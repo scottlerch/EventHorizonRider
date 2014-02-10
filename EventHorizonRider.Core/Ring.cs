@@ -38,8 +38,11 @@ namespace EventHorizonRider.Core
         {
             var halfGap = GapSize / 2f;
             var ringWidth = Texture.Width;
+
             var startRingEdge = Radius - (ringWidth / 2f);
-            var endRingEdge = Radius + (ringWidth / 2f);
+            // For don't collide while inside ring for the most part, this is better for gameplay
+            var endRingEdge = startRingEdge + 5; // Radius + (ringWidth / 2f);
+
             var shipFrontEdge = (Origin - ship.Position).Length() + (ship.Texture.Height / 2) + 5; // TODO: figure out why this fudge factor is needed
 
             return
