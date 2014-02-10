@@ -14,6 +14,8 @@ namespace EventHorizonRider.Core
         private GraphicsDevice graphicsDevice;
         private DateTime lastRingAdd = DateTime.UtcNow;
 
+        private bool stopped = false;
+
         public void LoadContent(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
@@ -34,6 +36,11 @@ namespace EventHorizonRider.Core
 
         public void Update(GameTime gameTime)
         {
+            if (stopped)
+            {
+                return;
+            }
+
             foreach (var ring in rings.ToList())
             {
                 ring.Radius -= (float)gameTime.ElapsedGameTime.TotalSeconds * 150f;
@@ -63,9 +70,10 @@ namespace EventHorizonRider.Core
             });
         }
 
-        public void Clear()
+        public void Initialize()
         {
             rings.Clear();
+            stopped = false;
         }
 
         public IEnumerable<Ring> AllRings
@@ -76,6 +84,11 @@ namespace EventHorizonRider.Core
         public void Remove(Ring ring)
         {
             rings.Remove(ring);
+        }
+
+        internal void Stop()
+        {
+            stopped = true;
         }
     }
 }

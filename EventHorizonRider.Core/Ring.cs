@@ -36,12 +36,18 @@ namespace EventHorizonRider.Core
 
         internal bool Intersects(Ship ship)
         {
-            // TODO: make this per-pixel accurate
-            return !(
-                        (ship.Rotation < GapAngle + 0.5f) &&
-                        (ship.Rotation > GapAngle - 0.5f)
-                    ) &&
-                    (Radius < 50f && Radius > 25f);
+            var halfGap = GapSize / 2f;
+            var ringWidth = Texture.Width;
+            var startRingEdge = Radius - (ringWidth / 2f);
+            var endRingEdge = Radius + (ringWidth / 2f);
+            var shipFrontEdge = (Origin - ship.Position).Length() + (ship.Texture.Height / 2) + 5; // TODO: figure out why this fudge factor is needed
+
+            return
+                !(
+                    (ship.Rotation < GapAngle + halfGap) &&
+                    (ship.Rotation > GapAngle - halfGap)
+                ) &&
+                (shipFrontEdge > startRingEdge && shipFrontEdge < endRingEdge);
         }
     }
 }

@@ -108,7 +108,7 @@ namespace EventHorizonRider.Core
                 gameTimeElapsed = Stopwatch.StartNew();
 
                 ship.Initialize(blackhole);
-                rings.Clear();
+                rings.Initialize();
 
                 state = GameState.Running;
             }
@@ -132,7 +132,7 @@ namespace EventHorizonRider.Core
                 backgroundColor = Color.Red;
 
                 ship.Stop();
-                rings.Clear();
+                rings.Stop();
                 gameTimeElapsed.Stop();
             }
 
