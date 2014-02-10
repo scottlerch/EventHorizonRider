@@ -19,6 +19,8 @@ namespace EventHorizonRider.Core
         {
             // Texture = content.Load<Texture2D>("ship");
 
+            var shipColor = Color.DarkGray.AdjustLight(0.9f).PackedValue;
+
             var height = 15;
             var width = 15;
 
@@ -34,7 +36,7 @@ namespace EventHorizonRider.Core
 
                 for (int x = left; x <= right; x++)
                 {
-                    data[x + (y * width)] = Color.DarkGray.PackedValue;
+                    data[x + (y * width)] = shipColor;
                 }
             }
 

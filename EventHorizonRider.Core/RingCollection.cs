@@ -18,8 +18,10 @@ namespace EventHorizonRider.Core
         {
             this.graphicsDevice = graphicsDevice;
 
+            var ringColor = Color.DarkGray.AdjustLight(0.5f).PackedValue;
+
             ringEdgeTexture = new Texture2D(graphicsDevice, 16, 25, false, SurfaceFormat.Color);
-            ringEdgeTexture.SetData(Enumerable.Range(0, ringEdgeTexture.Width * ringEdgeTexture.Height).Select(i => Color.DarkGray.PackedValue).ToArray());
+            ringEdgeTexture.SetData(Enumerable.Range(0, ringEdgeTexture.Width * ringEdgeTexture.Height).Select(i => ringColor).ToArray());
         }
 
         public void Draw(SpriteBatch spriteBatch)
