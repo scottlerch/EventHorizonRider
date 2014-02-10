@@ -3,24 +3,22 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EventHorizonRider.Core
 {
-    class RingCollection
+    internal class RingCollection
     {
-        Texture2D ringEdgeTexture;
-        List<Ring> rings = new List<Ring>();
-        Random rand = new Random();
-        GraphicsDevice graphicsDevice;
-        DateTime lastRingAdd = DateTime.UtcNow;
+        private Texture2D ringEdgeTexture;
+        private List<Ring> rings = new List<Ring>();
+        private Random rand = new Random();
+        private GraphicsDevice graphicsDevice;
+        private DateTime lastRingAdd = DateTime.UtcNow;
 
         public void LoadContent(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
 
-            ringEdgeTexture = new Texture2D(graphicsDevice, 8, 25, false, SurfaceFormat.Color);
+            ringEdgeTexture = new Texture2D(graphicsDevice, 16, 25, false, SurfaceFormat.Color);
             ringEdgeTexture.SetData(Enumerable.Range(0, ringEdgeTexture.Width * ringEdgeTexture.Height).Select(i => Color.DarkGray.PackedValue).ToArray());
         }
 
@@ -68,9 +66,9 @@ namespace EventHorizonRider.Core
             rings.Clear();
         }
 
-        public IEnumerable<Ring> GetRings()
+        public IEnumerable<Ring> AllRings
         {
-            return rings.ToList();
+            get { return rings; }
         }
 
         public void Remove(Ring ring)

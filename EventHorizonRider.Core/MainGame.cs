@@ -2,11 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace EventHorizonRider.Core
 {
@@ -15,18 +12,7 @@ namespace EventHorizonRider.Core
     /// </summary>
     public class MainGame : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-
-        Blackhole blackhole;
-        Ship ship;
-        RingCollection rings;
-
-        SpriteFont spriteFont;
-
-        Stopwatch gameTimeElapsed;
-
-        enum GameState
+        private enum GameState
         {
             Init,
             Running,
@@ -34,9 +20,20 @@ namespace EventHorizonRider.Core
             Over,
         }
 
-        GameState state;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
-        Color backgroundColor = Color.LightGray;
+        private Blackhole blackhole;
+        private Ship ship;
+        private RingCollection rings;
+
+        private SpriteFont spriteFont;
+
+        private Stopwatch gameTimeElapsed;
+
+        private GameState state;
+
+        private Color backgroundColor = Color.LightGray;
 
         public MainGame()
         {
@@ -76,14 +73,8 @@ namespace EventHorizonRider.Core
             spriteFont = Content.Load<SpriteFont>("font2");
 
             blackhole.LoadContent(Content, graphics.GraphicsDevice);
-            ship.LoadContent(Content);
+            ship.LoadContent(Content, GraphicsDevice);
             rings.LoadContent(GraphicsDevice);
-        }
-
-        void InitShip()
-        {
-            ship.Position.X = blackhole.Position.X;
-            ship.Position.Y = blackhole.Position.Y - (blackhole.Texture.Height / 2) - (ship.Texture.Height / 2);
         }
 
         /// <summary>
@@ -104,9 +95,10 @@ namespace EventHorizonRider.Core
         {
             var touchState = TouchPanel.GetState();
             var mouseState = Mouse.GetState();
+            var keyState = Keyboard.GetState();
 
-            if (touchState.Any(t => t.State == TouchLocationState.Pressed && t.Position.X > (graphics.GraphicsDevice.Viewport.Width - 200) && t.Position.Y < 30) ||
-                (mouseState.X > (graphics.GraphicsDevice.Viewport.Width - 200) && mouseState.Y < 30))
+            if (touchState.Any(t => t.State == TouchLocationState.Pressed && t.Position.X > (graphics.GraphicsDevice.Viewport.Width - 200) && t.Position.Y < 50) ||
+                (mouseState.X > (graphics.GraphicsDevice.Viewport.Width - 200) && mouseState.Y < 50))
             {
                 state = GameState.Init;
             }
@@ -114,51 +106,32 @@ namespace EventHorizonRider.Core
             if (state == GameState.Init)
             {
                 gameTimeElapsed = Stopwatch.StartNew();
-                InitShip();
+
+                ship.Initialize(blackhole);
                 rings.Clear();
+
                 state = GameState.Running;
             }
             else if (state == GameState.Running)
             {
-                gameTimeElapsed.Start();
                 backgroundColor = Color.LightGray;
 
-                KeyboardState keyState = Keyboard.GetState();
+                ship.Update(keyState, touchState, gameTime, blackhole);
+                rings.Update(gameTime);
 
-                float moveSpeed = 1.1f;
-                if (keyState.IsKeyDown(Keys.Left) && !keyState.IsKeyDown(Keys.Right))
+                foreach (var ring in rings.AllRings)
                 {
-                    ship.Rotation -= (MathHelper.Pi * 2) * (float)gameTime.ElapsedGameTime.TotalSeconds * moveSpeed;
-                }
-
-                if (keyState.IsKeyDown(Keys.Right) && !keyState.IsKeyDown(Keys.Left))
-                {
-                    ship.Rotation += (MathHelper.Pi * 2) * (float)gameTime.ElapsedGameTime.TotalSeconds * moveSpeed;
-                }
-
-                ship.Rotation = MathHelper.WrapAngle(ship.Rotation);
-
-                var radius = (blackhole.Texture.Width / 2) + (ship.Texture.Height / 2);
-                ship.Position.Y = blackhole.Position.Y - ((float)Math.Cos(ship.Rotation) * radius);
-                ship.Position.X = blackhole.Position.X + ((float)Math.Sin(ship.Rotation) * radius);
-
-                foreach (var ring in rings.GetRings())
-                {
-                    if (!(
-                            (ship.Rotation < ring.GapAngle + 0.5f) &&
-                            (ship.Rotation > ring.GapAngle - 0.5f)
-                          ) &&
-                        (ring.Radius < 50f && ring.Radius > 25f))
+                    if (ring.Intersects(ship))
                     {
                         state = GameState.Over;
                     }
                 }
-
-                rings.Update(gameTime);
             }
             else if (state == GameState.Over)
             {
                 backgroundColor = Color.Red;
+
+                ship.Stop();
                 rings.Clear();
                 gameTimeElapsed.Stop();
             }
