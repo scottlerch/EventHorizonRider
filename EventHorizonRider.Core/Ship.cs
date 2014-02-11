@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System;
+using System.Linq;
 
 namespace EventHorizonRider.Core
 {
@@ -14,10 +15,12 @@ namespace EventHorizonRider.Core
         public Texture2D Texture;
 
         private bool stopped = false;
+        private GraphicsDevice graphics;
 
         public void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
             // Texture = content.Load<Texture2D>("ship");
+            this.graphics = graphics;
 
             var shipColor = Color.DarkGray.AdjustLight(0.9f).PackedValue;
 
@@ -57,6 +60,20 @@ namespace EventHorizonRider.Core
                 rotation: Rotation);
         }
 
+        private bool Left(KeyboardState keyState, TouchCollection touchState)
+        {
+            return
+                (keyState.IsKeyDown(Keys.Left) && !keyState.IsKeyDown(Keys.Right)) ||
+                (touchState.Count > 0 && touchState.All(t => t.Position.X < graphics.Viewport.Width / 2));
+        }
+
+        private bool Right(KeyboardState keyState, TouchCollection touchState)
+        {
+            return 
+                (keyState.IsKeyDown(Keys.Right) && !keyState.IsKeyDown(Keys.Left)) ||
+                (touchState.Count > 0 && touchState.All(t => t.Position.X > graphics.Viewport.Width / 2));
+        }
+
         internal void Update(KeyboardState keyState, TouchCollection touchState, GameTime gameTime, Blackhole blackhole)
         {
             if (stopped)
@@ -65,12 +82,13 @@ namespace EventHorizonRider.Core
             }
 
             float moveSpeed = 1.1f;
-            if (keyState.IsKeyDown(Keys.Left) && !keyState.IsKeyDown(Keys.Right))
+
+            if (Left(keyState, touchState))
             {
                 Rotation -= (MathHelper.TwoPi) * (float)gameTime.ElapsedGameTime.TotalSeconds * moveSpeed;
             }
 
-            if (keyState.IsKeyDown(Keys.Right) && !keyState.IsKeyDown(Keys.Left))
+            if (Right(keyState, touchState))
             {
                 Rotation += (MathHelper.TwoPi) * (float)gameTime.ElapsedGameTime.TotalSeconds * moveSpeed;
             }
