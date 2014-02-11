@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
+  <Identity Name="1ce6a3f0-744a-4be3-8dbb-a4aa17137a37" Publisher="CN=Scott" Version="1.0.0.0" />
+  <Properties>
+    <DisplayName>EventHorizonRider.WindowsStore</DisplayName>
+    <PublisherDisplayName>Scott</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.3.0</OSMinVersion>
+    <OSMaxVersionTested>6.3.0</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="EventHorizonRider.WindowsStore.App">
+      <m2:VisualElements DisplayName="EventHorizonRider.WindowsStore" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="EventHorizonRider.WindowsStore" ForegroundText="light" BackgroundColor="#464646">
+        <m2:SplashScreen Image="Assets\SplashScreen.png" />
+        <m2:InitialRotationPreference>
+          <m2:Rotation Preference="landscape" />
+        </m2:InitialRotationPreference>
+      </m2:VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>
