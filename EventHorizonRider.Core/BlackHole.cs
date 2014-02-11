@@ -12,7 +12,7 @@ namespace EventHorizonRider.Core
         internal void LoadContent(ContentManager Content, GraphicsDevice graphics)
         {
             var padding = 4;
-            var radius = 50;
+            var radius = 60;
             var diameter = radius * 2;
             var paddedRadius = radius - padding;
             var origin = radius;

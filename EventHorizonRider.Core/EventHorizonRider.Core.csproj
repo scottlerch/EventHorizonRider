@@ -39,6 +39,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ring.cs" />
     <Compile Include="RingCollection.cs" />
+    <Compile Include="RingFactory.cs" />
+    <Compile Include="RingGap.cs" />
     <Compile Include="Ship.cs" />
   </ItemGroup>
   <ItemGroup>

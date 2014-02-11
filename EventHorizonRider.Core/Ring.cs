@@ -1,28 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EventHorizonRider.Core
 {
     internal class Ring
     {
-        public float GapAngle;
+        public List<RingGap> Gaps;
+
         public float Radius;
         public Texture2D Texture;
         public Vector2 Origin;
-        public float GapSize;
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            var gapStart = MathHelper.WrapAngle(GapAngle - (GapSize / 2));
-            var gapEnd = MathHelper.WrapAngle(GapAngle + (GapSize / 2));
-
             for (float i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.02f)
             {
-                if (gapStart < gapEnd && (i > gapStart && i < gapEnd))
-                    continue;
-
-                if (gapStart > gapEnd && (i > gapStart || i < gapEnd))
+                if (Gaps.Any(gap => gap.IsInsideGap(i)))
                     continue;
 
                 spriteBatch.Draw(Texture,
@@ -36,7 +32,12 @@ namespace EventHorizonRider.Core
 
         internal bool Intersects(Ship ship)
         {
-            var halfGap = GapSize / 2f;
+            return !Gaps.Any(gap => IsInsideGap(ship, gap));
+        }
+
+        private bool IsInsideGap(Ship ship, RingGap ringGap)
+        {
+            var halfGap = ringGap.GapSize / 2f;
             var ringWidth = Texture.Width;
 
             var startRingEdge = Radius - (ringWidth / 2f);
@@ -45,12 +46,12 @@ namespace EventHorizonRider.Core
 
             var shipFrontEdge = (Origin - ship.Position).Length() + (ship.Texture.Height / 2) + 5; // TODO: figure out why this fudge factor is needed
 
-            return
+            return !(
                 !(
-                    (ship.Rotation < GapAngle + halfGap) &&
-                    (ship.Rotation > GapAngle - halfGap)
+                    (ship.Rotation < ringGap.GapAngle + halfGap) &&
+                    (ship.Rotation > ringGap.GapAngle - halfGap)
                 ) &&
-                (shipFrontEdge > startRingEdge && shipFrontEdge < endRingEdge);
+                (shipFrontEdge > startRingEdge && shipFrontEdge < endRingEdge));
         }
     }
 }

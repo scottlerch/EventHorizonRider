@@ -8,11 +8,13 @@ namespace EventHorizonRider.Core
 {
     internal class RingCollection
     {
-        private Texture2D ringEdgeTexture;
+
         private List<Ring> rings = new List<Ring>();
-        private Random rand = new Random();
+
         private GraphicsDevice graphicsDevice;
         private DateTime lastRingAdd = DateTime.UtcNow;
+
+        private RingFactory ringFactory = new RingFactory();
 
         private bool stopped = false;
 
@@ -20,10 +22,7 @@ namespace EventHorizonRider.Core
         {
             this.graphicsDevice = graphicsDevice;
 
-            var ringColor = Color.DarkGray.AdjustLight(0.5f).PackedValue;
-
-            ringEdgeTexture = new Texture2D(graphicsDevice, 16, 25, false, SurfaceFormat.Color);
-            ringEdgeTexture.SetData(Enumerable.Range(0, ringEdgeTexture.Width * ringEdgeTexture.Height).Select(i => ringColor).ToArray());
+            ringFactory.LoadContent(graphicsDevice);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -60,14 +59,7 @@ namespace EventHorizonRider.Core
 
         public void AddRing()
         {
-            rings.Add(new Ring
-            {
-                Texture = ringEdgeTexture,
-                GapAngle = MathHelper.WrapAngle((float)rand.NextDouble() * MathHelper.Pi * 2f),
-                Radius = 1024f,
-                Origin = new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2),
-                GapSize = MathHelper.Pi / 6,
-            });
+            rings.Add(ringFactory.Create(gaps: 1, gapSize: MathHelper.Pi / 3));
         }
 
         public void Initialize()
