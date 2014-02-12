@@ -42,12 +42,19 @@ namespace EventHorizonRider.Core
 
             graphics.PreferredBackBufferWidth = 1136;
             graphics.PreferredBackBufferHeight = 640;
+            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
 
             state = GameState.Init;
 
             rings = new RingCollection();
             ship = new Ship();
             blackhole = new Blackhole();
+        }
+
+        public void SetResolution(int width, int height)
+        {
+            graphics.PreferredBackBufferWidth = width;
+            graphics.PreferredBackBufferHeight = height;
         }
 
         /// <summary>
