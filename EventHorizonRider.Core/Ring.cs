@@ -42,12 +42,12 @@ namespace EventHorizonRider.Core
 
         private bool IsInsideRing(Ship ship)
         {
-            var ringWidth = Texture.Width;
+            var ringWidth = Texture.Height;
 
             var startRingEdge = Radius - (ringWidth / 2f);
-            var endRingEdge = startRingEdge + 5; // don't collide while inside ring for the most part, this is better for gameplay // Radius + (ringWidth / 2f); 
+            var endRingEdge = Radius + (ringWidth / 2f);
 
-            var shipFrontEdge = (Origin - ship.Position).Length() + (ship.Texture.Height / 2) + 5; // TODO: figure out why this fudge factor is needed
+            var shipFrontEdge = (Origin - ship.Position).Length() + (ship.Texture.Height / 2);
 
             return shipFrontEdge.IsBetween(startRingEdge, endRingEdge);
         }
