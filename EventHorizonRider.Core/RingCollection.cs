@@ -8,13 +8,15 @@ namespace EventHorizonRider.Core
 {
     internal class RingCollection
     {
-
         private List<Ring> rings = new List<Ring>();
 
         private GraphicsDevice graphicsDevice;
         private DateTime lastRingAdd = DateTime.UtcNow;
 
         private RingFactory ringFactory = new RingFactory();
+        private RingInfoFactory ringInfoFactory = new RingInfoFactory();
+
+        private IEnumerator<RingInfo> currentSequence;
 
         private bool stopped = false;
 
@@ -23,6 +25,8 @@ namespace EventHorizonRider.Core
             this.graphicsDevice = graphicsDevice;
 
             ringFactory.LoadContent(graphicsDevice);
+
+            currentSequence = ringInfoFactory.GetRandomSequence().GetEnumerator();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -53,7 +57,7 @@ namespace EventHorizonRider.Core
             if (DateTime.UtcNow - lastRingAdd > TimeSpan.FromSeconds(0.9))
             {
                 lastRingAdd = DateTime.UtcNow;
-                AddRing();
+                rings.Add(ringFactory.Create(currentSequence.Next()));
             }
         }
 
@@ -68,11 +72,6 @@ namespace EventHorizonRider.Core
             }
 
             return false;
-        }
-
-        private void AddRing()
-        {
-            rings.Add(ringFactory.Create(gaps: 1, gapSize: MathHelper.Pi / 3));
         }
 
         public void Initialize()

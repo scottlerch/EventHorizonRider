@@ -21,20 +21,18 @@ namespace EventHorizonRider.Core
             ringEdgeTexture.SetData(Enumerable.Range(0, ringEdgeTexture.Width * ringEdgeTexture.Height).Select(i => ringColor).ToArray());
         }
 
-        internal Ring Create(int gaps, float gapSize)
+        internal Ring Create(RingInfo info)
         {
-            var randomStartAngle = (float)rand.NextDouble() * MathHelper.TwoPi;
-
             return new Ring
             {
                 Texture = ringEdgeTexture,
                 Radius = 768,
                 Origin = new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2),
-                Gaps = Enumerable.Range(0, gaps).Select(i =>
+                Gaps = Enumerable.Range(0, info.NumberOfGaps).Select(i =>
                     new RingGap 
                     {
-                        GapAngle = MathHelper.WrapAngle(((float)i * (MathHelper.TwoPi / (float)gaps)) + randomStartAngle), 
-                        GapSize = gapSize,
+                        GapAngle = MathHelper.WrapAngle(((float)i * (MathHelper.TwoPi / (float)info.NumberOfGaps)) + info.Angle),
+                        GapSize = info.GapSize,
                     }).ToList(),
             };
         }

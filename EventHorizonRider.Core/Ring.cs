@@ -32,26 +32,34 @@ namespace EventHorizonRider.Core
 
         internal bool Intersects(Ship ship)
         {
-            return !Gaps.Any(gap => IsInsideGap(ship, gap));
+            if (IsInsideRing(ship))
+            {
+                return !Gaps.Any(gap => IsInsideGap(ship, gap));
+            }
+
+            return false;
+        }
+
+        private bool IsInsideRing(Ship ship)
+        {
+            var ringWidth = Texture.Width;
+
+            var startRingEdge = Radius - (ringWidth / 2f);
+            var endRingEdge = startRingEdge + 5; // don't collide while inside ring for the most part, this is better for gameplay // Radius + (ringWidth / 2f); 
+
+            var shipFrontEdge = (Origin - ship.Position).Length() + (ship.Texture.Height / 2) + 5; // TODO: figure out why this fudge factor is needed
+
+            return shipFrontEdge.IsBetween(startRingEdge, endRingEdge);
         }
 
         private bool IsInsideGap(Ship ship, RingGap ringGap)
         {
             var halfGap = ringGap.GapSize / 2f;
-            var ringWidth = Texture.Width;
 
-            var startRingEdge = Radius - (ringWidth / 2f);
-            // For don't collide while inside ring for the most part, this is better for gameplay
-            var endRingEdge = startRingEdge + 5; // Radius + (ringWidth / 2f);
+            var gapStartAngle = ringGap.GapAngle - halfGap;
+            var gapEndAngle = ringGap.GapAngle + halfGap;
 
-            var shipFrontEdge = (Origin - ship.Position).Length() + (ship.Texture.Height / 2) + 5; // TODO: figure out why this fudge factor is needed
-
-            return !(
-                !(
-                    (ship.Rotation < ringGap.GapAngle + halfGap) &&
-                    (ship.Rotation > ringGap.GapAngle - halfGap)
-                ) &&
-                (shipFrontEdge > startRingEdge && shipFrontEdge < endRingEdge));
+            return ship.Rotation.IsBetweenAngles(gapStartAngle, gapEndAngle);
         }
     }
 }
