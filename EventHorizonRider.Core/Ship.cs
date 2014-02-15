@@ -64,14 +64,14 @@ namespace EventHorizonRider.Core
         {
             return
                 (keyState.IsKeyDown(Keys.Left) && !keyState.IsKeyDown(Keys.Right)) ||
-                (touchState.Count > 0 && touchState.All(t => t.Position.X < graphics.Viewport.Width / 2));
+                (touchState.Count > 0 && touchState.All(t => (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) && t.Position.X < graphics.Viewport.Width / 2));
         }
 
         private bool Right(KeyboardState keyState, TouchCollection touchState)
         {
             return 
                 (keyState.IsKeyDown(Keys.Right) && !keyState.IsKeyDown(Keys.Left)) ||
-                (touchState.Count > 0 && touchState.All(t => t.Position.X > graphics.Viewport.Width / 2));
+                (touchState.Count > 0 && touchState.All(t => (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) && t.Position.X > graphics.Viewport.Width / 2));
         }
 
         internal void Update(KeyboardState keyState, TouchCollection touchState, GameTime gameTime, Blackhole blackhole)

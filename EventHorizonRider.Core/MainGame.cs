@@ -126,12 +126,9 @@ namespace EventHorizonRider.Core
                 ship.Update(keyState, touchState, gameTime, blackhole);
                 rings.Update(gameTime);
 
-                foreach (var ring in rings.AllRings)
+                if (rings.Intersects(ship))
                 {
-                    if (ring.Intersects(ship))
-                    {
-                        state = GameState.Over;
-                    }
+                    state = GameState.Over;
                 }
             }
             else if (state == GameState.Over)

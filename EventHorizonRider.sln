@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHorizonRider.Core", "EventHorizonRider.Core\EventHorizonRider.Core.csproj", "{905E7D7C-FC4E-4AAA-AE6C-E6FCE75CBFFD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHorizonRider.Windows", "EventHorizonRider.Windows\EventHorizonRider.Windows.csproj", "{7F5A505F-CC2F-452D-AB8B-82FB2432D690}"

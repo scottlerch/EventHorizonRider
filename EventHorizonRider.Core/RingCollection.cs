@@ -57,7 +57,20 @@ namespace EventHorizonRider.Core
             }
         }
 
-        public void AddRing()
+        public bool Intersects(Ship ship)
+        {
+            foreach (var ring in rings)
+            {
+                if (ring.Intersects(ship))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void AddRing()
         {
             rings.Add(ringFactory.Create(gaps: 1, gapSize: MathHelper.Pi / 3));
         }
@@ -66,11 +79,6 @@ namespace EventHorizonRider.Core
         {
             rings.Clear();
             stopped = false;
-        }
-
-        public IEnumerable<Ring> AllRings
-        {
-            get { return rings; }
         }
 
         public void Remove(Ring ring)
