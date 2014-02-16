@@ -111,7 +111,7 @@ namespace EventHorizonRider.Core
             var keyState = Keyboard.GetState();
 
             if (touchState.Any(t => t.State == TouchLocationState.Pressed && t.Position.X > (graphics.GraphicsDevice.Viewport.Width - 200) && t.Position.Y < 50) ||
-                (mouseState.X > (graphics.GraphicsDevice.Viewport.Width - 200) && mouseState.Y < 50))
+                (mouseState.X > (graphics.GraphicsDevice.Viewport.Width - 200) && mouseState.Y < 50 && mouseState.LeftButton == ButtonState.Pressed))
             {
                 state = GameState.Init;
             }
