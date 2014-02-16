@@ -39,6 +39,7 @@
     <Compile Include="MainGame.cs" />
     <Compile Include="NumericExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Range.cs" />
     <Compile Include="Ring.cs" />
     <Compile Include="RingCollection.cs" />
     <Compile Include="RingFactory.cs" />

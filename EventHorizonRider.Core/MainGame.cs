@@ -123,7 +123,7 @@ namespace EventHorizonRider.Core
             {
                 backgroundColor = Color.LightGray;
 
-                ship.Update(keyState, touchState, gameTime, blackhole);
+                ship.Update(keyState, touchState, gameTime, blackhole, rings);
                 rings.Update(gameTime);
 
                 if (rings.Intersects(ship))

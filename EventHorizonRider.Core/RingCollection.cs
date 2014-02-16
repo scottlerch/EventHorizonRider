@@ -89,5 +89,13 @@ namespace EventHorizonRider.Core
         {
             stopped = true;
         }
+
+        internal void ClampToNearestGapEdge(Ship ship)
+        {
+            foreach (var ring in rings)
+            {
+                ring.ClampToNearestGapEdge(ship);
+            }
+        }
     }
 }

@@ -74,7 +74,9 @@ namespace EventHorizonRider.Core
                 (touchState.Count > 0 && touchState.All(t => (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) && t.Position.X > graphics.Viewport.Width / 2));
         }
 
-        internal void Update(KeyboardState keyState, TouchCollection touchState, GameTime gameTime, Blackhole blackhole)
+        internal float Radius { get; private set; }
+
+        internal void Update(KeyboardState keyState, TouchCollection touchState, GameTime gameTime, Blackhole blackhole, RingCollection rings)
         {
             if (stopped)
             {
@@ -95,9 +97,11 @@ namespace EventHorizonRider.Core
 
             Rotation = MathHelper.WrapAngle(Rotation);
 
-            var radius = (blackhole.Texture.Width / 2) + (Texture.Height / 2);
-            Position.Y = blackhole.Position.Y - ((float)Math.Cos(Rotation) * radius);
-            Position.X = blackhole.Position.X + ((float)Math.Sin(Rotation) * radius);
+            this.Radius = (blackhole.Texture.Width / 2) + (Texture.Height / 2);
+            Position.Y = blackhole.Position.Y - ((float)Math.Cos(Rotation) * this.Radius);
+            Position.X = blackhole.Position.X + ((float)Math.Sin(Rotation) * this.Radius);
+
+            rings.ClampToNearestGapEdge(this);
         }
 
         internal void Initialize(Blackhole blackhole)

@@ -54,12 +54,33 @@ namespace EventHorizonRider.Core
 
         private bool IsInsideGap(Ship ship, RingGap ringGap)
         {
-            var halfGap = ringGap.GapSize / 2f;
+            var gapEdges = GetGapEdges(ship, ringGap);
+
+            return ship.Rotation.IsBetweenAngles(gapEdges.Start, gapEdges.End);
+        }
+
+        private Range<float> GetGapEdges(Ship ship, RingGap ringGap)
+        {
+            var textureOffset = (float)Math.Asin((Texture.Width / 2) / ship.Radius);
+
+            var halfGap = (ringGap.GapSize / 2f) - textureOffset;
 
             var gapStartAngle = ringGap.GapAngle - halfGap;
             var gapEndAngle = ringGap.GapAngle + halfGap;
 
-            return ship.Rotation.IsBetweenAngles(gapStartAngle, gapEndAngle);
+            return new Range<float> 
+            { 
+                Start = MathHelper.WrapAngle(gapStartAngle), 
+                End = MathHelper.WrapAngle(gapEndAngle) 
+            };
+        }
+
+        internal void ClampToNearestGapEdge(Ship ship)
+        {
+            if (IsInsideRing(ship))
+            {
+                // TODO:
+            }
         }
     }
 }
