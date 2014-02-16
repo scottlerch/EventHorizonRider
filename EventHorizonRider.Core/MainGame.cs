@@ -26,6 +26,7 @@ namespace EventHorizonRider.Core
         private Blackhole blackhole;
         private Ship ship;
         private RingCollection rings;
+        private Levels levels;
 
         private SpriteFont spriteFont;
 
@@ -49,6 +50,7 @@ namespace EventHorizonRider.Core
             rings = new RingCollection();
             ship = new Ship();
             blackhole = new Blackhole();
+            levels = new Levels();
         }
 
         public void SetResolution(int width, int height)
@@ -116,6 +118,7 @@ namespace EventHorizonRider.Core
 
                 ship.Initialize(blackhole);
                 rings.Initialize();
+                rings.SetLevel(levels.GetLevelOne());
 
                 state = GameState.Running;
             }

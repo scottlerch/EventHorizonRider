@@ -14,7 +14,7 @@ namespace EventHorizonRider.Core
         private DateTime lastRingAdd = DateTime.UtcNow;
 
         private RingFactory ringFactory = new RingFactory();
-        private RingInfoFactory ringInfoFactory = new RingInfoFactory();
+        private Level level;
 
         private IEnumerator<RingInfo> currentSequence;
 
@@ -25,8 +25,13 @@ namespace EventHorizonRider.Core
             this.graphicsDevice = graphicsDevice;
 
             ringFactory.LoadContent(graphicsDevice);
+        }
 
-            currentSequence = ringInfoFactory.GetRandomSequence().GetEnumerator();
+        public void SetLevel(Level level)
+        {
+            this.level = level;
+
+            currentSequence = level.Sequence.GetEnumerator();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -46,7 +51,7 @@ namespace EventHorizonRider.Core
 
             foreach (var ring in rings.ToList())
             {
-                ring.Radius -= (float)gameTime.ElapsedGameTime.TotalSeconds * 150f;
+                ring.Radius -= (float)gameTime.ElapsedGameTime.TotalSeconds * this.level.RingSpeed;
 
                 if (ring.Radius <= 0)
                 {
@@ -54,7 +59,7 @@ namespace EventHorizonRider.Core
                 }
             }
 
-            if (DateTime.UtcNow - lastRingAdd > TimeSpan.FromSeconds(0.9))
+            if (DateTime.UtcNow - lastRingAdd > this.level.RingInterval)
             {
                 lastRingAdd = DateTime.UtcNow;
                 rings.Add(ringFactory.Create(currentSequence.Next()));

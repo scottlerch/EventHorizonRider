@@ -36,6 +36,8 @@
     <Compile Include="Blackhole.cs" />
     <Compile Include="ColorExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Level.cs" />
+    <Compile Include="Levels.cs" />
     <Compile Include="MainGame.cs" />
     <Compile Include="NumericExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

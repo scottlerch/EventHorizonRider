@@ -13,5 +13,21 @@ namespace EventHorizonRider.Core
             enumerator.MoveNext();
             return enumerator.Current;
         }
+
+        public static IEnumerable<T> Concat<T>(this IEnumerable<T> enumerable, params IEnumerable<T>[] enumerables)
+        {
+            foreach (var item in enumerable)
+            {
+                yield return item;
+            }
+
+            foreach (var nextEnumerable in enumerables)
+            {
+                foreach (var item in nextEnumerable)
+                {
+                    yield return item;
+                }
+            }
+        }
     }
 }
