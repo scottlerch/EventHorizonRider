@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using EventHorizonRider.Core.Extensions;
 using EventHorizonRider.Core.Utilities;
+using Microsoft.Xna.Framework.Audio;
 
 namespace EventHorizonRider.Core
 {
@@ -18,6 +19,8 @@ namespace EventHorizonRider.Core
 
         private bool stopped = false;
         private GraphicsDevice graphics;
+
+        private SoundEffect crashSound;
 
         public void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
@@ -47,6 +50,8 @@ namespace EventHorizonRider.Core
 
             Texture = new Texture2D(graphics, width, height, false, SurfaceFormat.Color);
             Texture.SetData(TextureProcessor.SoftenAlpha(data, width, height));
+
+            this.crashSound = content.Load<SoundEffect>("crash_sound");
         }
 
         public void Update(GameTime gameTime)
@@ -118,6 +123,8 @@ namespace EventHorizonRider.Core
 
         internal void Stop()
         {
+            this.crashSound.Play();
+
             stopped = true;
         }
     }

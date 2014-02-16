@@ -122,6 +122,10 @@
       <Link>Content\highscore_font.xnb</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\EventHorizonRider.Core\Content\crash_sound.xnb">
+      <Link>Content\crash_sound.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="EventHorizonRider.WindowsStore_TemporaryKey.pfx" />
     <None Include="packages.config" />
   </ItemGroup>

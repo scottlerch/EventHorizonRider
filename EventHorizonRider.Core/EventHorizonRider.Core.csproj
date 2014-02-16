@@ -64,6 +64,9 @@
     <Content Include="Content\highscore_font.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\crash_sound.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

@@ -148,6 +148,8 @@ namespace EventHorizonRider.Core
                 gameTimeElapsed.Stop();
 
                 playerData.Update(gameTimeElapsed.Elapsed);
+
+                state = GameState.Paused;
             }
 
             base.Update(gameTime);
