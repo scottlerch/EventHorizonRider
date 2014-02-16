@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System;
 using System.Linq;
+using EventHorizonRider.Core.Extensions;
+using EventHorizonRider.Core.Utilities;
 
 namespace EventHorizonRider.Core
 {
@@ -19,20 +21,20 @@ namespace EventHorizonRider.Core
 
         public void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
-            // Texture = content.Load<Texture2D>("ship");
             this.graphics = graphics;
 
-            var shipColor = Color.DarkGray.AdjustLight(0.9f).PackedValue;
+            var shipColor = Color.DarkGray.AdjustLight(0.9f);
 
-            var height = 15;
-            var width = 15;
+            var padding = 1;
+            var height = 15 + (padding * 2);
+            var width = 15 + (padding * 2);
 
-            uint[] data = new uint[width * height];
+            var data = new Color[width * height];
 
             var center = (float)width / 2f;
-            var slope = center / (float)height;
+            var slope = center / ((float)height - (padding * 2)); ;
 
-            for(int y = 0; y < height; y++)
+            for(int y = padding; y < height - padding; y++)
             {
                 var left = (int)Math.Round(center - (slope * y));
                 var right = (int)Math.Round(center + (slope * y));
@@ -44,7 +46,7 @@ namespace EventHorizonRider.Core
             }
 
             Texture = new Texture2D(graphics, width, height, false, SurfaceFormat.Color);
-            Texture.SetData(data);
+            Texture.SetData(TextureProcessor.SoftenAlpha(data, width, height));
         }
 
         public void Update(GameTime gameTime)

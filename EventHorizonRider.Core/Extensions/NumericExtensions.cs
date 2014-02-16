@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core.Extensions
 {
     internal static class NumericExtensions
     {

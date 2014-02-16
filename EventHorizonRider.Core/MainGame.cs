@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Storage;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using EventHorizonRider.Core.Extensions;
 
 namespace EventHorizonRider.Core
 {
