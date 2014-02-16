@@ -40,6 +40,7 @@
     <Compile Include="Levels.cs" />
     <Compile Include="MainGame.cs" />
     <Compile Include="NumericExtensions.cs" />
+    <Compile Include="PlayerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Range.cs" />
     <Compile Include="Ring.cs" />
@@ -53,6 +54,9 @@
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
       <HintPath>..\packages\MonoGame-Portable.3.1.3-Alpha\lib\portable-net4+sl5+wp8+win8\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\portable-net45+wp80+win8\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

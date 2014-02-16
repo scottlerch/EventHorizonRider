@@ -2,7 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Framework.Storage;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace EventHorizonRider.Core
@@ -27,6 +29,7 @@ namespace EventHorizonRider.Core
         private Ship ship;
         private RingCollection rings;
         private Levels levels;
+        private PlayerData playerData;
 
         private SpriteFont spriteFont;
 
@@ -51,6 +54,7 @@ namespace EventHorizonRider.Core
             ship = new Ship();
             blackhole = new Blackhole();
             levels = new Levels();
+            playerData = new PlayerData();
         }
 
         public void SetResolution(int width, int height)
@@ -141,6 +145,8 @@ namespace EventHorizonRider.Core
                 ship.Stop();
                 rings.Stop();
                 gameTimeElapsed.Stop();
+
+                playerData.Update(gameTimeElapsed.Elapsed);
             }
 
             base.Update(gameTime);
@@ -170,6 +176,9 @@ namespace EventHorizonRider.Core
 
             spriteBatch.DrawString(spriteFont, gameTimeElapsed.Elapsed.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(10, 10), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
             spriteBatch.DrawString(spriteFont, gameTimeElapsed.Elapsed.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(12, 12), Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.2f);
+
+            spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(10, 10 + 20), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
+            spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(12, 12 + 20), Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.2f);
 
             var rightEdge = graphics.GraphicsDevice.Viewport.Width - 110;
             spriteBatch.DrawString(spriteFont, "RESTART", new Vector2(rightEdge, 10), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
