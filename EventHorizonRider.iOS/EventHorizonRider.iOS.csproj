@@ -76,26 +76,21 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <None Include="..\EventHorizonRider.Core\Content\crash_sound.xnb">
-      <Link>Content\crash_sound.xnb</Link>
+    <Content Include="Content\crash_sound.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\EventHorizonRider.Core\Content\fps_font.xnb">
-      <Link>Content\fps_font.xnb</Link>
+    </Content>
+    <Content Include="Content\fps_font.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\EventHorizonRider.Core\Content\highscore_font.xnb">
-      <Link>Content\highscore_font.xnb</Link>
+    </Content>
+    <Content Include="Content\highscore_font.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\EventHorizonRider.Core\Content\newlevel_sound.xnb">
-      <Link>Content\newlevel_sound.xnb</Link>
+    </Content>
+    <Content Include="Content\newlevel_sound.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\EventHorizonRider.Core\Content\techno_song.xnb">
-      <Link>Content\techno_song.xnb</Link>
+    </Content>
+    <Content Include="Content\techno_song.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
@@ -125,10 +120,9 @@
     <Reference Include="monotouch" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\EventHorizonRider.Core\Content\techno_song.wma">
-      <Link>Content\techno_song.wma</Link>
+    <Content Include="Content\techno_song.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
 </Project>

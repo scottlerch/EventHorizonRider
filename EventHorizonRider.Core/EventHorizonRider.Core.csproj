@@ -74,6 +74,9 @@
     <Content Include="Content\newlevel_sound.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\techno_song.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\techno_song.wma">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

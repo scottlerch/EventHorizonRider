@@ -134,6 +134,10 @@
       <Link>Content\newlevel_sound.xnb</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\EventHorizonRider.Core\Content\techno_song.mp3">
+      <Link>Content\techno_song.mp3</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\EventHorizonRider.Core\Content\techno_song.wma">
       <Link>Content\techno_song.wma</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

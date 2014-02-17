@@ -37,7 +37,7 @@ namespace EventHorizonRider.Core
 
         private SpriteFont spriteFont;
 
-        private Stopwatch gameTimeElapsed;
+        private Stopwatch gameTimeElapsed = new Stopwatch();
 
         private GameState state = GameState.Init;
 
@@ -107,8 +107,7 @@ namespace EventHorizonRider.Core
 
             fpsCounter.LoadContent(Content, graphics.GraphicsDevice);
 
-            // TODO: songs not fully supported by monogame yet
-            //musicSong = Content.Load<Song>("techno_song");
+            musicSong = Content.Load<Song>("techno_song");
         }
 
         /// <summary>
@@ -141,16 +140,15 @@ namespace EventHorizonRider.Core
 
             if (state == GameState.Starting)
             {
-                gameTimeElapsed = Stopwatch.StartNew();
+                gameTimeElapsed.Restart();
                 currentLevelNumber = 1;
 
                 ship.Initialize(blackhole);
                 rings.Initialize();
                 rings.SetLevel(levels.GetLevel(currentLevelNumber));
 
-                // TODO: songs not fully supported by monogame yet
-                //MediaPlayer.IsRepeating = true;
-                //MediaPlayer.Play(musicSong);
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Play(musicSong);
 
                 state = GameState.Running;
             }

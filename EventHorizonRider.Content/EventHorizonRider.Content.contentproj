@@ -9,30 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
-    <MonoGamePlatform>Windows8</MonoGamePlatform>
+    <MonoGamePlatform>iOS</MonoGamePlatform>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <ContentRootDirectory>Content</ContentRootDirectory>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Windows' ">
-    <MonoGamePlatform>Windows</MonoGamePlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Windows8' ">
-    <MonoGamePlatform>Windows8</MonoGamePlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Android' ">
-    <MonoGamePlatform>Android</MonoGamePlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'iOS' ">
-    <MonoGamePlatform>iOS</MonoGamePlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'OSX' ">
-    <MonoGamePlatform>OSX</MonoGamePlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Linux' ">
-    <MonoGamePlatform>Linux</MonoGamePlatform>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'PSM' ">
-    <MonoGamePlatform>PSM</MonoGamePlatform>
   </PropertyGroup>
   <PropertyGroup>
     <RootNamespace>EventHorizonRider.Content</RootNamespace>
@@ -60,7 +39,7 @@
     <Compile Include="crash_sound.mp3">
       <Name>crash_sound</Name>
       <Importer>Mp3Importer</Importer>
-      <Processor>SoundEffectProcessor</Processor>
+      <Processor>MGSoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -75,7 +54,7 @@
     <Compile Include="newlevel_sound.mp3">
       <Name>newlevel_sound</Name>
       <Importer>Mp3Importer</Importer>
-      <Processor>SoundEffectProcessor</Processor>
+      <Processor>MGSoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +65,7 @@
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
