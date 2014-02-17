@@ -17,7 +17,7 @@ namespace EventHorizonRider.Core
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            for (float i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.02f)
+            for (float i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.03f)
             {
                 if (Gaps.Any(gap => gap.IsInsideGap(i)))
                     continue;
