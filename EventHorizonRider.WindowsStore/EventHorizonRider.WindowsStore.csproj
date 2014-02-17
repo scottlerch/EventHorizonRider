@@ -134,6 +134,14 @@
       <Link>Content\newlevel_sound.xnb</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\EventHorizonRider.Core\Content\techno_song.wma">
+      <Link>Content\techno_song.wma</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\EventHorizonRider.Core\Content\techno_song.xnb">
+      <Link>Content\techno_song.xnb</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="EventHorizonRider.WindowsStore_TemporaryKey.pfx" />
     <None Include="packages.config" />
   </ItemGroup>

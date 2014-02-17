@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using EventHorizonRider.Core.Extensions;
 using System;
+using Microsoft.Xna.Framework.Media;
 
 namespace EventHorizonRider.Core
 {
@@ -19,6 +20,7 @@ namespace EventHorizonRider.Core
         private enum GameState
         {
             Init,
+            Starting,
             Running,
             Paused,
             Over,
@@ -37,7 +39,7 @@ namespace EventHorizonRider.Core
 
         private Stopwatch gameTimeElapsed;
 
-        private GameState state;
+        private GameState state = GameState.Init;
 
         private Color backgroundColor = Color.LightGray;
         private Vector2 restartTextSize;
@@ -47,6 +49,8 @@ namespace EventHorizonRider.Core
         private TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(2);
         private TimeSpan levelEndTime = TimeSpan.Zero;
         private bool levelEnded = false;
+
+        private Song musicSong;
 
         public MainGame()
         {
@@ -102,6 +106,9 @@ namespace EventHorizonRider.Core
             restartTextSize = spriteFont.MeasureString("RESTART");
 
             fpsCounter.LoadContent(Content, graphics.GraphicsDevice);
+
+            // TODO: songs not fully supported by monogame yet
+            //musicSong = Content.Load<Song>("techno_song");
         }
 
         /// <summary>
@@ -129,10 +136,10 @@ namespace EventHorizonRider.Core
             if (touchState.Any(t => t.State == TouchLocationState.Pressed && t.Position.X > (graphics.GraphicsDevice.Viewport.Width - 200) && t.Position.Y < 50) ||
                 (mouseState.X > (graphics.GraphicsDevice.Viewport.Width - 200) && mouseState.Y < 50 && mouseState.LeftButton == ButtonState.Pressed))
             {
-                state = GameState.Init;
+                state = GameState.Starting;
             }
 
-            if (state == GameState.Init)
+            if (state == GameState.Starting)
             {
                 gameTimeElapsed = Stopwatch.StartNew();
                 currentLevelNumber = 1;
@@ -140,6 +147,10 @@ namespace EventHorizonRider.Core
                 ship.Initialize(blackhole);
                 rings.Initialize();
                 rings.SetLevel(levels.GetLevel(currentLevelNumber));
+
+                // TODO: songs not fully supported by monogame yet
+                //MediaPlayer.IsRepeating = true;
+                //MediaPlayer.Play(musicSong);
 
                 state = GameState.Running;
             }
@@ -172,6 +183,8 @@ namespace EventHorizonRider.Core
             }
             else if (state == GameState.Over)
             {
+                MediaPlayer.Stop();
+
                 backgroundColor = Color.Red;
 
                 ship.Stop();
