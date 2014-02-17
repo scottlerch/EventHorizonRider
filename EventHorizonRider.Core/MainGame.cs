@@ -39,6 +39,7 @@ namespace EventHorizonRider.Core
         private GameState state;
 
         private Color backgroundColor = Color.LightGray;
+        private Vector2 restartTextSize;
 
         public MainGame()
         {
@@ -89,6 +90,8 @@ namespace EventHorizonRider.Core
             blackhole.LoadContent(Content, graphics.GraphicsDevice);
             ship.LoadContent(Content, GraphicsDevice);
             rings.LoadContent(GraphicsDevice);
+
+            restartTextSize = spriteFont.MeasureString("RESTART");
         }
 
         /// <summary>
@@ -190,15 +193,15 @@ namespace EventHorizonRider.Core
                 scoreColor = Color.White.SetColors(percentComplete, 1f, percentComplete);
             }
 
-            spriteBatch.DrawString(spriteFont, gameTimeElapsed.Elapsed.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(10, 10), scoreColor, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
-            spriteBatch.DrawString(spriteFont, gameTimeElapsed.Elapsed.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(12, 12), Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.2f);
+            const float textPadding = 10;
+            const float textNewLinePadding = 5;
 
-            spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(10, 10 + 40), Color.LightGray.AdjustLight(0.9f), 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
-            spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(12, 12 + 40), Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.2f);
+            spriteBatch.DrawString(spriteFont, gameTimeElapsed.Elapsed.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(textPadding, textPadding), scoreColor, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
 
-            var rightEdge = graphics.GraphicsDevice.Viewport.Width - 160;
-            spriteBatch.DrawString(spriteFont, "RESTART", new Vector2(rightEdge, 10), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
-            spriteBatch.DrawString(spriteFont, "RESTART", new Vector2(rightEdge + 2, 12), Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.2f);
+            spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(textPadding, textPadding + restartTextSize.Y + textNewLinePadding), Color.LightGray.AdjustLight(0.9f), 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
+
+            var rightEdge = graphics.GraphicsDevice.Viewport.Width - restartTextSize.X - textPadding;
+            spriteBatch.DrawString(spriteFont, "RESTART", new Vector2(rightEdge, textPadding), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
 
             spriteBatch.End();
 
