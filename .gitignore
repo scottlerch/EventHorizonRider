@@ -217,3 +217,4 @@ pip-log.txt
 /EventHorizonRider/SDL.dll
 /EventHorizonRider.Windows/SDL.dll
 /*.userprefs
+/EventHorizonRider.Content/Logging.txt

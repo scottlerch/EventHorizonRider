@@ -28,7 +28,7 @@ namespace EventHorizonRider.Core
 
             var shipColor = Color.DarkGray.AdjustLight(0.9f);
 
-            var padding = 1;
+            var padding = 2;
             var height = 15 + (padding * 2);
             var width = 15 + (padding * 2);
 

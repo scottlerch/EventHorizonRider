@@ -193,10 +193,10 @@ namespace EventHorizonRider.Core
             spriteBatch.DrawString(spriteFont, gameTimeElapsed.Elapsed.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(10, 10), scoreColor, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
             spriteBatch.DrawString(spriteFont, gameTimeElapsed.Elapsed.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(12, 12), Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.2f);
 
-            spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(10, 10 + 32), Color.LightGray.AdjustLight(0.9f), 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
-            spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(12, 12 + 32), Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.2f);
+            spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(10, 10 + 40), Color.LightGray.AdjustLight(0.9f), 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
+            spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(12, 12 + 40), Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.2f);
 
-            var rightEdge = graphics.GraphicsDevice.Viewport.Width - 132;
+            var rightEdge = graphics.GraphicsDevice.Viewport.Width - 160;
             spriteBatch.DrawString(spriteFont, "RESTART", new Vector2(rightEdge, 10), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
             spriteBatch.DrawString(spriteFont, "RESTART", new Vector2(rightEdge + 2, 12), Color.Black, 0, Vector2.Zero, 1, SpriteEffects.None, 0.2f);
 
