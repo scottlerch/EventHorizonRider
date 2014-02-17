@@ -9,8 +9,30 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <MonoGamePlatform>Windows8</MonoGamePlatform>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
     <ContentRootDirectory>Content</ContentRootDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Windows' ">
+    <MonoGamePlatform>Windows</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Windows8' ">
+    <MonoGamePlatform>Windows8</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Android' ">
+    <MonoGamePlatform>Android</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'iOS' ">
+    <MonoGamePlatform>iOS</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'OSX' ">
+    <MonoGamePlatform>OSX</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Linux' ">
+    <MonoGamePlatform>Linux</MonoGamePlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'PSM' ">
+    <MonoGamePlatform>PSM</MonoGamePlatform>
   </PropertyGroup>
   <PropertyGroup>
     <RootNamespace>EventHorizonRider.Content</RootNamespace>
@@ -22,6 +44,9 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.XImporter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.AudioImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="MonoGameContentProcessors">
+      <HintPath>$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGameContentProcessors.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="highscore_font.png">
@@ -57,7 +82,7 @@
     <Compile Include="techno_song.mp3">
       <Name>techno_song</Name>
       <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
+      <Processor>MGSongProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
