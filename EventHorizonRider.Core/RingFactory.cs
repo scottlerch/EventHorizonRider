@@ -11,6 +11,7 @@ namespace EventHorizonRider.Core
         private Texture2D ringEdgeTexture;
         private Random rand = new Random();
         private GraphicsDevice graphicsDevice;
+        private float startRadius;
 
         internal void LoadContent(GraphicsDevice graphicsDevice)
         {
@@ -23,6 +24,9 @@ namespace EventHorizonRider.Core
 
             ringEdgeTexture = new Texture2D(graphicsDevice, ringSegmentWidth, ringSegmentHeight, false, SurfaceFormat.Color);
             ringEdgeTexture.SetData(Enumerable.Range(0, ringEdgeTexture.Width * ringEdgeTexture.Height).Select(i => ringColor).ToArray());
+
+            // TODO: calculate from viewport
+            startRadius = 700;
         }
 
         internal Ring Create(RingInfo info)
@@ -30,7 +34,7 @@ namespace EventHorizonRider.Core
             return new Ring
             {
                 Texture = ringEdgeTexture,
-                Radius = 768,
+                Radius = startRadius,
                 Origin = new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2),
                 Gaps = Enumerable.Range(0, info.NumberOfGaps).Select(i =>
                     new RingGap 

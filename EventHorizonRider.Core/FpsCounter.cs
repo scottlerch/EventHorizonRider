@@ -23,7 +23,7 @@ namespace EventHorizonRider.Core
 
             const float padding = 1;
 
-            position = new Vector2(padding, graphicsDevice.Viewport.Height - (textSize.Y + padding));
+            position = new Vector2(graphicsDevice.Viewport.Width - (textSize.X + padding), graphicsDevice.Viewport.Height - (textSize.Y + padding));
         }
 
         public void Update(GameTime gameTime)

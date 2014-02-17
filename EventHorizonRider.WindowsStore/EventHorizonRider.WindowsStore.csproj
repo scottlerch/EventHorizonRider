@@ -130,6 +130,10 @@
       <Link>Content\fps_font.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\EventHorizonRider.Core\Content\newlevel_sound.xnb">
+      <Link>Content\newlevel_sound.xnb</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="EventHorizonRider.WindowsStore_TemporaryKey.pfx" />
     <None Include="packages.config" />
   </ItemGroup>

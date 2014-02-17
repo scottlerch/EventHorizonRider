@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using EventHorizonRider.Core.Extensions;
+using System;
 
 namespace EventHorizonRider.Core
 {
@@ -41,6 +42,11 @@ namespace EventHorizonRider.Core
         private Color backgroundColor = Color.LightGray;
         private Vector2 restartTextSize;
         private FpsCounter fpsCounter;
+
+        private int currentLevelNumber = 1;
+        private TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(2);
+        private TimeSpan levelEndTime = TimeSpan.Zero;
+        private bool levelEnded = false;
 
         public MainGame()
         {
@@ -91,7 +97,7 @@ namespace EventHorizonRider.Core
 
             blackhole.LoadContent(Content, graphics.GraphicsDevice);
             ship.LoadContent(Content, GraphicsDevice);
-            rings.LoadContent(GraphicsDevice);
+            rings.LoadContent(Content, GraphicsDevice);
 
             restartTextSize = spriteFont.MeasureString("RESTART");
 
@@ -129,10 +135,11 @@ namespace EventHorizonRider.Core
             if (state == GameState.Init)
             {
                 gameTimeElapsed = Stopwatch.StartNew();
+                currentLevelNumber = 1;
 
                 ship.Initialize(blackhole);
                 rings.Initialize();
-                rings.SetLevel(levels.GetLevelOne());
+                rings.SetLevel(levels.GetLevel(currentLevelNumber));
 
                 state = GameState.Running;
             }
@@ -146,6 +153,21 @@ namespace EventHorizonRider.Core
                 if (rings.Intersects(ship))
                 {
                     state = GameState.Over;
+                }
+
+                if (!rings.HasMoreRings)
+                {
+                    if (!levelEnded)
+                    {
+                        levelEndTime = gameTime.TotalGameTime + waitBetweenLevels;
+                        levelEnded = true;
+                    }
+                    else if (levelEndTime.Ticks < gameTime.TotalGameTime.Ticks)
+                    {
+                        levelEnded = false;
+                        currentLevelNumber++;
+                        rings.SetLevel(levels.GetLevel(currentLevelNumber));
+                    }
                 }
             }
             else if (state == GameState.Over)
@@ -205,6 +227,9 @@ namespace EventHorizonRider.Core
             spriteBatch.DrawString(spriteFont, gameTimeElapsed.Elapsed.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(textPadding, textPadding), scoreColor, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
 
             spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(textPadding, textPadding + restartTextSize.Y + textNewLinePadding), Color.LightGray.AdjustLight(0.9f), 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
+
+            spriteBatch.DrawString(spriteFont, "Level: " + currentLevelNumber, new Vector2(textPadding, graphics.GraphicsDevice.Viewport.Height - (textPadding + restartTextSize.Y)), Color.LightGray.AdjustLight(0.9f), 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
+
 
             var rightEdge = graphics.GraphicsDevice.Viewport.Width - restartTextSize.X - textPadding;
             spriteBatch.DrawString(spriteFont, "RESTART", new Vector2(rightEdge, textPadding), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);

@@ -11,20 +11,20 @@ namespace EventHorizonRider.Core
     {
         private Random rand = new Random();
 
-        public IEnumerable<RingInfo> GetRandomSequence(int iterations = -1)
+        public IEnumerable<RingInfo> GetRandomSequence(int iterations = -1, int numberOfGaps = -1, float gapSize = -1f)
         {
             for (int i = 0; i < iterations || iterations == -1; i++)
             {
                 yield return new RingInfo
                 {
-                    GapSize = MathHelper.TwoPi / 4,
-                    NumberOfGaps = 1,
+                    GapSize = gapSize < 0f? rand.Next(4, 10) : MathHelper.TwoPi / 4f,
+                    NumberOfGaps = numberOfGaps < 1? rand.Next(1, 5) : numberOfGaps,
                     Angle = (float)rand.NextDouble() * MathHelper.TwoPi,
                 };
             }
         }
 
-        public IEnumerable<RingInfo> GetStepSequence(int numberOfSteps)
+        public IEnumerable<RingInfo> GetStepSequence(int numberOfSteps, float gapSize)
         {
             var angleStep = MathHelper.TwoPi / (float)numberOfSteps;
 
@@ -32,14 +32,14 @@ namespace EventHorizonRider.Core
             {
                 yield return new RingInfo
                 {
-                    GapSize = MathHelper.TwoPi / 4,
+                    GapSize = gapSize,
                     NumberOfGaps = 1,
                     Angle = angleStep * i,
                 };
             }
         }
 
-        public IEnumerable<RingInfo> GetZigZagSequence(int iterations)
+        public IEnumerable<RingInfo> GetZigZagSequence(int iterations, float gapSize)
         {
             var baseAngle = (float)rand.NextDouble() * MathHelper.TwoPi;
             var angleStep = MathHelper.TwoPi / 4;
@@ -48,7 +48,7 @@ namespace EventHorizonRider.Core
             {
                 yield return new RingInfo
                 {
-                    GapSize = MathHelper.TwoPi / 4,
+                    GapSize = gapSize,
                     NumberOfGaps = 1,
                     Angle = baseAngle + ((i % 2) * angleStep),
                 };

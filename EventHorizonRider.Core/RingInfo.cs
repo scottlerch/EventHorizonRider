@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EventHorizonRider.Core
 {
-    internal struct RingInfo
+    internal class RingInfo
     {
         public int NumberOfGaps;
         public float GapSize;

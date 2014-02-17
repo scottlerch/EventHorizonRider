@@ -88,6 +88,10 @@
       <Link>Content\highscore_font.xnb</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\EventHorizonRider.Core\Content\newlevel_sound.xnb">
+      <Link>Content\newlevel_sound.xnb</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>

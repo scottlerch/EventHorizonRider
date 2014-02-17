@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EventHorizonRider.Core.Extensions;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 
 namespace EventHorizonRider.Core
 {
@@ -19,13 +21,17 @@ namespace EventHorizonRider.Core
 
         private IEnumerator<RingInfo> currentSequence;
 
+        private SoundEffect newLevelSound;
+
         private bool stopped = false;
 
-        public void LoadContent(GraphicsDevice graphicsDevice)
+        public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
 
             ringFactory.LoadContent(graphicsDevice);
+
+            newLevelSound = content.Load<SoundEffect>("newlevel_sound");
         }
 
         public void SetLevel(Level level)
@@ -33,6 +39,9 @@ namespace EventHorizonRider.Core
             this.level = level;
 
             currentSequence = level.Sequence.GetEnumerator();
+            HasMoreRings = true;
+
+            newLevelSound.Play();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -63,9 +72,21 @@ namespace EventHorizonRider.Core
             if (DateTime.UtcNow - lastRingAdd > this.level.RingInterval)
             {
                 lastRingAdd = DateTime.UtcNow;
-                rings.Add(ringFactory.Create(currentSequence.Next()));
+
+                var ringInfo = currentSequence.Next();
+
+                if (ringInfo == null)
+                {
+                    HasMoreRings = false;
+                }
+                else
+                {
+                    rings.Add(ringFactory.Create(ringInfo));
+                }
             }
         }
+
+        public bool HasMoreRings { get; private set; }
 
         public bool Intersects(Ship ship)
         {
