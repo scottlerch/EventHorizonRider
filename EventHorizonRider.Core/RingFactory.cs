@@ -14,7 +14,7 @@ namespace EventHorizonRider.Core
 
         internal void LoadContent(GraphicsDevice graphicsDevice)
         {
-            const int ringSegmentWidth = 20;
+            const int ringSegmentWidth = 27;
             const int ringSegmentHeight = 45;
 
             this.graphicsDevice = graphicsDevice;
