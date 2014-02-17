@@ -36,6 +36,7 @@
     <Compile Include="Blackhole.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="FpsCounter.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Levels.cs" />
     <Compile Include="MainGame.cs" />
@@ -65,6 +66,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\crash_sound.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\fps_font.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />

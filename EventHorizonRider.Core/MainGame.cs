@@ -40,6 +40,7 @@ namespace EventHorizonRider.Core
 
         private Color backgroundColor = Color.LightGray;
         private Vector2 restartTextSize;
+        private FpsCounter fpsCounter;
 
         public MainGame()
         {
@@ -57,6 +58,7 @@ namespace EventHorizonRider.Core
             blackhole = new Blackhole();
             levels = new Levels();
             playerData = new PlayerData();
+            fpsCounter = new FpsCounter();
         }
 
         public void SetResolution(int width, int height)
@@ -92,6 +94,8 @@ namespace EventHorizonRider.Core
             rings.LoadContent(GraphicsDevice);
 
             restartTextSize = spriteFont.MeasureString("RESTART");
+
+            fpsCounter.LoadContent(Content, graphics.GraphicsDevice);
         }
 
         /// <summary>
@@ -110,6 +114,8 @@ namespace EventHorizonRider.Core
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            fpsCounter.Update(gameTime);
+
             var touchState = TouchPanel.GetState();
             var mouseState = Mouse.GetState();
             var keyState = Keyboard.GetState();
@@ -167,7 +173,7 @@ namespace EventHorizonRider.Core
             GraphicsDevice.Clear(backgroundColor);
 
             // Draw rings
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.Opaque);
             rings.Draw(spriteBatch);
             spriteBatch.End();
 
@@ -203,6 +209,9 @@ namespace EventHorizonRider.Core
             var rightEdge = graphics.GraphicsDevice.Viewport.Width - restartTextSize.X - textPadding;
             spriteBatch.DrawString(spriteFont, "RESTART", new Vector2(rightEdge, textPadding), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
 
+#if DEBUG
+            fpsCounter.Draw(spriteBatch);
+#endif
             spriteBatch.End();
 
             base.Draw(gameTime);

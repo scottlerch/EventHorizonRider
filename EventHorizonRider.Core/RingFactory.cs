@@ -14,11 +14,14 @@ namespace EventHorizonRider.Core
 
         internal void LoadContent(GraphicsDevice graphicsDevice)
         {
+            const int ringSegmentWidth = 16;
+            const int ringSegmentHeight = 45;
+
             this.graphicsDevice = graphicsDevice;
 
             var ringColor = Color.DarkGray.AdjustLight(0.5f).PackedValue;
 
-            ringEdgeTexture = new Texture2D(graphicsDevice, 16, 45, false, SurfaceFormat.Color);
+            ringEdgeTexture = new Texture2D(graphicsDevice, ringSegmentWidth, ringSegmentHeight, false, SurfaceFormat.Color);
             ringEdgeTexture.SetData(Enumerable.Range(0, ringEdgeTexture.Width * ringEdgeTexture.Height).Select(i => ringColor).ToArray());
         }
 
