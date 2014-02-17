@@ -76,12 +76,14 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Content Include="Content\crash_sound.xnb">
+    <None Include="..\EventHorizonRider.Core\Content\crash_sound.xnb">
+      <Link>Content\crash_sound.xnb</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\highscore_font.xnb">
+    </None>
+    <None Include="..\EventHorizonRider.Core\Content\highscore_font.xnb">
+      <Link>Content\highscore_font.xnb</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
