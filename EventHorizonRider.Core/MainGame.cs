@@ -107,7 +107,9 @@ namespace EventHorizonRider.Core
 
             fpsCounter.LoadContent(Content, graphics.GraphicsDevice);
 
+#if !WINDOWS
             musicSong = Content.Load<Song>("techno_song");
+#endif
         }
 
         /// <summary>
@@ -147,8 +149,10 @@ namespace EventHorizonRider.Core
                 rings.Initialize();
                 rings.SetLevel(levels.GetLevel(currentLevelNumber));
 
+#if !WINDOWS
                 MediaPlayer.IsRepeating = true;
                 MediaPlayer.Play(musicSong);
+#endif
 
                 state = GameState.Running;
             }
@@ -181,7 +185,9 @@ namespace EventHorizonRider.Core
             }
             else if (state == GameState.Over)
             {
+#if !WINDOWS
                 MediaPlayer.Stop();
+#endif
 
                 backgroundColor = Color.Red;
 
