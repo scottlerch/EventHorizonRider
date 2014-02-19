@@ -52,7 +52,7 @@ namespace EventHorizonRider.Core
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Blackhole blackhole)
         {
             if (stopped)
             {
@@ -62,6 +62,11 @@ namespace EventHorizonRider.Core
             foreach (var ring in rings.ToList())
             {
                 ring.Radius -= (float)gameTime.ElapsedGameTime.TotalSeconds * this.level.RingSpeed;
+
+                if (ring.Radius < blackhole.Height * 0.75f)
+                {
+                    blackhole.Pulse();
+                }
 
                 if (ring.Radius <= 0)
                 {

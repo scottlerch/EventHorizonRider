@@ -104,7 +104,10 @@ namespace EventHorizonRider.Core
 
             Rotation = MathHelper.WrapAngle(Rotation);
 
-            this.Radius = (blackhole.Texture.Width / 2) + (Texture.Height / 2);
+            const float RadiusPadding = 10;
+
+            this.Radius = (blackhole.Height / 2) + (Texture.Height / 2) + RadiusPadding;
+
             Position.Y = blackhole.Position.Y - ((float)Math.Cos(Rotation) * this.Radius);
             Position.X = blackhole.Position.X + ((float)Math.Sin(Rotation) * this.Radius);
 
@@ -116,7 +119,7 @@ namespace EventHorizonRider.Core
             Rotation = 0;
 
             Position.X = blackhole.Position.X;
-            Position.Y = blackhole.Position.Y - (blackhole.Texture.Height / 2) - (Texture.Height / 2);
+            Position.Y = blackhole.Position.Y - (blackhole.Height / 2) - (Texture.Height / 2);
 
             stopped = false;
         }

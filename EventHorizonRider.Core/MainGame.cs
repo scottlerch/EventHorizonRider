@@ -140,6 +140,8 @@ namespace EventHorizonRider.Core
                 state = GameState.Starting;
             }
 
+            blackhole.Update(gameTime);
+
             if (state == GameState.Starting)
             {
                 gameTimeElapsed.Restart();
@@ -161,7 +163,7 @@ namespace EventHorizonRider.Core
                 backgroundColor = Color.LightGray;
 
                 ship.Update(keyState, touchState, gameTime, blackhole, rings);
-                rings.Update(gameTime);
+                rings.Update(gameTime, blackhole);
 
                 if (rings.Intersects(ship))
                 {
