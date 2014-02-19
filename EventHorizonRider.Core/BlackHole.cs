@@ -34,44 +34,27 @@ namespace EventHorizonRider.Core
                 graphics.Viewport.Height / 2);
         }
 
-        public float Height { get { return Texture.Height * scale;  } }
+        public float Height { get { return Texture.Height * spring.BlockX; } }
 
-        private bool startPulse = false;
-        private bool isPulsing = false;
-        private TimeSpan pulseDuration = TimeSpan.FromSeconds(0.5);
-        private TimeSpan pulseEndTime;
-        private float scale = 1f;
+        private bool isStopped = false;
+
+        private Spring spring = new Spring
+        {
+            Friction = -0.9f,
+            Stiffness = -100f,
+            BlockMass = 0.1f,
+        };
 
         public void Pulse()
         {
-            if (!isPulsing)
-            {
-                startPulse = true;
-            }
+            spring.PullBlock(1.15f, 1.5f);
         }
 
         internal void Update(GameTime gameTime)
         {
-            // TODO: add bounce back, each call to pulse should add more engery into pulsing
-            if (startPulse)
+            if (!isStopped)
             {
-                pulseEndTime = gameTime.TotalGameTime + pulseDuration;
-                isPulsing = true;
-                startPulse = false;
-            }
-            else if (isPulsing)
-            {
-                if (pulseEndTime < gameTime.TotalGameTime)
-                {
-                    scale = 1f;
-                    isPulsing = false;
-                }
-                else
-                {
-                    var x = ((4f * (float)(pulseDuration.TotalSeconds - (pulseEndTime.TotalSeconds - gameTime.TotalGameTime.TotalSeconds))) - 1f);
-                    scale = -(x * x) + 2f;
-                    scale = ((scale - 1f) * 0.2f) + 1f;
-                }
+                spring.Update(gameTime.ElapsedGameTime);
             }
         }
 
@@ -80,7 +63,17 @@ namespace EventHorizonRider.Core
             spriteBatch.Draw(Texture,
                 position: Position,
                 origin: new Vector2(Texture.Width / 2, Texture.Height / 2),
-                scale: new Vector2(scale, scale));
+                scale: new Vector2(spring.BlockX, spring.BlockX));
+        }
+
+        internal void Stop()
+        {
+            isStopped = true;
+        }
+
+        internal void Start()
+        {
+            isStopped = false;
         }
     }
 }

@@ -63,12 +63,13 @@ namespace EventHorizonRider.Core
             {
                 ring.Radius -= (float)gameTime.ElapsedGameTime.TotalSeconds * this.level.RingSpeed;
 
-                if (ring.Radius < blackhole.Height * 0.75f)
+                if (!ring.ConsumedByBlackhole && ring.Radius <= blackhole.Height * 0.5f)
                 {
                     blackhole.Pulse();
+                    ring.ConsumedByBlackhole = true;
                 }
 
-                if (ring.Radius <= 0)
+                if (ring.Radius <= 0f)
                 {
                     rings.Remove(ring);
                 }
@@ -106,7 +107,7 @@ namespace EventHorizonRider.Core
             return false;
         }
 
-        public void Initialize()
+        public void Start()
         {
             rings.Clear();
             stopped = false;

@@ -18,6 +18,7 @@ namespace EventHorizonRider.Core
             {
                 case 1:
                     return GetLevelOne();
+                    //return GetTestLevel();
                 case 2:
                     return GetLevelTwo();
                 case 3:
@@ -27,6 +28,18 @@ namespace EventHorizonRider.Core
                 default:
                     return GetInfiniteLevel();
             }
+        }
+
+        public Level GetTestLevel()
+        {
+            return new Level
+            {
+                RingSpeed = 250,
+                RingInterval = TimeSpan.FromSeconds(4),
+                Sequence = Enumerable.Empty<RingInfo>().Concat(
+                    ringInfoFactory.GetStepSequence(numberOfSteps: 10, gapSize: MathHelper.TwoPi / 4f),
+                    ringInfoFactory.GetZigZagSequence(iterations: 10, gapSize: MathHelper.TwoPi / 4f)),
+            };
         }
 
         public Level GetLevelOne()

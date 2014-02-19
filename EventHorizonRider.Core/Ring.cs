@@ -83,5 +83,7 @@ namespace EventHorizonRider.Core
                 // TODO:
             }
         }
+
+        public bool ConsumedByBlackhole { get; set; }
     }
 }

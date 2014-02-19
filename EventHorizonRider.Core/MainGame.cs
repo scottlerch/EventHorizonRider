@@ -147,8 +147,9 @@ namespace EventHorizonRider.Core
                 gameTimeElapsed.Restart();
                 currentLevelNumber = 1;
 
-                ship.Initialize(blackhole);
-                rings.Initialize();
+                blackhole.Start();
+                ship.Start(blackhole);
+                rings.Start();
                 rings.SetLevel(levels.GetLevel(currentLevelNumber));
 
 #if !WINDOWS
@@ -193,6 +194,7 @@ namespace EventHorizonRider.Core
 
                 backgroundColor = Color.Red;
 
+                blackhole.Stop();
                 ship.Stop();
                 rings.Stop();
                 gameTimeElapsed.Stop();

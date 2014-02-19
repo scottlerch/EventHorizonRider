@@ -56,6 +56,7 @@
     <Compile Include="RingInfo.cs" />
     <Compile Include="RingInfoFactory.cs" />
     <Compile Include="Ship.cs" />
+    <Compile Include="Spring.cs" />
     <Compile Include="Utilities\TextureProcessor.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -114,7 +114,7 @@ namespace EventHorizonRider.Core
             rings.ClampToNearestGapEdge(this);
         }
 
-        internal void Initialize(Blackhole blackhole)
+        internal void Start(Blackhole blackhole)
         {
             Rotation = 0;
 
