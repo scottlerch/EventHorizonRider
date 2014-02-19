@@ -89,11 +89,14 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if exist "$(TargetDir)Content\*.xnb" copy /y "$(TargetDir)Content\*.xnb" "$(SolutionDir)EventHorizonRider.Core\Content"
-if exist "$(TargetDir)Content\*.wma" copy /y "$(TargetDir)Content\*.wma" "$(SolutionDir)EventHorizonRider.Core\Content"
-if exist "$(TargetDir)Content\*.mp3" copy /y "$(TargetDir)Content\*.mp3" "$(SolutionDir)EventHorizonRider.Core\Content"
-if exist "$(TargetDir)Content\*.xnb" copy /y "$(TargetDir)Content\*.xnb" "$(SolutionDir)EventHorizonRider.iOS\Content"
-if exist "$(TargetDir)Content\*.mp3" copy /y "$(TargetDir)Content\*.mp3" "$(SolutionDir)EventHorizonRider.iOS\Content"</PostBuildEvent>
+    <PostBuildEvent>if "$(MonoGamePlatform)" == "Windows8" copy /y "$(TargetDir)Content\*.xnb" "$(SolutionDir)EventHorizonRider.WindowsStore\Content"
+if "$(MonoGamePlatform)" == "Windows8" copy /y "$(TargetDir)Content\*.wma" "$(SolutionDir)EventHorizonRider.WindowsStore\Content"
+if "$(MonoGamePlatform)" == "Windows8" copy /y "$(TargetDir)Content\*.xnb" "$(SolutionDir)EventHorizonRider.WindowsPhone\Content"
+if "$(MonoGamePlatform)" == "Windows8" copy /y "$(TargetDir)Content\*.wma" "$(SolutionDir)EventHorizonRider.WindowsPhone\Content"
+if "$(MonoGamePlatform)" == "Windows" copy /y "$(TargetDir)Content\*.xnb" "$(SolutionDir)EventHorizonRider.Windows\Content"
+if "$(MonoGamePlatform)" == "Windows" copy /y "$(TargetDir)Content\*.wma" "$(SolutionDir)EventHorizonRider.Windows\Content"
+if "$(MonoGamePlatform)" == "iOS" copy /y "$(TargetDir)Content\*.xnb" "$(SolutionDir)EventHorizonRider.iOS\Content"
+if "$(MonoGamePlatform)" == "iOS" copy /y "$(TargetDir)Content\*.mp3" "$(SolutionDir)EventHorizonRider.iOS\Content"</PostBuildEvent>
   </PropertyGroup>
   <!--
       To modify your build process, add your task inside one of the targets below and uncomment it. 
