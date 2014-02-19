@@ -15,20 +15,31 @@ namespace EventHorizonRider.Core
         public Texture2D Texture;
         public Vector2 Origin;
 
+        public float RotationalVelocity;
+
+        private float rotationalOffset;
+
         public void Draw(SpriteBatch spriteBatch)
         {
             for (float i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.04f)
             {
+                var angle = i + rotationalOffset;
+
                 if (Gaps.Any(gap => gap.IsInsideGap(i)))
                     continue;
 
                 spriteBatch.Draw(Texture,
                     position: new Vector2(
-                        Origin.X + ((float)Math.Sin(i) * Radius),
-                        Origin.Y - ((float)Math.Cos(i) * Radius)),
+                        Origin.X + ((float)Math.Sin(angle) * Radius),
+                        Origin.Y - ((float)Math.Cos(angle) * Radius)),
                     origin: new Vector2(Texture.Width / 2, Texture.Height / 2),
-                    rotation: i);
+                    rotation: angle);
             }
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            rotationalOffset += RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         internal bool Intersects(Ship ship)
@@ -66,8 +77,8 @@ namespace EventHorizonRider.Core
 
             var halfGap = (ringGap.GapSize / 2f) - textureOffset;
 
-            var gapStartAngle = ringGap.GapAngle - halfGap;
-            var gapEndAngle = ringGap.GapAngle + halfGap;
+            var gapStartAngle = (ringGap.GapAngle+ rotationalOffset) - halfGap ;
+            var gapEndAngle = (ringGap.GapAngle + rotationalOffset) + halfGap ;
 
             return new Range<float> 
             { 

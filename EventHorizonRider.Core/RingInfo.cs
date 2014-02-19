@@ -11,5 +11,7 @@ namespace EventHorizonRider.Core
         public int NumberOfGaps;
         public float GapSize;
         public float Angle;
+
+        public float RotationalVelocity;
     }
 }

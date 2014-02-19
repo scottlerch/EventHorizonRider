@@ -13,6 +13,8 @@ namespace EventHorizonRider.Core
 {
     internal class Ship
     {
+        private float DefaultRotationVelocity = MathHelper.TwoPi / 32;
+
         public Vector2 Position;
         public float Rotation = 0;
         public Texture2D Texture;
@@ -54,11 +56,6 @@ namespace EventHorizonRider.Core
             this.crashSound = content.Load<SoundEffect>("crash_sound");
         }
 
-        public void Update(GameTime gameTime)
-        {
-
-        }
-
         internal void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Texture,
@@ -89,6 +86,8 @@ namespace EventHorizonRider.Core
             {
                 return;
             }
+
+            Rotation += DefaultRotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             float moveSpeed = 1.1f;
 

@@ -61,6 +61,8 @@ namespace EventHorizonRider.Core
 
             foreach (var ring in rings.ToList())
             {
+                ring.Update(gameTime);
+
                 ring.Radius -= (float)gameTime.ElapsedGameTime.TotalSeconds * this.level.RingSpeed;
 
                 if (!ring.ConsumedByBlackhole && ring.Radius <= blackhole.Height * 0.5f)

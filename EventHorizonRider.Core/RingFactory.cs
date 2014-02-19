@@ -33,6 +33,7 @@ namespace EventHorizonRider.Core
         {
             return new Ring
             {
+                RotationalVelocity = info.RotationalVelocity,
                 Texture = ringEdgeTexture,
                 Radius = startRadius,
                 Origin = new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2),
