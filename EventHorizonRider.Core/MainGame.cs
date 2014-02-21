@@ -52,6 +52,9 @@ namespace EventHorizonRider.Core
 
         private Song musicSong;
 
+        //private RenderTarget2D renderTarget;
+        //private Effect grayscaleEffect;
+
         public MainGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -110,6 +113,14 @@ namespace EventHorizonRider.Core
 #if !WINDOWS
             musicSong = Content.Load<Song>("techno_song");
 #endif
+
+            // grayscaleEffect = Content.Load<Effect>("grayscale_effect");
+
+            //renderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+            //                                  graphics.GraphicsDevice.PresentationParameters.BackBufferWidth,
+            //                                  graphics.GraphicsDevice.PresentationParameters.BackBufferHeight);
+
+            ship.Start(blackhole);
         }
 
         /// <summary>
@@ -213,6 +224,8 @@ namespace EventHorizonRider.Core
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            //GraphicsDevice.SetRenderTarget(renderTarget);
+
             GraphicsDevice.Clear(backgroundColor);
 
             // Draw rings
@@ -259,6 +272,13 @@ namespace EventHorizonRider.Core
             fpsCounter.Draw(spriteBatch);
 #endif
             spriteBatch.End();
+
+
+            //GraphicsDevice.SetRenderTarget(null);
+
+            //spriteBatch.Begin(0, BlendState.Opaque, null, null, null, grayscaleEffect);
+            //spriteBatch.Draw((Texture2D)renderTarget, position: Vector2.Zero, color: Color.White);
+            //spriteBatch.End();
 
             base.Draw(gameTime);
         }
