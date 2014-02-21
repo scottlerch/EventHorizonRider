@@ -17,15 +17,6 @@ namespace EventHorizonRider.Core
     /// </summary>
     public class MainGame : Game
     {
-        private enum GameState
-        {
-            Init,
-            Starting,
-            Running,
-            Paused,
-            Over,
-        }
-
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
@@ -34,16 +25,13 @@ namespace EventHorizonRider.Core
         private RingCollection rings;
         private Levels levels;
         private PlayerData playerData;
-
-        private SpriteFont spriteFont;
-
-        private Stopwatch gameTimeElapsed = new Stopwatch();
+        private PlayButton playButton;
+        private PlayTimer playTimer;
+        private FpsCounter fpsCounter;
 
         private GameState state = GameState.Init;
 
         private Color backgroundColor = Color.LightGray;
-        private Vector2 restartTextSize;
-        private FpsCounter fpsCounter;
 
         private int currentLevelNumber = 1;
         private TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(2);
@@ -72,6 +60,8 @@ namespace EventHorizonRider.Core
             levels = new Levels();
             playerData = new PlayerData();
             fpsCounter = new FpsCounter();
+            playButton = new PlayButton();
+            playTimer = new PlayTimer();
         }
 
         public void SetResolution(int width, int height)
@@ -100,14 +90,11 @@ namespace EventHorizonRider.Core
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            spriteFont = Content.Load<SpriteFont>("highscore_font");
-
+            playTimer.LoadContent(Content, GraphicsDevice);
             blackhole.LoadContent(Content, graphics.GraphicsDevice);
             ship.LoadContent(Content, GraphicsDevice);
             rings.LoadContent(Content, GraphicsDevice);
-
-            restartTextSize = spriteFont.MeasureString("RESTART");
-
+            playButton.LoadContent(Content, GraphicsDevice);
             fpsCounter.LoadContent(Content, graphics.GraphicsDevice);
 
 #if !WINDOWS
@@ -145,19 +132,21 @@ namespace EventHorizonRider.Core
             var mouseState = Mouse.GetState();
             var keyState = Keyboard.GetState();
 
-            if (touchState.Any(t => t.State == TouchLocationState.Pressed && t.Position.X > (graphics.GraphicsDevice.Viewport.Width - 200) && t.Position.Y < 50) ||
-                (mouseState.X > (graphics.GraphicsDevice.Viewport.Width - 200) && mouseState.Y < 50 && mouseState.LeftButton == ButtonState.Pressed))
+            playButton.Update(gameTime, mouseState, touchState, state);
+
+            if (playButton.Pressed)
             {
                 state = GameState.Starting;
             }
 
             blackhole.Update(gameTime);
+            playTimer.Update(gameTime, state, playerData, currentLevelNumber);
 
             if (state == GameState.Starting)
             {
-                gameTimeElapsed.Restart();
                 currentLevelNumber = 1;
 
+                playTimer.Restart();
                 blackhole.Start();
                 ship.Start(blackhole);
                 rings.Start();
@@ -208,9 +197,9 @@ namespace EventHorizonRider.Core
                 blackhole.Stop();
                 ship.Stop();
                 rings.Stop();
-                gameTimeElapsed.Stop();
 
-                playerData.Update(gameTimeElapsed.Elapsed);
+                playTimer.Stop();
+                playerData.Update(playTimer.Elapsed);
 
                 state = GameState.Paused;
             }
@@ -241,32 +230,8 @@ namespace EventHorizonRider.Core
 
             // Draw text
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-
-            var scoreColor = Color.White;
-
-            if (gameTimeElapsed.Elapsed >= playerData.Highscore)
-            {
-                scoreColor = Color.Yellow;
-            }
-            else
-            {
-                var percentComplete = 1f - (float)(gameTimeElapsed.Elapsed.TotalSeconds / playerData.Highscore.TotalSeconds);
-
-                scoreColor = Color.White.SetColors(percentComplete, 1f, percentComplete);
-            }
-
-            const float textPadding = 10;
-            const float textNewLinePadding = 5;
-
-            spriteBatch.DrawString(spriteFont, gameTimeElapsed.Elapsed.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(textPadding, textPadding), scoreColor, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
-
-            spriteBatch.DrawString(spriteFont, "Highscore: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff"), new Vector2(textPadding, textPadding + restartTextSize.Y + textNewLinePadding), Color.LightGray.AdjustLight(0.9f), 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
-
-            spriteBatch.DrawString(spriteFont, "Level: " + currentLevelNumber, new Vector2(textPadding, graphics.GraphicsDevice.Viewport.Height - (textPadding + restartTextSize.Y)), Color.LightGray.AdjustLight(0.9f), 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
-
-
-            var rightEdge = graphics.GraphicsDevice.Viewport.Width - restartTextSize.X - textPadding;
-            spriteBatch.DrawString(spriteFont, "RESTART", new Vector2(rightEdge, textPadding), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0.1f);
+            playTimer.Draw(spriteBatch);
+            playButton.Draw(spriteBatch);
 
 #if DEBUG
             fpsCounter.Draw(spriteBatch);
