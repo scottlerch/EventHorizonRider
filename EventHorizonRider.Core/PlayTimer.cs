@@ -51,7 +51,7 @@ namespace EventHorizonRider.Core
                 scoreColor = Color.White.SetColors(percentComplete, 1f, percentComplete);
             }
 
-            bestText = "Best: " + playerData.Highscore.ToString("hh\\:mm\\:ss\\.ff");
+            bestText = "Best: " + FormatTime(playerData.Highscore);
             levelText = "Level: " + currentLevelNumber;
         }
 
@@ -65,14 +65,19 @@ namespace EventHorizonRider.Core
             gameTimeElapsed.Stop();
         }
 
+        private string FormatTime(TimeSpan time)
+        {
+            return string.Format("{0:00}:{1:00}:{2:00}.{3:00}", time.Hours, time.Minutes, time.Seconds, (time.Milliseconds / 1000f) * 100);
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             const float textPadding = 10;
             const float textNewLinePadding = 5;
 
             spriteBatch.DrawString(
-                timeFont, 
-                gameTimeElapsed.Elapsed.ToString("hh\\:mm\\:ss\\.ff"),
+                timeFont,
+                FormatTime(gameTimeElapsed.Elapsed),
                 new Vector2(textPadding, textPadding), 
                 scoreColor, 
                 0,

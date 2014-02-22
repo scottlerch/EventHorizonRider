@@ -44,8 +44,8 @@ namespace EventHorizonRider.Core
         {
             this.gameState = gameState;
 
-            if (touchState.Any(t => t.State == TouchLocationState.Pressed && buttonBounds.Contains(t.Position)) ||
-                (mouseState.LeftButton == ButtonState.Pressed && buttonBounds.Contains(mouseState.Position)))
+            if ((gameState == GameState.Init || gameState == GameState.Paused) &&
+                IsPressed(mouseState, touchState))
             {
                 Pressed = true;
             }
@@ -53,6 +53,13 @@ namespace EventHorizonRider.Core
             {
                 Pressed = false;
             }
+        }
+
+        private bool IsPressed(MouseState mouseState, TouchCollection touchState)
+        {
+            return
+                touchState.Any(t => t.State == TouchLocationState.Pressed && buttonBounds.Contains(t.Position)) ||
+                (mouseState.LeftButton == ButtonState.Pressed && buttonBounds.Contains(mouseState.Position));
         }
 
         public void Draw(SpriteBatch spriteBatch)

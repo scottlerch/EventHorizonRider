@@ -9,6 +9,7 @@ using System.Linq;
 using EventHorizonRider.Core.Extensions;
 using System;
 using Microsoft.Xna.Framework.Media;
+using System.Linq;
 
 namespace EventHorizonRider.Core
 {
@@ -37,6 +38,8 @@ namespace EventHorizonRider.Core
         private TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(2);
         private TimeSpan levelEndTime = TimeSpan.Zero;
         private bool levelEnded = false;
+
+        private Texture2D background;
 
         private Song musicSong;
 
@@ -90,6 +93,8 @@ namespace EventHorizonRider.Core
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            background = Content.Load<Texture2D>("background");
+
             playTimer.LoadContent(Content, GraphicsDevice);
             blackhole.LoadContent(Content, graphics.GraphicsDevice);
             ship.LoadContent(Content, GraphicsDevice);
@@ -137,6 +142,7 @@ namespace EventHorizonRider.Core
             if (playButton.Pressed)
             {
                 state = GameState.Starting;
+                blackhole.Pulse();
             }
 
             blackhole.Update(gameTime);
@@ -216,6 +222,13 @@ namespace EventHorizonRider.Core
             //GraphicsDevice.SetRenderTarget(renderTarget);
 
             GraphicsDevice.Clear(backgroundColor);
+
+            if (state != GameState.Paused)
+            {
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+                spriteBatch.Draw(background, Vector2.Zero);
+                spriteBatch.End();
+            }
 
             // Draw rings
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.Opaque);
