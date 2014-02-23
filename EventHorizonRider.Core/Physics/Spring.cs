@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core.Physics
 {
     internal class Spring
     {

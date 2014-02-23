@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EventHorizonRider.Core.Extensions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EventHorizonRider.Core.Extensions;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core.Components
 {
     internal class Ring
     {

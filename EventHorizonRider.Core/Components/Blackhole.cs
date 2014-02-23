@@ -1,10 +1,10 @@
-﻿using EventHorizonRider.Core.Utilities;
+﻿using EventHorizonRider.Core.Graphics;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core.Components
 {
     internal class Blackhole
     {

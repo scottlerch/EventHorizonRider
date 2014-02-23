@@ -1,15 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EventHorizonRider.Core.Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventHorizonRider.Core.Extensions;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core.Components
 {
     internal class PlayTimer
     {

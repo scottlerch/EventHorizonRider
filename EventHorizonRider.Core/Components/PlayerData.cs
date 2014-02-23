@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core.Components
 {
     internal class PlayerData
     {

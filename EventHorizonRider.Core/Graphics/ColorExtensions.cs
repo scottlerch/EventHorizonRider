@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace EventHorizonRider.Core.Extensions
+namespace EventHorizonRider.Core.Graphics
 {
     internal static class ColorExtensions
     {

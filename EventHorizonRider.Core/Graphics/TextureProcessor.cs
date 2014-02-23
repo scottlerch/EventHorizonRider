@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventHorizonRider.Core.Utilities
+namespace EventHorizonRider.Core.Graphics
 {
     internal class TextureProcessor
     {

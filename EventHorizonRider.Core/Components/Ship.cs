@@ -1,15 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EventHorizonRider.Core.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System;
 using System.Linq;
-using EventHorizonRider.Core.Extensions;
-using EventHorizonRider.Core.Utilities;
-using Microsoft.Xna.Framework.Audio;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core.Components
 {
     internal class Ship
     {
