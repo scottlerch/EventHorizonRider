@@ -23,6 +23,13 @@ namespace EventHorizonRider.Core.Components
         private Vector2 screenCenter;
         private Vector2 startTextSize;
 
+        private readonly Func<Vector2> getScale;
+
+        public PlayButton(Func<Vector2> getScale)
+        {
+            this.getScale = getScale;
+        }
+
         public override void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
             buttonFont = content.Load<SpriteFont>("button_font");
@@ -95,7 +102,7 @@ namespace EventHorizonRider.Core.Components
                         screenCenter.Y - (startTextSize.Y/2f));
 
                     spriteBatch.DrawString(buttonFont, "START", position, Color.White*colorAlphaPercent, 0, Vector2.Zero,
-                        1, SpriteEffects.None, 0.1f);
+                        getScale(), SpriteEffects.None, 0.1f);
                 }
                 else
                 {
@@ -104,7 +111,7 @@ namespace EventHorizonRider.Core.Components
                         screenCenter.Y - (restartTextSize.Y/2f));
 
                     spriteBatch.DrawString(buttonFont, "RESTART", position, Color.White*colorAlphaPercent, 0,
-                        Vector2.Zero, 1, SpriteEffects.None, 0.1f);
+                        Vector2.Zero, getScale(), SpriteEffects.None, 0.1f);
                 }
             }
         }

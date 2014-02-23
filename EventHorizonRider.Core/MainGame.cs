@@ -73,7 +73,7 @@ namespace EventHorizonRider.Core
             ship = new Ship(blackhole);
             rings = new RingCollection(blackhole);
             fpsCounter = new FpsCounter();
-            playButton = new PlayButton();
+            playButton = new PlayButton(() => blackhole.Scale);
             playerData = new PlayerData();
             playTimer = new PlayTimer(playerData);
 

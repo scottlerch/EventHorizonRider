@@ -63,11 +63,13 @@ namespace EventHorizonRider.Core.Components
             }
         }
 
+        public Vector2 Scale { get { return new Vector2(spring.BlockX, spring.BlockX); } }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Position,
                 origin: new Vector2(texture.Width/2f, texture.Height/2f),
-                scale: new Vector2(spring.BlockX, spring.BlockX));
+                scale: Scale);
         }
 
         internal void Stop()
