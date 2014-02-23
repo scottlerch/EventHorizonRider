@@ -33,11 +33,13 @@ namespace EventHorizonRider.Core
                 graphics.Viewport.Width / 2f,
                 graphics.Viewport.Height / 2f);
 
+            const float buttonPadding = 10f;
+
             buttonBounds = new Rectangle(
-                (int)(screenCenter.X - (restartTextSize.X / 2f)),
-                (int)(screenCenter.Y - (restartTextSize.Y / 2f)),
-                (int)(restartTextSize.X),
-                (int)(restartTextSize.Y));
+                (int)(screenCenter.X - (restartTextSize.X / 2f) - buttonPadding),
+                (int)(screenCenter.Y - (restartTextSize.Y / 2f) - buttonPadding),
+                (int)(restartTextSize.X + buttonPadding),
+                (int)(restartTextSize.Y + buttonPadding));
         }
 
         public void Update(GameTime gameTime, MouseState mouseState, TouchCollection touchState, GameState gameState)

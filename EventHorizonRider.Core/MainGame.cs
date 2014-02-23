@@ -142,7 +142,7 @@ namespace EventHorizonRider.Core
             if (playButton.Pressed)
             {
                 state = GameState.Starting;
-                blackhole.Pulse();
+                blackhole.Pulse(pullX: 1.5f, pullVelocity:2.5f);
             }
 
             blackhole.Update(gameTime);

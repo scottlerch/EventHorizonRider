@@ -45,9 +45,9 @@ namespace EventHorizonRider.Core
             BlockMass = 0.1f,
         };
 
-        public void Pulse()
+        public void Pulse(float pullX = 1.15f, float pullVelocity = 1.5f)
         {
-            spring.PullBlock(1.15f, 1.5f);
+            spring.PullBlock(pullX, pullVelocity);
         }
 
         internal void Update(GameTime gameTime)

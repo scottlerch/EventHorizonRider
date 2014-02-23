@@ -219,3 +219,11 @@ pip-log.txt
 /*.userprefs
 /EventHorizonRider.Content/Logging.txt
 /README.html
+/EventHorizonRider.WindowsPhone/Content/*.xnb
+/EventHorizonRider.WindowsPhone/Content/*.wma
+/EventHorizonRider.Windows/Content/*.xnb
+/EventHorizonRider.Windows/Content/*.wma
+/EventHorizonRider.WindowsStore/Content/*.xnb
+/EventHorizonRider.WindowsStore/Content/*.wma
+/EventHorizonRider.iOS/Content/*.xnb
+/EventHorizonRider.iOS/Content/*.mp3
