@@ -19,7 +19,7 @@ namespace EventHorizonRider.Core
         public float Rotation = 0;
         public Texture2D Texture;
 
-        private bool stopped = false;
+        private bool stopped = true;
         private GraphicsDevice graphics;
 
         private SoundEffect crashSound;
@@ -103,7 +103,7 @@ namespace EventHorizonRider.Core
 
             Rotation = MathHelper.WrapAngle(Rotation);
 
-            const float RadiusPadding = 10;
+            const float RadiusPadding = 5;
 
             this.Radius = (blackhole.Height / 2) + (Texture.Height / 2) + RadiusPadding;
 
@@ -111,6 +111,14 @@ namespace EventHorizonRider.Core
             Position.X = blackhole.Position.X + ((float)Math.Sin(Rotation) * this.Radius);
 
             rings.ClampToNearestGapEdge(this);
+        }
+
+        internal void Initialize(Blackhole blackhole)
+        {
+            Rotation = 0;
+
+            Position.X = blackhole.Position.X;
+            Position.Y = blackhole.Position.Y - (blackhole.Height / 2) - (Texture.Height / 2);
         }
 
         internal void Start(Blackhole blackhole)

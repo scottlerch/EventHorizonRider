@@ -65,6 +65,14 @@ namespace EventHorizonRider.Core
             fpsCounter = new FpsCounter();
             playButton = new PlayButton();
             playTimer = new PlayTimer();
+
+            playButton.Pressed += (e, args) => 
+            {
+                blackhole.Pulse(pullX: 1.5f, pullVelocity: 2.5f);
+                playButton.Hide();
+
+                state = GameState.Starting;
+            };
         }
 
         public void SetResolution(int width, int height)
@@ -111,8 +119,6 @@ namespace EventHorizonRider.Core
             //renderTarget = new RenderTarget2D(graphics.GraphicsDevice,
             //                                  graphics.GraphicsDevice.PresentationParameters.BackBufferWidth,
             //                                  graphics.GraphicsDevice.PresentationParameters.BackBufferHeight);
-
-            ship.Start(blackhole);
         }
 
         /// <summary>
@@ -137,18 +143,18 @@ namespace EventHorizonRider.Core
             var mouseState = Mouse.GetState();
             var keyState = Keyboard.GetState();
 
-            playButton.Update(gameTime, mouseState, touchState, state);
-
-            if (playButton.Pressed)
-            {
-                state = GameState.Starting;
-                blackhole.Pulse(pullX: 1.5f, pullVelocity:2.5f);
-            }
-
+            playButton.Update(gameTime, mouseState, touchState);
             blackhole.Update(gameTime);
             playTimer.Update(gameTime, state, playerData, currentLevelNumber);
+            ship.Update(keyState, touchState, gameTime, blackhole, rings);
+            rings.Update(gameTime, blackhole);
+            playerData.Update(playTimer.Elapsed);
 
-            if (state == GameState.Starting)
+            if (state == GameState.Init)
+            {
+                ship.Initialize(blackhole);
+            }
+            else if (state == GameState.Starting)
             {
                 currentLevelNumber = 1;
 
@@ -168,9 +174,6 @@ namespace EventHorizonRider.Core
             else if (state == GameState.Running)
             {
                 backgroundColor = Color.LightGray;
-
-                ship.Update(keyState, touchState, gameTime, blackhole, rings);
-                rings.Update(gameTime, blackhole);
 
                 if (rings.Intersects(ship))
                 {
@@ -199,13 +202,13 @@ namespace EventHorizonRider.Core
 #endif
 
                 backgroundColor = Color.Red;
-
+                
                 blackhole.Stop();
                 ship.Stop();
                 rings.Stop();
 
                 playTimer.Stop();
-                playerData.Update(playTimer.Elapsed);
+                playButton.Show(isRestart: true);
 
                 state = GameState.Paused;
             }

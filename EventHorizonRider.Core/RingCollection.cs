@@ -23,7 +23,7 @@ namespace EventHorizonRider.Core
 
         private SoundEffect newLevelSound;
 
-        private bool stopped = false;
+        private bool stopped = true;
 
         public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
         {
