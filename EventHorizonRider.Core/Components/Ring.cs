@@ -1,43 +1,44 @@
-﻿using EventHorizonRider.Core.Extensions;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EventHorizonRider.Core.Extensions;
+using EventHorizonRider.Core.Input;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components
 {
-    internal class Ring
+    internal class Ring : ComponentBase
     {
         public List<RingGap> Gaps;
 
-        public float Radius;
-        public Texture2D Texture;
         public Vector2 Origin;
+        public float Radius;
 
         public float RotationalVelocity;
+        public Texture2D Texture;
 
         private float rotationalOffset;
+        public bool ConsumedByBlackhole { get; set; }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            for (float i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.04f)
+            for (var i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.04f)
             {
                 var angle = i + rotationalOffset;
 
                 if (Gaps.Any(gap => gap.IsInsideGap(i)))
                     continue;
 
-                spriteBatch.Draw(Texture,
-                    position: new Vector2(
-                        Origin.X + ((float)Math.Sin(angle) * Radius),
-                        Origin.Y - ((float)Math.Cos(angle) * Radius)),
-                    origin: new Vector2(Texture.Width / 2, Texture.Height / 2),
+                spriteBatch.Draw(Texture, new Vector2(
+                    Origin.X + ((float)Math.Sin(angle) * Radius),
+                    Origin.Y - ((float)Math.Cos(angle) * Radius)),
+                    origin: new Vector2(Texture.Width / 2f, Texture.Height / 2f),
                     rotation: angle);
             }
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime, InputState inputState)
         {
             rotationalOffset += RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
@@ -59,7 +60,7 @@ namespace EventHorizonRider.Core.Components
             var startRingEdge = Radius - (ringWidth / 2f);
             var endRingEdge = Radius + (ringWidth / 2f);
 
-            var shipFrontEdge = (Origin - ship.Position).Length() + (ship.Texture.Height / 2);
+            var shipFrontEdge = (Origin - ship.Position).Length() + (ship.Texture.Height / 2f);
 
             return shipFrontEdge.IsBetween(startRingEdge, endRingEdge);
         }
@@ -73,28 +74,18 @@ namespace EventHorizonRider.Core.Components
 
         private Range<float> GetGapEdges(Ship ship, RingGap ringGap)
         {
-            var textureOffset = (float)Math.Asin((Texture.Width / 2) / ship.Radius);
+            var textureOffset = (float)Math.Asin((Texture.Width / 2f) / ship.Radius);
 
             var halfGap = (ringGap.GapSize / 2f) - textureOffset;
 
-            var gapStartAngle = (ringGap.GapAngle+ rotationalOffset) - halfGap ;
-            var gapEndAngle = (ringGap.GapAngle + rotationalOffset) + halfGap ;
+            var gapStartAngle = (ringGap.GapAngle + rotationalOffset) - halfGap;
+            var gapEndAngle = (ringGap.GapAngle + rotationalOffset) + halfGap;
 
-            return new Range<float> 
-            { 
-                Start = MathHelper.WrapAngle(gapStartAngle), 
-                End = MathHelper.WrapAngle(gapEndAngle) 
+            return new Range<float>
+            {
+                Start = MathHelper.WrapAngle(gapStartAngle),
+                End = MathHelper.WrapAngle(gapEndAngle)
             };
         }
-
-        internal void ClampToNearestGapEdge(Ship ship)
-        {
-            if (IsInsideRing(ship))
-            {
-                // TODO:
-            }
-        }
-
-        public bool ConsumedByBlackhole { get; set; }
     }
 }

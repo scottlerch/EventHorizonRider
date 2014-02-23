@@ -1,32 +1,34 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using EventHorizonRider.Core.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace EventHorizonRider.Core.Components
 {
-    public class FpsCounter
+    internal class FpsCounter : ComponentBase
     {
-        private SpriteFont spriteFont;
+        private const string TextFormat = "FPS: {0} Memory: {1:0.0} MB";
 
-        private int frameRate = 0;
-        private int frameCounter = 0;
         private TimeSpan elapsedTime = TimeSpan.Zero;
-        private Vector2 textSize;
-        private readonly string textFormat = "FPS: {0} Memory: {1:0.0} MB";
+        private int frameCounter;
+        private int frameRate;
         private Vector2 position;
+        private SpriteFont spriteFont;
+        private Vector2 textSize;
 
-        internal void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
+        public override void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
             spriteFont = content.Load<SpriteFont>("fps_font");
-            textSize = spriteFont.MeasureString(textFormat);
+            textSize = spriteFont.MeasureString(TextFormat);
 
             const float padding = 1;
 
-            position = new Vector2(graphicsDevice.Viewport.Width - (textSize.X + padding), graphicsDevice.Viewport.Height - (textSize.Y + padding));
+            position = new Vector2(graphics.Viewport.Width - (textSize.X + padding),
+                graphics.Viewport.Height - (textSize.Y + padding));
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime, InputState inputState)
         {
             elapsedTime += gameTime.ElapsedGameTime;
 
@@ -38,13 +40,15 @@ namespace EventHorizonRider.Core.Components
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
+#if DEBUG
             frameCounter++;
 
-            string fps = string.Format(textFormat, frameRate, GC.GetTotalMemory(false) / 1024f / 1024f);
+            var fps = string.Format(TextFormat, frameRate, GC.GetTotalMemory(false)/1024f/1024f);
 
             spriteBatch.DrawString(spriteFont, fps, position, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 1);
+#endif
         }
     }
 }

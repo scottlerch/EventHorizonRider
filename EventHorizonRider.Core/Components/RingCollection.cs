@@ -1,42 +1,47 @@
-﻿using EventHorizonRider.Core.Extensions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using EventHorizonRider.Core.Extensions;
+using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace EventHorizonRider.Core.Components
 {
-    internal class RingCollection
+    internal class RingCollection : ComponentBase
     {
-        private List<Ring> rings = new List<Ring>();
+        private readonly Blackhole blackhole;
+        private readonly RingFactory ringFactory = new RingFactory();
+        private readonly List<Ring> rings = new List<Ring>();
+        private IEnumerator<RingInfo> currentSequence;
 
-        private GraphicsDevice graphicsDevice;
         private DateTime lastRingAdd = DateTime.UtcNow;
 
-        private RingFactory ringFactory = new RingFactory();
         private Level level;
-
-        private IEnumerator<RingInfo> currentSequence;
 
         private SoundEffect newLevelSound;
 
         private bool stopped = true;
 
-        public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
+        public RingCollection(Blackhole blackhole)
         {
-            this.graphicsDevice = graphicsDevice;
+            this.blackhole = blackhole;
+        }
 
-            ringFactory.LoadContent(graphicsDevice);
+        public bool HasMoreRings { get; private set; }
+
+        public override void LoadContent(ContentManager content, GraphicsDevice graphics)
+        {
+            ringFactory.LoadContent(graphics);
 
             newLevelSound = content.Load<SoundEffect>("newlevel_sound");
         }
 
-        public void SetLevel(Level level)
+        public void SetLevel(Level newLevel)
         {
-            this.level = level;
+            level = newLevel;
 
             currentSequence = level.Sequence.GetEnumerator();
             HasMoreRings = true;
@@ -44,7 +49,7 @@ namespace EventHorizonRider.Core.Components
             newLevelSound.Play();
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             foreach (var ring in rings)
             {
@@ -52,7 +57,7 @@ namespace EventHorizonRider.Core.Components
             }
         }
 
-        public void Update(GameTime gameTime, Blackhole blackhole)
+        public override void Update(GameTime gameTime, InputState inputState)
         {
             if (stopped)
             {
@@ -61,11 +66,11 @@ namespace EventHorizonRider.Core.Components
 
             foreach (var ring in rings.ToList())
             {
-                ring.Update(gameTime);
+                ring.Update(gameTime, inputState);
 
-                ring.Radius -= (float)gameTime.ElapsedGameTime.TotalSeconds * this.level.RingSpeed;
+                ring.Radius -= (float) gameTime.ElapsedGameTime.TotalSeconds*level.RingSpeed;
 
-                if (!ring.ConsumedByBlackhole && ring.Radius <= blackhole.Height * 0.5f)
+                if (!ring.ConsumedByBlackhole && ring.Radius <= blackhole.Height*0.5f)
                 {
                     blackhole.Pulse();
                     ring.ConsumedByBlackhole = true;
@@ -77,7 +82,7 @@ namespace EventHorizonRider.Core.Components
                 }
             }
 
-            if (DateTime.UtcNow - lastRingAdd > this.level.RingInterval)
+            if (DateTime.UtcNow - lastRingAdd > level.RingInterval)
             {
                 lastRingAdd = DateTime.UtcNow;
 
@@ -94,19 +99,9 @@ namespace EventHorizonRider.Core.Components
             }
         }
 
-        public bool HasMoreRings { get; private set; }
-
         public bool Intersects(Ship ship)
         {
-            foreach (var ring in rings)
-            {
-                if (ring.Intersects(ship))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return rings.Any(ring => ring.Intersects(ship));
         }
 
         public void Start()
@@ -123,14 +118,6 @@ namespace EventHorizonRider.Core.Components
         internal void Stop()
         {
             stopped = true;
-        }
-
-        internal void ClampToNearestGapEdge(Ship ship)
-        {
-            foreach (var ring in rings)
-            {
-                ring.ClampToNearestGapEdge(ship);
-            }
         }
     }
 }

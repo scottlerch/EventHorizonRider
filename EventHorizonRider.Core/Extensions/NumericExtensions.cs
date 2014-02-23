@@ -15,7 +15,7 @@ namespace EventHorizonRider.Core.Extensions
                 return angle > startAngle && angle < endAngle;
             }
 
-            return angle > startAngle || angle < endAngle; 
+            return angle > startAngle || angle < endAngle;
         }
 
         public static bool IsBetween(this int edge, int startEdge, int endEdge)

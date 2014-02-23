@@ -1,42 +1,39 @@
-﻿using EventHorizonRider.Core.Components;
+﻿using System;
+using EventHorizonRider.Core.Components;
+using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Framework.Media;
-using System;
 
 namespace EventHorizonRider.Core
 {
     /// <summary>
-    /// This is the main type for your game
+    ///     This is the main type for your game
     /// </summary>
     public class MainGame : Game
     {
-        private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-
         private Blackhole blackhole;
-        private Ship ship;
-        private RingCollection rings;
+        private FpsCounter fpsCounter;
+        private readonly GraphicsDeviceManager graphics;
+
+        private InputState inputState;
         private Levels levels;
-        private PlayerData playerData;
+
+        private Music music;
         private PlayButton playButton;
         private PlayTimer playTimer;
-        private FpsCounter fpsCounter;
-
-        private GameState state = GameState.Init;
+        private PlayerData playerData;
+        private RingCollection rings;
+        private Ship ship;
+        private readonly TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(2);
+        private Texture2D background;
 
         private Color backgroundColor = Color.LightGray;
 
         private int currentLevelNumber = 1;
-        private TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(2);
         private TimeSpan levelEndTime = TimeSpan.Zero;
-        private bool levelEnded = false;
-
-        private Texture2D background;
-
-        private Song musicSong;
+        private bool levelEnded;
+        private SpriteBatch spriteBatch;
+        private GameState state = GameState.Init;
 
         //private RenderTarget2D renderTarget;
         //private Effect grayscaleEffect;
@@ -49,25 +46,6 @@ namespace EventHorizonRider.Core
             graphics.PreferredBackBufferWidth = 1136;
             graphics.PreferredBackBufferHeight = 640;
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
-
-            state = GameState.Init;
-
-            rings = new RingCollection();
-            ship = new Ship();
-            blackhole = new Blackhole();
-            levels = new Levels();
-            playerData = new PlayerData();
-            fpsCounter = new FpsCounter();
-            playButton = new PlayButton();
-            playTimer = new PlayTimer();
-
-            playButton.Pressed += (e, args) => 
-            {
-                blackhole.Pulse(pullX: 1.5f, pullVelocity: 2.5f);
-                playButton.Hide();
-
-                state = GameState.Starting;
-            };
         }
 
         public void SetResolution(int width, int height)
@@ -77,20 +55,42 @@ namespace EventHorizonRider.Core
         }
 
         /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
+        ///     Allows the game to perform any initialization it needs to before starting to run.
+        ///     This is where it can query for any required services and load any non-graphic
+        ///     related content.  Calling base.Initialize will enumerate through any components
+        ///     and initialize them as well.
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            state = GameState.Init;
+            levels = new Levels();
+
+            music = new Music();
+
+            inputState = new InputState();
+
+            blackhole = new Blackhole();
+            ship = new Ship(blackhole);
+            rings = new RingCollection(blackhole);
+            fpsCounter = new FpsCounter();
+            playButton = new PlayButton();
+            playerData = new PlayerData();
+            playTimer = new PlayTimer(playerData);
+
+            playButton.Pressed += (e, args) =>
+            {
+                blackhole.Pulse(1.5f, 2.5f);
+                playButton.Hide();
+
+                state = GameState.Starting;
+            };
+
             base.Initialize();
         }
 
         /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
+        ///     LoadContent will be called once per game and is the place to load
+        ///     all of your content.
         /// </summary>
         protected override void LoadContent()
         {
@@ -99,15 +99,12 @@ namespace EventHorizonRider.Core
             background = Content.Load<Texture2D>("background");
 
             playTimer.LoadContent(Content, GraphicsDevice);
-            blackhole.LoadContent(Content, graphics.GraphicsDevice);
+            blackhole.LoadContent(Content, GraphicsDevice);
             ship.LoadContent(Content, GraphicsDevice);
             rings.LoadContent(Content, GraphicsDevice);
             playButton.LoadContent(Content, GraphicsDevice);
-            fpsCounter.LoadContent(Content, graphics.GraphicsDevice);
-
-#if !WINDOWS
-            musicSong = Content.Load<Song>("techno_song");
-#endif
+            fpsCounter.LoadContent(Content, GraphicsDevice);
+            music.LoadContent(Content, GraphicsDevice);
 
             // grayscaleEffect = Content.Load<Effect>("grayscale_effect");
 
@@ -117,8 +114,8 @@ namespace EventHorizonRider.Core
         }
 
         /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
+        ///     UnloadContent will be called once per game and is the place to unload
+        ///     all content.
         /// </summary>
         protected override void UnloadContent()
         {
@@ -126,43 +123,36 @@ namespace EventHorizonRider.Core
         }
 
         /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
+        ///     Allows the game to run logic such as updating the world,
+        ///     checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            fpsCounter.Update(gameTime);
+            inputState.Update();
 
-            var touchState = TouchPanel.GetState();
-            var mouseState = Mouse.GetState();
-            var keyState = Keyboard.GetState();
-
-            playButton.Update(gameTime, mouseState, touchState);
-            blackhole.Update(gameTime);
-            playTimer.Update(gameTime, state, playerData, currentLevelNumber);
-            ship.Update(keyState, touchState, gameTime, blackhole, rings);
-            rings.Update(gameTime, blackhole);
-            playerData.Update(playTimer.Elapsed);
+            fpsCounter.Update(gameTime, inputState);
+            playButton.Update(gameTime, inputState);
+            blackhole.Update(gameTime, inputState);
+            playTimer.Update(gameTime, inputState);
+            ship.Update(gameTime, inputState);
+            rings.Update(gameTime, inputState);
 
             if (state == GameState.Init)
             {
-                ship.Initialize(blackhole);
+                ship.Initialize();
             }
             else if (state == GameState.Starting)
             {
                 currentLevelNumber = 1;
 
+                playTimer.SetLevel(currentLevelNumber);
                 playTimer.Restart();
                 blackhole.Start();
-                ship.Start(blackhole);
+                ship.Start();
                 rings.Start();
                 rings.SetLevel(levels.GetLevel(currentLevelNumber));
-
-#if !WINDOWS
-                MediaPlayer.IsRepeating = true;
-                MediaPlayer.Play(musicSong);
-#endif
+                music.Play();
 
                 state = GameState.Running;
             }
@@ -186,24 +176,26 @@ namespace EventHorizonRider.Core
                     {
                         levelEnded = false;
                         currentLevelNumber++;
+
+                        playTimer.SetLevel(currentLevelNumber);
                         rings.SetLevel(levels.GetLevel(currentLevelNumber));
                     }
                 }
             }
             else if (state == GameState.Over)
             {
-#if !WINDOWS
-                MediaPlayer.Stop();
-#endif
+                music.Stop();
 
                 backgroundColor = Color.Red;
-                
+
                 blackhole.Stop();
                 ship.Stop();
                 rings.Stop();
 
                 playTimer.Stop();
-                playButton.Show(isRestart: true);
+                playButton.Show(true);
+
+                playerData.UpdateBestTime(playTimer.Elapsed);
 
                 state = GameState.Paused;
             }
@@ -212,7 +204,7 @@ namespace EventHorizonRider.Core
         }
 
         /// <summary>
-        /// This is called when the game should draw itself.
+        ///     This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
@@ -243,12 +235,8 @@ namespace EventHorizonRider.Core
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             playTimer.Draw(spriteBatch);
             playButton.Draw(spriteBatch);
-
-#if DEBUG
             fpsCounter.Draw(spriteBatch);
-#endif
             spriteBatch.End();
-
 
             //GraphicsDevice.SetRenderTarget(null);
 

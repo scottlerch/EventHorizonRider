@@ -6,8 +6,16 @@ namespace EventHorizonRider.Core.Components
     {
         public float GapAngle;
         public float GapSize;
-        public float GapStart { get { return MathHelper.WrapAngle(GapAngle - (GapSize / 2)); } }
-        public float GapEnd { get { return MathHelper.WrapAngle(GapAngle + (GapSize / 2)); } }
+
+        public float GapStart
+        {
+            get { return MathHelper.WrapAngle(GapAngle - (GapSize/2)); }
+        }
+
+        public float GapEnd
+        {
+            get { return MathHelper.WrapAngle(GapAngle + (GapSize/2)); }
+        }
 
         public bool IsInsideGap(float angle)
         {

@@ -1,29 +1,29 @@
-﻿using EventHorizonRider.Core.Graphics;
+﻿using System.Linq;
+using EventHorizonRider.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Linq;
 
 namespace EventHorizonRider.Core.Components
 {
     internal class RingFactory
     {
         private Texture2D ringEdgeTexture;
-        private Random rand = new Random();
-        private GraphicsDevice graphicsDevice;
         private float startRadius;
+        private Vector2 viewportCenter;
 
-        internal void LoadContent(GraphicsDevice graphicsDevice)
+        internal void LoadContent(GraphicsDevice graphics)
         {
             const int ringSegmentWidth = 27;
             const int ringSegmentHeight = 45;
 
-            this.graphicsDevice = graphicsDevice;
+            viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
 
             var ringColor = Color.DarkGray.AdjustLight(0.5f).PackedValue;
 
-            ringEdgeTexture = new Texture2D(graphicsDevice, ringSegmentWidth, ringSegmentHeight, false, SurfaceFormat.Color);
-            ringEdgeTexture.SetData(Enumerable.Range(0, ringEdgeTexture.Width * ringEdgeTexture.Height).Select(i => ringColor).ToArray());
+            ringEdgeTexture = new Texture2D(graphics, ringSegmentWidth, ringSegmentHeight, false,
+                SurfaceFormat.Color);
+            ringEdgeTexture.SetData(
+                Enumerable.Range(0, ringEdgeTexture.Width*ringEdgeTexture.Height).Select(i => ringColor).ToArray());
 
             // TODO: calculate from viewport
             startRadius = 700;
@@ -36,11 +36,11 @@ namespace EventHorizonRider.Core.Components
                 RotationalVelocity = info.RotationalVelocity,
                 Texture = ringEdgeTexture,
                 Radius = startRadius,
-                Origin = new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2),
+                Origin = viewportCenter,
                 Gaps = Enumerable.Range(0, info.NumberOfGaps).Select(i =>
-                    new RingGap 
+                    new RingGap
                     {
-                        GapAngle = MathHelper.WrapAngle(((float)i * (MathHelper.TwoPi / (float)info.NumberOfGaps)) + info.Angle),
+                        GapAngle = MathHelper.WrapAngle((i*(MathHelper.TwoPi/info.NumberOfGaps)) + info.Angle),
                         GapSize = info.GapSize,
                     }).ToList(),
             };

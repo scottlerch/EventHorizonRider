@@ -1,39 +1,53 @@
-﻿using EventHorizonRider.Core.Graphics;
+﻿using System;
+using System.Diagnostics;
+using EventHorizonRider.Core.Graphics;
+using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Diagnostics;
 
 namespace EventHorizonRider.Core.Components
 {
-    internal class PlayTimer
+    internal class PlayTimer : ComponentBase
     {
-        private GameState gameState;
-        private Stopwatch gameTimeElapsed = new Stopwatch();
+        private readonly Stopwatch gameTimeElapsed = new Stopwatch();
+        private readonly PlayerData playerData;
+        private string bestText;
 
         private Vector2 bestTextSize;
+        private int currentLevelNumber;
 
-        private GraphicsDevice graphics;
-        private SpriteFont timeFont;
-        private Color scoreColor;
-        private string bestText;
         private string levelText;
+        private Color scoreColor;
+        private SpriteFont timeFont;
 
-        public TimeSpan Elapsed { get { return gameTimeElapsed.Elapsed; } }
+        private Vector2 viewSize;
 
-        public void LoadContent(ContentManager content, GraphicsDevice graphics)
+        public PlayTimer(PlayerData playerData)
         {
-            this.graphics = graphics;
+            this.playerData = playerData;
+        }
+
+        public TimeSpan Elapsed
+        {
+            get { return gameTimeElapsed.Elapsed; }
+        }
+
+        public override void LoadContent(ContentManager content, GraphicsDevice graphics)
+        {
+            viewSize = new Vector2(graphics.Viewport.Width, graphics.Viewport.Height);
 
             timeFont = content.Load<SpriteFont>("highscore_font");
             bestTextSize = timeFont.MeasureString("Best: 00:00:00.00");
         }
 
-        public void Update(GameTime gameTime, GameState gameState, PlayerData playerData, int currentLevelNumber)
+        public void SetLevel(int newCurrentLevelNumber)
         {
-            this.gameState = gameState;
+            currentLevelNumber = newCurrentLevelNumber;
+        }
 
+        public override void Update(GameTime gameTime, InputState inputState)
+        {
             scoreColor = Color.White;
 
             if (gameTimeElapsed.Elapsed >= playerData.Highscore)
@@ -42,7 +56,8 @@ namespace EventHorizonRider.Core.Components
             }
             else
             {
-                var percentComplete = 1f - (float)(gameTimeElapsed.Elapsed.TotalSeconds / playerData.Highscore.TotalSeconds);
+                var percentComplete = 1f -
+                                      (float) (gameTimeElapsed.Elapsed.TotalSeconds/playerData.Highscore.TotalSeconds);
 
                 scoreColor = Color.White.SetColors(percentComplete, 1f, percentComplete);
             }
@@ -63,44 +78,44 @@ namespace EventHorizonRider.Core.Components
 
         private string FormatTime(TimeSpan time)
         {
-            return string.Format("{0:00}:{1:00}:{2:00}.{3:00}", time.Hours, time.Minutes, time.Seconds, (time.Milliseconds / 1000f) * 100);
+            return string.Format("{0:00}:{1:00}:{2:00}.{3:00}", time.Hours, time.Minutes, time.Seconds,
+                (time.Milliseconds/1000f)*100);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             const float textPadding = 10;
-            const float textNewLinePadding = 5;
 
             spriteBatch.DrawString(
                 timeFont,
                 FormatTime(gameTimeElapsed.Elapsed),
-                new Vector2(textPadding, textPadding), 
-                scoreColor, 
+                new Vector2(textPadding, textPadding),
+                scoreColor,
                 0,
                 Vector2.Zero,
-                1, 
-                SpriteEffects.None, 
+                1,
+                SpriteEffects.None,
                 0.1f);
 
             spriteBatch.DrawString(
                 timeFont,
                 bestText,
-                new Vector2(graphics.Viewport.Width - bestTextSize.X - textPadding, textPadding),
+                new Vector2(viewSize.X - bestTextSize.X - textPadding, textPadding),
                 Color.White, //Color.LightGray.AdjustLight(0.9f), 
-                0, 
-                Vector2.Zero, 
-                1, 
-                SpriteEffects.None, 
+                0,
+                Vector2.Zero,
+                1,
+                SpriteEffects.None,
                 0.1f);
 
             spriteBatch.DrawString(
-                timeFont, 
+                timeFont,
                 levelText,
-                new Vector2(textPadding, graphics.Viewport.Height - (textPadding + bestTextSize.Y)), 
-                Color.LightGray.AdjustLight(0.9f), 
-                0, 
+                new Vector2(textPadding, viewSize.Y - (textPadding + bestTextSize.Y)),
+                Color.LightGray.AdjustLight(0.9f),
+                0,
                 Vector2.Zero,
-                1, 
+                1,
                 SpriteEffects.None, 0.1f);
         }
     }

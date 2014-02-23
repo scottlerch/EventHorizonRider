@@ -2,8 +2,7 @@
 {
     internal struct Range<T>
     {
-        public T Start;
-
         public T End;
+        public T Start;
     }
 }

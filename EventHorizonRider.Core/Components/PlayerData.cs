@@ -1,12 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 using Newtonsoft.Json;
-using System;
-using System.IO;
 
 namespace EventHorizonRider.Core.Components
 {
-    internal class PlayerData
+    internal class PlayerData : ComponentBase
     {
         public TimeSpan Highscore { get; set; }
 
@@ -47,12 +47,12 @@ namespace EventHorizonRider.Core.Components
             result.AsyncWaitHandle.Dispose();
         }
 
-        internal void Update(TimeSpan timeSpan)
+        internal void UpdateBestTime(TimeSpan timeSpan)
         {
-            if (timeSpan > this.Highscore)
+            if (timeSpan > Highscore)
             {
-                this.Highscore = timeSpan;
-                this.Save();
+                Highscore = timeSpan;
+                Save();
             }
         }
     }

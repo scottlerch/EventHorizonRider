@@ -2,9 +2,9 @@
 {
     internal class RingInfo
     {
-        public int NumberOfGaps;
-        public float GapSize;
         public float Angle;
+        public float GapSize;
+        public int NumberOfGaps;
 
         public float RotationalVelocity;
     }

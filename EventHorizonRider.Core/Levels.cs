@@ -1,13 +1,13 @@
-﻿using EventHorizonRider.Core.Extensions;
-using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Linq;
+using EventHorizonRider.Core.Extensions;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core
 {
     internal class Levels
     {
-        private RingInfoFactory ringInfoFactory = new RingInfoFactory();
+        private readonly RingInfoFactory ringInfoFactory = new RingInfoFactory();
 
         public Level GetLevel(int level)
         {
@@ -34,8 +34,8 @@ namespace EventHorizonRider.Core
                 RingSpeed = 250,
                 RingInterval = TimeSpan.FromSeconds(4),
                 Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetStepSequence(numberOfSteps: 10, gapSize: MathHelper.TwoPi / 4f),
-                    ringInfoFactory.GetZigZagSequence(iterations: 10, gapSize: MathHelper.TwoPi / 4f)),
+                    ringInfoFactory.GetStepSequence(10, MathHelper.TwoPi/4f),
+                    ringInfoFactory.GetZigZagSequence(10, MathHelper.TwoPi/4f)),
             };
         }
 
@@ -46,8 +46,8 @@ namespace EventHorizonRider.Core
                 RingSpeed = 200,
                 RingInterval = TimeSpan.FromSeconds(0.9),
                 Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetStepSequence(numberOfSteps:10, gapSize:MathHelper.TwoPi / 4f),
-                    ringInfoFactory.GetZigZagSequence(iterations: 10, gapSize: MathHelper.TwoPi / 4f)),
+                    ringInfoFactory.GetStepSequence(10, MathHelper.TwoPi/4f),
+                    ringInfoFactory.GetZigZagSequence(10, MathHelper.TwoPi/4f)),
             };
         }
 
@@ -58,8 +58,8 @@ namespace EventHorizonRider.Core
                 RingSpeed = 250,
                 RingInterval = TimeSpan.FromSeconds(0.9),
                 Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetStepSequence(numberOfSteps: 5, gapSize: MathHelper.TwoPi / 5f),
-                    ringInfoFactory.GetZigZagSequence(iterations: 10, gapSize: MathHelper.TwoPi / 5f)),
+                    ringInfoFactory.GetStepSequence(5, MathHelper.TwoPi/5f),
+                    ringInfoFactory.GetZigZagSequence(10, MathHelper.TwoPi/5f)),
             };
         }
 
@@ -70,8 +70,8 @@ namespace EventHorizonRider.Core
                 RingSpeed = 275,
                 RingInterval = TimeSpan.FromSeconds(0.9),
                 Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetStepSequence(numberOfSteps: 3, gapSize: MathHelper.TwoPi / 5f),
-                    ringInfoFactory.GetZigZagSequence(iterations: 10, gapSize: MathHelper.TwoPi / 5f)),
+                    ringInfoFactory.GetStepSequence(3, MathHelper.TwoPi/5f),
+                    ringInfoFactory.GetZigZagSequence(10, MathHelper.TwoPi/5f)),
             };
         }
 
@@ -81,7 +81,7 @@ namespace EventHorizonRider.Core
             {
                 RingSpeed = 300,
                 RingInterval = TimeSpan.FromSeconds(0.9),
-                Sequence = ringInfoFactory.GetRandomSequence(iterations: 10, gapSize: MathHelper.TwoPi / 4),
+                Sequence = ringInfoFactory.GetRandomSequence(10, gapSize: MathHelper.TwoPi/4),
             };
         }
 
