@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
@@ -13,16 +14,29 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
     {
         private readonly Stopwatch gameTimeElapsed = new Stopwatch();
         private readonly PlayerData playerData;
-        private string bestText;
 
         private Vector2 bestTextSize;
+        private Vector2 levelTextSize;
+
         private int currentLevelNumber;
 
-        private string levelText;
+        private string levelNumberText;
+        private string bestNumberText;
+        private string timeNumberText;
+
         private Color scoreColor;
+
+        private SpriteFont labelFont;
         private SpriteFont timeFont;
 
         private Vector2 viewSize;
+
+        private List<float> textOffset;
+
+        private const string bestText = "Best: ";
+        private const string levelText = "Level: ";
+
+        //private Texture2D foreground;
 
         public PlayTimer(PlayerData playerData)
         {
@@ -38,8 +52,22 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             viewSize = new Vector2(graphics.Viewport.Width, graphics.Viewport.Height);
 
-            timeFont = content.Load<SpriteFont>("highscore_font");
-            bestTextSize = timeFont.MeasureString("Best: 00:00:00.00");
+            //foreground = content.Load<Texture2D>("foreground");
+
+            labelFont = content.Load<SpriteFont>("highscore_font");
+            timeFont = content.Load<SpriteFont>("time_font");
+
+            bestTextSize = labelFont.MeasureString(bestText);
+            levelTextSize = labelFont.MeasureString(levelText);
+
+            textOffset = new List<float>
+            {
+                timeFont.MeasureString("0.00").X,
+                timeFont.MeasureString("00.00").X,
+                timeFont.MeasureString("000.00").X,
+                timeFont.MeasureString("0000.00").X,
+                timeFont.MeasureString("00000.00").X
+            };
         }
 
         public void SetLevel(int newCurrentLevelNumber)
@@ -63,8 +91,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 scoreColor = Color.White.SetColors(percentComplete, 1f, percentComplete);
             }
 
-            bestText = "Best: " + FormatTime(playerData.Highscore);
-            levelText = "Level: " + currentLevelNumber;
+            bestNumberText = FormatTime(playerData.Highscore);
+            levelNumberText = currentLevelNumber.ToString();
+            timeNumberText = FormatTime(gameTimeElapsed.Elapsed);
         }
 
         public void Restart()
@@ -79,18 +108,21 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private string FormatTime(TimeSpan time)
         {
-            return string.Format("{0:00}:{1:00}:{2:00}.{3:00}", time.Hours, time.Minutes, time.Seconds,
-                (time.Milliseconds/1000f)*100);
+            return string.Format("{0:0.00}", time.TotalSeconds);
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
             const float textPadding = 10;
+            const float textVerticalSpacing = 5;
 
+            //spriteBatch.Draw(foreground, Vector2.Zero);
+
+            // Draw time text
             spriteBatch.DrawString(
                 timeFont,
-                FormatTime(gameTimeElapsed.Elapsed),
-                new Vector2(textPadding, textPadding),
+                timeNumberText,
+                new Vector2(viewSize.X - textOffset[timeNumberText.Length - 4] - textPadding, textPadding + bestTextSize.Y + textVerticalSpacing),
                 scoreColor,
                 0,
                 Vector2.Zero,
@@ -98,11 +130,12 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 SpriteEffects.None,
                 0.1f);
 
+            // Draw best time text
             spriteBatch.DrawString(
-                timeFont,
+                labelFont,
                 bestText,
-                new Vector2(viewSize.X - bestTextSize.X - textPadding, textPadding),
-                Color.White, //Color.LightGray.AdjustLight(0.9f), 
+                new Vector2(textPadding, textPadding),
+                Color.LightGray.AdjustLight(0.9f),
                 0,
                 Vector2.Zero,
                 1,
@@ -110,10 +143,35 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 0.1f);
 
             spriteBatch.DrawString(
-                timeFont,
+                labelFont,
+                bestNumberText,
+                new Vector2(textPadding + bestTextSize.X, textPadding),
+                Color.White,
+                0,
+                Vector2.Zero,
+                1,
+                SpriteEffects.None,
+                0.1f);
+
+            // Draw level number
+            var levelNumberTextSize = labelFont.MeasureString(levelNumberText).X;
+            var levelTextSize = labelFont.MeasureString(levelText).X;
+
+            spriteBatch.DrawString(
+                labelFont,
                 levelText,
-                new Vector2(textPadding, viewSize.Y - (textPadding + bestTextSize.Y)),
+                new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - textPadding, textPadding),
                 Color.LightGray.AdjustLight(0.9f),
+                0,
+                Vector2.Zero,
+                1,
+                SpriteEffects.None, 0.1f);
+
+            spriteBatch.DrawString(
+                labelFont,
+                levelNumberText,
+                new Vector2(viewSize.X - levelNumberTextSize - textPadding, textPadding),
+                Color.White,
                 0,
                 Vector2.Zero,
                 1,

@@ -11,7 +11,7 @@ namespace EventHorizonRider.Core.Components
 
         protected override void OnBeforeDraw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
         }
 
         protected override void OnAfterDraw(SpriteBatch spriteBatch)
