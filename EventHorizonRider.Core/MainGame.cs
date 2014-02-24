@@ -27,7 +27,7 @@ namespace EventHorizonRider.Core
 
             graphics.PreferredBackBufferWidth = 1136;
             graphics.PreferredBackBufferHeight = 640;
-            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
+            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
         }
 
         public void SetResolution(int width, int height)
