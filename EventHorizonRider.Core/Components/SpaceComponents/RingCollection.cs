@@ -111,6 +111,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         internal void Stop()
         {
             stopped = true;
+
+            foreach (var ring in Children.Cast<Ring>())
+            {
+                ring.Stop();
+            }
         }
     }
 }

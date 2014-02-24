@@ -19,6 +19,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         public float RotationalVelocity;
         public Texture2D Texture;
 
+        private bool isStopped;
+
         private float rotationalOffset;
         public bool ConsumedByBlackhole { get; set; }
 
@@ -41,7 +43,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            rotationalOffset += RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (!isStopped)
+            {
+                rotationalOffset += RotationalVelocity*(float) gameTime.ElapsedGameTime.TotalSeconds;
+            }
         }
 
         internal bool Intersects(Ship ship)
@@ -87,6 +92,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 Start = MathHelper.WrapAngle(gapStartAngle),
                 End = MathHelper.WrapAngle(gapEndAngle)
             };
+        }
+
+        internal void Stop()
+        {
+            isStopped = true;
         }
     }
 }
