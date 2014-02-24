@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class RingGap
     {

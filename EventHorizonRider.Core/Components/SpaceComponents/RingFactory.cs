@@ -1,9 +1,10 @@
-﻿using System.Linq;
+﻿using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class RingFactory
     {

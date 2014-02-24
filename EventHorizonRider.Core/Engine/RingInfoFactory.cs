@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core.Engine
 {
     internal class RingInfoFactory
     {

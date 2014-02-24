@@ -8,7 +8,7 @@ namespace EventHorizonRider.Core.Components
     {
         private Song musicSong;
 
-        public override void LoadContent(ContentManager content, GraphicsDevice graphics)
+        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
 #if !WINDOWS
             musicSong = content.Load<Song>("techno_song");

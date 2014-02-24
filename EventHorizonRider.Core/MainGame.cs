@@ -1,5 +1,5 @@
-﻿using System;
-using EventHorizonRider.Core.Components;
+﻿using EventHorizonRider.Core.Engine;
+using EventHorizonRider.Core.Engine.States;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,29 +11,11 @@ namespace EventHorizonRider.Core
     /// </summary>
     public class MainGame : Game
     {
-        private Blackhole blackhole;
-        private FpsCounter fpsCounter;
         private readonly GraphicsDeviceManager graphics;
 
         private InputState inputState;
-        private Levels levels;
-
-        private Music music;
-        private PlayButton playButton;
-        private PlayTimer playTimer;
-        private PlayerData playerData;
-        private RingCollection rings;
-        private Ship ship;
-        private readonly TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(2);
-        private Texture2D background;
-
-        private Color backgroundColor = Color.LightGray;
-
-        private int currentLevelNumber = 1;
-        private TimeSpan levelEndTime = TimeSpan.Zero;
-        private bool levelEnded;
         private SpriteBatch spriteBatch;
-        private GameState state = GameState.Init;
+        private GameContext gameContext;
 
         //private RenderTarget2D renderTarget;
         //private Effect grayscaleEffect;
@@ -62,28 +44,8 @@ namespace EventHorizonRider.Core
         /// </summary>
         protected override void Initialize()
         {
-            state = GameState.Init;
-            levels = new Levels();
-
-            music = new Music();
-
+            gameContext = new GameContext(new InitializeState());
             inputState = new InputState();
-
-            blackhole = new Blackhole();
-            ship = new Ship(blackhole);
-            rings = new RingCollection(blackhole);
-            fpsCounter = new FpsCounter();
-            playButton = new PlayButton(() => blackhole.Scale);
-            playerData = new PlayerData();
-            playTimer = new PlayTimer(playerData);
-
-            playButton.Pressed += (e, args) =>
-            {
-                blackhole.Pulse(1.5f, 2.5f);
-                playButton.Hide();
-
-                state = GameState.Starting;
-            };
 
             base.Initialize();
         }
@@ -96,15 +58,7 @@ namespace EventHorizonRider.Core
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            background = Content.Load<Texture2D>("background");
-
-            playTimer.LoadContent(Content, GraphicsDevice);
-            blackhole.LoadContent(Content, GraphicsDevice);
-            ship.LoadContent(Content, GraphicsDevice);
-            rings.LoadContent(Content, GraphicsDevice);
-            playButton.LoadContent(Content, GraphicsDevice);
-            fpsCounter.LoadContent(Content, GraphicsDevice);
-            music.LoadContent(Content, GraphicsDevice);
+            gameContext.Root.LoadContent(Content, GraphicsDevice);
 
             // grayscaleEffect = Content.Load<Effect>("grayscale_effect");
 
@@ -130,75 +84,7 @@ namespace EventHorizonRider.Core
         protected override void Update(GameTime gameTime)
         {
             inputState.Update();
-
-            fpsCounter.Update(gameTime, inputState);
-            playButton.Update(gameTime, inputState);
-            blackhole.Update(gameTime, inputState);
-            playTimer.Update(gameTime, inputState);
-            ship.Update(gameTime, inputState);
-            rings.Update(gameTime, inputState);
-
-            if (state == GameState.Init)
-            {
-                ship.Initialize();
-            }
-            else if (state == GameState.Starting)
-            {
-                currentLevelNumber = 1;
-
-                playTimer.SetLevel(currentLevelNumber);
-                playTimer.Restart();
-                blackhole.Start();
-                ship.Start();
-                rings.Start();
-                rings.SetLevel(levels.GetLevel(currentLevelNumber));
-                music.Play();
-
-                state = GameState.Running;
-            }
-            else if (state == GameState.Running)
-            {
-                backgroundColor = Color.LightGray;
-
-                if (rings.Intersects(ship))
-                {
-                    state = GameState.Over;
-                }
-
-                if (!rings.HasMoreRings)
-                {
-                    if (!levelEnded)
-                    {
-                        levelEndTime = gameTime.TotalGameTime + waitBetweenLevels;
-                        levelEnded = true;
-                    }
-                    else if (levelEndTime.Ticks < gameTime.TotalGameTime.Ticks)
-                    {
-                        levelEnded = false;
-                        currentLevelNumber++;
-
-                        playTimer.SetLevel(currentLevelNumber);
-                        rings.SetLevel(levels.GetLevel(currentLevelNumber));
-                    }
-                }
-            }
-            else if (state == GameState.Over)
-            {
-                music.Stop();
-
-                backgroundColor = Color.Red;
-
-                blackhole.Stop();
-                ship.Stop();
-                rings.Stop();
-
-                playTimer.Stop();
-                playButton.Show(true);
-
-                playerData.UpdateBestTime(playTimer.Elapsed);
-
-                state = GameState.Paused;
-            }
+            gameContext.Update(gameTime, inputState);
 
             base.Update(gameTime);
         }
@@ -210,33 +96,10 @@ namespace EventHorizonRider.Core
         protected override void Draw(GameTime gameTime)
         {
             //GraphicsDevice.SetRenderTarget(renderTarget);
+ 
+            GraphicsDevice.Clear(gameContext.Background.BackgroundColor);
 
-            GraphicsDevice.Clear(backgroundColor);
-
-            if (state != GameState.Paused)
-            {
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-                spriteBatch.Draw(background, Vector2.Zero);
-                spriteBatch.End();
-            }
-
-            // Draw rings
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.Opaque);
-            rings.Draw(spriteBatch);
-            spriteBatch.End();
-
-            // Draw blackhole and ship
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            blackhole.Draw(spriteBatch);
-            ship.Draw(spriteBatch);
-            spriteBatch.End();
-
-            // Draw text
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            playTimer.Draw(spriteBatch);
-            playButton.Draw(spriteBatch);
-            fpsCounter.Draw(spriteBatch);
-            spriteBatch.End();
+            gameContext.Root.Draw(spriteBatch);
 
             //GraphicsDevice.SetRenderTarget(null);
 

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Components.CenterComponents
 {
     internal class PlayButton : ComponentBase
     {
@@ -25,12 +25,12 @@ namespace EventHorizonRider.Core.Components
 
         private readonly Func<Vector2> getScale;
 
-        public PlayButton(Func<Vector2> getScale)
+        public PlayButton(Blackhole blackhole)
         {
-            this.getScale = getScale;
+            getScale = () => blackhole.Scale;
         }
 
-        public override void LoadContent(ContentManager content, GraphicsDevice graphics)
+        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             buttonFont = content.Load<SpriteFont>("button_font");
 
@@ -50,11 +50,13 @@ namespace EventHorizonRider.Core.Components
                 (int) (restartTextSize.Y + buttonPadding));
         }
 
-        public override void Update(GameTime gameTime, InputState inputState)
+        protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
+            Pressed = false;
+
             if (isVisible && IsPressed(inputState.MouseState, inputState.TouchState))
             {
-                Pressed(this, EventArgs.Empty);
+                Pressed = true;
             }
 
             if (isVisible && colorAlphaPercent < 1f)
@@ -69,7 +71,7 @@ namespace EventHorizonRider.Core.Components
             colorAlphaPercent = MathHelper.Clamp(colorAlphaPercent, 0, 1);
         }
 
-        public event EventHandler Pressed = delegate { };
+        public bool Pressed { get; private set; }
 
         public void Show(bool restart)
         {
@@ -91,7 +93,7 @@ namespace EventHorizonRider.Core.Components
                 (mouseState.LeftButton == ButtonState.Pressed && buttonBounds.Contains(mouseState.Position));
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        protected override void DrawCore(SpriteBatch spriteBatch)
         {
             if (colorAlphaPercent >= 0f)
             {

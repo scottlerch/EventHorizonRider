@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
     internal class PlayTimer : ComponentBase
     {
@@ -33,7 +34,7 @@ namespace EventHorizonRider.Core.Components
             get { return gameTimeElapsed.Elapsed; }
         }
 
-        public override void LoadContent(ContentManager content, GraphicsDevice graphics)
+        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             viewSize = new Vector2(graphics.Viewport.Width, graphics.Viewport.Height);
 
@@ -46,7 +47,7 @@ namespace EventHorizonRider.Core.Components
             currentLevelNumber = newCurrentLevelNumber;
         }
 
-        public override void Update(GameTime gameTime, InputState inputState)
+        protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
             scoreColor = Color.White;
 
@@ -82,7 +83,7 @@ namespace EventHorizonRider.Core.Components
                 (time.Milliseconds/1000f)*100);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        protected override void DrawCore(SpriteBatch spriteBatch)
         {
             const float textPadding = 10;
 

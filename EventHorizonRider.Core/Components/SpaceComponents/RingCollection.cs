@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using EventHorizonRider.Core.Components.CenterComponents;
+using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Extensions;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class RingCollection : ComponentBase
     {
         private readonly Blackhole blackhole;
         private readonly RingFactory ringFactory = new RingFactory();
-        private readonly List<Ring> rings = new List<Ring>();
         private IEnumerator<RingInfo> currentSequence;
 
         private DateTime lastRingAdd = DateTime.UtcNow;
@@ -32,7 +33,7 @@ namespace EventHorizonRider.Core.Components
 
         public bool HasMoreRings { get; private set; }
 
-        public override void LoadContent(ContentManager content, GraphicsDevice graphics)
+        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             ringFactory.LoadContent(graphics);
 
@@ -49,24 +50,16 @@ namespace EventHorizonRider.Core.Components
             newLevelSound.Play();
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (var ring in rings)
-            {
-                ring.Draw(spriteBatch);
-            }
-        }
-
-        public override void Update(GameTime gameTime, InputState inputState)
+        protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
             if (stopped)
             {
                 return;
             }
 
-            foreach (var ring in rings.ToList())
+            for (int i = Children.Count - 1; i >= 0; i--)
             {
-                ring.Update(gameTime, inputState);
+                var ring = (Ring)Children[i];
 
                 ring.Radius -= (float) gameTime.ElapsedGameTime.TotalSeconds*level.RingSpeed;
 
@@ -78,7 +71,7 @@ namespace EventHorizonRider.Core.Components
 
                 if (ring.Radius <= 0f)
                 {
-                    rings.Remove(ring);
+                    RemoveChild(ring);
                 }
             }
 
@@ -94,25 +87,25 @@ namespace EventHorizonRider.Core.Components
                 }
                 else
                 {
-                    rings.Add(ringFactory.Create(ringInfo));
+                    AddChild(ringFactory.Create(ringInfo));
                 }
             }
         }
 
         public bool Intersects(Ship ship)
         {
-            return rings.Any(ring => ring.Intersects(ship));
+            return Children.Cast<Ring>().Any(ring => ring.Intersects(ship));
         }
 
         public void Start()
         {
-            rings.Clear();
+            ClearChildren();
             stopped = false;
         }
 
         public void Remove(Ring ring)
         {
-            rings.Remove(ring);
+            RemoveChild(ring);
         }
 
         internal void Stop()

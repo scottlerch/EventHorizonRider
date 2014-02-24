@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core.Engine
 {
     internal class Level
     {

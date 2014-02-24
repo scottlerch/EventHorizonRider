@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Components.CenterComponents
 {
     internal class Ship : ComponentBase
     {
@@ -32,7 +32,7 @@ namespace EventHorizonRider.Core.Components
 
         internal float Radius { get; private set; }
 
-        public override void LoadContent(ContentManager content, GraphicsDevice graphics)
+        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
 
@@ -64,7 +64,7 @@ namespace EventHorizonRider.Core.Components
             crashSound = content.Load<SoundEffect>("crash_sound");
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        protected override void DrawCore(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Texture, Position,
                 origin: new Vector2(Texture.Width / 2f, Texture.Height / 2f),
@@ -93,7 +93,7 @@ namespace EventHorizonRider.Core.Components
                          t.Position.X > viewportCenter.Y));
         }
 
-        public override void Update(GameTime gameTime, InputState inputState)
+        protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
             if (stopped)
             {

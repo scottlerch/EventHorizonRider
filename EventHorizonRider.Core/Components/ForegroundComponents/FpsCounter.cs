@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
     internal class FpsCounter : ComponentBase
     {
@@ -17,7 +17,7 @@ namespace EventHorizonRider.Core.Components
         private SpriteFont spriteFont;
         private Vector2 textSize;
 
-        public override void LoadContent(ContentManager content, GraphicsDevice graphics)
+        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             spriteFont = content.Load<SpriteFont>("fps_font");
             textSize = spriteFont.MeasureString(TextFormat);
@@ -28,7 +28,7 @@ namespace EventHorizonRider.Core.Components
                 graphics.Viewport.Height - (textSize.Y + padding));
         }
 
-        public override void Update(GameTime gameTime, InputState inputState)
+        protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
             elapsedTime += gameTime.ElapsedGameTime;
 
@@ -40,7 +40,7 @@ namespace EventHorizonRider.Core.Components
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        protected override void DrawCore(SpriteBatch spriteBatch)
         {
 #if DEBUG
             frameCounter++;

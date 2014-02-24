@@ -39,31 +39,42 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ComponentBase.cs" />
-    <Compile Include="Components\Blackhole.cs" />
-    <Compile Include="Components\FpsCounter.cs" />
-    <Compile Include="Components\PlayButton.cs" />
-    <Compile Include="Components\PlayerData.cs" />
-    <Compile Include="Components\PlayTimer.cs" />
-    <Compile Include="Components\Ring.cs" />
-    <Compile Include="Components\RingCollection.cs" />
-    <Compile Include="Components\RingFactory.cs" />
-    <Compile Include="Components\RingGap.cs" />
-    <Compile Include="Components\Ship.cs" />
+    <Compile Include="Components\SpaceComponents\Background.cs" />
+    <Compile Include="Components\Center.cs" />
+    <Compile Include="Components\CenterComponents\Blackhole.cs" />
+    <Compile Include="Components\CenterComponents\PlayButton.cs" />
+    <Compile Include="Components\CenterComponents\Ship.cs" />
+    <Compile Include="Components\Foreground.cs" />
+    <Compile Include="Components\ForegroundComponents\FpsCounter.cs" />
+    <Compile Include="Components\ForegroundComponents\PlayTimer.cs" />
+    <Compile Include="Components\Root.cs" />
+    <Compile Include="Components\Space.cs" />
+    <Compile Include="Components\SpaceComponents\Ring.cs" />
+    <Compile Include="Components\SpaceComponents\RingCollection.cs" />
+    <Compile Include="Components\SpaceComponents\RingFactory.cs" />
+    <Compile Include="Components\SpaceComponents\RingGap.cs" />
+    <Compile Include="Engine\Level.cs" />
+    <Compile Include="Engine\Levels.cs" />
+    <Compile Include="Engine\PlayerData.cs" />
+    <Compile Include="Engine\RingInfo.cs" />
+    <Compile Include="Engine\RingInfoFactory.cs" />
+    <Compile Include="Engine\States\EndingState.cs" />
+    <Compile Include="Engine\States\OverState.cs" />
+    <Compile Include="Engine\States\InitializeState.cs" />
+    <Compile Include="Engine\States\RunningState.cs" />
+    <Compile Include="Engine\States\StartingState.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Engine\GameContext.cs" />
     <Compile Include="Graphics\ColorExtensions.cs" />
     <Compile Include="Graphics\TextureProcessor.cs" />
-    <Compile Include="GameState.cs" />
+    <Compile Include="Engine\GameStateBase.cs" />
     <Compile Include="Input\InputState.cs" />
-    <Compile Include="Level.cs" />
-    <Compile Include="Levels.cs" />
     <Compile Include="MainGame.cs" />
     <Compile Include="Extensions\NumericExtensions.cs" />
     <Compile Include="Components\Music.cs" />
     <Compile Include="Physics\Spring.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Range.cs" />
-    <Compile Include="RingInfo.cs" />
-    <Compile Include="RingInfoFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

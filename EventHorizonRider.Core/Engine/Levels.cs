@@ -3,7 +3,7 @@ using System.Linq;
 using EventHorizonRider.Core.Extensions;
 using Microsoft.Xna.Framework;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core.Engine
 {
     internal class Levels
     {

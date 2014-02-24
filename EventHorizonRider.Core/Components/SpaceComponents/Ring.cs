@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using EventHorizonRider.Core.Components.CenterComponents;
 using EventHorizonRider.Core.Extensions;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Ring : ComponentBase
     {
@@ -21,7 +22,7 @@ namespace EventHorizonRider.Core.Components
         private float rotationalOffset;
         public bool ConsumedByBlackhole { get; set; }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        protected override void DrawCore(SpriteBatch spriteBatch)
         {
             for (var i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.04f)
             {
@@ -38,7 +39,7 @@ namespace EventHorizonRider.Core.Components
             }
         }
 
-        public override void Update(GameTime gameTime, InputState inputState)
+        protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
             rotationalOffset += RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }

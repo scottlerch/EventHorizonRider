@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 using Newtonsoft.Json;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Engine
 {
     internal class PlayerData : ComponentBase
     {
