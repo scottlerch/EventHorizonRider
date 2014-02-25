@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Graphics;
+﻿using EventHorizonRider.Core.Engine;
+using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
@@ -20,7 +21,9 @@ namespace EventHorizonRider.Core.Components.CenterComponents
 
         private Texture2D texture;
 
-        private bool isStopped;
+        private bool isStopped = true;
+
+        private float currentRotation = 0f;
 
         public float Height
         {
@@ -60,6 +63,7 @@ namespace EventHorizonRider.Core.Components.CenterComponents
             if (!isStopped)
             {
                 spring.Update(gameTime.ElapsedGameTime);
+                currentRotation += RingInfoFactory.DefaultRotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
         }
 
@@ -69,6 +73,7 @@ namespace EventHorizonRider.Core.Components.CenterComponents
         {
             spriteBatch.Draw(texture, Position,
                 origin: new Vector2(texture.Width/2f, texture.Height/2f),
+                rotation: currentRotation,
                 scale: Scale);
         }
 

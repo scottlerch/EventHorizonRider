@@ -7,7 +7,7 @@ namespace EventHorizonRider.Core.Engine
     internal class RingInfoFactory
     {
         private readonly Random rand = new Random();
-        private const float DefaultRotationVelocity = MathHelper.TwoPi/32;
+        public const float DefaultRotationVelocity = MathHelper.TwoPi/32;
 
         public IEnumerable<RingInfo> GetRandomSequence(int iterations = -1, int numberOfGaps = -1, float gapSize = -1f)
         {
