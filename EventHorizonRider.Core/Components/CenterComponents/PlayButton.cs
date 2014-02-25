@@ -99,21 +99,13 @@ namespace EventHorizonRider.Core.Components.CenterComponents
             {
                 if (!isRestart)
                 {
-                    var position = new Vector2(
-                        screenCenter.X - (startTextSize.X/2f),
-                        screenCenter.Y - (startTextSize.Y/2f));
-
-                    spriteBatch.DrawString(buttonFont, "START", position, Color.White*colorAlphaPercent, 0, Vector2.Zero,
+                    spriteBatch.DrawString(buttonFont, "START", screenCenter, Color.White * colorAlphaPercent, 0, new Vector2(startTextSize.X / 2f, startTextSize.Y / 2f), 
                         getScale(), SpriteEffects.None, 0.1f);
                 }
                 else
                 {
-                    var position = new Vector2(
-                        screenCenter.X - (restartTextSize.X/2f),
-                        screenCenter.Y - (restartTextSize.Y/2f));
-
-                    spriteBatch.DrawString(buttonFont, "RESTART", position, Color.White*colorAlphaPercent, 0,
-                        Vector2.Zero, getScale(), SpriteEffects.None, 0.1f);
+                    spriteBatch.DrawString(buttonFont, "RESTART", screenCenter, Color.White * colorAlphaPercent, 0,
+                        new Vector2(restartTextSize.X / 2f, restartTextSize.Y / 2f), getScale(), SpriteEffects.None, 0.1f);
                 }
             }
         }
