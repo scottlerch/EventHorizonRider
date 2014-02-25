@@ -1,5 +1,6 @@
 ﻿using EventHorizonRider.Core.Components.CenterComponents;
 using EventHorizonRider.Core.Extensions;
+using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,7 +15,24 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         public List<RingGap> Gaps;
 
         public Vector2 Origin;
-        public float Radius;
+
+        private float radius;
+        private float maxRadius;
+
+        public float Radius
+        {
+            get { return radius; }
+            set
+            {
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                if (radius == 0)
+                {
+                    maxRadius = value;
+                }
+
+                radius = value;
+            }
+        }
 
         public float RotationalVelocity;
         public Texture2D Texture;
@@ -26,6 +44,14 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
+            var scale = 1f - (Radius/maxRadius);
+
+            const float low = 0.2f;
+            const float high = 0.6f;
+            const float diff = high - low;
+
+            var currentColor = Color.DarkGray.AdjustLight((scale * diff) + low);
+
             for (var i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.04f)
             {
                 var angle = i + rotationalOffset;
@@ -37,6 +63,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     Origin.X + ((float)Math.Sin(angle) * Radius),
                     Origin.Y - ((float)Math.Cos(angle) * Radius)),
                     origin: new Vector2(Texture.Width / 2f, Texture.Height / 2f),
+                    color: currentColor,
                     rotation: angle);
             }
         }

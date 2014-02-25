@@ -19,7 +19,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
 
-            var ringColor = Color.DarkGray.AdjustLight(0.5f).PackedValue;
+            var ringColor = Color.White;// Color.DarkGray.AdjustLight(0.5f).PackedValue;
 
             ringEdgeTexture = new Texture2D(graphics, ringSegmentWidth, ringSegmentHeight, false,
                 SurfaceFormat.Color);
