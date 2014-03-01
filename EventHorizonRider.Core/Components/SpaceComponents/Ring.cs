@@ -64,7 +64,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     Origin.Y - ((float)Math.Cos(angle) * Radius)),
                     origin: new Vector2(Texture.Width / 2f, Texture.Height / 2f),
                     color: currentColor,
-                    rotation: angle);
+                    rotation: angle,
+                    depth:0.3f);
             }
         }
 

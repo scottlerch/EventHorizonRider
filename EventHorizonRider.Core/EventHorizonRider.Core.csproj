@@ -49,6 +49,7 @@
     <Compile Include="Components\ForegroundComponents\PlayTimer.cs" />
     <Compile Include="Components\Root.cs" />
     <Compile Include="Components\Space.cs" />
+    <Compile Include="Components\SpaceComponents\Halo.cs" />
     <Compile Include="Components\SpaceComponents\Ring.cs" />
     <Compile Include="Components\SpaceComponents\RingCollection.cs" />
     <Compile Include="Components\SpaceComponents\RingFactory.cs" />

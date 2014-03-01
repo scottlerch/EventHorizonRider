@@ -11,6 +11,8 @@ namespace EventHorizonRider.Core.Engine
     {
         public Blackhole Blackhole { get; private set; }
 
+        public Halo Halo { get; private set; }
+
         public FpsCounter FpsCounter { get; private set; }
 
         public Music Music { get; private set; }
@@ -53,8 +55,9 @@ namespace EventHorizonRider.Core.Engine
             Center = new Center(Blackhole, PlayButton, Ship);
 
             Background = new Background();
+            Halo = new Halo(Blackhole);
             Rings = new RingCollection(Blackhole);
-            Space = new Space(Background, Rings);
+            Space = new Space(Background, Halo, Rings);
 
             FpsCounter = new FpsCounter();
             PlayerData = new PlayerData();
