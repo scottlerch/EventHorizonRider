@@ -52,7 +52,7 @@ namespace EventHorizonRider.Core.Engine
             if (timeSpan > Highscore)
             {
                 Highscore = timeSpan;
-                Save();
+                //Save();
             }
         }
     }

@@ -42,7 +42,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 graphics.Viewport.Width/2f,
                 graphics.Viewport.Height/2f);
 
-            const float buttonPadding = 10f;
+            const float buttonPadding = 20f;
 
             buttonBounds = new Rectangle(
                 (int) (screenCenter.X - (restartTextSize.X/2f) - buttonPadding),
