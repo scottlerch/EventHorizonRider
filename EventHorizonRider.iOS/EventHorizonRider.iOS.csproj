@@ -76,33 +76,20 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Content Include="Content\crash_sound.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\fps_font.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\highscore_font.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\newlevel_sound.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\techno_song.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\button_font.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\background.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\foreground.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\time_font.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Content\Effects\blur_effect.xnb" />
+    <Content Include="Content\Effects\gaussianblur_effect.xnb" />
+    <Content Include="Content\Effects\grayscale_effect.xnb" />
+    <Content Include="Content\Fonts\button_font.xnb" />
+    <Content Include="Content\Fonts\fps_font.xnb" />
+    <Content Include="Content\Fonts\highscore_font.xnb" />
+    <Content Include="Content\Fonts\time_font.xnb" />
+    <Content Include="Content\Images\background.xnb" />
+    <Content Include="Content\Images\blackhole.xnb" />
+    <Content Include="Content\Images\foreground.xnb" />
+    <Content Include="Content\Images\halo.xnb" />
+    <Content Include="Content\Images\ship.xnb" />
+    <Content Include="Content\Sounds\crash_sound.xnb" />
+    <Content Include="Content\Sounds\newlevel_sound.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
@@ -131,10 +118,21 @@
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Content Include="Content\techno_song.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Content\Music\techno_song.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Target Name="BeforeBuild">
+    <ItemGroup>
+      <AllContent Include="$(SolutionDir)EventHorizonRider.ContentXna\bin\$(Configuration)\**\Content\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AllContent)" DestinationFolder="$(ProjectDir)%(RecursiveDir)" />
+  </Target>
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <AllContent Include="$(SolutionDir)EventHorizonRider.ContentXna\bin\$(Configuration)\**\Content\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AllContent)" DestinationFolder="$(TargetDir)%(RecursiveDir)" />
+  </Target>
 </Project>

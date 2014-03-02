@@ -52,10 +52,10 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             viewSize = new Vector2(graphics.Viewport.Width, graphics.Viewport.Height);
 
-            //foreground = content.Load<Texture2D>("foreground");
+            //foreground = content.Load<Texture2D>(@"Images\foreground");
 
-            labelFont = content.Load<SpriteFont>("highscore_font");
-            timeFont = content.Load<SpriteFont>("time_font");
+            labelFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
+            timeFont = content.Load<SpriteFont>(@"Fonts\time_font");
 
             bestTextSize = labelFont.MeasureString(bestText);
             levelTextSize = labelFont.MeasureString(levelText);

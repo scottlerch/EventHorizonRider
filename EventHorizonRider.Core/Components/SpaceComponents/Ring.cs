@@ -46,8 +46,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             var scale = 1f - (Radius/maxRadius);
 
-            const float low = 0.2f;
-            const float high = 0.6f;
+            const float low = 0.1f;
+            const float high = 0.7f;
             const float diff = high - low;
 
             var currentColor = Color.DarkGray.AdjustLight((scale * diff) + low);

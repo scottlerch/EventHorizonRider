@@ -12,7 +12,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            background = content.Load<Texture2D>("background");
+            background = content.Load<Texture2D>(@"Images\background");
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)

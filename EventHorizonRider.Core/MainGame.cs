@@ -1,5 +1,6 @@
 ﻿using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Engine.States;
+using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,7 +19,7 @@ namespace EventHorizonRider.Core
         private GameContext gameContext;
 
         //private RenderTarget2D renderTarget;
-        //private Effect grayscaleEffect;
+        //private GaussianBlur blur = new GaussianBlur();
 
         public MainGame()
         {
@@ -60,11 +61,12 @@ namespace EventHorizonRider.Core
 
             gameContext.Root.LoadContent(Content, GraphicsDevice);
 
-            // grayscaleEffect = Content.Load<Effect>("grayscale_effect");
-
             //renderTarget = new RenderTarget2D(graphics.GraphicsDevice,
             //                                  graphics.GraphicsDevice.PresentationParameters.BackBufferWidth,
             //                                  graphics.GraphicsDevice.PresentationParameters.BackBufferHeight);
+
+            //blur.LoadContent(Content);
+            //blur.SetBlurEffectParameters(0f, 1.0f / renderTarget.Height);
         }
 
         /// <summary>
@@ -103,7 +105,7 @@ namespace EventHorizonRider.Core
 
             //GraphicsDevice.SetRenderTarget(null);
 
-            //spriteBatch.Begin(0, BlendState.Opaque, null, null, null, grayscaleEffect);
+            //spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
             //spriteBatch.Draw((Texture2D)renderTarget, position: Vector2.Zero, color: Color.White);
             //spriteBatch.End();
 

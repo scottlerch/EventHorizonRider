@@ -48,7 +48,7 @@ namespace EventHorizonRider.Core.Components.CenterComponents
             texture = new Texture2D(graphics, diameter, diameter, false, SurfaceFormat.Color);
             texture.SetData(TextureProcessor.SoftenAlpha(data, diameter, diameter));
 
-            texture = content.Load<Texture2D>("blackhole");
+            texture = content.Load<Texture2D>(@"Images\blackhole");
 
             Position = new Vector2(
                 graphics.Viewport.Width/2f,

@@ -19,7 +19,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            spriteFont = content.Load<SpriteFont>("fps_font");
+            spriteFont = content.Load<SpriteFont>(@"Fonts\fps_font");
             textSize = spriteFont.MeasureString(TextFormat);
 
             const float padding = 1;

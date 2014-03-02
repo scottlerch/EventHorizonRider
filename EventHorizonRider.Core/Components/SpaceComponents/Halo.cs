@@ -22,7 +22,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            texture = content.Load<Texture2D>("halo");
+            texture = content.Load<Texture2D>(@"Images\halo");
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)

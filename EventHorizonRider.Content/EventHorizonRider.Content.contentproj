@@ -38,93 +38,90 @@
       <HintPath>$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGameContentProcessors.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Compile Include="highscore_font.png">
-      <Name>highscore_font</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>MGSpriteFontTextureProcessor</Processor>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Compile Include="Effects\blur_effect.fx">
+      <Name>blur_effect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>MGEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="crash_sound.mp3">
-      <Name>crash_sound</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>MGSoundEffectProcessor</Processor>
+    <Compile Include="Effects\gaussianblur_effect.fx">
+      <Name>gaussianblur_effect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>MGEffectProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="fps_font.png">
-      <Name>fps_font</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>MGSpriteFontTextureProcessor</Processor>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="newlevel_sound.mp3">
-      <Name>newlevel_sound</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>MGSoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="techno_song.mp3">
-      <Name>techno_song</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>MGSongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="grayscale_effect.fx">
+    <Compile Include="Effects\grayscale_effect.fx">
       <Name>grayscale_effect</Name>
       <Importer>EffectImporter</Importer>
       <Processor>MGEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="button_font.png">
+    <Compile Include="Fonts\button_font.png">
       <Name>button_font</Name>
       <Importer>TextureImporter</Importer>
       <Processor>MGSpriteFontTextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="background.png">
-      <Name>background</Name>
+    <Compile Include="Fonts\fps_font.png">
+      <Name>fps_font</Name>
       <Importer>TextureImporter</Importer>
-      <Processor>MGTextureProcessor</Processor>
+      <Processor>MGSpriteFontTextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="time_font.png">
+    <Compile Include="Fonts\highscore_font.png">
+      <Name>highscore_font</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGSpriteFontTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Fonts\time_font.png">
       <Name>time_font</Name>
       <Importer>TextureImporter</Importer>
       <Processor>MGSpriteFontTextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="foreground.png">
+    <Compile Include="Images\background.png">
+      <Name>background</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\blackhole.png">
+      <Name>blackhole</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\foreground.png">
       <Name>foreground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\halo.png">
+      <Name>halo</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\ship.png">
+      <Name>ship</Name>
       <Importer>TextureImporter</Importer>
       <Processor>MGTextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="blackhole.png">
-      <Name>blackhole</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>MGTextureProcessor</Processor>
+    <Compile Include="Music\techno_song.mp3">
+      <Name>techno_song</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>MGSongProcessor</Processor>
     </Compile>
-    <Compile Include="halo.png">
-      <Name>halo</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>MGTextureProcessor</Processor>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\crash_sound.mp3">
+      <Name>crash_sound</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>MGSoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="ship.png">
-      <Name>ship</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>MGTextureProcessor</Processor>
+    <Compile Include="Sounds\newlevel_sound.mp3">
+      <Name>newlevel_sound</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>MGSoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

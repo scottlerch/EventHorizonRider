@@ -61,9 +61,9 @@ namespace EventHorizonRider.Core.Components.CenterComponents
             Texture = new Texture2D(graphics, width, height, false, SurfaceFormat.Color);
             Texture.SetData(TextureProcessor.SoftenAlpha(data, width, height));
 
-            Texture = content.Load<Texture2D>("ship");
+            Texture = content.Load<Texture2D>(@"Images\ship");
 
-            crashSound = content.Load<SoundEffect>("crash_sound");
+            crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)

@@ -11,7 +11,7 @@ namespace EventHorizonRider.Core.Components
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
 #if !WINDOWS
-            musicSong = content.Load<Song>("techno_song");
+            musicSong = content.Load<Song>(@"Music\techno_song");
 #endif
         }
 

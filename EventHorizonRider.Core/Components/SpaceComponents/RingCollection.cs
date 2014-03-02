@@ -37,7 +37,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             ringFactory.LoadContent(graphics);
 
-            newLevelSound = content.Load<SoundEffect>("newlevel_sound");
+            newLevelSound = content.Load<SoundEffect>(@"Sounds\newlevel_sound");
         }
 
         public void SetLevel(Level newLevel)

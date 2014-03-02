@@ -32,7 +32,7 @@ namespace EventHorizonRider.Core.Components.CenterComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            buttonFont = content.Load<SpriteFont>("button_font");
+            buttonFont = content.Load<SpriteFont>(@"Fonts\button_font");
 
             restartTextSize = buttonFont.MeasureString("RESTART");
             startTextSize = buttonFont.MeasureString("START");
