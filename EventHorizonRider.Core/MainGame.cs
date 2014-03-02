@@ -18,9 +18,6 @@ namespace EventHorizonRider.Core
         private SpriteBatch spriteBatch;
         private GameContext gameContext;
 
-        //private RenderTarget2D renderTarget;
-        //private GaussianBlur blur = new GaussianBlur();
-
         public MainGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -60,13 +57,6 @@ namespace EventHorizonRider.Core
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             gameContext.Root.LoadContent(Content, GraphicsDevice);
-
-            //renderTarget = new RenderTarget2D(graphics.GraphicsDevice,
-            //                                  graphics.GraphicsDevice.PresentationParameters.BackBufferWidth,
-            //                                  graphics.GraphicsDevice.PresentationParameters.BackBufferHeight);
-
-            //blur.LoadContent(Content);
-            //blur.SetBlurEffectParameters(0f, 1.0f / renderTarget.Height);
         }
 
         /// <summary>
@@ -97,17 +87,7 @@ namespace EventHorizonRider.Core
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.SetRenderTarget(renderTarget);
- 
-            GraphicsDevice.Clear(gameContext.Background.BackgroundColor);
-
             gameContext.Root.Draw(spriteBatch);
-
-            //GraphicsDevice.SetRenderTarget(null);
-
-            //spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
-            //spriteBatch.Draw((Texture2D)renderTarget, position: Vector2.Zero, color: Color.White);
-            //spriteBatch.End();
 
             base.Draw(gameTime);
         }

@@ -6,6 +6,8 @@ namespace EventHorizonRider.Core.Engine.States
     {
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
+            gameContext.Space.Blur = false;
+
             gameContext.CurrentLevelNumber = 1;
 
             gameContext.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
