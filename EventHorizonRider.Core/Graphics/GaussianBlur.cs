@@ -21,17 +21,15 @@ namespace EventHorizonRider.Core.Graphics
         public void SetBlurEffectParameters(float dx, float dy)
         {
             // Look up the sample weight and offset effect parameters.
-            EffectParameter weightsParameter, offsetsParameter;
-
-            weightsParameter = Effect.Parameters["SampleWeights"];
-            offsetsParameter = Effect.Parameters["SampleOffsets"];
+            var weightsParameter = Effect.Parameters["SampleWeights"];
+            var offsetsParameter = Effect.Parameters["SampleOffsets"];
 
             // Look up how many samples our gaussian blur effect supports.
             int sampleCount = weightsParameter.Elements.Count;
 
             // Create temporary arrays for computing our filter settings.
-            float[] sampleWeights = new float[sampleCount];
-            Vector2[] sampleOffsets = new Vector2[sampleCount];
+            var sampleWeights = new float[sampleCount];
+            var sampleOffsets = new Vector2[sampleCount];
 
             // The first sample always has a zero offset.
             sampleWeights[0] = ComputeGaussian(0);

@@ -1,5 +1,4 @@
-﻿using EventHorizonRider.Core.Components.CenterComponents;
-using EventHorizonRider.Core.Engine;
+﻿using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -11,9 +10,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     {
         private Texture2D texture;
 
-        private float currentRotation = 0f;
+        private float currentRotation;
 
         private readonly Blackhole blackhole;
+
+        public bool Visible { get; set; }
 
         public Halo(Blackhole newBlackhole)
         {
@@ -27,11 +28,14 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, blackhole.Position,
-                origin: new Vector2(texture.Width/2f, texture.Height/2f),
-                rotation: currentRotation,
-                scale: blackhole.Scale,
-                depth:0.2f);
+            if (Visible)
+            {
+                spriteBatch.Draw(texture, blackhole.Position,
+                    origin: new Vector2(texture.Width/2f, texture.Height/2f),
+                    rotation: currentRotation,
+                    scale: blackhole.Scale,
+                    depth: Depth);
+            }
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)

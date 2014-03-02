@@ -1,5 +1,4 @@
-﻿using EventHorizonRider.Core.Components.CenterComponents;
-using EventHorizonRider.Core.Engine;
+﻿using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Extensions;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
@@ -87,7 +86,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 }
                 else
                 {
-                    AddChild(ringFactory.Create(ringInfo));
+                    AddChild(ringFactory.Create(ringInfo), Depth);
                 }
             }
         }

@@ -40,10 +40,9 @@
   <ItemGroup>
     <Compile Include="ComponentBase.cs" />
     <Compile Include="Components\SpaceComponents\Background.cs" />
-    <Compile Include="Components\Center.cs" />
-    <Compile Include="Components\CenterComponents\Blackhole.cs" />
-    <Compile Include="Components\CenterComponents\PlayButton.cs" />
-    <Compile Include="Components\CenterComponents\Ship.cs" />
+    <Compile Include="Components\SpaceComponents\Blackhole.cs" />
+    <Compile Include="Components\ForegroundComponents\PlayButton.cs" />
+    <Compile Include="Components\SpaceComponents\Ship.cs" />
     <Compile Include="Components\Foreground.cs" />
     <Compile Include="Components\ForegroundComponents\FpsCounter.cs" />
     <Compile Include="Components\ForegroundComponents\PlayTimer.cs" />

@@ -2,8 +2,8 @@
 {
     internal class Root : ComponentBase
     {
-        public Root(Music music, Space space, Center center, Foreground foreground)
-            : base(music, space, center, foreground)
+        public Root(Music music, Space space, Foreground foreground)
+            : base(music, space, foreground)
         {
         }
     }

@@ -1,5 +1,4 @@
 ﻿using EventHorizonRider.Core.Components;
-using EventHorizonRider.Core.Components.CenterComponents;
 using EventHorizonRider.Core.Components.ForegroundComponents;
 using EventHorizonRider.Core.Components.SpaceComponents;
 using EventHorizonRider.Core.Input;
@@ -33,8 +32,6 @@ namespace EventHorizonRider.Core.Engine
 
         public Foreground Foreground { get; private set; }
 
-        public Center Center { get; private set; }
-
         public Space Space { get; private set; }
 
         public GameStateBase GameState { get; set; }
@@ -49,22 +46,20 @@ namespace EventHorizonRider.Core.Engine
 
             Music = new Music();
 
+            Background = new Background();
             Blackhole = new Blackhole();
             Ship = new Ship(Blackhole);
-            PlayButton = new PlayButton(Blackhole);
-            Center = new Center(Blackhole, PlayButton, Ship);
-
-            Background = new Background();
             Halo = new Halo(Blackhole);
             Rings = new RingCollection(Blackhole);
-            Space = new Space(Background, Halo, Rings);
+            Space = new Space(Background, Halo, Rings, Blackhole, Ship);
 
             FpsCounter = new FpsCounter();
             PlayerData = new PlayerData();
             PlayTimer = new PlayTimer(PlayerData);
-            Foreground = new Foreground(PlayTimer, FpsCounter);
+            PlayButton = new PlayButton(Blackhole);
+            Foreground = new Foreground(PlayButton, PlayTimer, FpsCounter);
 
-            Root = new Root(Music, Space, Center, Foreground);
+            Root = new Root(Music, Space, Foreground);
 
             Levels = new Levels();
         }

@@ -1,6 +1,5 @@
 ﻿using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Engine.States;
-using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -87,7 +86,7 @@ namespace EventHorizonRider.Core
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            gameContext.Root.Draw(spriteBatch);
+            gameContext.Root.Draw(spriteBatch, GraphicsDevice);
 
             base.Draw(gameTime);
         }

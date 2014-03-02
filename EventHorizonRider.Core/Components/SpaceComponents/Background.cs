@@ -19,7 +19,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             if (backgroundColor != Color.Red)
             {
-                spriteBatch.Draw(background, Vector2.Zero, depth:0.1f);
+                spriteBatch.Draw(background, Vector2.Zero, depth:Depth);
             }
         }
 

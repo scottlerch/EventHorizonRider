@@ -6,6 +6,7 @@ namespace EventHorizonRider.Core.Engine.States
     {
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
+            gameContext.Halo.Visible = true;
             gameContext.Ship.Initialize();
 
             if (gameContext.PlayButton.Pressed)

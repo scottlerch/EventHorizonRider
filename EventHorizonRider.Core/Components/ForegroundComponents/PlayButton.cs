@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq;
+﻿using EventHorizonRider.Core.Components.SpaceComponents;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using System;
+using System.Linq;
 
-namespace EventHorizonRider.Core.Components.CenterComponents
+namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
     internal class PlayButton : ComponentBase
     {

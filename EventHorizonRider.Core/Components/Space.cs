@@ -10,21 +10,19 @@ namespace EventHorizonRider.Core.Components
     {
         private RenderTarget2D renderTarget1;
         private RenderTarget2D renderTarget2;
-        private GaussianBlur blur = new GaussianBlur();
-        private GraphicsDevice graphics;
-        private Background background;
+        private readonly GaussianBlur blur = new GaussianBlur();
+        private readonly Background background;
 
         public bool Blur { get; set; }
 
-        public Space(Background background, Halo halo, RingCollection ringCollection) : base(background, halo, ringCollection)
+        public Space(Background background, Halo halo, RingCollection ringCollection, Blackhole blackhole, Ship ship) 
+            : base(background, halo, ringCollection, blackhole, ship)
         {
             this.background = background;
         }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            this.graphics = graphics;
-
             renderTarget1 = new RenderTarget2D(graphics,
                                               graphics.PresentationParameters.BackBufferWidth,
                                               graphics.PresentationParameters.BackBufferHeight);
@@ -36,7 +34,7 @@ namespace EventHorizonRider.Core.Components
             blur.LoadContent(content);
         }
 
-        protected override void OnBeforeDraw(SpriteBatch spriteBatch)
+        protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
             if (Blur)
             {
@@ -48,7 +46,7 @@ namespace EventHorizonRider.Core.Components
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
         }
 
-        protected override void OnAfterDraw(SpriteBatch spriteBatch)
+        protected override void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
             spriteBatch.End();
 
@@ -67,7 +65,6 @@ namespace EventHorizonRider.Core.Components
                 spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
                 spriteBatch.Draw(renderTarget2, position: Vector2.Zero, color: Color.White);
                 spriteBatch.End();
-
             }
         }
     }

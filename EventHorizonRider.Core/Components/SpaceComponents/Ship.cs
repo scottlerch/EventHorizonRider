@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using EventHorizonRider.Core.Graphics;
+﻿using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -8,8 +6,10 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using System;
+using System.Linq;
 
-namespace EventHorizonRider.Core.Components.CenterComponents
+namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Ship : ComponentBase
     {
@@ -70,7 +70,8 @@ namespace EventHorizonRider.Core.Components.CenterComponents
         {
             spriteBatch.Draw(Texture, Position,
                 origin: new Vector2(Texture.Width / 2f, Texture.Height / 2f),
-                rotation: Rotation);
+                rotation: Rotation,
+                depth: Depth);
         }
 
         private bool Left(KeyboardState keyState, TouchCollection touchState)

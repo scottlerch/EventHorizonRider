@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Input;
+﻿using System.Threading;
+using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,17 +14,28 @@ namespace EventHorizonRider.Core
     {
         private static readonly List<ComponentBase> EmptyList = new List<ComponentBase>(); 
         private List<ComponentBase> children;
- 
+
+        protected float Depth { get; private set; }
+
         protected ComponentBase(params ComponentBase[] components)
         {
             if (components.Length > 0)
             {
                 children = new List<ComponentBase>(components);
             }
+
+            var depthStep = 1f/(components.Length + 2);
+
+            for (int i = 0; i < components.Length; i++)
+            {
+                children[i].Depth = (i + 1)*depthStep;
+            }
         }
 
-        protected void AddChild(ComponentBase component)
+        protected void AddChild(ComponentBase component, float depth)
         {
+            component.Depth = depth;
+
             if (children == null)
             {
                 children = new List<ComponentBase>();    
@@ -81,25 +93,25 @@ namespace EventHorizonRider.Core
         {
         }
 
-        protected virtual void OnBeforeDraw(SpriteBatch spriteBatch)
+        protected virtual void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            OnBeforeDraw(spriteBatch);
+            OnBeforeDraw(spriteBatch, graphics);
 
             foreach (var child in Children)
             {
-                child.Draw(spriteBatch);
+                child.Draw(spriteBatch, graphics);
             }
 
             DrawCore(spriteBatch);
 
-            OnAfterDraw(spriteBatch);
+            OnAfterDraw(spriteBatch, graphics);
         }
 
-        protected virtual void OnAfterDraw(SpriteBatch spriteBatch)
+        protected virtual void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
         }
 

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EventHorizonRider.Core.Components.CenterComponents
+namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Blackhole : ComponentBase
     {
@@ -60,6 +60,11 @@ namespace EventHorizonRider.Core.Components.CenterComponents
             spring.PullBlock(pullX, pullVelocity);
         }
 
+        public void SetSize(float scaleSize)
+        {
+            spring.BlockX = scaleSize;
+        }
+
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
             if (!isStopped)
@@ -76,7 +81,8 @@ namespace EventHorizonRider.Core.Components.CenterComponents
             spriteBatch.Draw(texture, Position,
                 origin: new Vector2(texture.Width/2f, texture.Height/2f),
                 rotation: currentRotation,
-                scale: Scale);
+                scale: Scale,
+                depth: Depth);
         }
 
         internal void Stop()

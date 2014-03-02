@@ -7,6 +7,8 @@ namespace EventHorizonRider.Core.Engine.States
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
             gameContext.Space.Blur = true;
+            gameContext.Halo.Visible = false;
+            gameContext.Blackhole.SetSize(1.2f);
 
             gameContext.Music.Stop();
 

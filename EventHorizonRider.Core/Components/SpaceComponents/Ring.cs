@@ -1,5 +1,4 @@
-﻿using EventHorizonRider.Core.Components.CenterComponents;
-using EventHorizonRider.Core.Extensions;
+﻿using EventHorizonRider.Core.Extensions;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
@@ -65,7 +64,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     origin: new Vector2(Texture.Width / 2f, Texture.Height / 2f),
                     color: currentColor,
                     rotation: angle,
-                    depth:0.3f);
+                    depth: Depth);
             }
         }
 

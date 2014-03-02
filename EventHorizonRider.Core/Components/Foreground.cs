@@ -5,16 +5,16 @@ namespace EventHorizonRider.Core.Components
 {
     internal class Foreground : ComponentBase
     {
-        public Foreground(PlayTimer playTime, FpsCounter fpsCounter) : base(playTime, fpsCounter)
+        public Foreground(PlayButton playButton, PlayTimer playTime, FpsCounter fpsCounter) : base(playButton, playTime, fpsCounter)
         {
         }
 
-        protected override void OnBeforeDraw(SpriteBatch spriteBatch)
+        protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
         }
 
-        protected override void OnAfterDraw(SpriteBatch spriteBatch)
+        protected override void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
             spriteBatch.End();
         }
