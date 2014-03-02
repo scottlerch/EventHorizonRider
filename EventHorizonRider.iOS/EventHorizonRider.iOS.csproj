@@ -90,6 +90,9 @@
     <Content Include="Content\Images\ship.xnb" />
     <Content Include="Content\Sounds\crash_sound.xnb" />
     <Content Include="Content\Sounds\newlevel_sound.xnb" />
+    <BundleResource Include="Resources\Icon-60%402x.png" />
+    <BundleResource Include="Resources\Icon%402x.png" />
+    <BundleResource Include="Resources\Icon.png" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>

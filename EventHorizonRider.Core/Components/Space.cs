@@ -28,8 +28,8 @@ namespace EventHorizonRider.Core.Components
                                               graphics.PresentationParameters.BackBufferHeight);
 
             renderTarget2 = new RenderTarget2D(graphics,
-                                  graphics.PresentationParameters.BackBufferWidth,
-                                  graphics.PresentationParameters.BackBufferHeight);
+                                  graphics.PresentationParameters.BackBufferWidth / 2,
+                                  graphics.PresentationParameters.BackBufferHeight / 2);
 
             blur.LoadContent(content);
         }
@@ -54,16 +54,16 @@ namespace EventHorizonRider.Core.Components
             {
                 graphics.SetRenderTarget(renderTarget2);
 
-                blur.SetBlurEffectParameters(1f/renderTarget1.Width, 0f);
+                blur.SetBlurEffectParameters(1f / renderTarget2.Width, 0f);
                 spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
-                spriteBatch.Draw(renderTarget1, position: Vector2.Zero, color: Color.White);
+                spriteBatch.Draw(renderTarget1, renderTarget2.Bounds, Color.White);
                 spriteBatch.End();
 
                 graphics.SetRenderTarget(null);
 
-                blur.SetBlurEffectParameters(0f, 1f/renderTarget2.Height);
+                blur.SetBlurEffectParameters(0f, 1f/renderTarget1.Height);
                 spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
-                spriteBatch.Draw(renderTarget2, position: Vector2.Zero, color: Color.White);
+                spriteBatch.Draw(renderTarget2, renderTarget1.Bounds, Color.White);
                 spriteBatch.End();
             }
         }

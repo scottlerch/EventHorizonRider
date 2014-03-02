@@ -12,9 +12,9 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>7.0</string>
+	<string></string>
 	<key>CFBundleDisplayName</key>
-	<string>Event Horizon Rider</string>
+	<string>Horizon</string>
 	<key>CFBundleIdentifier</key>
 	<string>EventHorizonRider</string>
 	<key>CFBundleVersion</key>
@@ -25,7 +25,13 @@
 	<true/>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleBlackTranslucent</string>
-  <key>UIViewControllerBasedStatusBarAppearance</key>
-  <false/>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>Icon@2x.png</string>
+		<string>Icon.png</string>
+		<string>Icon-60@2x.png</string>
+	</array>
 </dict>
 </plist>
