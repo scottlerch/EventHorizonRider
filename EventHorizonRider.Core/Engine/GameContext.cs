@@ -61,7 +61,7 @@ namespace EventHorizonRider.Core.Engine
 
             Root = new Root(Music, Space, Foreground);
 
-            Levels = new Levels();
+            Levels = new Levels(new RingInfoFactory());
         }
 
         internal void Update(GameTime gameTime, InputState inputState)

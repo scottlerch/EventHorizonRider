@@ -8,7 +8,7 @@ namespace EventHorizonRider.Core.Engine.States
         {
             gameContext.Space.Blur = true;
             gameContext.Halo.Visible = false;
-            gameContext.Blackhole.SetSize(1.2f);
+            gameContext.Blackhole.SetExtraScale(0.3f);
 
             gameContext.Music.Stop();
 

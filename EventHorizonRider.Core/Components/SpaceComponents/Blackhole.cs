@@ -60,9 +60,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             spring.PullBlock(pullX, pullVelocity);
         }
 
-        public void SetSize(float scaleSize)
+        private float extraBlackholdScale = 0f;
+
+        public void SetExtraScale(float scaleSize)
         {
-            spring.BlockX = scaleSize;
+            extraBlackholdScale = scaleSize;
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -81,7 +83,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             spriteBatch.Draw(texture, Position,
                 origin: new Vector2(texture.Width/2f, texture.Height/2f),
                 rotation: currentRotation,
-                scale: Scale,
+                scale: new Vector2(Scale.X + extraBlackholdScale, Scale.Y + extraBlackholdScale),
                 depth: Depth);
         }
 

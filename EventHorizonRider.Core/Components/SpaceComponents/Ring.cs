@@ -78,12 +78,14 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         internal bool Intersects(Ship ship)
         {
+            var intersects = false;
+
             if (IsInsideRing(ship))
             {
-                return !Gaps.Any(gap => IsInsideGap(ship, gap));
+                intersects = !Gaps.Any(gap => IsInsideGap(ship, gap));
             }
 
-            return false;
+            return intersects;
         }
 
         private bool IsInsideRing(Ship ship)

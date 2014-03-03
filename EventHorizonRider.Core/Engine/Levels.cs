@@ -7,7 +7,12 @@ namespace EventHorizonRider.Core.Engine
 {
     internal class Levels
     {
-        private readonly RingInfoFactory ringInfoFactory = new RingInfoFactory();
+        private readonly RingInfoFactory ringInfoFactory;
+
+        public Levels(RingInfoFactory ringInfoFactory)
+        {
+            this.ringInfoFactory = ringInfoFactory;
+        }
 
         public Level GetLevel(int level)
         {
@@ -15,7 +20,6 @@ namespace EventHorizonRider.Core.Engine
             {
                 case 1:
                     return GetLevelOne();
-                    //return GetTestLevel();
                 case 2:
                     return GetLevelTwo();
                 case 3:
@@ -27,27 +31,13 @@ namespace EventHorizonRider.Core.Engine
             }
         }
 
-        public Level GetTestLevel()
-        {
-            return new Level
-            {
-                RingSpeed = 250,
-                RingInterval = TimeSpan.FromSeconds(4),
-                Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetStepSequence(10, MathHelper.TwoPi/4f),
-                    ringInfoFactory.GetZigZagSequence(10, MathHelper.TwoPi/4f)),
-            };
-        }
-
         public Level GetLevelOne()
         {
             return new Level
             {
-                RingSpeed = 200,
-                RingInterval = TimeSpan.FromSeconds(0.9),
-                Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetStepSequence(10, MathHelper.TwoPi/4f),
-                    ringInfoFactory.GetZigZagSequence(10, MathHelper.TwoPi/4f)),
+                RingSpeed = 150,
+                RingInterval = TimeSpan.FromSeconds(2),
+                Sequence = ringInfoFactory.GetRandomSequence(10, gapSize: MathHelper.TwoPi / 4),
             };
         }
 
@@ -55,11 +45,11 @@ namespace EventHorizonRider.Core.Engine
         {
             return new Level
             {
-                RingSpeed = 250,
-                RingInterval = TimeSpan.FromSeconds(0.9),
+                RingSpeed = 200,
+                RingInterval = TimeSpan.FromSeconds(1.5),
                 Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetStepSequence(5, MathHelper.TwoPi/5f),
-                    ringInfoFactory.GetZigZagSequence(10, MathHelper.TwoPi/5f)),
+                    ringInfoFactory.GetStepSequence(5, MathHelper.TwoPi / 5f),
+                    ringInfoFactory.GetStepSequence(5, MathHelper.TwoPi / 5f)),
             };
         }
 
@@ -67,11 +57,10 @@ namespace EventHorizonRider.Core.Engine
         {
             return new Level
             {
-                RingSpeed = 275,
-                RingInterval = TimeSpan.FromSeconds(0.9),
+                RingSpeed = 250,
+                RingInterval = TimeSpan.FromSeconds(1),
                 Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetStepSequence(3, MathHelper.TwoPi/5f),
-                    ringInfoFactory.GetZigZagSequence(10, MathHelper.TwoPi/5f)),
+                    ringInfoFactory.GetZigZagSequence(20, MathHelper.TwoPi / 5f)),
             };
         }
 
@@ -80,8 +69,8 @@ namespace EventHorizonRider.Core.Engine
             return new Level
             {
                 RingSpeed = 300,
-                RingInterval = TimeSpan.FromSeconds(0.9),
-                Sequence = ringInfoFactory.GetRandomSequence(10, gapSize: MathHelper.TwoPi/4),
+                RingInterval = TimeSpan.FromSeconds(0.75),
+                Sequence = ringInfoFactory.GetRandomSequence(10, gapSize: MathHelper.TwoPi / 4),
             };
         }
 
@@ -89,8 +78,8 @@ namespace EventHorizonRider.Core.Engine
         {
             return new Level
             {
-                RingSpeed = 325,
-                RingInterval = TimeSpan.FromSeconds(0.9),
+                RingSpeed = 350,
+                RingInterval = TimeSpan.FromSeconds(0.5),
                 Sequence = ringInfoFactory.GetRandomSequence(),
             };
         }

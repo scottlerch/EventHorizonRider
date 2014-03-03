@@ -39,16 +39,16 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             startTextSize = buttonFont.MeasureString("START");
 
             screenCenter = new Vector2(
-                graphics.Viewport.Width/2f,
-                graphics.Viewport.Height/2f);
+                graphics.Viewport.Width / 2f,
+                graphics.Viewport.Height / 2f);
 
-            const float buttonPadding = 20f;
+            const float buttonPadding = 100f;
 
             buttonBounds = new Rectangle(
-                (int) (screenCenter.X - (restartTextSize.X/2f) - buttonPadding),
-                (int) (screenCenter.Y - (restartTextSize.Y/2f) - buttonPadding),
-                (int) (restartTextSize.X + buttonPadding),
-                (int) (restartTextSize.Y + buttonPadding));
+                (int)(screenCenter.X - ((restartTextSize.X + buttonPadding) / 2f)),
+                (int)(screenCenter.Y - ((restartTextSize.Y + buttonPadding) / 2f)),
+                (int)(restartTextSize.X + buttonPadding),
+                (int)(restartTextSize.Y + buttonPadding));
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -62,11 +62,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             if (isVisible && colorAlphaPercent < 1f)
             {
-                colorAlphaPercent += FadeSpeed*(float) gameTime.ElapsedGameTime.TotalSeconds;
+                colorAlphaPercent += FadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             else if (!isVisible && colorAlphaPercent > 0f)
             {
-                colorAlphaPercent -= FadeSpeed*(float) gameTime.ElapsedGameTime.TotalSeconds;
+                colorAlphaPercent -= FadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
             colorAlphaPercent = MathHelper.Clamp(colorAlphaPercent, 0, 1);
@@ -100,7 +100,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             {
                 if (!isRestart)
                 {
-                    spriteBatch.DrawString(buttonFont, "START", screenCenter, Color.White * colorAlphaPercent, 0, new Vector2(startTextSize.X / 2f, startTextSize.Y / 2f), 
+                    spriteBatch.DrawString(buttonFont, "START", screenCenter, Color.White * colorAlphaPercent, 0, new Vector2(startTextSize.X / 2f, startTextSize.Y / 2f),
                         getScale(), SpriteEffects.None, 0.1f);
                 }
                 else

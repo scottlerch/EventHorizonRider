@@ -8,6 +8,7 @@ namespace EventHorizonRider.Core.Engine.States
         {
             gameContext.Space.Blur = false;
             gameContext.Halo.Visible = true;
+            gameContext.Blackhole.SetExtraScale(0f);
 
             gameContext.CurrentLevelNumber = 1;
 

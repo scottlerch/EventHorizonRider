@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EventHorizonRider.Core.Extensions;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents
 {
@@ -9,23 +10,17 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public float GapStart
         {
-            get { return MathHelper.WrapAngle(GapAngle - (GapSize/2)); }
+            get { return GapAngle - (GapSize/2f); }
         }
 
         public float GapEnd
         {
-            get { return MathHelper.WrapAngle(GapAngle + (GapSize/2)); }
+            get { return GapAngle + (GapSize/2f); }
         }
 
         public bool IsInsideGap(float angle)
         {
-            if (GapStart < GapEnd && (angle > GapStart && angle < GapEnd))
-                return true;
-
-            if (GapStart > GapEnd && (angle > GapStart || angle < GapEnd))
-                return true;
-
-            return false;
+            return angle.IsBetweenAngles(GapStart, GapEnd);
         }
     }
 }
