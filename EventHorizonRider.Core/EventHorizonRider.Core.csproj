@@ -54,6 +54,7 @@
     <Compile Include="Components\SpaceComponents\RingCollection.cs" />
     <Compile Include="Components\SpaceComponents\RingFactory.cs" />
     <Compile Include="Components\SpaceComponents\RingGap.cs" />
+    <Compile Include="Components\SpaceComponents\Shockwave.cs" />
     <Compile Include="Engine\Level.cs" />
     <Compile Include="Engine\Levels.cs" />
     <Compile Include="Engine\PlayerData.cs" />

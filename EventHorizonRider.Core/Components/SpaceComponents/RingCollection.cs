@@ -14,6 +14,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     internal class RingCollection : ComponentBase
     {
         private readonly Blackhole blackhole;
+        private readonly Shockwave shockwave;
         private readonly RingFactory ringFactory = new RingFactory();
         private IEnumerator<RingInfo> currentSequence;
 
@@ -25,9 +26,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private bool stopped = true;
 
-        public RingCollection(Blackhole blackhole)
+        public RingCollection(Blackhole blackhole, Shockwave shockwave)
         {
             this.blackhole = blackhole;
+            this.shockwave = shockwave;
         }
 
         public bool HasMoreRings { get; private set; }
@@ -45,8 +47,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             currentSequence = level.Sequence.GetEnumerator();
             HasMoreRings = true;
-
-            newLevelSound.Play();
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -66,6 +66,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 {
                     blackhole.Pulse(1.15f, level.RingSpeed / 150f);
                     ring.ConsumedByBlackhole = true;
+
+                    if (Children.Count == 1)
+                    {
+                        shockwave.Execute();
+                        newLevelSound.Play();
+                    }
                 }
 
                 if (ring.Radius <= 0f)

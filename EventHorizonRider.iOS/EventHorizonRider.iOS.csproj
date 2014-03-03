@@ -96,6 +96,7 @@
     <Content Include="Content\Images\title.xnb" />
     <Content Include="Content\Images\particle_base.xnb" />
     <Content Include="Content\Images\shield.xnb" />
+    <Content Include="Content\Images\shockwave.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>

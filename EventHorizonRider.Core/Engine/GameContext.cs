@@ -42,6 +42,8 @@ namespace EventHorizonRider.Core.Engine
 
         public int CurrentLevelNumber { get; set; }
 
+        public Shockwave Shockwave { get; private set; }
+
         public GameContext(GameStateBase gameState)
         {
             GameState = gameState;
@@ -50,10 +52,11 @@ namespace EventHorizonRider.Core.Engine
 
             Background = new Background();
             Blackhole = new Blackhole();
+            Shockwave = new Shockwave(Blackhole);
             Ship = new Ship(Blackhole);
             Halo = new Halo(Blackhole);
-            Rings = new RingCollection(Blackhole);
-            Space = new Space(Background, Halo, Rings, Blackhole, Ship);
+            Rings = new RingCollection(Blackhole, Shockwave);
+            Space = new Space(Background, Halo, Shockwave, Rings, Blackhole, Ship);
 
             FpsCounter = new FpsCounter();
             PlayerData = new PlayerData();

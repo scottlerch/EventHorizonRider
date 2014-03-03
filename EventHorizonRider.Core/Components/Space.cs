@@ -15,8 +15,8 @@ namespace EventHorizonRider.Core.Components
 
         public bool Blur { get; set; }
 
-        public Space(Background background, Halo halo, RingCollection ringCollection, Blackhole blackhole, Ship ship) 
-            : base(background, halo, ringCollection, blackhole, ship)
+        public Space(Background background, Halo halo, Shockwave shockwave, RingCollection ringCollection, Blackhole blackhole, Ship ship) 
+            : base(background, halo, shockwave, ringCollection, blackhole, ship)
         {
             this.background = background;
         }
