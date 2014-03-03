@@ -19,6 +19,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         public Vector2 Position;
         public float Rotation = 0;
         public Texture2D Texture;
+        private Texture2D shieldTexture;
 
         private SoundEffect crashSound;
         private bool stopped = true;
@@ -62,12 +63,18 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             Texture.SetData(TextureProcessor.SoftenAlpha(data, width, height));
 
             Texture = content.Load<Texture2D>(@"Images\ship");
+            shieldTexture = content.Load<Texture2D>(@"Images\shield");
 
             crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw(shieldTexture, Position,
+                origin: new Vector2(shieldTexture.Width / 2f, shieldTexture.Height / 2f),
+                rotation: Rotation,
+                depth: Depth - 0.0001f);
+
             spriteBatch.Draw(Texture, Position,
                 origin: new Vector2(Texture.Width / 2f, Texture.Height / 2f),
                 rotation: Rotation,

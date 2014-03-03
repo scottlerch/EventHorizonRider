@@ -95,11 +95,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>MGTextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\foreground.png">
-      <Name>foreground</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>MGTextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\halo.png">
       <Name>halo</Name>
       <Importer>TextureImporter</Importer>
@@ -128,6 +123,13 @@
       <Name>newlevel_sound</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>MGSoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\shield.png">
+      <Name>shield</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
