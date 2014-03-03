@@ -60,7 +60,7 @@ namespace EventHorizonRider.Core.Engine
                 RingSpeed = 250,
                 RingInterval = TimeSpan.FromSeconds(1),
                 Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetZigZagSequence(20, MathHelper.TwoPi / 5f)),
+                    ringInfoFactory.GetZigZagSequence(15, MathHelper.TwoPi / 5f)),
             };
         }
 
@@ -70,7 +70,7 @@ namespace EventHorizonRider.Core.Engine
             {
                 RingSpeed = 300,
                 RingInterval = TimeSpan.FromSeconds(0.75),
-                Sequence = ringInfoFactory.GetRandomSequence(10, gapSize: MathHelper.TwoPi / 4),
+                Sequence = ringInfoFactory.GetRandomSequence(20, gapSize: MathHelper.TwoPi / 4),
             };
         }
 

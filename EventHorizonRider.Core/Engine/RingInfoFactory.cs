@@ -13,7 +13,7 @@ namespace EventHorizonRider.Core.Engine
         {
             for (var i = 0; i < iterations || iterations == -1; i++)
             {
-                var currentGapSize = gapSize < 0f ? MathHelper.TwoPi / (float)rand.Next(4, 9) : gapSize;
+                var currentGapSize = gapSize < 0f ? MathHelper.TwoPi / (float)rand.Next(4, 8) : gapSize;
                 var currentNumberOfGaps = numberOfGaps < 0f ? rand.Next(1, (int)(MathHelper.TwoPi / currentGapSize)) : numberOfGaps;
 
                 yield return new RingInfo
