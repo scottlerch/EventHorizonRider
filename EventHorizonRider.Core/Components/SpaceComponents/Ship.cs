@@ -1,5 +1,6 @@
 ﻿using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -25,6 +26,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private bool stopped = true;
 
         private Vector2 viewportCenter;
+
+        private Texture2D particleBase;
+        private ParticleSystem particleSystem;
+        private Emitter emitter;
 
         public Ship(Blackhole blackhole)
         {
@@ -66,6 +71,25 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             shieldTexture = content.Load<Texture2D>(@"Images\shield");
 
             crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
+
+            particleBase = content.Load<Texture2D>(@"Images\particle_base");
+            particleSystem = new ParticleSystem(new Vector2(4000, 3000));
+            emitter = particleSystem.AddEmitter(
+                secPerSpawn:new Vector2(0.001f, 0.0015f),
+                spawnDirection:new Vector2(0f, -1f), 
+                spawnNoiseAngle:new Vector2(0.1f * MathHelper.Pi, 0.1f * -MathHelper.Pi),
+                startLife:new Vector2(0.5f, 0.75f),
+                startScale:new Vector2(16, 16),
+                endScale:new Vector2(4, 4),
+                startColor1:Color.Orange, 
+                startColor2:Color.Crimson, 
+                endColor1:new Color(Color.Orange.R, Color.Orange.G, Color.Orange.B, 0), 
+                endColor2:new Color(Color.Orange.R, Color.Orange.G, Color.Orange.B, 0),
+                startSpeed:new Vector2(400, 500), 
+                endSpeed:new Vector2(100, 120), 
+                budget:500, 
+                relPosition:Vector2.Zero, 
+                particleSprite:particleBase);
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
@@ -73,7 +97,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             spriteBatch.Draw(shieldTexture, Position,
                 origin: new Vector2(shieldTexture.Width / 2f, shieldTexture.Height / 2f),
                 rotation: Rotation,
-                depth: Depth - 0.0001f);
+                depth: Depth - 0.0002f);
+
+            particleSystem.Draw(spriteBatch, 1, Vector2.Zero, Depth - 0.0001f);
 
             spriteBatch.Draw(Texture, Position,
                 origin: new Vector2(Texture.Width / 2f, Texture.Height / 2f),
@@ -114,14 +140,21 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             const float moveSpeed = 1.1f;
 
+            emitter.Spawning = false;
+
+            var left = false;
+
             if (Left(inputState.KeyState, inputState.TouchState))
             {
                 Rotation -= (MathHelper.TwoPi) * (float)gameTime.ElapsedGameTime.TotalSeconds * moveSpeed;
+                emitter.Spawning = true;
+                left = true;
             }
 
             if (Right(inputState.KeyState, inputState.TouchState))
             {
                 Rotation += (MathHelper.TwoPi) * (float)gameTime.ElapsedGameTime.TotalSeconds * moveSpeed;
+                emitter.Spawning = true;
             }
 
             Rotation = MathHelper.WrapAngle(Rotation);
@@ -132,6 +165,20 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             Position.Y = blackhole.Position.Y - ((float)Math.Cos(Rotation) * Radius);
             Position.X = blackhole.Position.X + ((float)Math.Sin(Rotation) * Radius);
+
+            particleSystem.Position = Position;
+            emitter.SpawnDirection = (viewportCenter - Position);
+            emitter.SpawnDirection = new Vector2(-emitter.SpawnDirection.Y, emitter.SpawnDirection.X);
+
+            if (left)
+            {
+                emitter.SpawnDirection = new Vector2(-emitter.SpawnDirection.X, -emitter.SpawnDirection.Y);
+            }
+            
+            emitter.SpawnDirection.Normalize();
+            
+
+            particleSystem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
         }
 
         internal void Initialize()

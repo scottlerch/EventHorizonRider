@@ -93,9 +93,9 @@
     <BundleResource Include="Resources\Icon-60%402x.png" />
     <BundleResource Include="Resources\Icon%402x.png" />
     <BundleResource Include="Resources\Icon.png" />
-    <Content Include="Content\Images\title.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Content\Images\title.xnb" />
+    <Content Include="Content\Images\particle_base.xnb" />
+    <Content Include="Content\Images\shield.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
