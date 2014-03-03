@@ -101,12 +101,12 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 if (!isRestart)
                 {
                     spriteBatch.DrawString(buttonFont, "START", screenCenter, Color.White * colorAlphaPercent, 0, new Vector2(startTextSize.X / 2f, startTextSize.Y / 2f),
-                        getScale(), SpriteEffects.None, 0.1f);
+                        getScale(), SpriteEffects.None, Depth);
                 }
                 else
                 {
                     spriteBatch.DrawString(buttonFont, "RESTART", screenCenter, Color.White * colorAlphaPercent, 0,
-                        new Vector2(restartTextSize.X / 2f, restartTextSize.Y / 2f), getScale(), SpriteEffects.None, 0.1f);
+                        new Vector2(restartTextSize.X / 2f, restartTextSize.Y / 2f), getScale(), SpriteEffects.None, Depth);
                 }
             }
         }

@@ -47,7 +47,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             var fps = string.Format(TextFormat, frameRate, GC.GetTotalMemory(false)/1024f/1024f);
 
-            spriteBatch.DrawString(spriteFont, fps, position, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 1);
+            spriteBatch.DrawString(spriteFont, fps, position, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, Depth);
 #endif
         }
     }

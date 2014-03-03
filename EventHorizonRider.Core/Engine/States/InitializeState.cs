@@ -1,20 +1,28 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine.States
 {
     internal class InitializeState : GameStateBase
     {
+        private TimeSpan initInterval = TimeSpan.FromSeconds(2);
+
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
             gameContext.Halo.Visible = true;
             gameContext.Ship.Initialize();
 
-            if (gameContext.PlayButton.Pressed)
+            if (gameTime.TotalGameTime > initInterval)
             {
-                gameContext.Blackhole.Pulse(1.5f, 2.5f);
-                gameContext.PlayButton.Hide();
+                gameContext.Title.FadingOut = true;
 
-                gameContext.GameState = new StartingState();
+                if (!gameContext.Title.Visible && gameContext.PlayButton.Pressed)
+                {
+                    gameContext.Blackhole.Pulse(1.5f, 2.5f);
+                    gameContext.PlayButton.Hide();
+
+                    gameContext.GameState = new StartingState();
+                }
             }
         }
     }

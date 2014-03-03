@@ -5,7 +5,7 @@ namespace EventHorizonRider.Core.Components
 {
     internal class Foreground : ComponentBase
     {
-        public Foreground(PlayButton playButton, PlayTimer playTime, FpsCounter fpsCounter) : base(playButton, playTime, fpsCounter)
+        public Foreground(PlayButton playButton, PlayTimer playTime, Title title, FpsCounter fpsCounter) : base(playButton, playTime, title, fpsCounter)
         {
         }
 

@@ -38,6 +38,8 @@ namespace EventHorizonRider.Core.Engine
 
         public Levels Levels { get; private set; }
 
+        public Title Title { get; private set; }
+
         public int CurrentLevelNumber { get; set; }
 
         public GameContext(GameStateBase gameState)
@@ -57,7 +59,8 @@ namespace EventHorizonRider.Core.Engine
             PlayerData = new PlayerData();
             PlayTimer = new PlayTimer(PlayerData);
             PlayButton = new PlayButton(Blackhole);
-            Foreground = new Foreground(PlayButton, PlayTimer, FpsCounter);
+            Title = new Title();
+            Foreground = new Foreground(PlayButton, PlayTimer, Title, FpsCounter);
 
             Root = new Root(Music, Space, Foreground);
 

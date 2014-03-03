@@ -128,7 +128,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 Vector2.Zero,
                 1,
                 SpriteEffects.None,
-                0.1f);
+                Depth);
 
             // Draw best time text
             spriteBatch.DrawString(
@@ -140,7 +140,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 Vector2.Zero,
                 1,
                 SpriteEffects.None,
-                0.1f);
+                Depth);
 
             spriteBatch.DrawString(
                 labelFont,
@@ -151,7 +151,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 Vector2.Zero,
                 1,
                 SpriteEffects.None,
-                0.1f);
+                Depth);
 
             // Draw level number
             var levelNumberTextSize = labelFont.MeasureString(levelNumberText).X;
@@ -165,7 +165,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 0,
                 Vector2.Zero,
                 1,
-                SpriteEffects.None, 0.1f);
+                SpriteEffects.None, 
+                Depth);
 
             spriteBatch.DrawString(
                 labelFont,
@@ -175,7 +176,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 0,
                 Vector2.Zero,
                 1,
-                SpriteEffects.None, 0.1f);
+                SpriteEffects.None,
+                Depth);
         }
     }
 }
