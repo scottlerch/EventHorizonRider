@@ -27,8 +27,8 @@ namespace EventHorizonRider.Core.Physics
             x = newX;
             pullVelocity = newPullVelocity;
 
-            if ((x < BlockX && newPullVelocity < 0) ||
-                (x > BlockX && newPullVelocity > 0))
+            if ((x < BlockX && newPullVelocity > 0) ||
+                (x > BlockX && newPullVelocity < 0))
             {
                 pullVelocity *= -1f;
             }

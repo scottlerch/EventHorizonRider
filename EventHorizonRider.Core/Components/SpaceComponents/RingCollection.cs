@@ -64,7 +64,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
                 if (!ring.ConsumedByBlackhole && ring.Radius <= blackhole.Height*0.5f)
                 {
-                    blackhole.Pulse();
+                    blackhole.Pulse(1.15f, level.RingSpeed / 150f);
                     ring.ConsumedByBlackhole = true;
                 }
 
