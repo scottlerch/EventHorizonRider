@@ -77,21 +77,23 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             const float diff = high - low;
 
             var randomIndex = 0;
+            var currentOrigin = new Vector2(Textures[0].Width / 2f, Textures[0].Height / 2f);
+            var lightness = (scale*diff) + low;
 
-            for (var i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.04f)
+            for (var i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.08f)
             {
                 var angle = i + rotationalOffset;
 
                 if (Gaps.Any(gap => gap.IsInsideGap(i)))
                     continue;
 
-                var currentColor = SegmentColors[RandomColorIndex[randomIndex]].AdjustLight((scale * diff) + low);
+                var currentColor = SegmentColors[RandomColorIndex[randomIndex]].AdjustLight(lightness);
 
                 var texture = Textures[RandomTextureIndex[randomIndex]];
                 spriteBatch.Draw(texture, new Vector2(
                     Origin.X + ((float)Math.Sin(angle) * Radius),
                     Origin.Y - ((float)Math.Cos(angle) * Radius)),
-                    origin: new Vector2(texture.Width / 2f, texture.Height / 2f),
+                    origin: currentOrigin,
                     color: currentColor,
                     rotation: angle,
                     depth: Depth);
