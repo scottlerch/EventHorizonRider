@@ -34,22 +34,49 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         }
 
         public float RotationalVelocity;
-        public Texture2D Texture;
+        public Texture2D[] Textures;
 
         private bool isStopped;
 
         private float rotationalOffset;
         public bool ConsumedByBlackhole { get; set; }
 
+        private static readonly Color[] SegmentColors =
+        {
+            Color.DarkGray,
+            Color.LightGray,
+            Color.DarkGray.AdjustLight(0.7f)
+        };
+
+        private static readonly int[] RandomColorIndex;
+        private static readonly int[] RandomTextureIndex;
+
+        static Ring()
+        {
+            // Precompute random but deterministic indices for performance
+
+            const int maxCount = 200;
+            var random = new Random();
+
+            RandomColorIndex = new int[maxCount];
+            RandomTextureIndex = new int[maxCount];
+
+            for (int i = 0; i < maxCount; i++)
+            {
+                RandomColorIndex[i] = random.Next(0, SegmentColors.Length);
+                RandomTextureIndex[i] = random.Next(0, RingFactory.SegmentsCount);
+            }
+        }
+
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
             var scale = 1f - (Radius/maxRadius);
 
-            const float low = 0.1f;
-            const float high = 0.7f;
+            const float low = 0.2f;
+            const float high = 0.5f;
             const float diff = high - low;
 
-            var currentColor = Color.DarkGray.AdjustLight((scale * diff) + low);
+            var randomIndex = 0;
 
             for (var i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.04f)
             {
@@ -58,13 +85,18 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 if (Gaps.Any(gap => gap.IsInsideGap(i)))
                     continue;
 
-                spriteBatch.Draw(Texture, new Vector2(
+                var currentColor = SegmentColors[RandomColorIndex[randomIndex]].AdjustLight((scale * diff) + low);
+
+                var texture = Textures[RandomTextureIndex[randomIndex]];
+                spriteBatch.Draw(texture, new Vector2(
                     Origin.X + ((float)Math.Sin(angle) * Radius),
                     Origin.Y - ((float)Math.Cos(angle) * Radius)),
-                    origin: new Vector2(Texture.Width / 2f, Texture.Height / 2f),
+                    origin: new Vector2(texture.Width / 2f, texture.Height / 2f),
                     color: currentColor,
                     rotation: angle,
                     depth: Depth);
+
+                randomIndex++;
             }
         }
 
@@ -90,7 +122,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private bool IsInsideRing(Ship ship)
         {
-            var ringWidth = Texture.Height;
+            var ringWidth = Textures[0].Height;
 
             var startRingEdge = Radius - (ringWidth / 2f);
             var endRingEdge = Radius + (ringWidth / 2f);
@@ -109,7 +141,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private Range<float> GetGapEdges(Ship ship, RingGap ringGap)
         {
-            var textureOffset = (float)Math.Asin((Texture.Width / 2f) / ship.Radius);
+            var textureOffset = (float)Math.Asin((Textures[0].Width / 2f) / ship.Radius);
 
             var halfGap = (ringGap.GapSize / 2f) - textureOffset;
 

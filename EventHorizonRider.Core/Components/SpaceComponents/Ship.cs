@@ -1,5 +1,4 @@
-﻿using EventHorizonRider.Core.Graphics;
-using EventHorizonRider.Core.Input;
+﻿using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -42,31 +41,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
 
-            var shipColor = Color.DarkGray.AdjustLight(0.9f);
-
-            const int padding = 2;
-            const int height = 15 + (padding * 2);
-            const int width = 15 + (padding * 2);
-
-            const float center = width / 2f;
-            const float slope = center / ((float)height - (padding * 2));
-
-            var data = new Color[width * height];
-
-            for (var y = padding; y < height - padding; y++)
-            {
-                var left = (int)Math.Round(center - (slope * y));
-                var right = (int)Math.Round(center + (slope * y));
-
-                for (var x = left; x <= right; x++)
-                {
-                    data[x + (y * width)] = shipColor;
-                }
-            }
-
-            Texture = new Texture2D(graphics, width, height, false, SurfaceFormat.Color);
-            Texture.SetData(TextureProcessor.SoftenAlpha(data, width, height));
-
             Texture = content.Load<Texture2D>(@"Images\ship");
             shieldTexture = content.Load<Texture2D>(@"Images\shield");
 
@@ -79,8 +53,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 spawnDirection:new Vector2(0f, -1f), 
                 spawnNoiseAngle:new Vector2(0.1f * MathHelper.Pi, 0.1f * -MathHelper.Pi),
                 startLife:new Vector2(0.5f, 0.75f),
-                startScale:new Vector2(16, 16),
-                endScale:new Vector2(4, 4),
+                startScale:new Vector2(20, 20),
+                endScale:new Vector2(8, 8),
                 startColor1:Color.Orange, 
                 startColor2:Color.Crimson, 
                 endColor1:new Color(Color.Orange.R, Color.Orange.G, Color.Orange.B, 0), 
@@ -90,6 +64,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 budget:500, 
                 relPosition:Vector2.Zero, 
                 particleSprite:particleBase);
+
+            emitter.GravityCenter = viewportCenter;
+            emitter.GravityForce = 1.3f;
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
@@ -159,7 +136,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             Rotation = MathHelper.WrapAngle(Rotation);
 
-            const float radiusPadding = 5;
+            const float radiusPadding = 20;
 
             Radius = (blackhole.Height / 2f) + (Texture.Height / 2f) + radiusPadding;
 

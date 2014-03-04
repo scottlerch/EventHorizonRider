@@ -56,7 +56,7 @@ namespace EventHorizonRider.Core.Engine
             Ship = new Ship(Blackhole);
             Halo = new Halo(Blackhole);
             Rings = new RingCollection(Blackhole, Shockwave);
-            Space = new Space(Background, Halo, Shockwave, Rings, Blackhole, Ship);
+            Space = new Space(Background, Halo, Shockwave, Rings, Ship, Blackhole);
 
             FpsCounter = new FpsCounter();
             PlayerData = new PlayerData();

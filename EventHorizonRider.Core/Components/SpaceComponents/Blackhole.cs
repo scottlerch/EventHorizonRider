@@ -1,5 +1,4 @@
 ﻿using EventHorizonRider.Core.Engine;
-using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
@@ -23,7 +22,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private bool isStopped = true;
 
-        private float currentRotation = 0f;
+        private float currentRotation;
 
         public float Height
         {
@@ -32,22 +31,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            const int padding = 4;
-            const int radius = 80;
-            const int diameter = radius*2;
-            const int paddedRadius = radius - padding;
-            const int origin = radius;
-
-            var data = new Color[diameter*diameter];
-
-            for (var y = -paddedRadius; y <= paddedRadius; y++)
-                for (var x = -paddedRadius; x <= paddedRadius; x++)
-                    if (x*x + y*y <= paddedRadius*paddedRadius)
-                        data[origin + x + ((origin + y)*diameter)] = Color.Black;
-
-            texture = new Texture2D(graphics, diameter, diameter, false, SurfaceFormat.Color);
-            texture.SetData(TextureProcessor.SoftenAlpha(data, diameter, diameter));
-
             texture = content.Load<Texture2D>(@"Images\blackhole");
 
             Position = new Vector2(
@@ -60,7 +43,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             spring.PullBlock(pullX, pullVelocity);
         }
 
-        private float extraBlackholdScale = 0f;
+        private float extraBlackholdScale;
 
         public void SetExtraScale(float scaleSize)
         {

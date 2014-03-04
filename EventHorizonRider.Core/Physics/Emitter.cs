@@ -28,6 +28,8 @@ namespace EventHorizonRider.Core.Physics
         public Vector2 StartSpeed;
         public Vector2 EndSpeed;
         public bool Spawning;
+        public Vector2 GravityCenter;
+        public float GravityForce;
 
         public ParticleSystem Parent;
 

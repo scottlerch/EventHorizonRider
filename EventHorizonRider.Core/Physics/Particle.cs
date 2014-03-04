@@ -40,6 +40,7 @@ namespace EventHorizonRider.Core.Physics
                 return false;
             lifePhase = lifeLeft / startingLife;      // 1 means newly created 0 means dead.
             Position += MathLib.LinearInterpolate(endDirection, startDirection, lifePhase) * dt;
+            Position += (parent.GravityCenter - Position)*parent.GravityForce*dt;
             return true;
         }
 

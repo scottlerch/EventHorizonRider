@@ -34,6 +34,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     origin: new Vector2(texture.Width/2f, texture.Height/2f),
                     rotation: currentRotation,
                     scale: blackhole.Scale,
+                    color: Color.White * 0.4f,
                     depth: Depth);
             }
         }
