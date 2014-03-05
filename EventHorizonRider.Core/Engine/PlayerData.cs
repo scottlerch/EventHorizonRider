@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Storage;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using PCLStorage;
+using System;
+using System.Threading.Tasks;
 
 namespace EventHorizonRider.Core.Engine
 {
@@ -10,49 +9,41 @@ namespace EventHorizonRider.Core.Engine
     {
         public TimeSpan Highscore { get; set; }
 
-        public void Save()
+        public async Task Save()
         {
-            var result = StorageDevice.BeginShowSelector(PlayerIndex.One, null, null);
-            result.AsyncWaitHandle.WaitOne();
-            var storageDevice = StorageDevice.EndShowSelector(result);
-
-            result = storageDevice.BeginOpenContainer("EventHorizon", null, null);
-            result.AsyncWaitHandle.WaitOne();
-
-            using (var container = storageDevice.EndOpenContainer(result))
-            using (var writer = new StreamWriter(container.CreateFile("user.dat")))
-            {
-                writer.WriteLine(JsonConvert.SerializeObject(this));
-            }
+            var rootFolder = FileSystem.Current.LocalStorage;
+            var folder = await rootFolder.CreateFolderAsync("EventHorizon", CreationCollisionOption.OpenIfExists);
+            var file = await folder.CreateFileAsync("player1.json", CreationCollisionOption.ReplaceExisting);
+            await file.WriteAllTextAsync(JsonConvert.SerializeObject(this));
         }
 
-        public void Load()
+        public async Task Load()
         {
-            var result = StorageDevice.BeginShowSelector(PlayerIndex.One, null, null);
-            result.AsyncWaitHandle.WaitOne();
-            var storageDevice = StorageDevice.EndShowSelector(result);
-            result.AsyncWaitHandle.Dispose();
+            var rootFolder = FileSystem.Current.LocalStorage;
+            var folder = await rootFolder.GetFolderAsync("EventHorizon");
 
-            result = storageDevice.BeginOpenContainer("EventHorizon", null, null);
-            result.AsyncWaitHandle.WaitOne();
+            var fileExists = await folder.CheckExistsAsync("player1.json");
 
-            using (var container = storageDevice.EndOpenContainer(result))
+            if (fileExists == ExistenceCheckResult.FileExists)
             {
-                if (container.FileExists("user.dat"))
+                var file = await folder.GetFileAsync("player1.json");
+                var text = await file.ReadAllTextAsync();
+
+                if (!string.IsNullOrEmpty(text))
                 {
-                    // TODO: open file API not implemented yet in monogame
+                    var data = JsonConvert.DeserializeObject<PlayerData>(text);
+
+                    Highscore = data.Highscore;
                 }
             }
-
-            result.AsyncWaitHandle.Dispose();
         }
 
-        internal void UpdateBestTime(TimeSpan timeSpan)
+        internal async Task UpdateBestTime(TimeSpan timeSpan)
         {
             if (timeSpan > Highscore)
             {
                 Highscore = timeSpan;
-                //Save();
+                await Save();
             }
         }
     }

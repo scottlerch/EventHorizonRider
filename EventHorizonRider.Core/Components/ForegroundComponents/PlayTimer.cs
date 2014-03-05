@@ -52,8 +52,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             viewSize = new Vector2(graphics.Viewport.Width, graphics.Viewport.Height);
 
-            //foreground = content.Load<Texture2D>(@"Images\foreground");
-
             labelFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
             timeFont = content.Load<SpriteFont>(@"Fonts\time_font");
 
@@ -85,8 +83,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             }
             else
             {
-                var percentComplete = 1f -
-                                      (float) (gameTimeElapsed.Elapsed.TotalSeconds/playerData.Highscore.TotalSeconds);
+                var percentComplete = 1f - (float) (gameTimeElapsed.Elapsed.TotalSeconds/playerData.Highscore.TotalSeconds);
 
                 scoreColor = Color.White.SetColors(percentComplete, 1f, percentComplete);
             }
@@ -115,8 +112,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             const float textPadding = 10;
             const float textVerticalSpacing = 5;
-
-            //spriteBatch.Draw(foreground, Vector2.Zero);
 
             // Draw time text
             spriteBatch.DrawString(

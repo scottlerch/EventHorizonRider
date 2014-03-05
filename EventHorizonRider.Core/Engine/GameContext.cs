@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Components;
+﻿using System.Threading.Tasks;
+using EventHorizonRider.Core.Components;
 using EventHorizonRider.Core.Components.ForegroundComponents;
 using EventHorizonRider.Core.Components.SpaceComponents;
 using EventHorizonRider.Core.Input;
@@ -44,6 +45,24 @@ namespace EventHorizonRider.Core.Engine
 
         public Shockwave Shockwave { get; private set; }
 
+        private Task ioTask;
+
+        public Task IoTask
+        {
+            get { return ioTask; }
+            set
+            {
+                if (ioTask != null && !ioTask.IsCompleted)
+                {
+                    ioTask = ioTask.ContinueWith(t => value.Wait() );
+                }
+                else
+                {
+                    ioTask = value;
+                }
+            }
+        }
+
         public GameContext(GameStateBase gameState)
         {
             GameState = gameState;
@@ -60,6 +79,9 @@ namespace EventHorizonRider.Core.Engine
 
             FpsCounter = new FpsCounter();
             PlayerData = new PlayerData();
+
+            IoTask = PlayerData.Load();
+
             PlayTimer = new PlayTimer(PlayerData);
             PlayButton = new PlayButton(Blackhole);
             Title = new Title();

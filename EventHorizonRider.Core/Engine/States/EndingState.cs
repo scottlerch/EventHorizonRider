@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine.States
 {
@@ -20,7 +21,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.PlayTimer.Stop();
             gameContext.PlayButton.Show(true);
 
-            gameContext.PlayerData.UpdateBestTime(gameContext.PlayTimer.Elapsed);
+            gameContext.IoTask = gameContext.PlayerData.UpdateBestTime(gameContext.PlayTimer.Elapsed);
 
             gameContext.GameState = new OverState();
         }
