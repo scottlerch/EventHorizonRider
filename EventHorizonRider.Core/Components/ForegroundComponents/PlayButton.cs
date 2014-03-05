@@ -55,7 +55,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             Pressed = false;
 
-            if (isVisible && IsPressed(inputState.MouseState, inputState.TouchState))
+            if (isVisible && IsPressed(inputState.MouseState, inputState.TouchState, inputState.KeyState))
             {
                 Pressed = true;
             }
@@ -87,9 +87,10 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         }
 
 
-        private bool IsPressed(MouseState mouseState, TouchCollection touchState)
+        private bool IsPressed(MouseState mouseState, TouchCollection touchState, KeyboardState keyboardState)
         {
-            return
+            return 
+                keyboardState.GetPressedKeys().Contains(Keys.Space) || 
                 touchState.Any(t => t.State == TouchLocationState.Pressed && buttonBounds.Contains(t.Position)) ||
                 (mouseState.LeftButton == ButtonState.Pressed && buttonBounds.Contains(mouseState.Position));
         }

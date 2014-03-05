@@ -1,5 +1,4 @@
 ﻿using EventHorizonRider.Core.Extensions;
-using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents
 {

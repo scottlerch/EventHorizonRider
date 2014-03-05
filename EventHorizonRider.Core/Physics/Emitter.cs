@@ -7,14 +7,14 @@ namespace EventHorizonRider.Core.Physics
 {
     internal class Emitter
     {
-        private readonly Random random;                   // Pointer to a random object passed trough constructor.
-        private float nextSpawnIn;                      // This is a random number generated using the SecPerSpawn.
-        private float secPassed;                        // Time pased since last spawn.
-        private readonly LinkedList<Particle> activeParticles;   // A list of all the active particles.
+        private readonly Random random; 
+        private float nextSpawnIn;
+        private float secPassed;
+        private readonly LinkedList<Particle> activeParticles; 
 
-        public Vector2 RelPosition;             // Position relative to collection.
-        public int Budget;                      // Max number of alive particles.
-        public Texture2D ParticleSprite;        // This is what the particle looks like.
+        public Vector2 RelPosition;
+        public int Budget;
+        public Texture2D ParticleSprite;
         public Vector2 SecPerSpawn;
         public Vector2 SpawnDirection;
         public Vector2 SpawnNoiseAngle;
