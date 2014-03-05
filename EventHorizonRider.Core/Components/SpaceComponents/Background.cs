@@ -33,7 +33,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     position: center,
                     origin: new Vector2(stars.Width / 2f, stars.Height / 2f),
                     rotation: currentRotation,
-                    color: Color.White * 0.5f,
+                    color: Color.White * 0.8f,
                     scale: new Vector2(1.3f, 1.3f),
                     depth: Depth + 0.001f);
             }

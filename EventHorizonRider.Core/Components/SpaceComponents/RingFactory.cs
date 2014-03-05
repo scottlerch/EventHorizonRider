@@ -1,6 +1,4 @@
-﻿using System.ServiceModel;
-using EventHorizonRider.Core.Engine;
-using EventHorizonRider.Core.Graphics;
+﻿using EventHorizonRider.Core.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,7 +21,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             ringEdgeTextures = new Texture2D[SegmentsCount];
             for (int i = 0; i < ringEdgeTextures.Length; i++)
             {
-                ringEdgeTextures[i] = content.Load<Texture2D>(@"Images\ring_segment" + (i + 1));
+                ringEdgeTextures[i] = content.Load<Texture2D>(@"Images\ring_segment" + (i + 3));
             }
 
             // TODO: calculate from viewport

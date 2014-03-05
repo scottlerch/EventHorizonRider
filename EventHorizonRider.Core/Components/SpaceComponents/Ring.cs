@@ -45,7 +45,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             Color.DarkGray,
             Color.LightGray,
-            Color.DarkGray.AdjustLight(0.7f)
+            Color.DarkGray.AdjustLight(0.8f)
         };
 
         private static readonly int[] RandomColorIndex;
@@ -72,8 +72,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             var scale = 1f - (Radius/maxRadius);
 
-            const float low = 0.2f;
-            const float high = 0.5f;
+            const float low = 0.3f;
+            const float high = 0.6f;
             const float diff = high - low;
 
             var randomIndex = 0;
