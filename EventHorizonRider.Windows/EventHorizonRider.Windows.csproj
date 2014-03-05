@@ -40,6 +40,12 @@
     <StartupObject>EventHorizonRider.Windows.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PCLStorage">
+      <HintPath>..\packages\PCLStorage.0.9.3\lib\net45\PCLStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions">
+      <HintPath>..\packages\PCLStorage.0.9.3\lib\net45\PCLStorage.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -107,6 +113,6 @@
     <ItemGroup>
       <AllContent Include="$(SolutionDir)EventHorizonRider.ContentXna\bin\$(Configuration)\**\Content\**\*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(AllContent)" DestinationFolder="$(TargetDir)%(RecursiveDir)"/>
+    <Copy SourceFiles="@(AllContent)" DestinationFolder="$(TargetDir)%(RecursiveDir)" />
   </Target>
 </Project>
