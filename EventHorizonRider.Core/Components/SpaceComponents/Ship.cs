@@ -11,14 +11,15 @@ using System.Linq;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents
 {
-    internal class Ship : ComponentBase
+    internal class Ship : ComponentBase, ISpriteInfo
     {
         private readonly Blackhole blackhole;
         private const float DefaultRotationVelocity = MathHelper.TwoPi / 32;
 
-        public Vector2 Position;
-        public float Rotation = 0;
-        public Texture2D Texture;
+        public Vector2 Position { get; set; }
+        public float Rotation { get; set; }
+
+        public Texture2D Texture { get; set; }
         private Texture2D shieldTexture;
 
         private SoundEffect crashSound;
@@ -42,6 +43,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
 
             Texture = content.Load<Texture2D>(@"Images\ship");
+            TextureData = new Color[Texture.Width * Texture.Height];
+            Texture.GetData(TextureData);
+
             shieldTexture = content.Load<Texture2D>(@"Images\shield");
 
             crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
@@ -67,6 +71,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             emitter.GravityCenter = viewportCenter;
             emitter.GravityForce = 1.3f;
+
+            Origin = new Vector2(Texture.Width/2f, Texture.Height/2f);
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
@@ -78,8 +84,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             particleSystem.Draw(spriteBatch, 1, Vector2.Zero, Depth - 0.0001f);
 
-            spriteBatch.Draw(Texture, Position,
-                origin: new Vector2(Texture.Width / 2f, Texture.Height / 2f),
+            spriteBatch.Draw(
+                Texture, 
+                Position,
+                origin: Origin,
                 rotation: Rotation,
                 depth: Depth);
         }
@@ -140,8 +148,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             Radius = (blackhole.Height / 2f) + (Texture.Height / 2f) + radiusPadding;
 
-            Position.Y = blackhole.Position.Y - ((float)Math.Cos(Rotation) * Radius);
-            Position.X = blackhole.Position.X + ((float)Math.Sin(Rotation) * Radius);
+            Position = new Vector2(
+                blackhole.Position.X + ((float)Math.Sin(Rotation) * Radius),
+                blackhole.Position.Y - ((float)Math.Cos(Rotation) * Radius));
 
             particleSystem.Position = Position;
             emitter.SpawnDirection = (viewportCenter - Position);
@@ -162,16 +171,18 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             Rotation = 0;
 
-            Position.X = blackhole.Position.X;
-            Position.Y = blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f);
+            Position = new Vector2(
+                blackhole.Position.X,
+                blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f));
         }
 
         internal void Start()
         {
             Rotation = 0;
 
-            Position.X = blackhole.Position.X;
-            Position.Y = blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f);
+            Position = new Vector2(
+                blackhole.Position.X,
+                blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f));
 
             stopped = false;
         }
@@ -182,5 +193,17 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             stopped = true;
         }
+
+        public Vector2 Origin
+        {
+            get; set;
+        }
+
+        public Vector2 Scale
+        {
+            get { return Vector2.One; }
+        }
+
+        public Color[] TextureData{get; private set; }
     }
 }

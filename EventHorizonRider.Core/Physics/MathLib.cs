@@ -1,9 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Physics
 {
-    internal class MathLib
+    internal static class MathLib
     {
+        private static readonly Random Random = new Random();
+
+        public static float GetRandomBetween(float a, float b)
+        {
+            return a + ((b - a)*(float)Random.NextDouble());
+        }
+
         public static byte LinearInterpolate(byte a, byte b, double t)
         {
             return (byte)(a * (1 - t) + b * t);

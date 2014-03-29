@@ -8,9 +8,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class RingFactory
     {
-        public const int SegmentsCount = 3;
+        public const int SegmentsCount = 4;
 
-        private Texture2D[] ringEdgeTextures;
+        private Texture2D[] asteroidTextures;
+        private Color[][] asteroidTexturesData;
+
         private float startRadius;
         private Vector2 viewportCenter;
 
@@ -18,10 +20,14 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
 
-            ringEdgeTextures = new Texture2D[SegmentsCount];
-            for (int i = 0; i < ringEdgeTextures.Length; i++)
+            asteroidTextures = new Texture2D[SegmentsCount];
+            asteroidTexturesData = new Color[SegmentsCount][];
+
+            for (int i = 0; i < asteroidTextures.Length; i++)
             {
-                ringEdgeTextures[i] = content.Load<Texture2D>(@"Images\ring_segment" + (i + 3));
+                asteroidTextures[i] = content.Load<Texture2D>(@"Images\asteroid_" + (i + 1));
+                asteroidTexturesData[i] = new Color[asteroidTextures[i].Width * asteroidTextures[i].Height];
+                asteroidTextures[i].GetData(asteroidTexturesData[i]);
             }
 
             // TODO: calculate from viewport
@@ -30,19 +36,18 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         internal Ring Create(RingInfo info)
         {
-            return new Ring
-            {
-                RotationalVelocity = info.RotationalVelocity,
-                Textures = ringEdgeTextures,
-                Radius = startRadius,
-                Origin = viewportCenter,
-                Gaps = Enumerable.Range(0, info.NumberOfGaps).Select(i =>
+            return new Ring(
+                rotationalVelocity: info.RotationalVelocity,
+                textures: asteroidTextures,
+                texturesData: asteroidTexturesData,
+                radius: startRadius,
+                origin: viewportCenter,
+                gaps: Enumerable.Range(0, info.NumberOfGaps).Select(i =>
                     new RingGap
                     {
                         GapAngle = MathHelper.WrapAngle((i*(MathHelper.TwoPi/info.NumberOfGaps)) + info.Angle),
                         GapSize = info.GapSize,
-                    }).ToList(),
-            };
+                    }).ToList());
         }
     }
 }

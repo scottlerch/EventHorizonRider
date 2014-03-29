@@ -44,8 +44,21 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <MtouchDebug>true</MtouchDebug>
+    <MtouchDebug>True</MtouchDebug>
     <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchSdkVersion>Default</MtouchSdkVersion>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchProfiling>False</MtouchProfiling>
+    <MtouchExtraArgs />
+    <MtouchFastDev>False</MtouchFastDev>
+    <MtouchEnableGenericValueTypeSharing>False</MtouchEnableGenericValueTypeSharing>
+    <MtouchArch>Default, ARMv7</MtouchArch>
+    <MtouchUseLlvm>False</MtouchUseLlvm>
+    <MtouchUseThumb>False</MtouchUseThumb>
+    <MtouchUseSGen>False</MtouchUseSGen>
+    <MtouchUseRefCounting>False</MtouchUseRefCounting>
+    <MtouchOptimizePNGs>True</MtouchOptimizePNGs>
+    <MtouchI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -107,6 +120,10 @@
     <Content Include="Content\Images\ring_segment6.xnb" />
     <Content Include="Content\Images\ring_segment7.xnb" />
     <Content Include="Content\Images\stars.xnb" />
+    <Content Include="Content\Images\asteroid_1.xnb" />
+    <Content Include="Content\Images\asteroid_2.xnb" />
+    <Content Include="Content\Images\asteroid_3.xnb" />
+    <Content Include="Content\Images\asteroid_4.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>

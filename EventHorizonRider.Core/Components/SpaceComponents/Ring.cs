@@ -1,6 +1,6 @@
-﻿using EventHorizonRider.Core.Extensions;
-using EventHorizonRider.Core.Graphics;
+﻿using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,12 +11,20 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Ring : ComponentBase
     {
-        public List<RingGap> Gaps;
+        private static readonly Color[] SegmentColors =
+        {
+            Color.DarkGray,
+            Color.LightGray,
+            Color.DarkGray.AdjustLight(0.8f)
+        };
 
-        public Vector2 Origin;
+        private readonly Vector2 origin;
+        private readonly Asteriod[] asteroids;
+        private readonly float rotationalVelocity;
 
         private float radius;
         private float maxRadius;
+        private bool isStopped;
 
         public float Radius
         {
@@ -33,72 +41,74 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             }
         }
 
-        public float RotationalVelocity;
-        public Texture2D[] Textures;
-
-        private bool isStopped;
-
-        private float rotationalOffset;
         public bool ConsumedByBlackhole { get; set; }
 
-        private static readonly Color[] SegmentColors =
+        public Ring(
+            float rotationalVelocity,
+            Texture2D[] textures,
+            Color[][] texturesData,
+            float radius,
+            Vector2 origin,
+            List<RingGap> gaps)
         {
-            Color.DarkGray,
-            Color.LightGray,
-            Color.DarkGray.AdjustLight(0.8f)
-        };
+            Radius = radius;
 
-        private static readonly int[] RandomColorIndex;
-        private static readonly int[] RandomTextureIndex;
-
-        static Ring()
-        {
-            // Precompute random but deterministic indices for performance
-
-            const int maxCount = 200;
+            this.rotationalVelocity = rotationalVelocity;
+            this.origin = origin;
+            
+            var newAsteroids = new List<Asteriod>();
             var random = new Random();
 
-            RandomColorIndex = new int[maxCount];
-            RandomTextureIndex = new int[maxCount];
+            var maximumAsteroidsPerRing = (int)MathLib.GetRandomBetween(30, 50);
 
-            for (int i = 0; i < maxCount; i++)
+            var angleSpacing = MathHelper.TwoPi/maximumAsteroidsPerRing;
+
+            for (var angle = -MathHelper.Pi; angle < MathHelper.Pi; angle += angleSpacing)
             {
-                RandomColorIndex[i] = random.Next(0, SegmentColors.Length);
-                RandomTextureIndex[i] = random.Next(0, RingFactory.SegmentsCount);
+                if (gaps.Any(gap => gap.IsInsideGap(angle)))
+                    continue;
+
+                var textureIndex = random.Next(0, textures.Length);
+
+                var asteroid = new Asteriod
+                {
+                    Texture = textures[textureIndex],
+                    TextureData = texturesData[textureIndex],
+                    Rotation = MathHelper.WrapAngle((float) random.NextDouble()*MathHelper.TwoPi),
+                    RotationRate = (float) random.NextDouble()*MathHelper.TwoPi/4f,
+                    Scale = Vector2.One* MathLib.GetRandomBetween(0.2f, 0.7f),
+                    Origin = new Vector2(textures[textureIndex].Width/2f, textures[textureIndex].Height/2f),
+                    RadiusOffset = (float) random.NextDouble()*10f,
+                    Color = SegmentColors[random.Next(0, SegmentColors.Length)],
+                    Angle = angle + ((float) random.NextDouble()*(0.5f*angleSpacing)),
+                };
+
+                asteroid.UpdatePosition(origin, Radius);
+
+                newAsteroids.Add(asteroid);
             }
+
+            asteroids = newAsteroids.ToArray();
         }
+
+        private float asteroidColorOffset;
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            var scale = 1f - (Radius/maxRadius);
+            var currentDepth = Depth;
 
-            const float low = 0.3f;
-            const float high = 0.6f;
-            const float diff = high - low;
-
-            var randomIndex = 0;
-            var currentOrigin = new Vector2(Textures[0].Width / 2f, Textures[0].Height / 2f);
-            var lightness = (scale*diff) + low;
-
-            for (var i = -MathHelper.Pi; i < MathHelper.Pi; i += 0.08f)
+            foreach (var asteroid in asteroids)
             {
-                var angle = i + rotationalOffset;
+                spriteBatch.Draw(
+                    asteroid.Texture,
+                    asteroid.Position,
+                    origin: asteroid.Origin,
+                    color: asteroid.Color.AdjustLight(asteroidColorOffset),
+                    rotation: asteroid.Rotation,
+                    depth: currentDepth,
+                    scale: asteroid.Scale);
 
-                if (Gaps.Any(gap => gap.IsInsideGap(i)))
-                    continue;
-
-                var currentColor = SegmentColors[RandomColorIndex[randomIndex]].AdjustLight(lightness);
-
-                var texture = Textures[RandomTextureIndex[randomIndex]];
-                spriteBatch.Draw(texture, new Vector2(
-                    Origin.X + ((float)Math.Sin(angle) * Radius),
-                    Origin.Y - ((float)Math.Cos(angle) * Radius)),
-                    origin: currentOrigin,
-                    color: currentColor,
-                    rotation: angle,
-                    depth: Depth);
-
-                randomIndex++;
+                currentDepth += 0.0001f;
             }
         }
 
@@ -106,30 +116,56 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             if (!isStopped)
             {
-                rotationalOffset += RotationalVelocity*(float) gameTime.ElapsedGameTime.TotalSeconds;
+                var scale = 1f - (Radius / maxRadius);
+
+                const float low = 0.3f;
+                const float high = 0.6f;
+                const float diff = high - low;
+
+                var lightness = (scale * diff) + low;
+
+                asteroidColorOffset = lightness;
+
+                var rotationalOffset = rotationalVelocity*(float) gameTime.ElapsedGameTime.TotalSeconds;
+
+                for (int i = 0 ; i < asteroids.Length; i++)
+                {
+                    asteroids[i].Angle += rotationalOffset;
+                    asteroids[i].Rotation += asteroids[i].RotationRate*(float)gameTime.ElapsedGameTime.TotalSeconds;
+                    asteroids[i].UpdatePosition(origin, Radius);
+                }
             }
         }
 
         internal bool Intersects(Ship ship)
         {
-            var intersects = false;
+            // TODO: add heuristics to optimize collision detection
 
-            if (IsInsideRing(ship))
+            //if (IsInsideRing(ship))
+            //{
+
+            for (var i = 0; i < asteroids.Length; i++)
             {
-                intersects = !Gaps.Any(gap => IsInsideGap(ship, gap));
+                if (CollisionDetection.Collides(ship, asteroids[i]))
+                {
+                    return true;
+                }
             }
 
-            return intersects;
+            //}
+
+            return false;
         }
 
+        /*
         private bool IsInsideRing(Ship ship)
         {
-            var ringWidth = Textures[0].Height;
+            var ringWidth = textures[0].Height;
 
             var startRingEdge = Radius - (ringWidth / 2f);
             var endRingEdge = Radius + (ringWidth / 2f);
 
-            var shipFrontEdge = (Origin - ship.Position).Length() + (ship.Texture.Height / 2f);
+            var shipFrontEdge = (ringOrigin - ship.Position).Length() + (ship.Texture.Height / 2f);
 
             return shipFrontEdge.IsBetween(startRingEdge, endRingEdge);
         }
@@ -143,7 +179,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private Range<float> GetGapEdges(Ship ship, RingGap ringGap)
         {
-            var textureOffset = (float)Math.Asin((Textures[0].Width / 2f) / ship.Radius);
+            var textureOffset = (float)Math.Asin((textures[0].Width / 2f) / ship.Radius);
 
             var halfGap = (ringGap.GapSize / 2f) - textureOffset;
 
@@ -156,6 +192,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 End = MathHelper.WrapAngle(gapEndAngle)
             };
         }
+         */
 
         internal void Stop()
         {

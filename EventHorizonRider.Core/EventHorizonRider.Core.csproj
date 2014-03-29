@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="ComponentBase.cs" />
     <Compile Include="Components\ForegroundComponents\Title.cs" />
+    <Compile Include="Components\SpaceComponents\Asteroid.cs" />
     <Compile Include="Components\SpaceComponents\Background.cs" />
     <Compile Include="Components\SpaceComponents\Blackhole.cs" />
     <Compile Include="Components\ForegroundComponents\PlayButton.cs" />
@@ -75,7 +76,9 @@
     <Compile Include="MainGame.cs" />
     <Compile Include="Extensions\NumericExtensions.cs" />
     <Compile Include="Components\Music.cs" />
+    <Compile Include="Physics\CollisionDetection.cs" />
     <Compile Include="Physics\Emitter.cs" />
+    <Compile Include="Physics\ISpriteInfo.cs" />
     <Compile Include="Physics\MathLib.cs" />
     <Compile Include="Physics\Particle.cs" />
     <Compile Include="Physics\ParticleSystem.cs" />
