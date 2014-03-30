@@ -1,9 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 
 namespace EventHorizonRider.Core.Graphics
 {
     internal class TextureProcessor
     {
+        public static byte[] GetAlphaData(Texture2D texture)
+        {
+            var data = new Color[texture.Width * texture.Height];
+            texture.GetData(data);
+            return data.Select(c => c.A).ToArray();
+        }
+
         public static Color[] SoftenAlpha(Color[] data, int width, int height)
         {
             var antiAliasedData = new Color[width*height];

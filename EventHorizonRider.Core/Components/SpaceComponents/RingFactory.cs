@@ -1,4 +1,5 @@
 ﻿using EventHorizonRider.Core.Engine;
+using EventHorizonRider.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,10 +9,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class RingFactory
     {
-        public const int SegmentsCount = 4;
+        private const int AsteroidsCount = 4;
 
         private Texture2D[] asteroidTextures;
-        private Color[][] asteroidTexturesData;
+        private byte[][] asteroidTexturesData;
 
         private float startRadius;
         private Vector2 viewportCenter;
@@ -20,14 +21,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
 
-            asteroidTextures = new Texture2D[SegmentsCount];
-            asteroidTexturesData = new Color[SegmentsCount][];
+            asteroidTextures = new Texture2D[AsteroidsCount];
+            asteroidTexturesData = new byte[AsteroidsCount][];
 
             for (int i = 0; i < asteroidTextures.Length; i++)
             {
                 asteroidTextures[i] = content.Load<Texture2D>(@"Images\asteroid_" + (i + 1));
-                asteroidTexturesData[i] = new Color[asteroidTextures[i].Width * asteroidTextures[i].Height];
-                asteroidTextures[i].GetData(asteroidTexturesData[i]);
+                asteroidTexturesData[i] = TextureProcessor.GetAlphaData(asteroidTextures[i]);
             }
 
             // TODO: calculate from viewport

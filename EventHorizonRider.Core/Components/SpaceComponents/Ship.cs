@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Input;
+﻿using EventHorizonRider.Core.Graphics;
+using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -45,8 +46,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
 
             Texture = content.Load<Texture2D>(@"Images\ship");
-            TextureData = new Color[Texture.Width * Texture.Height];
-            Texture.GetData(TextureData);
+            TextureAlphaData = TextureProcessor.GetAlphaData(Texture);
 
             shieldTexture = content.Load<Texture2D>(@"Images\shield");
 
@@ -236,6 +236,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             get { return Vector2.One; }
         }
 
-        public Color[] TextureData{get; private set; }
+        public byte[] TextureAlphaData{get; private set; }
     }
 }

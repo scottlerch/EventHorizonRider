@@ -18,7 +18,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         public Vector2 Position { get; private set; }
         public Color Color { get; set; }
         public float Angle { get; set; }
-        public Color[] TextureData { get; set; }
+        public byte[] TextureAlphaData { get; set; }
 
         public float RotationRate { get; set; }
 

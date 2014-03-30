@@ -46,7 +46,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         public Ring(
             float rotationalVelocity,
             Texture2D[] textures,
-            Color[][] texturesData,
+            byte[][] texturesData,
             float radius,
             Vector2 origin,
             List<RingGap> gaps)
@@ -59,7 +59,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             var newAsteroids = new List<Asteriod>();
             var random = new Random();
 
-            var maximumAsteroidsPerRing = (int)MathLib.GetRandomBetween(30, 50);
+            var maximumAsteroidsPerRing = (int)MathLib.GetRandomBetween(15, 35);
 
             var depthOffset = new float[maximumAsteroidsPerRing];
             for (int i = 0; i < depthOffset.Length; i++)
@@ -82,7 +82,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 {
                     RelativeDepth = depthOffset[index],
                     Texture = textures[textureIndex],
-                    TextureData = texturesData[textureIndex],
+                    TextureAlphaData = texturesData[textureIndex],
                     Rotation = MathHelper.WrapAngle((float) random.NextDouble()*MathHelper.TwoPi),
                     RotationRate = (float)random.NextDouble() * MathHelper.TwoPi / 4f * (random.Next(2) == 0 ? -1f : 1f),
                     Scale = Vector2.One* MathLib.GetRandomBetween(0.2f, 0.8f),
@@ -125,7 +125,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             {
                 var scale = 1f - (Radius / maxRadius);
 
-                const float low = 0.3f;
+                const float low = 0.1f;
                 const float high = 0.6f;
                 const float diff = high - low;
 
@@ -148,9 +148,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             // TODO: add heuristics to optimize collision detection
 
-            //if (IsInsideRing(ship))
-            //{
-
             for (var i = 0; i < asteroids.Length; i++)
             {
                 if (CollisionDetection.Collides(ship, asteroids[i]))
@@ -159,47 +156,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 }
             }
 
-            //}
-
             return false;
         }
-
-        /*
-        private bool IsInsideRing(Ship ship)
-        {
-            var ringWidth = textures[0].Height;
-
-            var startRingEdge = Radius - (ringWidth / 2f);
-            var endRingEdge = Radius + (ringWidth / 2f);
-
-            var shipFrontEdge = (ringOrigin - ship.Position).Length() + (ship.Texture.Height / 2f);
-
-            return shipFrontEdge.IsBetween(startRingEdge, endRingEdge);
-        }
-
-        private bool IsInsideGap(Ship ship, RingGap ringGap)
-        {
-            var gapEdges = GetGapEdges(ship, ringGap);
-
-            return ship.Rotation.IsBetweenAngles(gapEdges.Start, gapEdges.End);
-        }
-
-        private Range<float> GetGapEdges(Ship ship, RingGap ringGap)
-        {
-            var textureOffset = (float)Math.Asin((textures[0].Width / 2f) / ship.Radius);
-
-            var halfGap = (ringGap.GapSize / 2f) - textureOffset;
-
-            var gapStartAngle = (ringGap.GapAngle + rotationalOffset) - halfGap;
-            var gapEndAngle = (ringGap.GapAngle + rotationalOffset) + halfGap;
-
-            return new Range<float>
-            {
-                Start = MathHelper.WrapAngle(gapStartAngle),
-                End = MathHelper.WrapAngle(gapEndAngle)
-            };
-        }
-         */
 
         internal void Stop()
         {
