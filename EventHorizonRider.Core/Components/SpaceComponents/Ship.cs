@@ -24,6 +24,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private SoundEffect crashSound;
         private bool stopped = true;
+        private bool visible = true;
 
         private Vector2 viewportCenter;
 
@@ -80,10 +81,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 startLife: new Vector2(0.1f, 0.5f),
                 startScale: new Vector2(20, 20),
                 endScale: new Vector2(8, 8),
-                startColor1: Color.Orange,
-                startColor2: Color.Crimson,
-                endColor1: new Color(Color.Orange.R, Color.Orange.G, Color.Orange.B, 0),
-                endColor2: new Color(Color.Orange.R, Color.Orange.G, Color.Orange.B, 0),
+                startColor1: Color.SkyBlue,
+                startColor2: Color.Blue,
+                endColor1: new Color(Color.SkyBlue.R, Color.SkyBlue.G, Color.SkyBlue.B, 0),
+                endColor2: new Color(Color.SkyBlue.R, Color.SkyBlue.G, Color.SkyBlue.B, 0),
                 startSpeed: new Vector2(400, 500),
                 endSpeed: new Vector2(100, 120),
                 budget: 50,
@@ -99,6 +100,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
+            if (!visible)
+            {
+                return;
+            }
+
             spriteBatch.Draw(shieldTexture, Position,
                 origin: new Vector2(shieldTexture.Width / 2f, shieldTexture.Height / 2f),
                 rotation: Rotation,
@@ -209,6 +215,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f));
 
             stopped = false;
+            visible = true;
         }
 
         internal void Stop()
@@ -216,6 +223,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             crashSound.Play();
 
             stopped = true;
+            //visible = false;
         }
 
         public Vector2 Origin

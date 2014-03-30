@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine.States
 {
