@@ -148,8 +148,8 @@ namespace EventHorizonRider.Core.Physics
                         Color colorA = dataA[xA + yA * widthA];
                         Color colorB = dataB[xB + yB * widthB];
 
-                        // If both pixels are not completely transparent,
-                        if (colorA.A != 0 && colorB.A != 0)
+                        // If both pixels are completely opaque,
+                        if (colorA.A == 1 && colorB.A == 1)
                         {
                             // then an intersection has been found
                             return true;

@@ -61,7 +61,15 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             var maximumAsteroidsPerRing = (int)MathLib.GetRandomBetween(30, 50);
 
+            var depthOffset = new float[maximumAsteroidsPerRing];
+            for (int i = 0; i < depthOffset.Length; i++)
+            {
+                depthOffset[i] = i*0.0001f;
+            }
+            depthOffset = depthOffset.OrderBy(x => random.Next()).ToArray();
+
             var angleSpacing = MathHelper.TwoPi/maximumAsteroidsPerRing;
+            var index = 0;
 
             for (var angle = -MathHelper.Pi; angle < MathHelper.Pi; angle += angleSpacing)
             {
@@ -72,11 +80,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
                 var asteroid = new Asteriod
                 {
+                    RelativeDepth = depthOffset[index],
                     Texture = textures[textureIndex],
                     TextureData = texturesData[textureIndex],
                     Rotation = MathHelper.WrapAngle((float) random.NextDouble()*MathHelper.TwoPi),
                     RotationRate = (float) random.NextDouble()*MathHelper.TwoPi/4f,
-                    Scale = Vector2.One* MathLib.GetRandomBetween(0.2f, 0.7f),
+                    Scale = Vector2.One* MathLib.GetRandomBetween(0.2f, 0.8f),
                     Origin = new Vector2(textures[textureIndex].Width/2f, textures[textureIndex].Height/2f),
                     RadiusOffset = (float) random.NextDouble()*10f,
                     Color = SegmentColors[random.Next(0, SegmentColors.Length)],
@@ -86,6 +95,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 asteroid.UpdatePosition(origin, Radius);
 
                 newAsteroids.Add(asteroid);
+
+                index++;
             }
 
             asteroids = newAsteroids.ToArray();
@@ -95,8 +106,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            var currentDepth = Depth;
-
             foreach (var asteroid in asteroids)
             {
                 spriteBatch.Draw(
@@ -105,10 +114,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     origin: asteroid.Origin,
                     color: asteroid.Color.AdjustLight(asteroidColorOffset),
                     rotation: asteroid.Rotation,
-                    depth: currentDepth,
+                    depth: asteroid.RelativeDepth + Depth,
                     scale: asteroid.Scale);
-
-                currentDepth += 0.0001f;
             }
         }
 
