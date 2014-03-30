@@ -84,7 +84,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     Texture = textures[textureIndex],
                     TextureData = texturesData[textureIndex],
                     Rotation = MathHelper.WrapAngle((float) random.NextDouble()*MathHelper.TwoPi),
-                    RotationRate = (float) random.NextDouble()*MathHelper.TwoPi/4f,
+                    RotationRate = (float)random.NextDouble() * MathHelper.TwoPi / 4f * (random.Next(2) == 0 ? -1f : 1f),
                     Scale = Vector2.One* MathLib.GetRandomBetween(0.2f, 0.8f),
                     Origin = new Vector2(textures[textureIndex].Width/2f, textures[textureIndex].Height/2f),
                     RadiusOffset = (float) random.NextDouble()*10f,
