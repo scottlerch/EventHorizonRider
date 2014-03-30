@@ -29,7 +29,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private Texture2D particleBase;
         private ParticleSystem particleSystem;
-        private Emitter emitter;
+        private Emitter sideThrustEmitter;
+        private Emitter mainThrustEmitter;
 
         public Ship(Blackhole blackhole)
         {
@@ -52,7 +53,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             particleBase = content.Load<Texture2D>(@"Images\particle_base");
             particleSystem = new ParticleSystem(new Vector2(4000, 3000));
-            emitter = particleSystem.AddEmitter(
+            sideThrustEmitter = particleSystem.AddEmitter(
                 secPerSpawn:new Vector2(0.001f, 0.0015f),
                 spawnDirection:new Vector2(0f, -1f), 
                 spawnNoiseAngle:new Vector2(0.1f * MathHelper.Pi, 0.1f * -MathHelper.Pi),
@@ -69,8 +70,29 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 relPosition:Vector2.Zero, 
                 particleSprite:particleBase);
 
-            emitter.GravityCenter = viewportCenter;
-            emitter.GravityForce = 1.3f;
+            sideThrustEmitter.GravityCenter = viewportCenter;
+            sideThrustEmitter.GravityForce = 1.3f;
+
+            mainThrustEmitter = particleSystem.AddEmitter(
+                secPerSpawn: new Vector2(0.001f, 0.0015f),
+                spawnDirection: new Vector2(0f, -1f),
+                spawnNoiseAngle: new Vector2(0.3f * MathHelper.Pi, 0.3f * -MathHelper.Pi),
+                startLife: new Vector2(0.1f, 0.5f),
+                startScale: new Vector2(20, 20),
+                endScale: new Vector2(8, 8),
+                startColor1: Color.Orange,
+                startColor2: Color.Crimson,
+                endColor1: new Color(Color.Orange.R, Color.Orange.G, Color.Orange.B, 0),
+                endColor2: new Color(Color.Orange.R, Color.Orange.G, Color.Orange.B, 0),
+                startSpeed: new Vector2(400, 500),
+                endSpeed: new Vector2(100, 120),
+                budget: 50,
+                relPosition: Vector2.Zero,
+                particleSprite: particleBase);
+
+            mainThrustEmitter.GravityCenter = viewportCenter;
+            mainThrustEmitter.GravityForce = 1.3f;
+            mainThrustEmitter.Spawning = true;
 
             Origin = new Vector2(Texture.Width/2f, Texture.Height/2f);
         }
@@ -125,21 +147,21 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             const float moveSpeed = 1.1f;
 
-            emitter.Spawning = false;
+            sideThrustEmitter.Spawning = false;
 
             var left = false;
 
             if (Left(inputState.KeyState, inputState.TouchState))
             {
                 Rotation -= (MathHelper.TwoPi) * (float)gameTime.ElapsedGameTime.TotalSeconds * moveSpeed;
-                emitter.Spawning = true;
+                sideThrustEmitter.Spawning = true;
                 left = true;
             }
 
             if (Right(inputState.KeyState, inputState.TouchState))
             {
                 Rotation += (MathHelper.TwoPi) * (float)gameTime.ElapsedGameTime.TotalSeconds * moveSpeed;
-                emitter.Spawning = true;
+                sideThrustEmitter.Spawning = true;
             }
 
             Rotation = MathHelper.WrapAngle(Rotation);
@@ -153,16 +175,18 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 blackhole.Position.Y - ((float)Math.Cos(Rotation) * Radius));
 
             particleSystem.Position = Position;
-            emitter.SpawnDirection = (viewportCenter - Position);
-            emitter.SpawnDirection = new Vector2(-emitter.SpawnDirection.Y, emitter.SpawnDirection.X);
+            sideThrustEmitter.SpawnDirection = (viewportCenter - Position);
+            sideThrustEmitter.SpawnDirection = new Vector2(-sideThrustEmitter.SpawnDirection.Y, sideThrustEmitter.SpawnDirection.X);
 
             if (left)
             {
-                emitter.SpawnDirection = new Vector2(-emitter.SpawnDirection.X, -emitter.SpawnDirection.Y);
+                sideThrustEmitter.SpawnDirection = new Vector2(-sideThrustEmitter.SpawnDirection.X, -sideThrustEmitter.SpawnDirection.Y);
             }
             
-            emitter.SpawnDirection.Normalize();
-            
+            sideThrustEmitter.SpawnDirection.Normalize();
+
+            mainThrustEmitter.SpawnDirection = (viewportCenter - Position);
+            mainThrustEmitter.SpawnDirection.Normalize();
 
             particleSystem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
         }
