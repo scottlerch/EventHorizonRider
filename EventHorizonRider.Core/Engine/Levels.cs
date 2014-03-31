@@ -19,69 +19,62 @@ namespace EventHorizonRider.Core.Engine
             switch (level)
             {
                 case 1:
-                    return GetLevelOne();
+                    return new Level
+                    {
+                        RingSpeed = 125,
+                        RingInterval = TimeSpan.FromSeconds(2),
+                        Sequence = ringInfoFactory.GetRandomSequence(
+                            iterations:10, 
+                            gapSize: Range.Create(MathHelper.TwoPi / 3.5f), 
+                            type: RingType.Dust),
+                    };
                 case 2:
-                    return GetLevelTwo();
+                    return new Level
+                    {
+                        RingSpeed = 150,
+                        RingInterval = TimeSpan.FromSeconds(1.5),
+                        Sequence = Enumerable.Empty<RingInfo>().Concat(
+                            ringInfoFactory.GetStepSequence(
+                                numberOfSteps: 5, 
+                                gapSize: MathHelper.TwoPi / 4f,
+                                type: RingType.All,
+                                typeSelection: RingTypeSelection.RoundRobin),
+                            ringInfoFactory.GetStepSequence(
+                                numberOfSteps: 5, 
+                                gapSize: MathHelper.TwoPi / 4f, 
+                                type: RingType.All, 
+                                typeSelection: RingTypeSelection.RoundRobin)),
+                    };
                 case 3:
-                    return GetLevelThree();
+                    return new Level
+                    {
+                        RingSpeed = 175,
+                        RingInterval = TimeSpan.FromSeconds(1),
+                        Sequence = Enumerable.Empty<RingInfo>().Concat(
+                            ringInfoFactory.GetZigZagSequence(
+                                iterations:15, 
+                                gapSize: MathHelper.TwoPi / 5f, 
+                                type: RingType.All,
+                                typeSelection: RingTypeSelection.RoundRobin)),
+                    };
                 case 4:
-                    return GetLevelFour();
+                    return new Level
+                    {
+                        RingSpeed = 200,
+                        RingInterval = TimeSpan.FromSeconds(0.75),
+                        Sequence = ringInfoFactory.GetRandomSequence(
+                            iterations:20, 
+                            gapSize: Range.Create(MathHelper.TwoPi / 4), 
+                            type: RingType.Asteroid),
+                    };
                 default:
-                    return GetInfiniteLevel();
+                    return new Level
+                    {
+                        RingSpeed = 250,
+                        RingInterval = TimeSpan.FromSeconds(0.5),
+                        Sequence = ringInfoFactory.GetRandomSequence(),
+                    };
             }
-        }
-
-        public Level GetLevelOne()
-        {
-            return new Level
-            {
-                RingSpeed = 150,
-                RingInterval = TimeSpan.FromSeconds(2),
-                Sequence = ringInfoFactory.GetRandomSequence(10, gapSize: MathHelper.TwoPi / 4),
-            };
-        }
-
-        public Level GetLevelTwo()
-        {
-            return new Level
-            {
-                RingSpeed = 200,
-                RingInterval = TimeSpan.FromSeconds(1.5),
-                Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetStepSequence(5, MathHelper.TwoPi / 5f),
-                    ringInfoFactory.GetStepSequence(5, MathHelper.TwoPi / 5f)),
-            };
-        }
-
-        public Level GetLevelThree()
-        {
-            return new Level
-            {
-                RingSpeed = 250,
-                RingInterval = TimeSpan.FromSeconds(1),
-                Sequence = Enumerable.Empty<RingInfo>().Concat(
-                    ringInfoFactory.GetZigZagSequence(15, MathHelper.TwoPi / 5f)),
-            };
-        }
-
-        public Level GetLevelFour()
-        {
-            return new Level
-            {
-                RingSpeed = 300,
-                RingInterval = TimeSpan.FromSeconds(0.75),
-                Sequence = ringInfoFactory.GetRandomSequence(20, gapSize: MathHelper.TwoPi / 4),
-            };
-        }
-
-        public Level GetInfiniteLevel()
-        {
-            return new Level
-            {
-                RingSpeed = 350,
-                RingInterval = TimeSpan.FromSeconds(0.5),
-                Sequence = ringInfoFactory.GetRandomSequence(),
-            };
         }
     }
 }

@@ -40,10 +40,11 @@
   <ItemGroup>
     <Compile Include="ComponentBase.cs" />
     <Compile Include="Components\ForegroundComponents\Title.cs" />
-    <Compile Include="Components\SpaceComponents\Asteroid.cs" />
+    <Compile Include="Components\SpaceComponents\RingObject.cs" />
     <Compile Include="Components\SpaceComponents\Background.cs" />
     <Compile Include="Components\SpaceComponents\Blackhole.cs" />
     <Compile Include="Components\ForegroundComponents\PlayButton.cs" />
+    <Compile Include="Components\SpaceComponents\RingTexturesInfo.cs" />
     <Compile Include="Components\SpaceComponents\Ship.cs" />
     <Compile Include="Components\Foreground.cs" />
     <Compile Include="Components\ForegroundComponents\FpsCounter.cs" />
@@ -61,6 +62,8 @@
     <Compile Include="Engine\PlayerData.cs" />
     <Compile Include="Engine\RingInfo.cs" />
     <Compile Include="Engine\RingInfoFactory.cs" />
+    <Compile Include="Engine\RingType.cs" />
+    <Compile Include="Engine\RingTypeSelection.cs" />
     <Compile Include="Engine\States\EndingState.cs" />
     <Compile Include="Engine\States\OverState.cs" />
     <Compile Include="Engine\States\InitializeState.cs" />
@@ -79,7 +82,7 @@
     <Compile Include="Physics\CollisionDetection.cs" />
     <Compile Include="Physics\Emitter.cs" />
     <Compile Include="Physics\ISpriteInfo.cs" />
-    <Compile Include="Physics\MathLib.cs" />
+    <Compile Include="Physics\MathUtilities.cs" />
     <Compile Include="Physics\Particle.cs" />
     <Compile Include="Physics\ParticleSystem.cs" />
     <Compile Include="Physics\Spring.cs" />

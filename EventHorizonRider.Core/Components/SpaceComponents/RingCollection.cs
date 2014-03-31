@@ -122,5 +122,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 ring.Stop();
             }
         }
+
+        internal void Clear()
+        {
+            ClearChildren();
+        }
     }
 }

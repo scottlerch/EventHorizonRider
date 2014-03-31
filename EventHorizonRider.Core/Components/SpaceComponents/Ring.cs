@@ -11,20 +11,14 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Ring : ComponentBase
     {
-        private static readonly Color[] SegmentColors =
-        {
-            Color.DarkGray,
-            Color.LightGray,
-            Color.DarkGray.AdjustLight(0.8f)
-        };
-
         private readonly Vector2 origin;
-        private readonly Asteriod[] asteroids;
+        private readonly RingObject[] ringObjects;
         private readonly float rotationalVelocity;
 
         private float radius;
         private float maxRadius;
         private bool isStopped;
+        private float ringObjectsColorOffset;
 
         public float Radius
         {
@@ -45,8 +39,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public Ring(
             float rotationalVelocity,
-            Texture2D[] textures,
-            byte[][] texturesData,
+            RingTexturesInfo texturesInfo,
             float radius,
             Vector2 origin,
             List<RingGap> gaps)
@@ -56,10 +49,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             this.rotationalVelocity = rotationalVelocity;
             this.origin = origin;
             
-            var newAsteroids = new List<Asteriod>();
+            var newRingObjects = new List<RingObject>();
             var random = new Random();
 
-            var maximumAsteroidsPerRing = (int)MathLib.GetRandomBetween(15, 35);
+            var maximumAsteroidsPerRing = texturesInfo.DensityRange.GetRandom();
 
             var depthOffset = new float[maximumAsteroidsPerRing];
             for (int i = 0; i < depthOffset.Length; i++)
@@ -76,43 +69,41 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 if (gaps.Any(gap => gap.IsInsideGap(angle)))
                     continue;
 
-                var textureIndex = random.Next(0, textures.Length);
+                var textureIndex = random.Next(0, texturesInfo.Textures.Length);
 
-                var asteroid = new Asteriod
+                var asteroid = new RingObject
                 {
                     RelativeDepth = depthOffset[index],
-                    Texture = textures[textureIndex],
-                    TextureAlphaData = texturesData[textureIndex],
+                    Texture = texturesInfo.Textures[textureIndex],
+                    TextureAlphaData = texturesInfo.TexturesAlphaData[textureIndex],
                     Rotation = MathHelper.WrapAngle((float) random.NextDouble()*MathHelper.TwoPi),
                     RotationRate = (float)random.NextDouble() * MathHelper.TwoPi / 4f * (random.Next(2) == 0 ? -1f : 1f),
-                    Scale = Vector2.One* MathLib.GetRandomBetween(0.2f, 0.8f),
-                    Origin = new Vector2(textures[textureIndex].Width/2f, textures[textureIndex].Height/2f),
-                    RadiusOffset = (float) random.NextDouble()*10f,
-                    Color = SegmentColors[random.Next(0, SegmentColors.Length)],
+                    Scale = Vector2.One* texturesInfo.ScaleRange.GetRandom(),
+                    Origin = new Vector2(texturesInfo.Textures[textureIndex].Width / 2f, texturesInfo.Textures[textureIndex].Height / 2f),
+                    RadiusOffset = (float) random.NextDouble()*texturesInfo.RadiusOffsetJitter,
+                    Color = texturesInfo.TextureColors[random.Next(0, texturesInfo.TextureColors.Length)],
                     Angle = angle + ((float) random.NextDouble()*(0.5f*angleSpacing)),
                 };
 
                 asteroid.UpdatePosition(origin, Radius);
 
-                newAsteroids.Add(asteroid);
+                newRingObjects.Add(asteroid);
 
                 index++;
             }
 
-            asteroids = newAsteroids.ToArray();
+            ringObjects = newRingObjects.ToArray();
         }
-
-        private float asteroidColorOffset;
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            foreach (var asteroid in asteroids)
+            foreach (var asteroid in ringObjects)
             {
                 spriteBatch.Draw(
                     asteroid.Texture,
                     asteroid.Position,
                     origin: asteroid.Origin,
-                    color: asteroid.Color.AdjustLight(asteroidColorOffset),
+                    color: asteroid.Color.AdjustLight(ringObjectsColorOffset),
                     rotation: asteroid.Rotation,
                     depth: asteroid.RelativeDepth + Depth,
                     scale: asteroid.Scale);
@@ -131,15 +122,15 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
                 var lightness = (scale * diff) + low;
 
-                asteroidColorOffset = lightness;
+                ringObjectsColorOffset = lightness;
 
                 var rotationalOffset = rotationalVelocity*(float) gameTime.ElapsedGameTime.TotalSeconds;
 
-                for (int i = 0 ; i < asteroids.Length; i++)
+                for (int i = 0 ; i < ringObjects.Length; i++)
                 {
-                    asteroids[i].Angle += rotationalOffset;
-                    asteroids[i].Rotation += asteroids[i].RotationRate*(float)gameTime.ElapsedGameTime.TotalSeconds;
-                    asteroids[i].UpdatePosition(origin, Radius);
+                    ringObjects[i].Angle += rotationalOffset;
+                    ringObjects[i].Rotation += ringObjects[i].RotationRate*(float)gameTime.ElapsedGameTime.TotalSeconds;
+                    ringObjects[i].UpdatePosition(origin, Radius);
                 }
             }
         }
@@ -148,9 +139,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             // TODO: add heuristics to optimize collision detection
 
-            for (var i = 0; i < asteroids.Length; i++)
+            for (var i = 0; i < ringObjects.Length; i++)
             {
-                if (CollisionDetection.Collides(ship, asteroids[i]))
+                if (CollisionDetection.Collides(ship, ringObjects[i]))
                 {
                     return true;
                 }

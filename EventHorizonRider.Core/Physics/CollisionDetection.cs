@@ -139,7 +139,7 @@ namespace EventHorizonRider.Core.Physics
             // For each row of pixels in A
             for (int yA = 0; yA < heightA; yA++)
             {
-                // Start at the beginning of the row
+                // Low at the beginning of the row
                 Vector2 posInB = yPosInB;
 
                 // For each pixel in this row

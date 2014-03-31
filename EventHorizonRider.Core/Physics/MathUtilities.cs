@@ -3,10 +3,21 @@ using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Physics
 {
-    internal static class MathLib
+    internal static class MathUtilities
     {
         private static readonly Random Random = new Random();
 
+        /// <summary>
+        /// Get random value between two numbers inclusive.
+        /// </summary>
+        public static int GetRandomBetween(int a, int b)
+        {
+            return Random.Next(a, b + 1);
+        }
+
+        /// <summary>
+        /// Get random value between two numbers inclusive.
+        /// </summary>
         public static float GetRandomBetween(float a, float b)
         {
             return a + ((b - a)*(float)Random.NextDouble());

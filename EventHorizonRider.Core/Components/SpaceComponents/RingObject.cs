@@ -6,9 +6,10 @@ using System;
 namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     /// <summary>
-    /// Keeps track of individual asteroid states within Ring class.
+    /// Keeps track of individual ring object states within Ring class.
+    /// This could be an individual asteroid, dust particle, etc.
     /// </summary>
-    internal class Asteriod : ISpriteInfo
+    internal class RingObject : ISpriteInfo
     {
         public float RelativeDepth { get; set; }
         public Texture2D Texture { get; set; }

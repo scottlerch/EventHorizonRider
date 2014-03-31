@@ -69,7 +69,7 @@ namespace EventHorizonRider.Core.Physics
             ParticleSprite = particleSprite;
             Parent = parent;
             activeParticles = new LinkedList<Particle>();
-            nextSpawnIn = MathLib.LinearInterpolate(secPerSpawn.X, secPerSpawn.Y, random.NextDouble());
+            nextSpawnIn = MathUtilities.LinearInterpolate(secPerSpawn.X, secPerSpawn.Y, random.NextDouble());
             secPassed = 0.0f;
             this.random = random;
         }
@@ -83,28 +83,28 @@ namespace EventHorizonRider.Core.Physics
                 if (activeParticles.Count < Budget && Spawning)
                 {
                     // Spawn a particle
-                    var startDirection = Vector2.Transform(SpawnDirection, Matrix.CreateRotationZ(MathLib.LinearInterpolate(SpawnNoiseAngle.X, SpawnNoiseAngle.Y, random.NextDouble())));
+                    var startDirection = Vector2.Transform(SpawnDirection, Matrix.CreateRotationZ(MathUtilities.LinearInterpolate(SpawnNoiseAngle.X, SpawnNoiseAngle.Y, random.NextDouble())));
                     startDirection.Normalize();
-                    var endDirection = startDirection * MathLib.LinearInterpolate(EndSpeed.X, EndSpeed.Y, random.NextDouble());
+                    var endDirection = startDirection * MathUtilities.LinearInterpolate(EndSpeed.X, EndSpeed.Y, random.NextDouble());
 
-                    startDirection *= MathLib.LinearInterpolate(StartSpeed.X, StartSpeed.Y, random.NextDouble());
+                    startDirection *= MathUtilities.LinearInterpolate(StartSpeed.X, StartSpeed.Y, random.NextDouble());
 
                     activeParticles.AddLast(
                         new Particle(
-                            RelPosition + MathLib.LinearInterpolate(Parent.LastPos, Parent.Position, secPassed / dt),
+                            RelPosition + MathUtilities.LinearInterpolate(Parent.LastPos, Parent.Position, secPassed / dt),
                             startDirection,
                             endDirection,
-                            MathLib.LinearInterpolate(StartLife.X, StartLife.Y, random.NextDouble()),
-                            MathLib.LinearInterpolate(StartScale.X, StartScale.Y, random.NextDouble()),
-                            MathLib.LinearInterpolate(EndScale.X, EndScale.Y, random.NextDouble()),
-                            MathLib.LinearInterpolate(StartColor1, StartColor2, random.NextDouble()),
-                            MathLib.LinearInterpolate(EndColor1, EndColor2, random.NextDouble()),
+                            MathUtilities.LinearInterpolate(StartLife.X, StartLife.Y, random.NextDouble()),
+                            MathUtilities.LinearInterpolate(StartScale.X, StartScale.Y, random.NextDouble()),
+                            MathUtilities.LinearInterpolate(EndScale.X, EndScale.Y, random.NextDouble()),
+                            MathUtilities.LinearInterpolate(StartColor1, StartColor2, random.NextDouble()),
+                            MathUtilities.LinearInterpolate(EndColor1, EndColor2, random.NextDouble()),
                             this)
                     );
                     activeParticles.Last.Value.Update(secPassed);
                 }
                 secPassed -= nextSpawnIn;
-                nextSpawnIn = MathLib.LinearInterpolate(SecPerSpawn.X, SecPerSpawn.Y, random.NextDouble());
+                nextSpawnIn = MathUtilities.LinearInterpolate(SecPerSpawn.X, SecPerSpawn.Y, random.NextDouble());
             }
 
             var node = activeParticles.First;
