@@ -52,7 +52,7 @@ namespace EventHorizonRider.Core.Engine
             gapSize = gapSize ?? Range.Create(MathHelper.TwoPi/8, MathHelper.TwoPi/4);
             numberOfGaps = numberOfGaps ?? Range.Create(1, 4);
 
-            for (var i = 0; i < iterations || iterations == -1; i++)
+            for (var i = 0; i < iterations || iterations == null; i++)
             {
                 var currentGapSize = gapSize.Value.GetRandom();
                 var currentNumberOfGaps = numberOfGaps.Value.GetRandom();
