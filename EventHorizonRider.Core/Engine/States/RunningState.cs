@@ -27,7 +27,7 @@ namespace EventHorizonRider.Core.Engine.States
                 {
                     gameContext.GameState = new EndingState();
                 }
-                else if (!gameContext.Rings.HasMoreRings)
+                else if (!gameContext.Rings.HasMoreRings && gameContext.Rings.Children.Count == 0)
                 {
                     if (!levelEnded)
                     {
