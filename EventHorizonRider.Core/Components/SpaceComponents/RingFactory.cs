@@ -24,6 +24,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             asteroids.DensityRange = Range.Create(15, 35);
             asteroids.ScaleRange = Range.Create(0.2f, 0.8f);
             asteroids.RadiusOffsetJitter = 10f;
+            asteroids.AngleJitter = 0.8f;
             asteroids.TextureColors = new[]
             {
                 Color.DarkGray.AdjustLight(1.2f),
@@ -36,6 +37,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             dust.DensityRange = Range.Create(100, 110);
             dust.ScaleRange = Range.Create(0.3f, 1f);
             dust.RadiusOffsetJitter = 10f;
+            dust.AngleJitter = 0.8f;
             dust.TextureColors = new []
             {
                 Color.Tan, 

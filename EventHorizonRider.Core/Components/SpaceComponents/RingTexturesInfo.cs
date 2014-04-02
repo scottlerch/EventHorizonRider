@@ -27,5 +27,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         /// Random jitter from ring radius.
         /// </summary>
         public float RadiusOffsetJitter { get; set; }
+
+        /// <summary>
+        /// Percent jitter of angle spacing.  Set to 0 for no jitter and 1 for full.
+        /// </summary>
+        public float AngleJitter { get; set; }
     }
 }

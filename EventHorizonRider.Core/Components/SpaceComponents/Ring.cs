@@ -82,7 +82,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     Origin = new Vector2(texturesInfo.Textures[textureIndex].Width / 2f, texturesInfo.Textures[textureIndex].Height / 2f),
                     RadiusOffset = (float) random.NextDouble()*texturesInfo.RadiusOffsetJitter,
                     Color = texturesInfo.TextureColors[random.Next(0, texturesInfo.TextureColors.Length)],
-                    Angle = angle + ((float) random.NextDouble()*(0.5f*angleSpacing)),
+                    Angle = angle + ((float) random.NextDouble()*(texturesInfo.AngleJitter*angleSpacing)),
                 };
 
                 asteroid.UpdatePosition(origin, Radius);
