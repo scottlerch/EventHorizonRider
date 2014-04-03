@@ -74,7 +74,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     }
                 }
 
-                if (ring.Radius <= 0f)
+                if (ring.Radius <= (blackhole.Height * 0.2f))
                 {
                     RemoveChild(ring);
                 }

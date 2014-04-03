@@ -7,6 +7,7 @@ namespace EventHorizonRider.Core.Engine
     {
         Asteroid = 1,
         Dust = 2,
-        All = Asteroid | Dust,
+        DustWithAsteroid = 4,
+        All = Asteroid | Dust | DustWithAsteroid,
     }
 }

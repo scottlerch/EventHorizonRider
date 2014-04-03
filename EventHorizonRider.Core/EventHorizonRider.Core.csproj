@@ -45,6 +45,7 @@
     <Compile Include="Components\SpaceComponents\Blackhole.cs" />
     <Compile Include="Components\ForegroundComponents\PlayButton.cs" />
     <Compile Include="Components\SpaceComponents\RingTexturesInfo.cs" />
+    <Compile Include="Components\SpaceComponents\RingTexturesInfoGroup.cs" />
     <Compile Include="Components\SpaceComponents\Ship.cs" />
     <Compile Include="Components\Foreground.cs" />
     <Compile Include="Components\ForegroundComponents\FpsCounter.cs" />

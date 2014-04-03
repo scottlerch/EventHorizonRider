@@ -41,6 +41,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         internal float Radius { get; private set; }
 
+        public float Speed { get; set; }
+
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
@@ -151,22 +153,20 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             Rotation += DefaultRotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            const float moveSpeed = 1.1f;
-
             sideThrustEmitter.Spawning = false;
 
             var left = false;
 
             if (Left(inputState.KeyState, inputState.TouchState))
             {
-                Rotation -= (MathHelper.TwoPi) * (float)gameTime.ElapsedGameTime.TotalSeconds * moveSpeed;
+                Rotation -= (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
                 sideThrustEmitter.Spawning = true;
                 left = true;
             }
 
             if (Right(inputState.KeyState, inputState.TouchState))
             {
-                Rotation += (MathHelper.TwoPi) * (float)gameTime.ElapsedGameTime.TotalSeconds * moveSpeed;
+                Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
                 sideThrustEmitter.Spawning = true;
             }
 

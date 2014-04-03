@@ -20,7 +20,9 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Rings.Start();
             gameContext.Background.Start();
 
-            gameContext.Rings.SetLevel(gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber));
+            var level = gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber);
+            gameContext.Rings.SetLevel(level);
+            gameContext.Ship.Speed = level.ShipSpeed;
 
             gameContext.Music.Play();
 

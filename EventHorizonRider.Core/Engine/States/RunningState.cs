@@ -5,9 +5,17 @@ namespace EventHorizonRider.Core.Engine.States
 {
     internal class RunningState : GameStateBase
     {
-        private readonly TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(2);
+        private readonly TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(0.1);
         private TimeSpan levelEndTime = TimeSpan.Zero;
         private bool levelEnded;
+
+        private void UpdateLevel(GameContext gameContext)
+        {
+            var level = gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber);
+            gameContext.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
+            gameContext.Rings.SetLevel(level);
+            gameContext.Ship.Speed = level.ShipSpeed;
+        }
 
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
@@ -16,8 +24,8 @@ namespace EventHorizonRider.Core.Engine.States
                 gameContext.CurrentLevelNumber = gameContext.Root.OverrideLevel.Value;
 
                 gameContext.Rings.Clear();
-                gameContext.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
-                gameContext.Rings.SetLevel(gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber));
+                
+                UpdateLevel(gameContext);
 
                 gameContext.Root.OverrideLevel = null;
             }
@@ -39,8 +47,7 @@ namespace EventHorizonRider.Core.Engine.States
                         levelEnded = false;
                         gameContext.CurrentLevelNumber++;
 
-                        gameContext.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
-                        gameContext.Rings.SetLevel(gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber));
+                        UpdateLevel(gameContext);
                     }
                 }
             }

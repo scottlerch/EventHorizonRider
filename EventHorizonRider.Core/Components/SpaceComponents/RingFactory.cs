@@ -11,6 +11,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     internal class RingFactory
     {
         private RingTexturesInfo asteroids;
+        private RingTexturesInfo sparseAsteroids;
         private RingTexturesInfo dust;
 
         private float startRadius;
@@ -26,6 +27,21 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             asteroids.RadiusOffsetJitter = 10f;
             asteroids.AngleJitter = 0.8f;
             asteroids.TextureColors = new[]
+            {
+                Color.DarkGray.AdjustLight(1.2f),
+                Color.LightGray,
+                Color.DarkGray,
+                Color.Beige,
+            };
+
+            sparseAsteroids = new RingTexturesInfo();
+            sparseAsteroids.Textures = asteroids.Textures;
+            sparseAsteroids.TexturesAlphaData = asteroids.TexturesAlphaData;
+            sparseAsteroids.DensityRange = Range.Create(5, 15);
+            sparseAsteroids.ScaleRange = Range.Create(0.1f, 0.6f);
+            sparseAsteroids.RadiusOffsetJitter = 10f;
+            sparseAsteroids.AngleJitter = 0.8f;
+            sparseAsteroids.TextureColors = new[]
             {
                 Color.DarkGray.AdjustLight(1.2f),
                 Color.LightGray,
@@ -67,14 +83,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             return texturesInfo;
         }
 
-        private RingTexturesInfo GetTexturesInfo(RingType type)
+        private RingTexturesInfoGroup GetTexturesInfo(RingType type)
         {
             switch (type)
             {
                 case RingType.Asteroid:
-                    return asteroids;
+                    return new RingTexturesInfoGroup(new[] { asteroids }, RingTexturesInfoGroupMode.Sequential);
                 case RingType.Dust:
-                    return dust;
+                    return new RingTexturesInfoGroup(new[] { dust }, RingTexturesInfoGroupMode.Sequential);
+                case RingType.DustWithAsteroid:
+                    return new RingTexturesInfoGroup(new[] {dust, sparseAsteroids  }, RingTexturesInfoGroupMode.Sequential);
                 default:
                     throw new Exception("invalid ring type");
             }
@@ -84,7 +102,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             return new Ring(
                 rotationalVelocity: info.RotationalVelocity,
-                texturesInfo: GetTexturesInfo(info.Type),
+                texturesInfoGroup: GetTexturesInfo(info.Type),
                 radius: startRadius,
                 origin: viewportCenter,
                 gaps: Enumerable.Range(0, info.NumberOfGaps).Select(i =>

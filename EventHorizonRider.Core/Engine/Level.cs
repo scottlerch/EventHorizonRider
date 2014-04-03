@@ -5,9 +5,10 @@ namespace EventHorizonRider.Core.Engine
 {
     internal class Level
     {
-        public Level(TimeSpan ringInterval, float ringSeparation, IEnumerable<RingInfo> sequence)
+        public Level(TimeSpan ringInterval, float ringSeparation, float shipSpeed, IEnumerable<RingInfo> sequence)
         {
             RingInterval = ringInterval;
+            ShipSpeed = shipSpeed;
             Sequence = sequence;
             RingSeparation = ringSeparation;
             RingSpeed = ringSeparation/(float)ringInterval.TotalSeconds;
@@ -20,5 +21,7 @@ namespace EventHorizonRider.Core.Engine
         public TimeSpan RingInterval { get; private set; }
 
         public float RingSeparation { get; private set; }
+
+        public float ShipSpeed { get; private set; }
     }
 }
