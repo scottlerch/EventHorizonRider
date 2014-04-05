@@ -37,7 +37,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             sparseAsteroids = new RingTexturesInfo();
             sparseAsteroids.Textures = asteroids.Textures;
             sparseAsteroids.TexturesAlphaData = asteroids.TexturesAlphaData;
-            sparseAsteroids.DensityRange = Range.Create(5, 15);
+            sparseAsteroids.DensityRange = Range.Create(5, 10);
             sparseAsteroids.ScaleRange = Range.Create(0.1f, 0.6f);
             sparseAsteroids.RadiusOffsetJitter = 10f;
             sparseAsteroids.AngleJitter = 0.8f;
@@ -50,8 +50,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             };
 
             dust = LoadData(content, "dust", 1);
-            dust.DensityRange = Range.Create(100, 110);
-            dust.ScaleRange = Range.Create(0.3f, 1f);
+            dust.DensityRange = Range.Create(65, 75);
+            dust.ScaleRange = Range.Create(0.5f, 1.3f);
             dust.RadiusOffsetJitter = 10f;
             dust.AngleJitter = 0.8f;
             dust.TextureColors = new []

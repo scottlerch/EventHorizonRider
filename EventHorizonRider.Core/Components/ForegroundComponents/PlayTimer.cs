@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using EventHorizonRider.Core.Engine;
+﻿using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
     internal class PlayTimer : ComponentBase
     {
-        private readonly Stopwatch gameTimeElapsed = new Stopwatch();
+        private TimeSpan gameTimeElapsed;
+        private TimeSpan? gameStartTime;
+        private bool updatingTime;
         private readonly PlayerData playerData;
 
         private Vector2 bestTextSize;
-        private Vector2 levelTextSize;
 
         private int currentLevelNumber;
 
@@ -33,8 +33,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private List<float> textOffset;
 
-        private const string bestText = "Best: ";
-        private const string levelText = "Level: ";
+        private const string BestText = "Best: ";
+        private const string LevelText = "Level: ";
 
         //private Texture2D foreground;
 
@@ -45,7 +45,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         public TimeSpan Elapsed
         {
-            get { return gameTimeElapsed.Elapsed; }
+            get { return gameTimeElapsed; }
         }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
@@ -55,8 +55,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             labelFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
             timeFont = content.Load<SpriteFont>(@"Fonts\time_font");
 
-            bestTextSize = labelFont.MeasureString(bestText);
-            levelTextSize = labelFont.MeasureString(levelText);
+            bestTextSize = labelFont.MeasureString(BestText);
+            labelFont.MeasureString(LevelText);
 
             textOffset = new List<float>
             {
@@ -75,32 +75,40 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
+            if (updatingTime)
+            {
+                gameStartTime = gameStartTime ?? gameTime.TotalGameTime;
+                gameTimeElapsed = gameTime.TotalGameTime - gameStartTime.Value;
+            }
+
             scoreColor = Color.White;
 
-            if (gameTimeElapsed.Elapsed >= playerData.Highscore)
+            if (gameTimeElapsed >= playerData.Highscore)
             {
                 scoreColor = Color.Yellow;
             }
             else
             {
-                var percentComplete = 1f - (float) (gameTimeElapsed.Elapsed.TotalSeconds/playerData.Highscore.TotalSeconds);
+                var percentComplete = 1f - (float) (gameTimeElapsed.TotalSeconds/playerData.Highscore.TotalSeconds);
 
                 scoreColor = Color.White.SetColors(percentComplete, 1f, percentComplete);
             }
 
             bestNumberText = FormatTime(playerData.Highscore);
             levelNumberText = currentLevelNumber.ToString();
-            timeNumberText = FormatTime(gameTimeElapsed.Elapsed);
+            timeNumberText = FormatTime(gameTimeElapsed);
         }
 
         public void Restart()
         {
-            gameTimeElapsed.Restart();
+            updatingTime = true;
+            gameStartTime = null;
+            gameTimeElapsed = TimeSpan.Zero;
         }
 
         public void Stop()
         {
-            gameTimeElapsed.Stop();
+            updatingTime = false;
         }
 
         private string FormatTime(TimeSpan time)
@@ -128,7 +136,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             // Draw best time text
             spriteBatch.DrawString(
                 labelFont,
-                bestText,
+                BestText,
                 new Vector2(textPadding, textPadding),
                 Color.LightGray.AdjustLight(0.9f),
                 0,
@@ -150,11 +158,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             // Draw level number
             var levelNumberTextSize = labelFont.MeasureString(levelNumberText).X;
-            var levelTextSize = labelFont.MeasureString(levelText).X;
+            var levelTextSize = labelFont.MeasureString(LevelText).X;
 
             spriteBatch.DrawString(
                 labelFont,
-                levelText,
+                LevelText,
                 new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - textPadding, textPadding),
                 Color.LightGray.AdjustLight(0.9f),
                 0,

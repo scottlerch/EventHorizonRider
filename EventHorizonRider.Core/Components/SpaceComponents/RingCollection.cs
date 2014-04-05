@@ -18,7 +18,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private readonly RingFactory ringFactory = new RingFactory();
         private IEnumerator<RingInfo> currentSequence;
 
-        private DateTime lastRingAdd = DateTime.UtcNow;
+        private TimeSpan? lastRingAdd;
 
         private Level level;
 
@@ -80,9 +80,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 }
             }
 
-            if (DateTime.UtcNow - lastRingAdd > level.RingInterval)
+            lastRingAdd = lastRingAdd ?? gameTime.TotalGameTime;
+
+            if (gameTime.TotalGameTime - lastRingAdd > level.RingInterval)
             {
-                lastRingAdd = DateTime.UtcNow;
+                lastRingAdd = gameTime.TotalGameTime;
 
                 var ringInfo = currentSequence.Next();
 
