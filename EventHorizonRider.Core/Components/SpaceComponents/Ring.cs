@@ -66,6 +66,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     if (gaps.Any(gap => gap.IsInsideGap(angle)))
                         continue;
 
+
+                    var isEdge = gaps.Any(gap => gap.IsInsideGap(angle + angleSpacing)) ||
+                                 gaps.Any(gap => gap.IsInsideGap(angle - angleSpacing));
+
                     var textureIndex = random.Next(0, texturesInfo.Textures.Length);
 
                     var ringObject = new RingObject
@@ -80,7 +84,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                                 texturesInfo.Textures[textureIndex].Height/2f),
                         RadiusOffset = (float) random.NextDouble()*texturesInfo.RadiusOffsetJitter,
                         Color = texturesInfo.TextureColors[random.Next(0, texturesInfo.TextureColors.Length)],
-                        Angle = angle + ((float) random.NextDouble()*(texturesInfo.AngleJitter*angleSpacing)),
+                        Angle = angle + (!isEdge? ((float) random.NextDouble()*(texturesInfo.AngleJitter*angleSpacing)) : 0f),
                     };
 
                     ringObject.UpdatePosition(origin, Radius);
