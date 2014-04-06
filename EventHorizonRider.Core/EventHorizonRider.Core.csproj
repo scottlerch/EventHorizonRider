@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ComponentBase.cs" />
+    <Compile Include="Components\ForegroundComponents\MenuButton.cs" />
     <Compile Include="Components\ForegroundComponents\Title.cs" />
     <Compile Include="Components\SpaceComponents\RingObject.cs" />
     <Compile Include="Components\SpaceComponents\Background.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Engine\RingType.cs" />
     <Compile Include="Engine\RingTypeSelection.cs" />
     <Compile Include="Engine\States\EndingState.cs" />
+    <Compile Include="Engine\States\MenuState.cs" />
     <Compile Include="Engine\States\OverState.cs" />
     <Compile Include="Engine\States\InitializeState.cs" />
     <Compile Include="Engine\States\RunningState.cs" />

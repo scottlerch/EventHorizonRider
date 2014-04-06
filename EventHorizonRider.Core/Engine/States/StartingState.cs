@@ -6,6 +6,9 @@ namespace EventHorizonRider.Core.Engine.States
     {
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
+            gameContext.PlayTimer.ShowLevelAndScore();
+            gameContext.MenuButton.Hide();
+
             gameContext.Space.Blur = false;
             gameContext.Halo.Visible = true;
             gameContext.Blackhole.SetExtraScale(0f);

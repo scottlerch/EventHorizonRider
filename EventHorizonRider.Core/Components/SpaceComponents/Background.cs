@@ -16,8 +16,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private Vector2 center;
         private float currentRotation;
 
+        public float Scale { get; set; }
+
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
+            Scale = 1f;
+
             background = content.Load<Texture2D>(@"Images\background");
             stars = content.Load<Texture2D>(@"Images\stars");
 
@@ -28,13 +32,19 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             if (backgroundColor != Color.Red)
             {
-                spriteBatch.Draw(background, Vector2.Zero, depth:Depth, color:Color.White * 0.5f, scale:new Vector2(2f, 2f));
+                spriteBatch.Draw(background,
+                    position: center,
+                    origin: new Vector2(background.Width / 2f, background.Height / 2f),
+                    depth:Depth,
+                    color:Color.White * 0.5f,
+                    scale:(new Vector2(2f, 2f) * Scale));
+
                 spriteBatch.Draw(stars,
                     position: center,
                     origin: new Vector2(stars.Width / 2f, stars.Height / 2f),
                     rotation: currentRotation,
                     color: Color.White * 0.8f,
-                    scale: new Vector2(1.3f, 1.3f),
+                    scale: new Vector2(1.3f, 1.3f) * Scale,
                     depth: Depth + 0.001f);
             }
         }

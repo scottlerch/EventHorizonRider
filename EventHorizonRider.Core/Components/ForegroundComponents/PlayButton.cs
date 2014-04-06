@@ -35,7 +35,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             buttonFont = content.Load<SpriteFont>(@"Fonts\button_font");
 
-            restartTextSize = buttonFont.MeasureString("RESTART");
+            restartTextSize = buttonFont.MeasureString("RESET");
             startTextSize = buttonFont.MeasureString("START");
 
             screenCenter = new Vector2(
@@ -81,8 +81,13 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             colorAlphaPercent = 1f;
         }
 
-        public void Hide()
+        public void Hide(bool fade = true)
         {
+            if (!fade)
+            {
+                colorAlphaPercent = 0f;    
+            }
+
             isVisible = false;
         }
 
@@ -106,7 +111,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 }
                 else
                 {
-                    spriteBatch.DrawString(buttonFont, "RESTART", screenCenter, Color.White * colorAlphaPercent, 0,
+                    spriteBatch.DrawString(buttonFont, "RESET", screenCenter, Color.White * colorAlphaPercent, 0,
                         new Vector2(restartTextSize.X / 2f, restartTextSize.Y / 2f), getScale(), SpriteEffects.None, Depth);
                 }
             }

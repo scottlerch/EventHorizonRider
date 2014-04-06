@@ -11,6 +11,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
     internal class PlayTimer : ComponentBase
     {
+        const float TextPadding = 10;
+        const float TextVerticalSpacing = 5;
+
         private TimeSpan gameTimeElapsed;
         private TimeSpan? gameStartTime;
         private bool updatingTime;
@@ -35,6 +38,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private const string BestText = "Best: ";
         private const string LevelText = "Level: ";
+
+        private bool isLevelAndScoreVisible;
 
         //private Texture2D foreground;
 
@@ -71,6 +76,16 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         public void SetLevel(int newCurrentLevelNumber)
         {
             currentLevelNumber = newCurrentLevelNumber;
+        }
+
+        public void ShowLevelAndScore()
+        {
+            isLevelAndScoreVisible = true;
+        }
+
+        public void HideLevelAndScore()
+        {
+            isLevelAndScoreVisible = false;
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -118,26 +133,21 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            const float textPadding = 10;
-            const float textVerticalSpacing = 5;
+            DrawBestTime(spriteBatch);
 
-            // Draw time text
-            spriteBatch.DrawString(
-                timeFont,
-                timeNumberText,
-                new Vector2(viewSize.X - textOffset[timeNumberText.Length - 4] - textPadding, textPadding + bestTextSize.Y + textVerticalSpacing),
-                scoreColor,
-                0,
-                Vector2.Zero,
-                1,
-                SpriteEffects.None,
-                Depth);
+            if (isLevelAndScoreVisible)
+            {
+                DrawCurrentTime(spriteBatch);
+                DrawLevelNumber(spriteBatch);
+            }
+        }
 
-            // Draw best time text
+        private void DrawBestTime(SpriteBatch spriteBatch)
+        {
             spriteBatch.DrawString(
                 labelFont,
                 BestText,
-                new Vector2(textPadding, textPadding),
+                new Vector2(TextPadding, TextPadding),
                 Color.LightGray.AdjustLight(0.9f),
                 0,
                 Vector2.Zero,
@@ -148,33 +158,49 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             spriteBatch.DrawString(
                 labelFont,
                 bestNumberText,
-                new Vector2(textPadding + bestTextSize.X, textPadding),
+                new Vector2(TextPadding + bestTextSize.X, TextPadding),
                 Color.White,
                 0,
                 Vector2.Zero,
                 1,
                 SpriteEffects.None,
                 Depth);
+        }
 
-            // Draw level number
+        private void DrawCurrentTime(SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawString(
+              timeFont,
+              timeNumberText,
+              new Vector2(viewSize.X - textOffset[timeNumberText.Length - 4] - TextPadding, TextPadding + bestTextSize.Y + TextVerticalSpacing),
+              scoreColor,
+              0,
+              Vector2.Zero,
+              1,
+              SpriteEffects.None,
+              Depth);
+        }
+
+        private void DrawLevelNumber(SpriteBatch spriteBatch)
+        {
             var levelNumberTextSize = labelFont.MeasureString(levelNumberText).X;
             var levelTextSize = labelFont.MeasureString(LevelText).X;
 
             spriteBatch.DrawString(
                 labelFont,
                 LevelText,
-                new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - textPadding, textPadding),
+                new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, TextPadding),
                 Color.LightGray.AdjustLight(0.9f),
                 0,
                 Vector2.Zero,
                 1,
-                SpriteEffects.None, 
+                SpriteEffects.None,
                 Depth);
 
             spriteBatch.DrawString(
                 labelFont,
                 levelNumberText,
-                new Vector2(viewSize.X - levelNumberTextSize - textPadding, textPadding),
+                new Vector2(viewSize.X - levelNumberTextSize - TextPadding, TextPadding),
                 Color.White,
                 0,
                 Vector2.Zero,

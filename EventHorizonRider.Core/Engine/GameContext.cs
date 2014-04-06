@@ -19,6 +19,8 @@ namespace EventHorizonRider.Core.Engine
 
         public PlayButton PlayButton { get; private set; }
 
+        public MenuButton MenuButton { get; private set; }
+
         public PlayTimer PlayTimer { get; private set; }
 
         public PlayerData PlayerData { get; private set; }
@@ -84,8 +86,9 @@ namespace EventHorizonRider.Core.Engine
 
             PlayTimer = new PlayTimer(PlayerData);
             PlayButton = new PlayButton(Blackhole);
+            MenuButton = new MenuButton();
             Title = new Title();
-            Foreground = new Foreground(PlayButton, PlayTimer, Title, FpsCounter);
+            Foreground = new Foreground(PlayButton, MenuButton, PlayTimer, Title, FpsCounter);
 
             Root = new Root(Music, Space, Foreground);
 

@@ -59,14 +59,14 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             }
         }
 
-        public Vector2 Scale { get { return new Vector2(spring.BlockX, spring.BlockX); } }
+        public Vector2 Scale { get { return new Vector2(spring.BlockX + extraBlackholdScale, spring.BlockX + extraBlackholdScale); } }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Position,
                 origin: new Vector2(texture.Width/2f, texture.Height/2f),
                 rotation: currentRotation,
-                scale: new Vector2(Scale.X + extraBlackholdScale, Scale.Y + extraBlackholdScale),
+                scale: new Vector2(Scale.X, Scale.Y),
                 depth: Depth);
         }
 

@@ -204,6 +204,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             Position = new Vector2(
                 blackhole.Position.X,
                 blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f));
+
+            mainThrustEmitter.Clear();
+            sideThrustEmitter.Clear();
         }
 
         internal void Start()
