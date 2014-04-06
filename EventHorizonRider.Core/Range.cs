@@ -29,5 +29,15 @@ namespace EventHorizonRider.Core
         {
             return MathUtilities.GetRandomBetween(range.Low, range.High);
         }
+
+        public static float GetDifference(this Range<float> range)
+        {
+            return range.High - range.Low;
+        }
+
+        public static Range<float> ScaleHigh(this Range<float> range, float scale)
+        {
+            return Create(range.Low, range.Low + (range.GetDifference()*scale));
+        }
     }
 }

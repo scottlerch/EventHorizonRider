@@ -58,6 +58,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             {
                 var maximumAsteroidsPerRing = texturesInfo.DensityRange.GetRandom();
 
+                var minimumAngleSpacing = MathHelper.TwoPi/texturesInfo.DensityRange.High; 
                 var angleSpacing = MathHelper.TwoPi/maximumAsteroidsPerRing;
                 var count = 0;
 
@@ -66,9 +67,22 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     if (gaps.Any(gap => gap.IsInsideGap(angle)))
                         continue;
 
+                    // When object is closer to gap edge make sure it's scaled smaller with less random jitter
+                    // so the gaps stay closer to a constant size
+                    const int gapScaleFadeSize = 2;
+                    float gapScaleFade = 1f;
+                    bool isGapEdge = false;
 
-                    var isEdge = gaps.Any(gap => gap.IsInsideGap(angle + angleSpacing)) ||
-                                 gaps.Any(gap => gap.IsInsideGap(angle - angleSpacing));
+                    for (int i = 1; i <= gapScaleFadeSize; i++)
+                    {
+                        if (gaps.Any(gap => gap.IsInsideGap(angle + (minimumAngleSpacing * i))) ||
+                            gaps.Any(gap => gap.IsInsideGap(angle - (minimumAngleSpacing * i))))
+                        {
+                            gapScaleFade = 0.5f + (((i - 1) / (float)gapScaleFadeSize) * 0.5f);
+                            isGapEdge = i == 1;
+                            break;
+                        }
+                    }
 
                     var textureIndex = random.Next(0, texturesInfo.Textures.Length);
 
@@ -78,13 +92,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                         TextureAlphaData = texturesInfo.TexturesAlphaData[textureIndex],
                         Rotation = MathHelper.WrapAngle((float) random.NextDouble()*MathHelper.TwoPi),
                         RotationRate = (float) random.NextDouble()*MathHelper.TwoPi/4f*(random.Next(2) == 0 ? -1f : 1f),
-                        Scale = Vector2.One*texturesInfo.ScaleRange.GetRandom(),
+                        Scale = Vector2.One * texturesInfo.ScaleRange.ScaleHigh(gapScaleFade).GetRandom(),
                         Origin =
                             new Vector2(texturesInfo.Textures[textureIndex].Width/2f,
                                 texturesInfo.Textures[textureIndex].Height/2f),
                         RadiusOffset = (float) random.NextDouble()*texturesInfo.RadiusOffsetJitter,
                         Color = texturesInfo.TextureColors[random.Next(0, texturesInfo.TextureColors.Length)],
-                        Angle = angle + (!isEdge? ((float) random.NextDouble()*(texturesInfo.AngleJitter*angleSpacing)) : 0f),
+                        Angle = angle + ((isGapEdge? 0f : gapScaleFade) * ((float) random.NextDouble()*(texturesInfo.AngleJitter*angleSpacing))),
                     };
 
                     ringObject.UpdatePosition(origin, Radius);
