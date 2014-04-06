@@ -130,7 +130,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                  touchState.All(
                      t =>
                          (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                         t.Position.X < viewportCenter.X));
+                         t.Position.X < (viewportCenter.X - (blackhole.Height / 2f))));
         }
 
         private bool Right(KeyboardState keyState, TouchCollection touchState)
@@ -141,7 +141,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                  touchState.All(
                      t =>
                          (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                         t.Position.X > viewportCenter.Y));
+                         t.Position.X > (viewportCenter.X  + (blackhole.Height / 2f))));
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
