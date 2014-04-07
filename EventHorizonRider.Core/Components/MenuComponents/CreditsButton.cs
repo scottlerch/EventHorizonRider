@@ -26,13 +26,13 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             textLocation = new Vector2(
                 (graphics.Viewport.Width / 2f) - (textSize.X / 2f),
-                (graphics.Viewport.Height / 2f) + 100f);
+                (graphics.Viewport.Height / 2f) + 150f);
 
             buttonBounds = new Rectangle(
-                (int)(textLocation.X),
-                (int)(textLocation.Y),
-                (int)(textSize.X + buttonPadding),
-                (int)(textSize.Y + buttonPadding));
+                (int)(textLocation.X - buttonPadding),
+                (int)(textLocation.Y - buttonPadding),
+                (int)(textSize.X + (buttonPadding * 2)),
+                (int)(textSize.Y + (buttonPadding * 2)));
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)

@@ -45,11 +45,11 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             startLevelTextLocation = new Vector2(
                 (graphics.Viewport.Width / 2f) - (startLevelTextSize.X / 2f),
-                (graphics.Viewport.Height / 2f) - 100f);
+                (graphics.Viewport.Height / 2f) - 175f);
 
             levelButtons = new LevelButton[Levels.NumberOfLevels];
 
-            var levelButtonY = startLevelTextLocation.Y - 50f;
+            var levelButtonY = startLevelTextLocation.Y + 75f;
             var levelButtonsWidth = 500f;
             var levelButtonSpacing = levelButtonsWidth/(Levels.NumberOfLevels - 1);
             var levelButtonXBase = (graphics.Viewport.Width / 2f) - (levelButtonsWidth / 2f);
@@ -105,7 +105,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
                     (mouseState.LeftButton == ButtonState.Pressed && button.Bounds.Contains(mouseState.Position)))
                     .FirstOrDefault();
 
-            if (levelButton != null)
+            if (levelButton != null && levelButton.LevelNumber <= MaximumStartLevel)
             {
                 return levelButton.LevelNumber;
             }
@@ -128,7 +128,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             foreach (var levelButton in levelButtons)
             {
-                var color = Color.LightGray.AdjustLight(0.7f);
+                var color = Color.LightGray.AdjustLight(0.4f);
 
                 if (levelButton.LevelNumber == StartLevel)
                 {

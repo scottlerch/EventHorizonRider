@@ -118,6 +118,7 @@
     <Content Include="Content\Images\asteroid_3.xnb" />
     <Content Include="Content\Images\asteroid_4.xnb" />
     <Content Include="Content\Images\dust_1.xnb" />
+    <Content Include="Content\Images\credits.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>

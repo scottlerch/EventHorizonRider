@@ -35,13 +35,13 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             menuTextLocation = new Vector2(graphics.Viewport.Width - (menuTextSize.X) - textPadding, textPadding);
             backTextLocation = new Vector2(graphics.Viewport.Width - (backTextSize.X) - textPadding, textPadding);
 
-            const float buttonPadding = 100f;
+            const float buttonPadding = 50f;
 
             buttonBounds = new Rectangle(
-                (int)(menuTextLocation.X),
-                (int)(menuTextLocation.Y),
-                (int)(menuTextSize.X + buttonPadding),
-                (int)(menuTextSize.Y + buttonPadding));
+                (int)(menuTextLocation.X - buttonPadding),
+                (int)(menuTextLocation.Y - buttonPadding),
+                (int)(menuTextSize.X + (buttonPadding * 2)),
+                (int)(menuTextSize.Y + (buttonPadding * 2)));
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)

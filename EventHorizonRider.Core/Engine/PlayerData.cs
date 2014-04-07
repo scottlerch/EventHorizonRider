@@ -14,6 +14,12 @@ namespace EventHorizonRider.Core.Engine
 
         public int DefaultLevelNumber { get; set; }
 
+        public PlayerData()
+        {
+            HighestLevelNumber = 1;
+            DefaultLevelNumber = 1;
+        }
+
         public async Task Save()
         {
             var rootFolder = FileSystem.Current.LocalStorage;
