@@ -11,14 +11,30 @@ namespace EventHorizonRider.Core.Components
         private RenderTarget2D renderTarget1;
         private RenderTarget2D renderTarget2;
         private readonly GaussianBlur blur = new GaussianBlur();
-        private readonly Background background;
 
         public bool Blur { get; set; }
+
+        public Blackhole Blackhole { get; private set; }
+
+        public Halo Halo { get; private set; }
+
+        public RingCollection Rings { get; private set; }
+
+        public Ship Ship { get; private set; }
+
+        public Background Background { get; private set; }
+
+        public Shockwave Shockwave { get; private set; }
 
         public Space(Background background, Halo halo, Shockwave shockwave, RingCollection ringCollection, Ship ship, Blackhole blackhole) 
             : base(background, halo, shockwave, ship,ringCollection, blackhole)
         {
-            this.background = background;
+            Background = background;
+            Halo = halo;
+            Shockwave = shockwave;
+            Rings = ringCollection;
+            Ship = ship;
+            Blackhole = blackhole;
         }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
@@ -41,7 +57,7 @@ namespace EventHorizonRider.Core.Components
                 graphics.SetRenderTarget(renderTarget1);
             }
 
-            graphics.Clear(background.BackgroundColor);
+            graphics.Clear(Background.BackgroundColor);
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
         }

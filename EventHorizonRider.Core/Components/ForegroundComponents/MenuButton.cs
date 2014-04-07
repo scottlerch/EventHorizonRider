@@ -25,7 +25,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            buttonFont = content.Load<SpriteFont>(@"Fonts\button_font");
+            buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
 
             menuTextSize = buttonFont.MeasureString("MENU");
             backTextSize = buttonFont.MeasureString("BACK");

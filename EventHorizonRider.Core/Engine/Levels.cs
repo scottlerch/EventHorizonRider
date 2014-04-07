@@ -15,6 +15,8 @@ namespace EventHorizonRider.Core.Engine
             this.ringInfoFactory = ringInfoFactory;
         }
 
+        public static int NumberOfLevels { get { return 5; } }
+
         public Level GetLevel(int level)
         {
             switch (level)

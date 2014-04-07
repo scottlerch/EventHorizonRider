@@ -6,7 +6,7 @@ namespace EventHorizonRider.Core.Engine.States
     {
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
-            if (gameContext.PlayButton.Pressed)
+            if (gameContext.Root.Foreground.PlayButton.Pressed)
             {
                 gameContext.GameState = new InitializeState();
             }

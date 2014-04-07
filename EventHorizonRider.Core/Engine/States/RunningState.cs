@@ -12,9 +12,9 @@ namespace EventHorizonRider.Core.Engine.States
         private void UpdateLevel(GameContext gameContext)
         {
             var level = gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber);
-            gameContext.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
-            gameContext.Rings.SetLevel(level);
-            gameContext.Ship.Speed = level.ShipSpeed;
+            gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
+            gameContext.Root.Space.Rings.SetLevel(level);
+            gameContext.Root.Space.Ship.Speed = level.ShipSpeed;
         }
 
         public override void Handle(GameContext gameContext, GameTime gameTime)
@@ -23,7 +23,7 @@ namespace EventHorizonRider.Core.Engine.States
             {
                 gameContext.CurrentLevelNumber = gameContext.Root.OverrideLevel.Value;
 
-                gameContext.Rings.Clear();
+                gameContext.Root.Space.Rings.Clear();
                 
                 UpdateLevel(gameContext);
 
@@ -31,11 +31,11 @@ namespace EventHorizonRider.Core.Engine.States
             }
             else
             {
-                if (gameContext.Rings.Intersects(gameContext.Ship))
+                if (gameContext.Root.Space.Rings.Intersects(gameContext.Root.Space.Ship))
                 {
                     gameContext.GameState = new EndingState();
                 }
-                else if (!gameContext.Rings.HasMoreRings && gameContext.Rings.Children.Count == 0)
+                else if (!gameContext.Root.Space.Rings.HasMoreRings && gameContext.Root.Space.Rings.Children.Count == 0)
                 {
                     if (!levelEnded)
                     {

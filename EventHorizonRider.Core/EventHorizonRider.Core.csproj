@@ -39,7 +39,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ComponentBase.cs" />
+    <Compile Include="Components\Menu.cs" />
+    <Compile Include="Components\MenuComponents\Credits.cs" />
+    <Compile Include="Components\MenuComponents\CreditsButton.cs" />
+    <Compile Include="Components\MenuComponents\LevelSelect.cs" />
     <Compile Include="Components\ForegroundComponents\MenuButton.cs" />
+    <Compile Include="Components\MenuComponents\ResetBestButton.cs" />
     <Compile Include="Components\ForegroundComponents\Title.cs" />
     <Compile Include="Components\SpaceComponents\RingObject.cs" />
     <Compile Include="Components\SpaceComponents\Background.cs" />

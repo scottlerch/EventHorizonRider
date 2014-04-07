@@ -10,9 +10,21 @@ namespace EventHorizonRider.Core.Components
     {
         public int? OverrideLevel { get; set; }
 
-        public Root(Music music, Space space, Foreground foreground)
-            : base(music, space, foreground)
+        public Space Space { get; private set; }
+
+        public Menu Menu { get; private set; }
+
+        public Foreground Foreground { get; private set; }
+
+        public Music Music { get; private set; }
+
+        public Root(Music music, Space space, Menu menu, Foreground foreground)
+            : base(music, space, menu, foreground)
         {
+            Music = music;
+            Space = space;
+            Menu = menu;
+            Foreground = foreground;
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)

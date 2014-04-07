@@ -5,36 +5,39 @@ namespace EventHorizonRider.Core.Engine.States
 {
     internal class InitializeState : GameStateBase
     {
-        private TimeSpan initInterval = TimeSpan.FromSeconds(2);
+        private readonly TimeSpan initInterval = TimeSpan.FromSeconds(2);
 
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
-            gameContext.Background.Scale = 1f;
-            gameContext.Blackhole.SetExtraScale(0f);
-            gameContext.Background.Start();
-            gameContext.PlayTimer.HideLevelAndScore();
-            gameContext.Ship.Initialize();
-            gameContext.Rings.Clear();
-            gameContext.Space.Blur = false;
-            gameContext.Halo.Visible = true;
-            gameContext.Ship.Initialize();
-            gameContext.MenuButton.Show();
-            gameContext.PlayButton.Show(restart:false);
+            gameContext.Root.Menu.Visible = false;
+
+            gameContext.Root.Space.Background.Scale = 1f;
+            gameContext.Root.Space.Blackhole.SetExtraScale(0f);
+            gameContext.Root.Space.Background.Start();
+            gameContext.Root.Space.Ship.Initialize();
+            gameContext.Root.Space.Rings.Clear();
+            gameContext.Root.Space.Blur = false;
+            gameContext.Root.Space.Halo.Visible = true;
+            gameContext.Root.Space.Ship.Initialize();
+
+            gameContext.Root.Foreground.PlayTimer.HideLevelAndScore();
+            gameContext.Root.Foreground.MenuButton.Show();
+            gameContext.Root.Foreground.PlayButton.Show(restart: false);
 
             if (gameTime.TotalGameTime > initInterval)
             {
-                gameContext.Title.FadingOut = true;
+                gameContext.Root.Foreground.Title.FadingOut = true;
 
-                if (!gameContext.Title.Visible)
+                if (!gameContext.Root.Foreground.Title.Visible)
                 {
-                    if (gameContext.PlayButton.Pressed)
+                    if (gameContext.Root.Foreground.PlayButton.Pressed)
                     {
-                        gameContext.Blackhole.Pulse(1.5f, 2.5f);
-                        gameContext.PlayButton.Hide();
+                        gameContext.Root.Space.Blackhole.Pulse(1.5f, 2.5f);
+                        gameContext.Root.Foreground.PlayButton.Hide();
 
                         gameContext.GameState = new StartingState();
                     }
-                    else if (gameContext.MenuButton.Pressed)
+                    else if (gameContext.Root.Foreground.MenuButton.Pressed)
                     {
                         gameContext.GameState = new MenuState();
                     }

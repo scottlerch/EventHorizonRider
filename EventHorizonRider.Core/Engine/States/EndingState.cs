@@ -6,21 +6,21 @@ namespace EventHorizonRider.Core.Engine.States
     {
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
-            gameContext.Space.Blur = true;
-            gameContext.Halo.Visible = false;
-            gameContext.Blackhole.SetExtraScale(0.3f);
+            gameContext.Root.Space.Blur = true;
+            gameContext.Root.Space.Halo.Visible = false;
+            gameContext.Root.Space.Blackhole.SetExtraScale(0.3f);
 
-            gameContext.Music.Stop();
+            gameContext.Root.Music.Stop();
 
-            gameContext.Background.Gameover();
-            gameContext.Blackhole.Stop();
-            gameContext.Ship.Stop();
-            gameContext.Rings.Stop();
+            gameContext.Root.Space.Background.Gameover();
+            gameContext.Root.Space.Blackhole.Stop();
+            gameContext.Root.Space.Ship.Stop();
+            gameContext.Root.Space.Rings.Stop();
 
-            gameContext.PlayTimer.Stop();
-            gameContext.PlayButton.Show(true);
+            gameContext.Root.Foreground.PlayTimer.Stop();
+            gameContext.Root.Foreground.PlayButton.Show(true);
 
-            gameContext.IoTask = gameContext.PlayerData.UpdateBestTime(gameContext.PlayTimer.Elapsed);
+            gameContext.IoTask = gameContext.PlayerData.UpdateBestTime(gameContext.Root.Foreground.PlayTimer.Elapsed, gameContext.CurrentLevelNumber);
 
             gameContext.GameState = new OverState();
         }

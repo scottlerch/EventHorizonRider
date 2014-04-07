@@ -17,8 +17,20 @@ namespace EventHorizonRider.Core
 
         protected float Depth { get; private set; }
 
+        protected ComponentBase Parent { get; private set; }
+
+        private bool visible = true;
+
+        public bool Visible
+        {
+            get { return visible && (Parent == null || Parent.Visible); }
+            set { visible = value; }
+        }
+
         protected ComponentBase(params ComponentBase[] components)
         {
+            Visible = true;
+
             if (components.Length > 0)
             {
                 children = new List<ComponentBase>(components);
@@ -35,6 +47,7 @@ namespace EventHorizonRider.Core
         protected void AddChild(ComponentBase component, float depth)
         {
             component.Depth = depth;
+            component.Parent = this;
 
             if (children == null)
             {
@@ -48,6 +61,7 @@ namespace EventHorizonRider.Core
         {
             if (children != null)
             {
+                component.Parent = null;
                 children.Remove(component);
             }
         }
@@ -56,6 +70,11 @@ namespace EventHorizonRider.Core
         {
             if (children != null)
             {
+                foreach (var child in Children)
+                {
+                    child.Parent = null;
+                }
+
                 children.Clear();
             }
         }
@@ -99,6 +118,8 @@ namespace EventHorizonRider.Core
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
+            if (!Visible) return;
+
             OnBeforeDraw(spriteBatch, graphics);
 
             foreach (var child in Children)

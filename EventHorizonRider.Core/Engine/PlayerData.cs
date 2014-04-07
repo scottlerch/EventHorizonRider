@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Dynamic;
+using Newtonsoft.Json;
 using PCLStorage;
 using System;
 using System.Threading.Tasks;
@@ -7,7 +8,11 @@ namespace EventHorizonRider.Core.Engine
 {
     internal class PlayerData : ComponentBase
     {
-        public TimeSpan Highscore { get; set; }
+        public TimeSpan BestTime { get; set; }
+
+        public int HighestLevelNumber { get; set; }
+
+        public int DefaultLevelNumber { get; set; }
 
         public async Task Save()
         {
@@ -33,18 +38,38 @@ namespace EventHorizonRider.Core.Engine
                 {
                     var data = JsonConvert.DeserializeObject<PlayerData>(text);
 
-                    Highscore = data.Highscore;
+                    BestTime = data.BestTime;
+                    HighestLevelNumber = data.HighestLevelNumber;
+                    DefaultLevelNumber = data.DefaultLevelNumber;
                 }
+            }
+
+            if (HighestLevelNumber < 1) HighestLevelNumber = 1;
+            if (DefaultLevelNumber < 1) DefaultLevelNumber = 1;
+        }
+
+        internal async Task UpdateDefaultLevel(int defaultLevelNumber)
+        {
+            DefaultLevelNumber = defaultLevelNumber;
+            await Save();
+        }
+
+        internal async Task UpdateBestTime(TimeSpan timeSpan, int levelNumber)
+        {
+            if (timeSpan > BestTime)
+            {
+                BestTime = timeSpan;
+                HighestLevelNumber = levelNumber;
+                await Save();
             }
         }
 
-        internal async Task UpdateBestTime(TimeSpan timeSpan)
+        internal async Task Reset()
         {
-            if (timeSpan > Highscore)
-            {
-                Highscore = timeSpan;
-                await Save();
-            }
+            BestTime = TimeSpan.Zero;
+            HighestLevelNumber = 1;
+            DefaultLevelNumber = 1;
+            await Save();
         }
     }
 }

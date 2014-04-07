@@ -6,28 +6,27 @@ namespace EventHorizonRider.Core.Engine.States
     {
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
-            gameContext.PlayTimer.ShowLevelAndScore();
-            gameContext.MenuButton.Hide();
+            gameContext.CurrentLevelNumber = gameContext.PlayerData.DefaultLevelNumber;
 
-            gameContext.Space.Blur = false;
-            gameContext.Halo.Visible = true;
-            gameContext.Blackhole.SetExtraScale(0f);
+            gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
+            gameContext.Root.Foreground.PlayTimer.Restart();
+            gameContext.Root.Foreground.PlayTimer.ShowLevelAndScore();
+            gameContext.Root.Foreground.MenuButton.Hide();
 
-            gameContext.CurrentLevelNumber = 1;
+            gameContext.Root.Space.Blur = false;
+            gameContext.Root.Space.Halo.Visible = true;
+            gameContext.Root.Space.Blackhole.SetExtraScale(0f);
 
-            gameContext.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
-            gameContext.PlayTimer.Restart();
-
-            gameContext.Blackhole.Start();
-            gameContext.Ship.Start();
-            gameContext.Rings.Start();
-            gameContext.Background.Start();
+            gameContext.Root.Space.Blackhole.Start();
+            gameContext.Root.Space.Ship.Start();
+            gameContext.Root.Space.Rings.Start();
+            gameContext.Root.Space.Background.Start();
 
             var level = gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber);
-            gameContext.Rings.SetLevel(level);
-            gameContext.Ship.Speed = level.ShipSpeed;
+            gameContext.Root.Space.Rings.SetLevel(level);
+            gameContext.Root.Space.Ship.Speed = level.ShipSpeed;
 
-            gameContext.Music.Play();
+            gameContext.Root.Music.Play();
 
             gameContext.GameState = new RunningState();
         }

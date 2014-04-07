@@ -98,18 +98,18 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             scoreColor = Color.White;
 
-            if (gameTimeElapsed >= playerData.Highscore)
+            if (gameTimeElapsed >= playerData.BestTime)
             {
                 scoreColor = Color.Yellow;
             }
             else
             {
-                var percentComplete = 1f - (float) (gameTimeElapsed.TotalSeconds/playerData.Highscore.TotalSeconds);
+                var percentComplete = 1f - (float) (gameTimeElapsed.TotalSeconds/playerData.BestTime.TotalSeconds);
 
                 scoreColor = Color.White.SetColors(percentComplete, 1f, percentComplete);
             }
 
-            bestNumberText = FormatTime(playerData.Highscore);
+            bestNumberText = FormatTime(playerData.BestTime);
             levelNumberText = currentLevelNumber.ToString();
             timeNumberText = FormatTime(gameTimeElapsed);
         }
