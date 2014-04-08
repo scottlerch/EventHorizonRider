@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using EventHorizonRider.Core.Extensions;
-using EventHorizonRider.Core.Input;
+﻿using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 

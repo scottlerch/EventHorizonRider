@@ -5,15 +5,17 @@ namespace EventHorizonRider.Core.Input
 {
     internal class InputState
     {
-        public KeyboardState KeyState = Keyboard.GetState();
-        public MouseState MouseState = Mouse.GetState();
-        public TouchCollection TouchState = TouchPanel.GetState();
+        public KeyboardState KeyState;
+        public TouchCollection TouchState;
+        public MouseState MouseState;
 
         public void Update()
         {
             KeyState = Keyboard.GetState();
-            MouseState = Mouse.GetState();
             TouchState = TouchPanel.GetState();
+            
+            // TODO: detect if device supports mouse, on iOS mouse gets values from touch which can mess things up
+            // MouseState = Mouse.GetState();
         }
     }
 }
