@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 using System.Linq;
 
 namespace EventHorizonRider.Core.Components.MenuComponents
@@ -15,10 +14,9 @@ namespace EventHorizonRider.Core.Components.MenuComponents
         private class LevelButton
         {
             public Vector2 Position;
-            public Vector2 Size;
             public string Text;
-            public Rectangle Bounds;
             public int LevelNumber;
+            public Button Button;
         }
 
         private SpriteFont buttonFont;
@@ -67,12 +65,13 @@ namespace EventHorizonRider.Core.Components.MenuComponents
                     LevelNumber = i + 1,
                     Text = (i + 1).ToString(),
                     Position = position,
-                    Size = size,
-                    Bounds = new Rectangle(
-                        (int)(position.X),
-                        (int)(position.Y),
-                        (int)(size.X + buttonPadding),
-                        (int)(size.Y + buttonPadding))
+                    Button = new Button(
+                        buttonBounds: new Rectangle(
+                            (int)(position.X),
+                            (int)(position.Y),
+                            (int)(size.X + buttonPadding),
+                            (int)(size.Y + buttonPadding)),
+                        key: Keys.D1 + i),
                 };
             }
         }
@@ -83,31 +82,24 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             if (Visible)
             {
-                Pressed = IsPressed(inputState.MouseState, inputState.TouchState, inputState.KeyState);
+                Pressed = IsPressed(inputState);
             }
         }
 
         public int? Pressed { get; private set; }
 
-        private int? IsPressed(MouseState mouseState, TouchCollection touchState, KeyboardState keyboardState)
+        private int? IsPressed(InputState inputState)
         {
-            var key = keyboardState.GetPressedKeys()
-                .FirstOrDefault(k => k >= Keys.D1 && k <= (Keys) ((int) Keys.D1 + Levels.NumberOfLevels));
-
-            if (key != default(Keys))
+            foreach (var levelButton in levelButtons)
             {
-                return key - Keys.D1;
+                levelButton.Button.Update(inputState, Visible);
             }
 
-            var levelButton =
-                levelButtons.Where((button, i) =>
-                    touchState.Any(t => t.State == TouchLocationState.Pressed && button.Bounds.Contains(t.Position)) ||
-                    (mouseState.LeftButton == ButtonState.Pressed && button.Bounds.Contains(mouseState.Position)))
-                    .FirstOrDefault();
+            var pressedLevelButton = levelButtons.FirstOrDefault(levelButton => levelButton.Button.Pressed);
 
-            if (levelButton != null && levelButton.LevelNumber <= MaximumStartLevel)
+            if (pressedLevelButton != null)
             {
-                return levelButton.LevelNumber;
+                return pressedLevelButton.LevelNumber;
             }
 
             return null;
@@ -130,7 +122,11 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             {
                 var color = Color.LightGray.AdjustLight(0.4f);
 
-                if (levelButton.LevelNumber == StartLevel)
+                if (levelButton.Button.Hover)
+                {
+                    color = Color.Yellow;
+                }
+                else if (levelButton.LevelNumber == StartLevel)
                 {
                     color = Color.Yellow;
                 }

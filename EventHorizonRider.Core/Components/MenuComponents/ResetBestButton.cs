@@ -1,21 +1,19 @@
-﻿using EventHorizonRider.Core.Graphics;
-using EventHorizonRider.Core.Input;
+﻿using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
-using System.Linq;
 
 namespace EventHorizonRider.Core.Components.MenuComponents
 {
     internal class ResetButton : ComponentBase
     {
-        private Rectangle buttonBounds;
         private SpriteFont buttonFont;
 
         private Vector2 textLocation;
         private Vector2 textSize;
+
+        public Button Button { get; set; }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
@@ -29,31 +27,18 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             const float buttonPadding = 50f;
 
-            buttonBounds = new Rectangle(
-                (int)(textLocation.X - buttonPadding),
-                (int)(textLocation.Y - buttonPadding),
-                (int)(textSize.X + (buttonPadding * 2)),
-                (int)(textSize.Y + (buttonPadding * 2)));
+            Button = new Button(
+                buttonBounds: new Rectangle(
+                    (int) (textLocation.X - buttonPadding),
+                    (int) (textLocation.Y - buttonPadding),
+                    (int) (textSize.X + (buttonPadding*2)),
+                    (int) (textSize.Y + (buttonPadding*2))),
+                key: Keys.R);
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            Pressed = false;
-
-            if (Visible && IsPressed(inputState.MouseState, inputState.TouchState, inputState.KeyState))
-            {
-                Pressed = true;
-            }
-        }
-
-        public bool Pressed { get; private set; }
-
-        private bool IsPressed(MouseState mouseState, TouchCollection touchState, KeyboardState keyboardState)
-        {
-            return
-                keyboardState.GetPressedKeys().Contains(Keys.R) ||
-                touchState.Any(t => t.State == TouchLocationState.Pressed && buttonBounds.Contains(t.Position)) ||
-                (mouseState.LeftButton == ButtonState.Pressed && buttonBounds.Contains(mouseState.Position));
+            Button.Update(inputState, Visible);
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
@@ -62,7 +47,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
                 buttonFont,
                 "RESET BEST",
                 textLocation,
-                Color.White,
+                Button.Hover? Color.Yellow : Color.White,
                 0,
                 Vector2.Zero,
                 1f,

@@ -1,19 +1,15 @@
-﻿using EventHorizonRider.Core.Components.SpaceComponents;
-using EventHorizonRider.Core.Input;
+﻿using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
-using System;
-using System.Linq;
 
 namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
     internal class PlayButton : ComponentBase
     {
         private float fadeSpeed = 1.5f;
-        private Rectangle buttonBounds;
+
         private SpriteFont buttonFont;
 
         private float colorAlphaPercent = 1f;
@@ -25,6 +21,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private Vector2 startTextSize;
 
         public float Scale { get; set; }
+
+        public Button Button { get; private set; }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
@@ -39,21 +37,18 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             const float buttonPadding = 100f;
 
-            buttonBounds = new Rectangle(
-                (int)(screenCenter.X - ((restartTextSize.X + buttonPadding) / 2f)),
-                (int)(screenCenter.Y - ((restartTextSize.Y + buttonPadding) / 2f)),
-                (int)(restartTextSize.X + buttonPadding),
-                (int)(restartTextSize.Y + buttonPadding));
+            Button = new Button(
+                buttonBounds: new Rectangle(
+                    (int)(screenCenter.X - ((restartTextSize.X + buttonPadding) / 2f)),
+                    (int)(screenCenter.Y - ((restartTextSize.Y + buttonPadding) / 2f)),
+                    (int)(restartTextSize.X + buttonPadding),
+                    (int)(restartTextSize.Y + buttonPadding)),
+               key: Keys.Space);
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            Pressed = false;
-
-            if (isVisible && IsPressed(inputState.MouseState, inputState.TouchState, inputState.KeyState))
-            {
-                Pressed = true;
-            }
+            Button.Update(inputState, isVisible);
 
             if (isVisible && colorAlphaPercent < 1f)
             {
@@ -67,9 +62,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             colorAlphaPercent = MathHelper.Clamp(colorAlphaPercent, 0, 1);
         }
 
-        public bool Pressed { get; private set; }
-
-        public void Show(bool restart, bool fade = false, float fadeSpeed = 1.5f)
+        public void Show(bool restart, bool fade = false, float newFadeSpeed = 1.5f)
         {
             isVisible = true;
             isRestart = restart;
@@ -79,10 +72,10 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 colorAlphaPercent = 1f;
             }
 
-            this.fadeSpeed = fadeSpeed;
+            fadeSpeed = newFadeSpeed;
         }
 
-        public void Hide(bool fade = true, float fadeSpeed = 1.5f)
+        public void Hide(bool fade = true, float newFadeSpeed = 1.5f)
         {
             if (!fade)
             {
@@ -90,16 +83,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             }
 
             isVisible = false;
-            this.fadeSpeed = fadeSpeed;
-        }
-
-
-        private bool IsPressed(MouseState mouseState, TouchCollection touchState, KeyboardState keyboardState)
-        {
-            return 
-                keyboardState.GetPressedKeys().Contains(Keys.Space) || 
-                touchState.Any(t => t.State == TouchLocationState.Pressed && buttonBounds.Contains(t.Position)) ||
-                (mouseState.LeftButton == ButtonState.Pressed && buttonBounds.Contains(mouseState.Position));
+            fadeSpeed = newFadeSpeed;
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
@@ -108,13 +92,27 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             {
                 if (!isRestart)
                 {
-                    spriteBatch.DrawString(buttonFont, "START", screenCenter, Color.White * colorAlphaPercent, 0, new Vector2(startTextSize.X / 2f, startTextSize.Y / 2f),
-                        Scale, SpriteEffects.None, Depth);
+                    spriteBatch.DrawString(
+                        buttonFont, 
+                        "START", 
+                        screenCenter,
+                        (Button.Hover ? Color.Yellow : Color.White) * colorAlphaPercent, 
+                        0, 
+                        new Vector2(startTextSize.X / 2f, startTextSize.Y / 2f),
+                        Scale, 
+                        SpriteEffects.None, Depth);
                 }
                 else
                 {
-                    spriteBatch.DrawString(buttonFont, "RESET", screenCenter, Color.White * colorAlphaPercent, 0,
-                        new Vector2(restartTextSize.X / 2f, restartTextSize.Y / 2f), Scale, SpriteEffects.None, Depth);
+                    spriteBatch.DrawString(
+                        buttonFont, 
+                        "RESET", 
+                        screenCenter,
+                        (Button.Hover? Color.Yellow : Color.White) * colorAlphaPercent,
+                        0,
+                        new Vector2(restartTextSize.X / 2f, restartTextSize.Y / 2f), 
+                        Scale,
+                        SpriteEffects.None, Depth);
                 }
             }
         }

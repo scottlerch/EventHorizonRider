@@ -4,18 +4,17 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
-using System.Linq;
 
 namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
     internal class MenuButton : ComponentBase
     {
-        private Rectangle buttonBounds;
+        public Button Button { get; private set; }
+
         private SpriteFont buttonFont;
 
         private bool isVisible = true;
-        private bool isBack = false;
+        private bool isBack;
 
         private Vector2 menuTextLocation;
         private Vector2 menuTextSize;
@@ -37,24 +36,19 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             const float buttonPadding = 50f;
 
-            buttonBounds = new Rectangle(
-                (int)(menuTextLocation.X - buttonPadding),
-                (int)(menuTextLocation.Y - buttonPadding),
-                (int)(menuTextSize.X + (buttonPadding * 2)),
-                (int)(menuTextSize.Y + (buttonPadding * 2)));
+            Button = new Button(
+                buttonBounds: new Rectangle(
+                    (int) (menuTextLocation.X - buttonPadding),
+                    (int) (menuTextLocation.Y - buttonPadding),
+                    (int) (menuTextSize.X + (buttonPadding*2)),
+                    (int) (menuTextSize.Y + (buttonPadding*2))),
+                key: Keys.M);
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            Pressed = false;
-
-            if (isVisible && IsPressed(inputState.MouseState, inputState.TouchState, inputState.KeyState))
-            {
-                Pressed = true;
-            }
+            Button.Update(inputState, Visible);
         }
-
-        public bool Pressed { get; private set; }
 
         public void Show(bool back = false)
         {
@@ -67,14 +61,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             isVisible = false;
         }
 
-        private bool IsPressed(MouseState mouseState, TouchCollection touchState, KeyboardState keyboardState)
-        {
-            return
-                keyboardState.GetPressedKeys().Contains(Keys.Space) ||
-                touchState.Any(t => t.State == TouchLocationState.Pressed && buttonBounds.Contains(t.Position)) ||
-                (mouseState.LeftButton == ButtonState.Pressed && buttonBounds.Contains(mouseState.Position));
-        }
-
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
             if (isVisible)
@@ -85,7 +71,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                         buttonFont,
                         "BACK",
                         backTextLocation,
-                        Color.LightGray.AdjustLight(0.9f),
+                        Button.Hover? Color.Yellow : Color.LightGray.AdjustLight(0.9f),
                         0,
                         Vector2.Zero,
                         1f,
@@ -98,7 +84,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                         buttonFont,
                         "MENU",
                         menuTextLocation,
-                        Color.LightGray.AdjustLight(0.9f),
+                        Button.Hover ? Color.Yellow : Color.LightGray.AdjustLight(0.9f),
                         0,
                         Vector2.Zero,
                         1f,

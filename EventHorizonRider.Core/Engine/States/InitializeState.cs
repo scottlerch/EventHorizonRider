@@ -25,6 +25,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Foreground.MenuButton.Show();
             gameContext.Root.Foreground.PlayButton.Scale = 1f;
 
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (gameContext.Root.Space.Blackhole.ExtraScale == 0)
             {
                 gameContext.Root.Foreground.PlayButton.Show(restart: false);
@@ -36,14 +37,14 @@ namespace EventHorizonRider.Core.Engine.States
 
                 if (!gameContext.Root.Foreground.Title.Visible)
                 {
-                    if (gameContext.Root.Foreground.PlayButton.Pressed)
+                    if (gameContext.Root.Foreground.PlayButton.Button.Pressed)
                     {
                         gameContext.Root.Space.Blackhole.Pulse(1.5f, 2.5f);
                         gameContext.Root.Foreground.PlayButton.Hide();
 
                         gameContext.GameState = new StartingState();
                     }
-                    else if (gameContext.Root.Foreground.MenuButton.Pressed)
+                    else if (gameContext.Root.Foreground.MenuButton.Button.Pressed)
                     {
                         gameContext.GameState = new MenuState();
                     }
