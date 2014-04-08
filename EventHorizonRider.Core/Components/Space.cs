@@ -1,5 +1,7 @@
 ﻿using EventHorizonRider.Core.Components.SpaceComponents;
 using EventHorizonRider.Core.Graphics;
+using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +14,7 @@ namespace EventHorizonRider.Core.Components
         private RenderTarget2D renderTarget2;
         private readonly GaussianBlur blur = new GaussianBlur();
 
-        public bool Blur { get; set; }
+        public Motion blurAmount;
 
         public Blackhole Blackhole { get; private set; }
 
@@ -26,9 +28,26 @@ namespace EventHorizonRider.Core.Components
 
         public Shockwave Shockwave { get; private set; }
 
+        public void SetBlur(float blurAmount)
+        {
+            this.blurAmount.Set(blurAmount);
+        }
+
+        public void StartBlur(float blurAmount, float speed)
+        {
+            this.blurAmount.UpdateTarget(blurAmount, speed);
+        }
+
+        public void StopBlur()
+        {
+            blurAmount.UpdateTarget(0);
+        }
+
         public Space(Background background, Halo halo, Shockwave shockwave, RingCollection ringCollection, Ship ship, Blackhole blackhole) 
             : base(background, halo, shockwave, ship,ringCollection, blackhole)
         {
+            blurAmount.Initialize(0, 0, 30);
+
             Background = background;
             Halo = halo;
             Shockwave = shockwave;
@@ -50,9 +69,15 @@ namespace EventHorizonRider.Core.Components
             blur.LoadContent(content);
         }
 
+        protected override void UpdateCore(GameTime gameTime, InputState inputState)
+        {
+            blurAmount.Update(gameTime);
+            blur.BlueAmount = blurAmount.Value;
+        }
+
         protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            if (Blur)
+            if (blurAmount.Value > 0)
             {
                 graphics.SetRenderTarget(renderTarget1);
             }
@@ -66,7 +91,7 @@ namespace EventHorizonRider.Core.Components
         {
             spriteBatch.End();
 
-            if (Blur)
+            if (blurAmount.Value > 0)
             {
                 graphics.SetRenderTarget(renderTarget2);
 

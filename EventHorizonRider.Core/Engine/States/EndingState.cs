@@ -6,7 +6,7 @@ namespace EventHorizonRider.Core.Engine.States
     {
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
-            gameContext.Root.Space.Blur = true;
+            gameContext.Root.Space.SetBlur(blurAmount:5f);
             gameContext.Root.Space.Halo.Visible = false;
             gameContext.Root.Space.Blackhole.SetExtraScale(0.3f);
 

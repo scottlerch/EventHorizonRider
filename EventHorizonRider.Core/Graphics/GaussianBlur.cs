@@ -85,10 +85,15 @@ namespace EventHorizonRider.Core.Graphics
         /// </summary>
         private float ComputeGaussian(float n)
         {
-            float theta = 5f; //Settings.BlurAmount; // typically 1 to 10
+            float theta = BlueAmount;
 
             return (float)((1.0 / Math.Sqrt(2 * Math.PI * theta)) *
                            Math.Exp(-(n * n) / (2 * theta * theta)));
         }
+
+        /// <summary>
+        /// Value typically between 1 and 10.
+        /// </summary>
+        public float BlueAmount { get; set; }
     }
 }

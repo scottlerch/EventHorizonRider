@@ -13,7 +13,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Foreground.PlayTimer.ShowLevelAndScore();
             gameContext.Root.Foreground.MenuButton.Hide();
 
-            gameContext.Root.Space.Blur = false;
+            gameContext.Root.Space.StopBlur();
             gameContext.Root.Space.Halo.Visible = true;
             gameContext.Root.Space.Blackhole.SetExtraScale(0f);
 

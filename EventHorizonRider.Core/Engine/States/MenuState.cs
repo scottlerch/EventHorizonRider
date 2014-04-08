@@ -9,11 +9,13 @@ namespace EventHorizonRider.Core.Engine.States
         {
             gameContext.Root.Menu.Visible = true;
 
-            gameContext.Root.Space.Blur = true;
+            gameContext.Root.Space.StartBlur(blurAmount:5f, speed:15f);
             gameContext.Root.Foreground.MenuButton.Show(true);
-            gameContext.Root.Foreground.PlayButton.Hide(fade: false);
-            gameContext.Root.Space.Blackhole.SetExtraScale(3.5f);
+            gameContext.Root.Foreground.PlayButton.Hide(fade: true, fadeSpeed:10f);
+            gameContext.Root.Space.Blackhole.SetExtraScale(3.5f, animate:true, speed:16f);
             gameContext.Root.Space.Background.Scale = gameContext.Root.Space.Blackhole.Scale.X;
+
+            gameContext.Root.Menu.Visible = gameContext.Root.Space.Blackhole.ExtraScale == 3.5f;
 
             gameContext.Root.Menu.LevelSelect.MaximumStartLevel = gameContext.PlayerData.HighestLevelNumber;
             gameContext.Root.Menu.LevelSelect.StartLevel = gameContext.PlayerData.DefaultLevelNumber;

@@ -12,7 +12,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
     internal class PlayButton : ComponentBase
     {
-        public float FadeSpeed = 1.5f;
+        private float fadeSpeed = 1.5f;
         private Rectangle buttonBounds;
         private SpriteFont buttonFont;
 
@@ -24,12 +24,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private Vector2 screenCenter;
         private Vector2 startTextSize;
 
-        private readonly Func<Vector2> getScale;
-
-        public PlayButton(Blackhole blackhole)
-        {
-            getScale = () => blackhole.Scale;
-        }
+        public float Scale { get; set; }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
@@ -62,11 +57,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             if (isVisible && colorAlphaPercent < 1f)
             {
-                colorAlphaPercent += FadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                colorAlphaPercent += fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             else if (!isVisible && colorAlphaPercent > 0f)
             {
-                colorAlphaPercent -= FadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                colorAlphaPercent -= fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
             colorAlphaPercent = MathHelper.Clamp(colorAlphaPercent, 0, 1);
@@ -74,14 +69,20 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         public bool Pressed { get; private set; }
 
-        public void Show(bool restart)
+        public void Show(bool restart, bool fade = false, float fadeSpeed = 1.5f)
         {
             isVisible = true;
             isRestart = restart;
-            colorAlphaPercent = 1f;
+
+            if (!fade)
+            {
+                colorAlphaPercent = 1f;
+            }
+
+            this.fadeSpeed = fadeSpeed;
         }
 
-        public void Hide(bool fade = true)
+        public void Hide(bool fade = true, float fadeSpeed = 1.5f)
         {
             if (!fade)
             {
@@ -89,6 +90,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             }
 
             isVisible = false;
+            this.fadeSpeed = fadeSpeed;
         }
 
 
@@ -107,12 +109,12 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 if (!isRestart)
                 {
                     spriteBatch.DrawString(buttonFont, "START", screenCenter, Color.White * colorAlphaPercent, 0, new Vector2(startTextSize.X / 2f, startTextSize.Y / 2f),
-                        getScale(), SpriteEffects.None, Depth);
+                        Scale, SpriteEffects.None, Depth);
                 }
                 else
                 {
                     spriteBatch.DrawString(buttonFont, "RESET", screenCenter, Color.White * colorAlphaPercent, 0,
-                        new Vector2(restartTextSize.X / 2f, restartTextSize.Y / 2f), getScale(), SpriteEffects.None, Depth);
+                        new Vector2(restartTextSize.X / 2f, restartTextSize.Y / 2f), Scale, SpriteEffects.None, Depth);
                 }
             }
         }

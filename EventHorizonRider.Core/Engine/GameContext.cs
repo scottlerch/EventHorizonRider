@@ -73,7 +73,7 @@ namespace EventHorizonRider.Core.Engine
                     creditsButton: new CreditsButton(),
                     credits: new Credits()),
                 foreground: new Foreground(
-                    playButton: new PlayButton(blackhole),
+                    playButton: new PlayButton(),
                     menuButton: new MenuButton(),
                     playTime: new PlayTimer(PlayerData),
                     title: new Title(),

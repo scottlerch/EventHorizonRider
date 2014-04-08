@@ -19,6 +19,8 @@ namespace EventHorizonRider.Core.Engine.States
 
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
+            gameContext.Root.Foreground.PlayButton.Scale = gameContext.Root.Space.Blackhole.Scale.X;
+
             if (gameContext.Root.OverrideLevel.HasValue)
             {
                 gameContext.CurrentLevelNumber = gameContext.Root.OverrideLevel.Value;

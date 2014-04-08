@@ -8,6 +8,8 @@ namespace EventHorizonRider.Core.Engine.States
         {
             if (gameContext.Root.Foreground.PlayButton.Pressed)
             {
+                gameContext.Root.Space.Blackhole.SetExtraScale(0f);
+
                 gameContext.GameState = new InitializeState();
             }
         }

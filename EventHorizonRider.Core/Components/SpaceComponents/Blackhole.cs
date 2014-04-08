@@ -44,14 +44,39 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         }
 
         private float extraBlackholdScale;
+        private float newExtraBlackholdScale;
+        private float extraBlackholeScaleSpeed;
 
-        public void SetExtraScale(float scaleSize)
+        public float ExtraScale { get { return extraBlackholdScale; } }
+
+        public void SetExtraScale(float scaleSize, bool animate = false, float speed = 1f)
         {
-            extraBlackholdScale = scaleSize;
+            newExtraBlackholdScale = scaleSize;
+
+            if (!animate)
+            {
+                extraBlackholdScale = scaleSize;
+            }
+            else
+            {
+                extraBlackholeScaleSpeed = speed;
+                extraBlackholeScaleSpeed *= extraBlackholdScale < newExtraBlackholdScale ? 1f : -1f;
+            }
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
+            if (extraBlackholdScale != newExtraBlackholdScale)
+            {
+                extraBlackholdScale += (float)gameTime.ElapsedGameTime.TotalSeconds * extraBlackholeScaleSpeed;
+
+                if ((extraBlackholeScaleSpeed > 0 && extraBlackholdScale > newExtraBlackholdScale) ||
+                    (extraBlackholeScaleSpeed < 0 && extraBlackholdScale < newExtraBlackholdScale))
+                {
+                    extraBlackholdScale = newExtraBlackholdScale;
+                }
+            }
+
             if (!isStopped)
             {
                 spring.Update(gameTime.ElapsedGameTime);
