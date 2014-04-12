@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Linq;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -12,7 +13,6 @@ namespace EventHorizonRider.Core
     /// </summary>
     internal abstract class ComponentBase
     {
-        private static readonly List<ComponentBase> EmptyList = new List<ComponentBase>(); 
         private List<ComponentBase> children;
 
         protected float Depth { get; private set; }
@@ -70,26 +70,47 @@ namespace EventHorizonRider.Core
         {
             if (children != null)
             {
-                foreach (var child in Children)
-                {
-                    child.Parent = null;
-                }
-
+                ForEach<ComponentBase>(child => child.Parent = null);
                 children.Clear();
             }
         }
 
-        public IList<ComponentBase> Children
+        public IEnumerable<ComponentBase> Children
         {
-            get { return children ?? EmptyList; }
+            get { return children ?? Enumerable.Empty<ComponentBase>(); }
+        }
+
+        public bool ChildrenIsEmpty { get { return children == null || children.Count == 0; } }
+
+        public int ChildrenCount { get { return children == null ? 0 : children.Count; } }
+
+        public void ForEach<T>(Action<T> action) where T : ComponentBase
+        {
+            if (children == null) return;
+
+            var count = children.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                action(children[i] as T);
+            }
+        }
+
+        public void ForEachReverse<T>(Action<T> action) where T : ComponentBase
+        {
+            if (children == null) return;
+
+            var lastIndex = children.Count - 1;
+
+            for (int i = lastIndex; i >= 0; i--)
+            {
+                action(children[i] as T);
+            }
         }
 
         public void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
-            foreach (var child in Children)
-            {
-                child.LoadContent(content, graphics);
-            }
+            ForEach<ComponentBase>(child => child.LoadContent(content, graphics));
 
             LoadContentCore(content, graphics);
         }
@@ -100,10 +121,7 @@ namespace EventHorizonRider.Core
 
         public void Update(GameTime gameTime, InputState inputState)
         {
-            foreach (var child in Children)
-            {
-                child.Update(gameTime, inputState);
-            }
+            ForEach<ComponentBase>(child => child.Update(gameTime, inputState));
 
             UpdateCore(gameTime, inputState);
         }
@@ -122,10 +140,7 @@ namespace EventHorizonRider.Core
 
             OnBeforeDraw(spriteBatch, graphics);
 
-            foreach (var child in Children)
-            {
-                child.Draw(spriteBatch, graphics);
-            }
+            ForEach<ComponentBase>(child => child.Draw(spriteBatch, graphics));
 
             DrawCore(spriteBatch);
 

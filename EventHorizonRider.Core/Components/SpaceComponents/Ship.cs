@@ -55,7 +55,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
 
             particleBase = content.Load<Texture2D>(@"Images\particle_base");
-            particleSystem = new ParticleSystem();
+            particleSystem = new ParticleSystem(new Vector2(10000, 10000));
             sideThrustEmitter = particleSystem.AddEmitter(
                 secPerSpawn:Range.Create(0.001f, 0.0015f),
                 spawnDirection:new Vector2(0f, -1f),
@@ -177,6 +177,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 blackhole.Position.Y - ((float)Math.Cos(Rotation) * Radius));
 
             particleSystem.Position = Position;
+
             sideThrustEmitter.SpawnDirection = (viewportCenter - Position);
             sideThrustEmitter.SpawnDirection = new Vector2(-sideThrustEmitter.SpawnDirection.Y, sideThrustEmitter.SpawnDirection.X);
 

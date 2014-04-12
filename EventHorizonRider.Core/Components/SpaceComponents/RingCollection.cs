@@ -57,28 +57,26 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 return;
             }
 
-            for (int i = Children.Count - 1; i >= 0; i--)
+            ForEachReverse<Ring>(ring =>
             {
-                var ring = (Ring)Children[i];
-
-                if (!ring.ConsumedByBlackhole && ring.OutterRadius <= blackhole.Height*0.5f)
-                {
-                    // TODO: pulse needs to handle spirals better, maybe slowly grow as spiral consumed?
-                    blackhole.Pulse(1.3f, level.RingSpeed / 200f);
-                    ring.ConsumedByBlackhole = true;
-
-                    if (Children.Count == 1)
-                    {
-                        shockwave.Execute();
-                        newLevelSound.Play();
-                    }
-                }
-
                 if (ring.OutterRadius <= (blackhole.Height * 0.2f))
                 {
+                    if (!ring.ConsumedByBlackhole)
+                    {
+                        // TODO: pulse needs to handle spirals better, maybe slowly grow as spiral consumed?
+                        blackhole.Pulse(1.3f, level.RingSpeed / 200f);
+                        ring.ConsumedByBlackhole = true;
+
+                        if (ChildrenCount == 1)
+                        {
+                            shockwave.Execute();
+                            newLevelSound.Play();
+                        }
+                    }
+
                     RemoveChild(ring);
                 }
-            }
+            });
 
             lastRingAdd = lastRingAdd ?? gameTime.TotalGameTime;
 
@@ -120,10 +118,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             stopped = true;
 
-            foreach (var ring in Children.Cast<Ring>())
-            {
-                ring.Stop();
-            }
+            ForEach<Ring>(ring => ring.Stop());
         }
 
         internal void Clear()

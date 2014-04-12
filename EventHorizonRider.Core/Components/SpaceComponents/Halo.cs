@@ -14,8 +14,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private readonly Blackhole blackhole;
 
-        public bool Visible { get; set; }
-
         public Halo(Blackhole newBlackhole)
         {
             blackhole = newBlackhole;

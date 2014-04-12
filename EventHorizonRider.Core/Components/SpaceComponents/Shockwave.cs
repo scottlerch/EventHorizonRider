@@ -16,11 +16,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private float currentScale;
 
-        private bool visible;
-
         public Shockwave(Blackhole newBlackhole)
         {
             blackhole = newBlackhole;
+            Visible = false;
         }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
@@ -30,7 +29,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            if (visible)
+            if (Visible)
             {
                 spriteBatch.Draw(texture, blackhole.Position,
                     origin: new Vector2(texture.Width / 2f, texture.Height / 2f),
@@ -49,13 +48,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             if (currentScale > 4f)
             {
-                visible = false;
+                Visible = false;
             }
         }
 
         public void Execute()
         {
-            visible = true;
+            Visible = true;
             currentScale = 0.4f;
         }
     }
