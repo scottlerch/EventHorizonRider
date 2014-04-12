@@ -55,20 +55,18 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
 
             particleBase = content.Load<Texture2D>(@"Images\particle_base");
-            particleSystem = new ParticleSystem(new Vector2(4000, 3000));
+            particleSystem = new ParticleSystem();
             sideThrustEmitter = particleSystem.AddEmitter(
-                secPerSpawn:new Vector2(0.001f, 0.0015f),
-                spawnDirection:new Vector2(0f, -1f), 
-                spawnNoiseAngle:new Vector2(0.1f * MathHelper.Pi, 0.1f * -MathHelper.Pi),
-                startLife:new Vector2(0.5f, 0.75f),
-                startScale:new Vector2(20, 20),
-                endScale:new Vector2(8, 8),
-                startColor1:Color.Orange, 
-                startColor2:Color.Crimson, 
-                endColor1:new Color(Color.Orange.R, Color.Orange.G, Color.Orange.B, 0), 
-                endColor2:new Color(Color.Orange.R, Color.Orange.G, Color.Orange.B, 0),
-                startSpeed:new Vector2(400, 500), 
-                endSpeed:new Vector2(100, 120), 
+                secPerSpawn:Range.Create(0.001f, 0.0015f),
+                spawnDirection:new Vector2(0f, -1f),
+                spawnNoiseAngle: Range.Create(0.1f * MathHelper.Pi, 0.1f * -MathHelper.Pi),
+                startLife: Range.Create(0.5f, 0.75f),
+                startScale: Range.Create(20f, 20f),
+                endScale: Range.Create(8f, 8f),
+                startColor:Range.Create(Color.Orange, Color.Crimson),
+                endColor: Range.Create(Color.Orange.AdjustAlpha(0), Color.Orange.AdjustAlpha(0)),
+                startSpeed: Range.Create(400f, 500f),
+                endSpeed: Range.Create(100f, 120f), 
                 budget:500, 
                 relPosition:Vector2.Zero, 
                 particleSprite:particleBase);
@@ -77,18 +75,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             sideThrustEmitter.GravityForce = 1.3f;
 
             mainThrustEmitter = particleSystem.AddEmitter(
-                secPerSpawn: new Vector2(0.001f, 0.0015f),
+                secPerSpawn: Range.Create(0.001f, 0.0015f),
                 spawnDirection: new Vector2(0f, -1f),
-                spawnNoiseAngle: new Vector2(0.3f * MathHelper.Pi, 0.3f * -MathHelper.Pi),
-                startLife: new Vector2(0.1f, 0.5f),
-                startScale: new Vector2(20, 20),
-                endScale: new Vector2(8, 8),
-                startColor1: Color.SkyBlue,
-                startColor2: Color.Blue,
-                endColor1: new Color(Color.SkyBlue.R, Color.SkyBlue.G, Color.SkyBlue.B, 0),
-                endColor2: new Color(Color.SkyBlue.R, Color.SkyBlue.G, Color.SkyBlue.B, 0),
-                startSpeed: new Vector2(400, 500),
-                endSpeed: new Vector2(100, 120),
+                spawnNoiseAngle: Range.Create(0.3f * MathHelper.Pi, 0.3f * -MathHelper.Pi),
+                startLife: Range.Create(0.1f, 0.5f),
+                startScale: Range.Create(20f, 20f),
+                endScale: Range.Create(8f, 8f),
+                startColor: Range.Create(Color.SkyBlue, Color.Blue),
+                endColor: Range.Create(Color.SkyBlue.AdjustAlpha(0), Color.SkyBlue.AdjustAlpha(0)),
+                startSpeed: Range.Create(400f, 500f),
+                endSpeed: Range.Create(100f, 120f),
                 budget: 50,
                 relPosition: Vector2.Zero,
                 particleSprite: particleBase);

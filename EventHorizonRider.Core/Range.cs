@@ -12,7 +12,7 @@ namespace EventHorizonRider.Core
     {
         public static Range<T> Create<T>(T low, T high)
         {
-            return new Range<T> {High = high, Low = low};
+            return new Range<T> { High = high, Low = low };
         }
 
         public static Range<T> Create<T>(T value)
@@ -35,9 +35,14 @@ namespace EventHorizonRider.Core
             return range.High - range.Low;
         }
 
+        public static float LinearInterpolate(this Range<float> range, float scale)
+        {
+            return MathUtilities.LinearInterpolate(range, scale);
+        }
+
         public static Range<float> ScaleHigh(this Range<float> range, float scale)
         {
-            return Create(range.Low, range.Low + (range.GetDifference()*scale));
+            return Create(range.Low, range.Low + (range.GetDifference() * scale));
         }
     }
 }

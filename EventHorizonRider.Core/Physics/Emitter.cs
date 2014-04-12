@@ -15,18 +15,16 @@ namespace EventHorizonRider.Core.Physics
         public Vector2 RelPosition;
         public int Budget;
         public Texture2D ParticleSprite;
-        public Vector2 SecPerSpawn;
+        public Range<float> SecPerSpawn;
         public Vector2 SpawnDirection;
-        public Vector2 SpawnNoiseAngle;
-        public Vector2 StartLife;
-        public Vector2 StartScale;
-        public Vector2 EndScale;
-        public Color StartColor1;
-        public Color StartColor2;
-        public Color EndColor1;
-        public Color EndColor2;
-        public Vector2 StartSpeed;
-        public Vector2 EndSpeed;
+        public Range<float> SpawnNoiseAngle;
+        public Range<float> StartLife;
+        public Range<float> StartScale;
+        public Range<float> EndScale;
+        public Range<Color> StartColor;
+        public Range<Color> EndColor;
+        public Range<float> StartSpeed;
+        public Range<float> EndSpeed;
         public bool Spawning;
         public Vector2 GravityCenter;
         public float GravityForce;
@@ -34,18 +32,16 @@ namespace EventHorizonRider.Core.Physics
         public ParticleSystem Parent;
 
         public Emitter(
-            Vector2 secPerSpawn, 
+            Range<float> secPerSpawn, 
             Vector2 spawnDirection,
-            Vector2 spawnNoiseAngle, 
-            Vector2 startLife,
-            Vector2 startScale,
-            Vector2 endScale, 
-            Color startColor1, 
-            Color startColor2, 
-            Color endColor1, 
-            Color endColor2,
-            Vector2 startSpeed,
-            Vector2 endSpeed,
+            Range<float> spawnNoiseAngle,
+            Range<float> startLife,
+            Range<float> startScale,
+            Range<float> endScale, 
+            Range<Color> startColor,
+            Range<Color> endColor,
+            Range<float> startSpeed,
+            Range<float> endSpeed,
             int budget, 
             Vector2 relPosition, 
             Texture2D particleSprite, 
@@ -58,10 +54,8 @@ namespace EventHorizonRider.Core.Physics
             StartLife = startLife;
             StartScale = startScale;
             EndScale = endScale;
-            StartColor1 = startColor1;
-            StartColor2 = startColor2;
-            EndColor1 = endColor1;
-            EndColor2 = endColor2;
+            StartColor = startColor;
+            EndColor = endColor;
             StartSpeed = startSpeed;
             EndSpeed = endSpeed;
             Budget = budget;
@@ -69,7 +63,7 @@ namespace EventHorizonRider.Core.Physics
             ParticleSprite = particleSprite;
             Parent = parent;
             activeParticles = new LinkedList<Particle>();
-            nextSpawnIn = MathUtilities.LinearInterpolate(secPerSpawn.X, secPerSpawn.Y, random.NextDouble());
+            nextSpawnIn = MathUtilities.LinearInterpolate(secPerSpawn, random.NextDouble());
             secPassed = 0.0f;
             this.random = random;
         }
@@ -83,28 +77,28 @@ namespace EventHorizonRider.Core.Physics
                 if (activeParticles.Count < Budget && Spawning)
                 {
                     // Spawn a particle
-                    var startDirection = Vector2.Transform(SpawnDirection, Matrix.CreateRotationZ(MathUtilities.LinearInterpolate(SpawnNoiseAngle.X, SpawnNoiseAngle.Y, random.NextDouble())));
+                    var startDirection = Vector2.Transform(SpawnDirection, Matrix.CreateRotationZ(MathUtilities.LinearInterpolate(SpawnNoiseAngle, random.NextDouble())));
                     startDirection.Normalize();
-                    var endDirection = startDirection * MathUtilities.LinearInterpolate(EndSpeed.X, EndSpeed.Y, random.NextDouble());
+                    var endDirection = startDirection * MathUtilities.LinearInterpolate(EndSpeed, random.NextDouble());
 
-                    startDirection *= MathUtilities.LinearInterpolate(StartSpeed.X, StartSpeed.Y, random.NextDouble());
+                    startDirection *= MathUtilities.LinearInterpolate(StartSpeed, random.NextDouble());
 
                     activeParticles.AddLast(
                         new Particle(
                             RelPosition + MathUtilities.LinearInterpolate(Parent.LastPos, Parent.Position, secPassed / dt),
                             startDirection,
                             endDirection,
-                            MathUtilities.LinearInterpolate(StartLife.X, StartLife.Y, random.NextDouble()),
-                            MathUtilities.LinearInterpolate(StartScale.X, StartScale.Y, random.NextDouble()),
-                            MathUtilities.LinearInterpolate(EndScale.X, EndScale.Y, random.NextDouble()),
-                            MathUtilities.LinearInterpolate(StartColor1, StartColor2, random.NextDouble()),
-                            MathUtilities.LinearInterpolate(EndColor1, EndColor2, random.NextDouble()),
+                            MathUtilities.LinearInterpolate(StartLife, random.NextDouble()),
+                            MathUtilities.LinearInterpolate(StartScale, random.NextDouble()),
+                            MathUtilities.LinearInterpolate(EndScale, random.NextDouble()),
+                            MathUtilities.LinearInterpolate(StartColor, random.NextDouble()),
+                            MathUtilities.LinearInterpolate(EndColor, random.NextDouble()),
                             this)
                     );
                     activeParticles.Last.Value.Update(secPassed);
                 }
                 secPassed -= nextSpawnIn;
-                nextSpawnIn = MathUtilities.LinearInterpolate(SecPerSpawn.X, SecPerSpawn.Y, random.NextDouble());
+                nextSpawnIn = MathUtilities.LinearInterpolate(SecPerSpawn, random.NextDouble());
             }
 
             var node = activeParticles.First;

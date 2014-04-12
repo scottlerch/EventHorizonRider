@@ -22,8 +22,8 @@ namespace EventHorizonRider.Core
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            graphics.PreferredBackBufferWidth = 1136;
-            graphics.PreferredBackBufferHeight = 640;
+            SetResolution(1136, 640);
+
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
         }
 

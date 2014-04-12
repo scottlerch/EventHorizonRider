@@ -20,7 +20,7 @@ namespace EventHorizonRider.Core.Physics
 
         public Vector2 LastPos;
 
-        public ParticleSystem(Vector2 position)
+        public ParticleSystem(Vector2 position = default(Vector2))
         {
             Position = position;
             LastPos = position;
@@ -62,18 +62,16 @@ namespace EventHorizonRider.Core.Physics
         }
 
         public Emitter AddEmitter(
-            Vector2 secPerSpawn, 
-            Vector2 spawnDirection, 
-            Vector2 spawnNoiseAngle, 
-            Vector2 startLife, 
-            Vector2 startScale,
-            Vector2 endScale, 
-            Color startColor1,
-            Color startColor2,
-            Color endColor1, 
-            Color endColor2,
-            Vector2 startSpeed,
-            Vector2 endSpeed, 
+            Range<float> secPerSpawn, 
+            Vector2 spawnDirection,
+            Range<float> spawnNoiseAngle,
+            Range<float> startLife,
+            Range<float> startScale,
+            Range<float> endScale, 
+            Range<Color> startColor,
+            Range<Color> endColor,
+            Range<float> startSpeed,
+            Range<float> endSpeed, 
             int budget, 
             Vector2 relPosition,
             Texture2D particleSprite)
@@ -85,10 +83,8 @@ namespace EventHorizonRider.Core.Physics
                 startLife, 
                 startScale, 
                 endScale, 
-                startColor1,
-                startColor2, 
-                endColor1, 
-                endColor2, 
+                startColor,
+                endColor,
                 startSpeed,
                 endSpeed, 
                 budget, 
