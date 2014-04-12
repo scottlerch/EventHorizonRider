@@ -7,5 +7,6 @@
         public float GapSize;
         public int NumberOfGaps;
         public float RotationalVelocity;
+        public float SpiralRadius;
     }
 }

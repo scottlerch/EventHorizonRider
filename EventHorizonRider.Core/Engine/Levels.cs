@@ -20,20 +20,47 @@ namespace EventHorizonRider.Core.Engine
         public Level GetLevel(int level)
         {
             switch (level)
-            {
+            {                         
                 case 1:
                     return new Level(
-                        shipSpeed:MathHelper.TwoPi * 0.9f,
-                        ringSeparation: MaxRingRadius / 2.5f,
+                        shipSpeed: MathHelper.TwoPi*0.8f,
+                        ringSeparation: MaxRingRadius/1.5f,
                         ringInterval: TimeSpan.FromSeconds(2),
-                        sequence:  ringInfoFactory.GetRandomSequence(
-                            iterations:10, 
-                            gapSize: Range.Create(MathHelper.TwoPi / 3.5f), 
-                            type: RingType.Dust));
+                        sequence: Enumerable.Empty<RingInfo>().Concat(
+                            ringInfoFactory.GetRandomSequence(
+                                iterations: 4,
+                                numberOfGaps: Range.Create(2),
+                                gapSize: Range.Create(MathHelper.TwoPi/4),
+                                type: RingType.Dust,
+                                typeSelection: RingTypeSelection.RoundRobin),
+                            ringInfoFactory.GetSpirals(
+                                iterations: 1,
+                                spiralRadius: 500f,
+                                type: RingType.Dust),
+                            ringInfoFactory.GetRandomSequence(
+                                iterations: 5,
+                                numberOfGaps: Range.Create(2),
+                                gapSize: Range.Create(MathHelper.TwoPi / 4),
+                                type: RingType.DustWithAsteroid),
+                            ringInfoFactory.GetSpirals(
+                                iterations: 1,
+                                spiralRadius: 500f,
+                                type: RingType.Dust),
+                            ringInfoFactory.GetRandomSequence(
+                                iterations: 5,
+                                numberOfGaps: Range.Create(2),
+                                gapSize: Range.Create(MathHelper.TwoPi / 4),
+                                type: RingType.Asteroid),
+                            ringInfoFactory.GetRandomSequence(
+                                iterations: 5,
+                                numberOfGaps: Range.Create(1),
+                                gapSize: Range.Create(MathHelper.TwoPi / 5),
+                                type: RingType.Asteroid)));
+
                 case 2:
                     return new Level(
-                        shipSpeed: MathHelper.TwoPi * 1f,
-                        ringSeparation: MaxRingRadius / 3,
+                        shipSpeed: MathHelper.TwoPi * 0.9f,
+                        ringSeparation: MaxRingRadius / 2f,
                         ringInterval: TimeSpan.FromSeconds(1.5),
                         sequence:  Enumerable.Empty<RingInfo>().Concat(
                             ringInfoFactory.GetStepSequence(
@@ -41,6 +68,10 @@ namespace EventHorizonRider.Core.Engine
                                 gapSize: MathHelper.TwoPi/4f,
                                 type: RingType.Dust | RingType.DustWithAsteroid,
                                 typeSelection: RingTypeSelection.RoundRobin),
+                            ringInfoFactory.GetSpirals(
+                                iterations: 1,
+                                spiralRadius: 500f,
+                                type: RingType.DustWithAsteroid),
                             ringInfoFactory.GetStepSequence(
                                 numberOfSteps: 4,
                                 gapSize: MathHelper.TwoPi/4f,

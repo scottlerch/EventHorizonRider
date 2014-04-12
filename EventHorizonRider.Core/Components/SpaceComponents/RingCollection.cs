@@ -19,6 +19,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private IEnumerator<RingInfo> currentSequence;
 
         private TimeSpan? lastRingAdd;
+        private TimeSpan lastRingDuration = TimeSpan.Zero;
 
         private Level level;
 
@@ -60,10 +61,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             {
                 var ring = (Ring)Children[i];
 
-                ring.Radius -= (float) gameTime.ElapsedGameTime.TotalSeconds*level.RingSpeed;
-
-                if (!ring.ConsumedByBlackhole && ring.Radius <= blackhole.Height*0.5f)
+                if (!ring.ConsumedByBlackhole && ring.OutterRadius <= blackhole.Height*0.5f)
                 {
+                    // TODO: pulse needs to handle spirals better, maybe slowly grow as spiral consumed?
                     blackhole.Pulse(1.3f, level.RingSpeed / 200f);
                     ring.ConsumedByBlackhole = true;
 
@@ -74,7 +74,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     }
                 }
 
-                if (ring.Radius <= (blackhole.Height * 0.2f))
+                if (ring.OutterRadius <= (blackhole.Height * 0.2f))
                 {
                     RemoveChild(ring);
                 }
@@ -82,10 +82,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             lastRingAdd = lastRingAdd ?? gameTime.TotalGameTime;
 
-            if (gameTime.TotalGameTime - lastRingAdd > level.RingInterval)
+            if (gameTime.TotalGameTime - lastRingAdd > (level.RingInterval + lastRingDuration))
             {
-                lastRingAdd = gameTime.TotalGameTime;
-
                 var ringInfo = currentSequence.Next();
 
                 if (ringInfo == null)
@@ -94,7 +92,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 }
                 else
                 {
-                    AddChild(ringFactory.Create(ringInfo), Depth);
+                    AddChild(ringFactory.Create(ringInfo, level), Depth);
+
+                    lastRingAdd = gameTime.TotalGameTime;
+                    lastRingDuration = TimeSpan.FromSeconds(ringInfo.SpiralRadius / level.RingSpeed);
                 }
             }
         }

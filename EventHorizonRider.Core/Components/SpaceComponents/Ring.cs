@@ -12,40 +12,49 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     internal class Ring : ComponentBase
     {
         private readonly Vector2 origin;
-        private readonly RingObject[] ringObjects;
+        private readonly List<RingObject> ringObjects;
         private readonly float rotationalVelocity;
 
-        private float radius;
+        private float innerRadius;
         private float maxRadius;
         private bool isStopped;
-        private float ringObjectsColorOffset;
+        private float ringCollapseSpeed;
 
-        public float Radius
+        public float InnerRadius
         {
-            get { return radius; }
+            get { return innerRadius; }
             set
             {
                 // ReSharper disable once CompareOfFloatsByEqualityOperator
-                if (radius == 0)
+                if (innerRadius == 0)
                 {
                     maxRadius = value;
                 }
 
-                radius = value;
+                innerRadius = value;
             }
         }
+
+        public float OutterRadius { get { return InnerRadius + Width; } }
+
+        public float Width { get; private set; }
 
         public bool ConsumedByBlackhole { get; set; }
 
         public Ring(
+            float ringCollapseSpeed,
             float rotationalVelocity,
             RingTexturesInfoGroup texturesInfoGroup,
-            float radius,
+            float innerRadius,
             Vector2 origin,
+            float spiralRadius,
+            float spiralSpeed,
             List<RingGap> gaps)
         {
-            Radius = radius;
+            InnerRadius = innerRadius;
+            Width = spiralRadius;
 
+            this.ringCollapseSpeed = ringCollapseSpeed;
             this.rotationalVelocity = rotationalVelocity;
             this.origin = origin;
             
@@ -53,6 +62,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             var random = new Random();
             var currentDepthOffset = 0f;
             int index = 0;
+            var spiralRotations = (spiralSpeed*(spiralRadius/ringCollapseSpeed)) / MathHelper.TwoPi;
+            var isSpiral = spiralRadius > 0;
 
             foreach (var texturesInfo in texturesInfoGroup.TextureInfos)
             {
@@ -61,9 +72,18 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 var minimumAngleSpacing = MathHelper.TwoPi/texturesInfo.DensityRange.High; 
                 var angleSpacing = MathHelper.TwoPi/maximumAsteroidsPerRing;
                 var count = 0;
+                var radiusOffset = 0f;
 
-                for (var angle = -MathHelper.Pi; angle < MathHelper.Pi; angle += angleSpacing)
+                var spiralRadiusOffset = spiralRadius / (maximumAsteroidsPerRing * spiralRotations);
+                var maximumAngle = isSpiral? MathHelper.TwoPi*spiralRotations : MathHelper.TwoPi;
+
+                for (var angle = 0f; angle < maximumAngle; angle += angleSpacing)
                 {
+                    if (isSpiral)
+                    {
+                        radiusOffset += spiralRadiusOffset;
+                    }
+
                     if (gaps.Any(gap => gap.IsInsideGap(angle)))
                         continue;
 
@@ -82,6 +102,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                             isGapEdge = i == 1;
                             break;
                         }
+
+                        if (isSpiral)
+                        {
+                            if (angle < (minimumAngleSpacing * i) || angle > (maximumAngle - (minimumAngleSpacing * i)))
+                            {
+                                gapScaleFade = 0.5f + (((i - 1) / (float)gapScaleFadeSize) * 0.5f);
+                                isGapEdge = i == 1;
+                                break;
+                            }
+                        }
                     }
 
                     var textureIndex = random.Next(0, texturesInfo.Textures.Length);
@@ -96,12 +126,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                         Origin =
                             new Vector2(texturesInfo.Textures[textureIndex].Width/2f,
                                 texturesInfo.Textures[textureIndex].Height/2f),
-                        RadiusOffset = (float) random.NextDouble()*texturesInfo.RadiusOffsetJitter,
+                        RadiusOffset = ((float) random.NextDouble()*texturesInfo.RadiusOffsetJitter) + radiusOffset,
                         Color = texturesInfo.TextureColors[random.Next(0, texturesInfo.TextureColors.Length)],
                         Angle = angle + ((isGapEdge? 0f : gapScaleFade) * ((float) random.NextDouble()*(texturesInfo.AngleJitter*angleSpacing))),
                     };
 
-                    ringObject.UpdatePosition(origin, Radius);
+                    ringObject.UpdatePosition(origin, InnerRadius);
 
                     newRingObjects.Add(ringObject);
                     count++;
@@ -133,21 +163,24 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 }
             }
 
-            ringObjects = newRingObjects.ToArray();
+            // Reverse so removal of objects is optimized
+            newRingObjects.Reverse();
+
+            ringObjects = newRingObjects;
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            foreach (var asteroid in ringObjects)
+            foreach (var ringObject in ringObjects)
             {
                 spriteBatch.Draw(
-                    asteroid.Texture,
-                    asteroid.Position,
-                    origin: asteroid.Origin,
-                    color: asteroid.Color.AdjustLight(ringObjectsColorOffset),
-                    rotation: asteroid.Rotation,
-                    depth: asteroid.RelativeDepth + Depth,
-                    scale: asteroid.Scale);
+                    ringObject.Texture,
+                    ringObject.Position,
+                    origin: ringObject.Origin,
+                    color: ringObject.Color.AdjustLight(ringObject.ColorLightness),
+                    rotation: ringObject.Rotation,
+                    depth: ringObject.RelativeDepth + Depth,
+                    scale: ringObject.Scale);
             }
         }
 
@@ -155,23 +188,27 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             if (!isStopped)
             {
-                var scale = 1f - (Radius / maxRadius);
+                InnerRadius -= (float)gameTime.ElapsedGameTime.TotalSeconds * ringCollapseSpeed;
 
                 const float low = 0.1f;
                 const float high = 0.6f;
                 const float diff = high - low;
 
-                var lightness = (scale * diff) + low;
-
-                ringObjectsColorOffset = lightness;
-
                 var rotationalOffset = rotationalVelocity*(float) gameTime.ElapsedGameTime.TotalSeconds;
 
-                for (int i = 0 ; i < ringObjects.Length; i++)
+                for (int i = ringObjects.Count - 1; i >= 0; i--)
                 {
+                    var scale = 1f - ((InnerRadius + ringObjects[i].RadiusOffset) / maxRadius);
+
+                    ringObjects[i].ColorLightness = (scale*diff) + low;
                     ringObjects[i].Angle += rotationalOffset;
                     ringObjects[i].Rotation += ringObjects[i].RotationRate*(float)gameTime.ElapsedGameTime.TotalSeconds;
-                    ringObjects[i].UpdatePosition(origin, Radius);
+                    ringObjects[i].UpdatePosition(origin, InnerRadius);
+
+                    if ((ringObjects[i].Position - origin).LengthSquared() <= 50f) // TODO: where to get this fudge factor?
+                    {
+                        ringObjects.RemoveAt(i);
+                    }
                 }
             }
         }
@@ -180,7 +217,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             // TODO: add heuristics to optimize collision detection
 
-            for (var i = 0; i < ringObjects.Length; i++)
+            for (var i = 0; i < ringObjects.Count; i++)
             {
                 if (CollisionDetection.Collides(ship, ringObjects[i]))
                 {

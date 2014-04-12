@@ -40,6 +40,28 @@ namespace EventHorizonRider.Core.Engine
                 .Where(x => ((int) x != 0) && (((int) x & ((int) x - 1)) == 0))
                 .ToArray();
 
+        public IEnumerable<RingInfo> GetSpirals(
+            int? iterations = null,
+            float spiralRadius = 700f,
+            RingType type = RingType.All,
+            RingTypeSelection typeSelection = RingTypeSelection.UniformRandom)
+        {
+            var ringTypeSelector = new RingTypeSelectionHelper(type, typeSelection);
+
+            for (var i = 0; i < iterations || iterations == null; i++)
+            {
+                yield return new RingInfo
+                {
+                    Type = ringTypeSelector.GetNext(),
+                    GapSize = 0,
+                    NumberOfGaps = 0,
+                    Angle = (float)Rand.NextDouble() * MathHelper.TwoPi,
+                    RotationalVelocity = DefaultRotationVelocity,
+                    SpiralRadius = 700f,
+                };
+            }
+        }
+
         public IEnumerable<RingInfo> GetRandomSequence(
             int? iterations = null, 
             Range<int>? numberOfGaps = null, 

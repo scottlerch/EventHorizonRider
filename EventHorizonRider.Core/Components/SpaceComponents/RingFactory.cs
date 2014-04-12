@@ -98,13 +98,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             }
         }
 
-        internal Ring Create(RingInfo info)
+        internal Ring Create(RingInfo info, Level level)
         {
             return new Ring(
+                ringCollapseSpeed: level.RingSpeed,
                 rotationalVelocity: info.RotationalVelocity,
                 texturesInfoGroup: GetTexturesInfo(info.Type),
-                radius: startRadius,
+                innerRadius: startRadius,
                 origin: viewportCenter,
+                spiralRadius: info.SpiralRadius,
+                spiralSpeed: level.ShipSpeed,
                 gaps: Enumerable.Range(0, info.NumberOfGaps).Select(i =>
                     new RingGap
                     {

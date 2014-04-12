@@ -18,12 +18,14 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         public Vector2 Scale { get; set; }
         public Vector2 Position { get; private set; }
         public Color Color { get; set; }
+        public float ColorLightness { get; set; }
+
         public float Angle { get; set; }
         public byte[] TextureAlphaData { get; set; }
 
         public float RotationRate { get; set; }
 
-        public float RadiusOffset { private get; set; }
+        public float RadiusOffset { get; set; }
 
         public void UpdatePosition(Vector2 ringOrigin, float ringRadius)
         {
