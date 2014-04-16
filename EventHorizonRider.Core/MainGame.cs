@@ -22,11 +22,15 @@ namespace EventHorizonRider.Core
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            SetResolution(1136, 640);
+            // Default to iPhone 5 display
+            // SetResolution(1136, 640);
 
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
         }
 
+        /// <remarks>
+        /// Only here for testing.  MonoGame should automatically select correct resolution.
+        /// </remarks>
         public void SetResolution(int width, int height)
         {
             graphics.PreferredBackBufferWidth = width;
@@ -41,6 +45,8 @@ namespace EventHorizonRider.Core
         /// </summary>
         protected override void Initialize()
         {
+            ScreenInfo.Initialize(GraphicsDevice);
+
             gameContext = new GameContext(new InitializeState());
             inputState = new InputState();
 

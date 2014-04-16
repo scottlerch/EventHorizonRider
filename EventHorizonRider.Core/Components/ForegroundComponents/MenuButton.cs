@@ -31,8 +31,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             const float textPadding = 10;
 
-            menuTextLocation = new Vector2(graphics.Viewport.Width - (menuTextSize.X) - textPadding, textPadding);
-            backTextLocation = new Vector2(graphics.Viewport.Width - (backTextSize.X) - textPadding, textPadding);
+            menuTextLocation = new Vector2(ScreenInfo.LogicalWidth - (menuTextSize.X) - textPadding, textPadding);
+            backTextLocation = new Vector2(ScreenInfo.LogicalWidth - (backTextSize.X) - textPadding, textPadding);
 
             const float buttonPadding = 50f;
 

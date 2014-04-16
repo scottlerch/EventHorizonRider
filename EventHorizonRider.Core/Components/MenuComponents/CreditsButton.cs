@@ -24,8 +24,8 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             const float buttonPadding = 50f;
 
             textLocation = new Vector2(
-                (graphics.Viewport.Width / 2f) - (textSize.X / 2f),
-                (graphics.Viewport.Height / 2f) + 150f);
+                (ScreenInfo.LogicalWidth / 2f) - (textSize.X / 2f),
+                (ScreenInfo.LogicalHeight / 2f) + 150f);
 
             Button = new Button(
                 buttonBounds: new Rectangle(

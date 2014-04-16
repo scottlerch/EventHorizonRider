@@ -16,8 +16,8 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             texture = content.Load<Texture2D>(@"Images\credits");
 
             center = new Vector2(
-                graphics.Viewport.Width / 2f,
-                graphics.Viewport.Height / 2f);
+                ScreenInfo.LogicalWidth / 2f,
+                ScreenInfo.LogicalHeight / 2f);
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)

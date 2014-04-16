@@ -45,7 +45,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
+            viewportCenter = new Vector2(ScreenInfo.LogicalWidth / 2f, ScreenInfo.LogicalHeight / 2f);
 
             Texture = content.Load<Texture2D>(@"Images\ship");
             TextureAlphaData = TextureProcessor.GetAlphaData(Texture);

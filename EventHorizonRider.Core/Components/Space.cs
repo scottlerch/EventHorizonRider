@@ -84,7 +84,7 @@ namespace EventHorizonRider.Core.Components
 
             graphics.Clear(Background.BackgroundColor);
 
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, ScreenInfo.ScaleMatrix);
         }
 
         protected override void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)

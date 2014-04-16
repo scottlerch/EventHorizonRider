@@ -19,7 +19,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         internal void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
-            viewportCenter = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
+            viewportCenter = new Vector2(ScreenInfo.LogicalWidth / 2f, ScreenInfo.LogicalHeight / 2f);
 
             asteroids = LoadData(content, "asteroid", 4);
             asteroids.DensityRange = Range.Create(15, 35);

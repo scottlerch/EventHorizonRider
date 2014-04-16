@@ -25,7 +25,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             background = content.Load<Texture2D>(@"Images\background");
             stars = content.Load<Texture2D>(@"Images\stars");
 
-            center = new Vector2(graphics.Viewport.Width / 2f, graphics.Viewport.Height / 2f);
+            center = new Vector2(ScreenInfo.LogicalWidth / 2f, ScreenInfo.LogicalHeight / 2f);
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)

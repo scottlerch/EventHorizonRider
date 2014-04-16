@@ -27,7 +27,7 @@ namespace EventHorizonRider.Core.Components
 
         protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, ScreenInfo.ScaleMatrix);
         }
 
         protected override void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)

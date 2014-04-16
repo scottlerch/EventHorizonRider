@@ -55,7 +55,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            viewSize = new Vector2(graphics.Viewport.Width, graphics.Viewport.Height);
+            viewSize = new Vector2(ScreenInfo.LogicalWidth, ScreenInfo.LogicalHeight);
 
             labelFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
             timeFont = content.Load<SpriteFont>(@"Fonts\time_font");
