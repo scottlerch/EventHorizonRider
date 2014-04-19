@@ -21,8 +21,8 @@ namespace EventHorizonRider.Core.Input
                         touch.Id, 
                         touch.State, 
                         new Vector2(
-                            touch.Position.X * ScreenInfo.InputScale, 
-                            touch.Position.Y * ScreenInfo.InputScale))).ToArray());
+                            touch.Position.X * DeviceInfo.InputScale, 
+                            touch.Position.Y * DeviceInfo.InputScale))).ToArray());
 
             // TODO: detect if device supports mouse, on iOS mouse gets values from touch which can mess things up
             // MouseState = Mouse.GetState();

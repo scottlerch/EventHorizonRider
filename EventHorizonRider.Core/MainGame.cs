@@ -16,9 +16,11 @@ namespace EventHorizonRider.Core
         private InputState inputState;
         private SpriteBatch spriteBatch;
         private GameContext gameContext;
+        private readonly DetailLevel detailLevel;
 
-        public MainGame()
+        public MainGame(DetailLevel gameDetailLevel = DetailLevel.Full)
         {
+            detailLevel = gameDetailLevel;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
@@ -45,7 +47,7 @@ namespace EventHorizonRider.Core
         /// </summary>
         protected override void Initialize()
         {
-            ScreenInfo.Initialize(GraphicsDevice);
+            DeviceInfo.Initialize(GraphicsDevice, detailLevel);
 
             gameContext = new GameContext(new InitializeState());
             inputState = new InputState();

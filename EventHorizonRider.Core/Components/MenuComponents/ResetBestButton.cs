@@ -22,8 +22,8 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             textSize = buttonFont.MeasureString("RESET BEST");
 
             textLocation = new Vector2(
-                (ScreenInfo.LogicalWidth / 2f) - (textSize.X / 2f),
-                (ScreenInfo.LogicalHeight / 2f) + 25f);
+                (DeviceInfo.LogicalWidth / 2f) - (textSize.X / 2f),
+                (DeviceInfo.LogicalHeight / 2f) + 25f);
 
             const float buttonPadding = 50f;
 

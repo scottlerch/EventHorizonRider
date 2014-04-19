@@ -42,15 +42,15 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             const float buttonPadding = 50f;
 
             startLevelTextLocation = new Vector2(
-                (ScreenInfo.LogicalWidth / 2f) - (startLevelTextSize.X / 2f),
-                (ScreenInfo.LogicalHeight / 2f) - 175f);
+                (DeviceInfo.LogicalWidth / 2f) - (startLevelTextSize.X / 2f),
+                (DeviceInfo.LogicalHeight / 2f) - 175f);
 
             levelButtons = new LevelButton[Levels.NumberOfLevels];
 
             var levelButtonY = startLevelTextLocation.Y + 75f;
             var levelButtonsWidth = 500f;
             var levelButtonSpacing = levelButtonsWidth/(Levels.NumberOfLevels - 1);
-            var levelButtonXBase = (ScreenInfo.LogicalWidth / 2f) - (levelButtonsWidth / 2f);
+            var levelButtonXBase = (DeviceInfo.LogicalWidth / 2f) - (levelButtonsWidth / 2f);
 
             for (int i = 0; i < Levels.NumberOfLevels; i++)
             {

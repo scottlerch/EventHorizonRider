@@ -100,6 +100,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public bool Intersects(Ship ship)
         {
+            // TODO: optimize collision detection, this is the biggest bottleneck right now
             return Children.Cast<Ring>().Any(ring => ring.Intersects(ship));
         }
 

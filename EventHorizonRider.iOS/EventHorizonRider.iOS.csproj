@@ -89,6 +89,8 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DeviceHardware.cs" />
+    <Compile Include="HardwareType.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Content Include="Content\Effects\blur_effect.xnb" />

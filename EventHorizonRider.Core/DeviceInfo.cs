@@ -4,11 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core
 {
-    internal class ScreenInfo
+    internal class DeviceInfo
     {
-        public static Matrix ScaleMatrix { get; private set; }
+        public static Matrix OutputScaleMatrix { get; private set; }
 
         public static float InputScale { get; private set; }
+
+        public static float OutputScale { get; private set; }
 
         public static int LogicalWidth { get; private set; }
 
@@ -18,19 +20,23 @@ namespace EventHorizonRider.Core
 
         public static int NativeHeight { get; private set; }
 
-        public static void Initialize(GraphicsDevice graphics)
+        public static DetailLevel DetailLevel { get; private set; }
+
+        public static void Initialize(GraphicsDevice graphics, DetailLevel detailLevel)
         {
             // Original native resolution
             const int baseHeight = 640;
             const int baseWidth = 1136;
 
+            DetailLevel = detailLevel;
+
             NativeHeight = graphics.Viewport.Height;
             NativeWidth = graphics.Viewport.Width;
 
-            var scale = (float)NativeHeight / (float)baseHeight;
-            ScaleMatrix = Matrix.CreateScale(scale, scale, 1);
+            OutputScale = (float)NativeHeight / (float)baseHeight;
+            OutputScaleMatrix = Matrix.CreateScale(OutputScale, OutputScale, 1);
 
-            InputScale = 1f/scale;
+            InputScale = 1f / OutputScale;
 
             LogicalHeight = baseHeight;
             LogicalWidth = (int)Math.Round(NativeWidth * ((float)baseHeight / (float)NativeHeight));

@@ -24,8 +24,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             const float padding = 1;
 
-            position = new Vector2(ScreenInfo.LogicalWidth - (textSize.X + padding),
-                ScreenInfo.LogicalHeight - (textSize.Y + padding));
+            position = new Vector2(DeviceInfo.LogicalWidth - (textSize.X + padding),
+                DeviceInfo.LogicalHeight - (textSize.Y + padding));
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)

@@ -34,8 +34,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             texture = content.Load<Texture2D>(@"Images\blackhole");
 
             Position = new Vector2(
-                ScreenInfo.LogicalWidth/2f,
-                ScreenInfo.LogicalHeight/2f);
+                DeviceInfo.LogicalWidth/2f,
+                DeviceInfo.LogicalHeight/2f);
         }
 
         public void Pulse(float pullX = 1.15f, float pullVelocity = 1.5f)

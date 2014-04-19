@@ -32,8 +32,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             startTextSize = buttonFont.MeasureString("START");
 
             screenCenter = new Vector2(
-                ScreenInfo.LogicalWidth / 2f,
-                ScreenInfo.LogicalHeight / 2f);
+                DeviceInfo.LogicalWidth / 2f,
+                DeviceInfo.LogicalHeight / 2f);
 
             const float buttonPadding = 100f;
 
