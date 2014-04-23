@@ -89,6 +89,7 @@
     <Compile Include="MainGame.cs" />
     <Compile Include="Extensions\NumericExtensions.cs" />
     <Compile Include="Components\Music.cs" />
+    <Compile Include="Physics\CollisionInfo.cs" />
     <Compile Include="Physics\Motion.cs" />
     <Compile Include="Physics\CollisionDetection.cs" />
     <Compile Include="Physics\Emitter.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Physics\MathUtilities.cs" />
     <Compile Include="Physics\Particle.cs" />
     <Compile Include="Physics\ParticleSystem.cs" />
+    <Compile Include="Graphics\PixelData.cs" />
     <Compile Include="Physics\Spring.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Range.cs" />

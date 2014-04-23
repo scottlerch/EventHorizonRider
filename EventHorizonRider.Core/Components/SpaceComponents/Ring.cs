@@ -101,7 +101,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     var ringObject = new RingObject
                     {
                         Texture = texturesInfo.Textures[textureIndex],
-                        TextureAlphaData = texturesInfo.TexturesAlphaData[textureIndex],
+                        CollisionInfo = texturesInfo.CollisionInfos[textureIndex],
                         Rotation = MathHelper.WrapAngle((float) random.NextDouble()*MathHelper.TwoPi),
                         RotationRate = (float) random.NextDouble()*MathHelper.TwoPi/4f*(random.Next(2) == 0 ? -1f : 1f),
                         Scale = Vector2.One * texturesInfo.ScaleRange.ScaleHigh(edgeModifier.EdgeScale).GetRandom(),

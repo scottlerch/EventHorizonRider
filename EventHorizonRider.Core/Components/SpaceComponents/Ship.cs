@@ -48,7 +48,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             viewportCenter = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
 
             Texture = content.Load<Texture2D>(@"Images\ship");
-            TextureAlphaData = TextureProcessor.GetAlphaData(Texture);
+            CollisionInfo = CollisionDetection.GetCollisionInfo(Texture);
 
             shieldTexture = content.Load<Texture2D>(@"Images\shield");
 
@@ -236,6 +236,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             get { return Vector2.One; }
         }
 
-        public byte[] TextureAlphaData{get; private set; }
+        public CollisionInfo CollisionInfo {get; private set; }
     }
 }

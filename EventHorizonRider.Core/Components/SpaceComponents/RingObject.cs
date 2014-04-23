@@ -21,7 +21,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         public float ColorLightness { get; set; }
 
         public float Angle { get; set; }
-        public byte[] TextureAlphaData { get; set; }
+        public CollisionInfo CollisionInfo { get; set; }
 
         public float RotationRate { get; set; }
 

@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core
 {
+    /// <summary>
+    /// Information to scale game based on hardware device it's running on in a platform agnostic way.
+    /// </summary>
     internal class DeviceInfo
     {
         public static Matrix OutputScaleMatrix { get; private set; }
@@ -26,20 +29,21 @@ namespace EventHorizonRider.Core
         {
             // Original native resolution
             const int baseHeight = 640;
-            const int baseWidth = 1136;
+            // const int baseWidth = 1136;
 
             DetailLevel = detailLevel;
 
             NativeHeight = graphics.Viewport.Height;
             NativeWidth = graphics.Viewport.Width;
 
-            OutputScale = (float)NativeHeight / (float)baseHeight;
+            // Only scale output on Height since the game is run in portrait mode
+            OutputScale = NativeHeight / (float)baseHeight;
             OutputScaleMatrix = Matrix.CreateScale(OutputScale, OutputScale, 1);
 
             InputScale = 1f / OutputScale;
 
             LogicalHeight = baseHeight;
-            LogicalWidth = (int)Math.Round(NativeWidth * ((float)baseHeight / (float)NativeHeight));
+            LogicalWidth = (int)Math.Round(NativeWidth * (baseHeight / (float)NativeHeight));
         }
     }
 }

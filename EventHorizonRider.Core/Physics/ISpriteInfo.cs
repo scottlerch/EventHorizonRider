@@ -10,10 +10,6 @@ namespace EventHorizonRider.Core.Physics
         float Rotation { get; }
         Vector2 Position { get; }
         Texture2D Texture { get; }
-
-        /// <summary>
-        /// Just the alpha channel data of the texture used by collision detection.
-        /// </summary>
-        byte[] TextureAlphaData { get; }
+        CollisionInfo CollisionInfo { get; }
     }
 }

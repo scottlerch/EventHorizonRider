@@ -6,11 +6,28 @@ namespace EventHorizonRider.Core.Graphics
 {
     internal class TextureProcessor
     {
-        public static byte[] GetAlphaData(Texture2D texture)
+        public static PixelData<byte> GetCroppedData(PixelData<byte> data, Rectangle bounds)
+        {
+            var croppedWidth = bounds.Width;
+            var croppedHeight = bounds.Height;
+            var croppedData = new PixelData<byte>(croppedWidth, croppedHeight);
+
+            for (int x = 0; x < croppedWidth; x++)
+            {
+                for (int y = 0; y < croppedHeight; y++)
+                {
+                    croppedData[x, y] = data[x + bounds.X, y + bounds.Y];
+                }
+            }
+
+            return croppedData;
+        }
+
+        public static PixelData<byte> GetAlphaData(Texture2D texture)
         {
             var data = new Color[texture.Width * texture.Height];
             texture.GetData(data);
-            return data.Select(c => c.A).ToArray();
+            return new PixelData<byte>(data.Select(c => c.A).ToArray(), texture.Width, texture.Height);
         }
 
         public static Color[] SoftenAlpha(Color[] data, int width, int height)

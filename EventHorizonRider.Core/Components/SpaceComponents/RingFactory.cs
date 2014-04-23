@@ -1,6 +1,7 @@
 ﻿using System;
 using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -36,7 +37,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             sparseAsteroids = new RingTexturesInfo();
             sparseAsteroids.Textures = asteroids.Textures;
-            sparseAsteroids.TexturesAlphaData = asteroids.TexturesAlphaData;
+            sparseAsteroids.CollisionInfos = asteroids.CollisionInfos;
             sparseAsteroids.DensityRange = Range.Create(5, 10);
             sparseAsteroids.ScaleRange = Range.Create(0.1f, 0.6f);
             sparseAsteroids.RadiusOffsetJitter = 10f;
@@ -71,13 +72,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             var texturesInfo = new RingTexturesInfo
             {
                 Textures = new Texture2D[count],
-                TexturesAlphaData = new byte[count][]
+                CollisionInfos = new CollisionInfo[count],
             };
 
             for (var i = 0; i < count; i++)
             {
                 texturesInfo.Textures[i] = content.Load<Texture2D>(@"Images\" + imageBaseName + "_" + (i + 1));
-                texturesInfo.TexturesAlphaData[i] = TextureProcessor.GetAlphaData(texturesInfo.Textures[i]);
+                texturesInfo.CollisionInfos[i] = CollisionDetection.GetCollisionInfo(texturesInfo.Textures[i]);
             }
 
             return texturesInfo;

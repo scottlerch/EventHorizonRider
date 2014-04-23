@@ -18,14 +18,16 @@ namespace EventHorizonRider.Core
         private GameContext gameContext;
         private readonly DetailLevel detailLevel;
 
-        public MainGame(DetailLevel gameDetailLevel = DetailLevel.Full)
+        public MainGame() : this(DetailLevel.Full)
+        {
+        }
+
+        public MainGame(DetailLevel gameDetailLevel)
         {
             detailLevel = gameDetailLevel;
+
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
-            // Default to iPhone 5 display
-            // SetResolution(1136, 640);
 
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
         }

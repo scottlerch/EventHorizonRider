@@ -1,5 +1,7 @@
 ﻿using System;
+using EventHorizonRider.Core.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Physics
 {
@@ -9,25 +11,47 @@ namespace EventHorizonRider.Core.Physics
     /// </summary>
     internal class CollisionDetection
     {
+        public static CollisionInfo GetCollisionInfo(Texture2D texture, byte alphaThreshold = 255)
+        {
+            var data = TextureProcessor.GetAlphaData(texture);
+
+            var bounds = new Rectangle(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
+
+            for (int x = 0; x < texture.Width; x++)
+            {
+                for (int y = 0; y < texture.Height; y++)
+                {
+                    if (data[x, y] >= alphaThreshold)
+                    {
+                        bounds.X = Math.Min(bounds.X, x - 1);
+                        bounds.Y = Math.Min(bounds.Y, y - 1);
+                        bounds.Width = Math.Max(bounds.Width, ((x + 1) - bounds.X) + 1);
+                        bounds.Height = Math.Max(bounds.Height, ((y + 1) - bounds.Y) + 1);
+                    }
+                }
+            }
+
+            var croppedData = TextureProcessor.GetCroppedData(data, bounds);
+
+            return new CollisionInfo(croppedData, new Vector2(bounds.X, bounds.Y));
+        }
+
         public static bool Collides(ISpriteInfo sprite1, ISpriteInfo sprite2, byte tolerance = 255)
         {
-            var transform1 = GetTransform(sprite1);
-            var transform2 = GetTransform(sprite2);
-
             var bounds1 = GetBoundingRectangle(sprite1);
             var bounds2 = GetBoundingRectangle(sprite2);
 
             if (bounds1.Intersects(bounds2))
             {
                 if (IntersectPixels(
-                        transform1,
-                        sprite1.Texture.Width,
-                        sprite1.Texture.Height,
-                        sprite1.TextureAlphaData,
-                        transform2,
-                        sprite2.Texture.Width,
-                        sprite2.Texture.Height,
-                        sprite2.TextureAlphaData,
+                        GetTransform(sprite1),
+                        sprite1.CollisionInfo.PixelData.Width,
+                        sprite1.CollisionInfo.PixelData.Height,
+                        sprite1.CollisionInfo.PixelData.Data,
+                        GetTransform(sprite2),
+                        sprite2.CollisionInfo.PixelData.Width,
+                        sprite2.CollisionInfo.PixelData.Height,
+                        sprite2.CollisionInfo.PixelData.Data,
                         tolerance))
                 {
                     return true;
@@ -37,64 +61,21 @@ namespace EventHorizonRider.Core.Physics
             return false;
         }
 
-        public static Matrix GetTransform(ISpriteInfo spriteInfo)
+        private static Matrix GetTransform(ISpriteInfo spriteInfo)
         {
             return
-                Matrix.CreateTranslation(new Vector3(-spriteInfo.Origin, 0.0f)) *
+                Matrix.CreateTranslation(new Vector3(-(spriteInfo.Origin - spriteInfo.CollisionInfo.Offset), 0.0f)) *
                 Matrix.CreateScale(new Vector3(spriteInfo.Scale, 1.0f)) *
                 Matrix.CreateRotationZ(spriteInfo.Rotation) *
                 Matrix.CreateTranslation(new Vector3(spriteInfo.Position, 0.0f));
         }
 
-        public static Rectangle GetBoundingRectangle(ISpriteInfo spriteInfo)
+        private static Rectangle GetBoundingRectangle(ISpriteInfo spriteInfo)
         {
             return CalculateBoundingRectangle(
-                spriteInfo.Texture.Bounds,
+                spriteInfo.CollisionInfo.Bounds,
                 GetTransform(spriteInfo));
         }
-
-        /// <summary>
-        /// Determines if there is overlap of the non-transparent pixels
-        /// between two sprites.
-        /// </summary>
-        /// <param name="rectangleA">Bounding rectangle of the first sprite</param>
-        /// <param name="dataA">Pixel data of the first sprite</param>
-        /// <param name="rectangleB">Bouding rectangle of the second sprite</param>
-        /// <param name="dataB">Pixel data of the second sprite</param>
-        /// <param name="tolerance">Tolerance of alpha channel before considering it a collision</param>
-        /// <returns>True if non-transparent pixels overlap; false otherwise</returns>
-        public static bool IntersectPixels(Rectangle rectangleA, byte[] dataA, Rectangle rectangleB, byte[] dataB, byte tolerance)
-        {
-            // Find the bounds of the rectangle intersection
-            int top = Math.Max(rectangleA.Top, rectangleB.Top);
-            int bottom = Math.Min(rectangleA.Bottom, rectangleB.Bottom);
-            int left = Math.Max(rectangleA.Left, rectangleB.Left);
-            int right = Math.Min(rectangleA.Right, rectangleB.Right);
-
-            // Check every point within the intersection bounds
-            for (int y = top; y < bottom; y++)
-            {
-                for (int x = left; x < right; x++)
-                {
-                    // Get the color of both pixels at this point
-                    byte colorA = dataA[(x - rectangleA.Left) +
-                                         (y - rectangleA.Top) * rectangleA.Width];
-                    byte colorB = dataB[(x - rectangleB.Left) +
-                                         (y - rectangleB.Top) * rectangleB.Width];
-
-                    // If both pixels are not completely transparent,
-                    if (colorA >= tolerance && colorB >= tolerance)
-                    {
-                        // then an intersection has been found
-                        return true;
-                    }
-                }
-            }
-
-            // No intersection found
-            return false;
-        }
-
 
         /// <summary>
         /// Determines if there is overlap of the non-transparent pixels between two
@@ -110,7 +91,7 @@ namespace EventHorizonRider.Core.Physics
         /// <param name="dataB">Pixel color data of the second sprite.</param>
         /// <param name="tolerance">Tolerance of alpha channel before considering it a collision</param>
         /// <returns>True if non-transparent pixels overlap; false otherwise</returns>
-        public static bool IntersectPixels(
+        private static bool IntersectPixels(
             Matrix transformA, 
             int widthA, 
             int heightA, 
@@ -185,7 +166,7 @@ namespace EventHorizonRider.Core.Physics
         /// <param name="rectangle">Original bounding rectangle.</param>
         /// <param name="transform">World transform of the rectangle.</param>
         /// <returns>A new rectangle which contains the trasnformed rectangle.</returns>
-        public static Rectangle CalculateBoundingRectangle(Rectangle rectangle, Matrix transform)
+        private static Rectangle CalculateBoundingRectangle(Rectangle rectangle, Matrix transform)
         {
             // Get all four corners in local space
             var leftTop = new Vector2(rectangle.Left, rectangle.Top);

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EventHorizonRider.Core.Physics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents
@@ -6,7 +7,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     internal class RingTexturesInfo
     {
         public Texture2D[] Textures { get; set; }
-        public byte[][] TexturesAlphaData { get; set; }
+        public CollisionInfo[] CollisionInfos { get; set; }
 
         /// <summary>
         /// Color to apply to texture when rendering.  To new [] { Color.White } for default.
