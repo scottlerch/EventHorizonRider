@@ -17,7 +17,7 @@ namespace EventHorizonRider.iOS
             switch (DeviceHardware.Version)
             {
                 case HardwareType.iPad3:
-                    detailLevel = DetailLevel.FullLimitedEffects;
+                    detailLevel = DetailLevel.PixelShaderEffectsHalf | DetailLevel.CollisionDetectionHalf;
                     break;
             }
 

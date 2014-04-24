@@ -66,7 +66,7 @@ namespace EventHorizonRider.Core.Components
 
             var scaleBackBuffer = 2f;
 
-            if (DeviceInfo.DetailLevel == DetailLevel.FullLimitedEffects)
+            if (DeviceInfo.DetailLevel == DetailLevel.PixelShaderEffectsHalf)
             {
                 scaleBackBuffer = 4f;
             }

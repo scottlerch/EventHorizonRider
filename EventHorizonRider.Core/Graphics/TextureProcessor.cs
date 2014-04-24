@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 
@@ -6,6 +7,24 @@ namespace EventHorizonRider.Core.Graphics
 {
     internal class TextureProcessor
     {
+        public static PixelData<byte> GetScaledData(PixelData<byte> data, float scale)
+        {
+            var scaledData = new PixelData<byte>((int)Math.Round(data.Width * scale), (int)Math.Round(data.Height * scale));
+
+            var xRatio = data.Width/(float)scaledData.Width;
+            var yRatio = data.Height/(float)scaledData.Height;
+
+            for (int y = 0; y < scaledData.Height; y++)
+            {
+                for (int x = 0; x < scaledData.Width; x++)
+                {
+                    scaledData[x, y] = data[(int) (x*xRatio), (int) (y*yRatio)];
+                }
+            }
+
+            return scaledData;
+        }
+
         public static PixelData<byte> GetCroppedData(PixelData<byte> data, Rectangle bounds)
         {
             var croppedWidth = bounds.Width;

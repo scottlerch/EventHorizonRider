@@ -11,10 +11,13 @@ namespace EventHorizonRider.Core.Physics
 
         public Vector2 Offset { get; private set; }
 
-        public CollisionInfo(PixelData<byte> pixelData, Vector2 offset)
+        public float Scale { get; private set; }
+
+        public CollisionInfo(PixelData<byte> pixelData, Vector2 offset, float scale)
         {
             PixelData = pixelData;
             Offset = offset;
+            Scale = scale;
             Bounds = new Rectangle(0, 0, pixelData.Width, pixelData.Height);
         }
     }

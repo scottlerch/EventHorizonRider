@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using EventHorizonRider.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,10 +12,11 @@ namespace EventHorizonRider.Core.Physics
     /// </summary>
     internal class CollisionDetection
     {
-        public static CollisionInfo GetCollisionInfo(Texture2D texture, byte alphaThreshold = 255)
+        public static CollisionInfo GetCollisionInfo(Texture2D texture, byte alphaThreshold = 255, float resolution = 1f)
         {
             var data = TextureProcessor.GetAlphaData(texture);
 
+            // Calculate crop border
             var bounds = new Rectangle(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
 
             for (int x = 0; x < texture.Width; x++)
@@ -31,9 +33,14 @@ namespace EventHorizonRider.Core.Physics
                 }
             }
 
-            var croppedData = TextureProcessor.GetCroppedData(data, bounds);
+            var newData = TextureProcessor.GetCroppedData(data, bounds);
 
-            return new CollisionInfo(croppedData, new Vector2(bounds.X, bounds.Y));
+            if (resolution < 1f)
+            {
+                newData = TextureProcessor.GetScaledData(newData, resolution);
+            }
+
+            return new CollisionInfo(newData, new Vector2(bounds.X, bounds.Y), 1f / resolution);
         }
 
         public static bool Collides(ISpriteInfo sprite1, ISpriteInfo sprite2, byte tolerance = 255)
@@ -65,7 +72,7 @@ namespace EventHorizonRider.Core.Physics
         {
             return
                 Matrix.CreateTranslation(new Vector3(-(spriteInfo.Origin - spriteInfo.CollisionInfo.Offset), 0.0f)) *
-                Matrix.CreateScale(new Vector3(spriteInfo.Scale, 1.0f)) *
+                Matrix.CreateScale(new Vector3(spriteInfo.Scale * spriteInfo.CollisionInfo.Scale, 1.0f)) *
                 Matrix.CreateRotationZ(spriteInfo.Rotation) *
                 Matrix.CreateTranslation(new Vector3(spriteInfo.Position, 0.0f));
         }
