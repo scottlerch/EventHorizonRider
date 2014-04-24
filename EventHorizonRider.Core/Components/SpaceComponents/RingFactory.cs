@@ -27,6 +27,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             asteroids.ScaleRange = Range.Create(0.2f, 0.8f);
             asteroids.RadiusOffsetJitter = 10f;
             asteroids.AngleJitter = 0.8f;
+            asteroids.TaperAmount = 1;
+            asteroids.TaperScale = 1f;
             asteroids.TextureColors = new[]
             {
                 Color.DarkGray.AdjustLight(1.2f),
@@ -42,6 +44,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             sparseAsteroids.ScaleRange = Range.Create(0.1f, 0.6f);
             sparseAsteroids.RadiusOffsetJitter = 10f;
             sparseAsteroids.AngleJitter = 0.8f;
+            sparseAsteroids.TaperAmount = 1;
+            sparseAsteroids.TaperScale = 1f;
             sparseAsteroids.TextureColors = new[]
             {
                 Color.DarkGray.AdjustLight(1.2f),
@@ -51,10 +55,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             };
 
             dust = LoadData(content, "dust", 1);
-            dust.DensityRange = Range.Create(65, 75);
-            dust.ScaleRange = Range.Create(0.5f, 1.3f);
+            dust.DensityRange = Range.Create(85, 95);
+            dust.ScaleRange = Range.Create(0.3f, 1.2f);
             dust.RadiusOffsetJitter = 10f;
             dust.AngleJitter = 0.8f;
+            dust.TaperAmount = 4;
+            dust.TaperScale = 0.4f;
             dust.TextureColors = new []
             {
                 Color.Tan, 
@@ -78,7 +84,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             for (var i = 0; i < count; i++)
             {
                 texturesInfo.Textures[i] = content.Load<Texture2D>(@"Images\" + imageBaseName + "_" + (i + 1));
-                texturesInfo.CollisionInfos[i] = CollisionDetection.GetCollisionInfo(texturesInfo.Textures[i], resolution:DeviceInfo.DetailLevel.HasFlag(DetailLevel.CollisionDetectionFull)? 1f : 0.5f);
+                texturesInfo.CollisionInfos[i] = CollisionDetection.GetCollisionInfo(texturesInfo.Textures[i], resolution:DeviceInfo.DetailLevel.HasFlag(DetailLevel.CollisionDetectionFull)? 1f : 0.75f);
             }
 
             return texturesInfo;

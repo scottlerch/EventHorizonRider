@@ -95,7 +95,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     if (gaps.Any(gap => gap.IsInsideGap(angle)))
                         continue;
 
-                    var edgeModifier = CalculateEdgeModifer(gaps, angle, minimumAngleSpacing, maximumAngle, isSpiral);
+                    var edgeModifier = CalculateEdgeModifer(gaps, angle, minimumAngleSpacing, maximumAngle, isSpiral, texturesInfo.TaperAmount, texturesInfo.TaperScale);
                     var textureIndex = random.Next(0, texturesInfo.Textures.Length);
 
                     var ringObject = new RingObject
@@ -137,11 +137,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             ringObjects = newRingObjects;
         }
 
-        private EdgeModifier CalculateEdgeModifer(IList<RingGap> gaps, float angle, float minimumAngleSpacing, float maximumAngle, bool isSpiral)
+        private EdgeModifier CalculateEdgeModifer(IList<RingGap> gaps, float angle, float minimumAngleSpacing, float maximumAngle, bool isSpiral, int taperAmount, float taperScale)
         {
             // When object is closer to gap edge make sure it's scaled smaller with less random jitter
             // so the gaps stay closer to a constant size
-            const int gapScaleFadeSize = 2;
+            int gapScaleFadeSize = taperAmount;
 
             var edgeModifier = new EdgeModifier { EdgeScale = 1f, IsEdge = false };
 
@@ -150,7 +150,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 if (gaps.Any(gap => gap.IsInsideGap(angle + (minimumAngleSpacing * i))) ||
                     gaps.Any(gap => gap.IsInsideGap(angle - (minimumAngleSpacing * i))))
                 {
-                    edgeModifier.EdgeScale = 0.5f + (((i - 1) / (float)gapScaleFadeSize) * 0.5f);
+                    edgeModifier.EdgeScale = taperScale + (((i - 1) / (float)gapScaleFadeSize) * taperScale);
                     edgeModifier.IsEdge = i == 1;
                     break;
                 }
@@ -159,7 +159,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 {
                     if (angle < (minimumAngleSpacing * i) || angle > (maximumAngle - (minimumAngleSpacing * i)))
                     {
-                        edgeModifier.EdgeScale = 0.5f + (((i - 1) / (float)gapScaleFadeSize) * 0.5f);
+                        edgeModifier.EdgeScale = taperScale + (((i - 1) / (float)gapScaleFadeSize) * taperScale);
                         edgeModifier.IsEdge = i == 1;
                         break;
                     }

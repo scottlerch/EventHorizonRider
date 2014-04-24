@@ -33,5 +33,15 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         /// Percent jitter of angle spacing.  Set to 0 for no jitter and 1 for full.
         /// </summary>
         public float AngleJitter { get; set; }
+
+        /// <summary>
+        /// Number of objects to taper in size at edges.
+        /// </summary>
+        public int TaperAmount { get; set; }
+
+        /// <summary>
+        /// Amount to scale tapered edge by.
+        /// </summary>
+        public float TaperScale { get; set; }
     }
 }

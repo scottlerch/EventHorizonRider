@@ -48,7 +48,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             viewportCenter = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
 
             Texture = content.Load<Texture2D>(@"Images\ship");
-            CollisionInfo = CollisionDetection.GetCollisionInfo(Texture, resolution: DeviceInfo.DetailLevel.HasFlag(DetailLevel.CollisionDetectionFull) ? 1f : 0.5f);
+            CollisionInfo = CollisionDetection.GetCollisionInfo(Texture, resolution: DeviceInfo.DetailLevel.HasFlag(DetailLevel.CollisionDetectionFull) ? 1f : 0.75f);
 
             shieldTexture = content.Load<Texture2D>(@"Images\shield");
 
