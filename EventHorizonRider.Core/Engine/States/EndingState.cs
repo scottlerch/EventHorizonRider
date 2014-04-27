@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EventHorizonRider.Core.Components.ForegroundComponents;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine.States
 {
@@ -8,7 +9,6 @@ namespace EventHorizonRider.Core.Engine.States
         {
             gameContext.Root.Space.SetBlur(blurAmount:5f);
             gameContext.Root.Space.Halo.Visible = false;
-            gameContext.Root.Space.Blackhole.SetExtraScale(0.3f);
 
             gameContext.Root.Music.Stop();
 
@@ -18,7 +18,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Space.Rings.Stop();
 
             gameContext.Root.Foreground.PlayTimer.Stop();
-            gameContext.Root.Foreground.PlayButton.Show(true);
+            gameContext.Root.Foreground.PlayButton.Show(state: PlayButtonState.Restart);
 
             gameContext.IoTask = gameContext.PlayerData.UpdateBestTime(gameContext.Root.Foreground.PlayTimer.Elapsed, gameContext.CurrentLevelNumber);
 

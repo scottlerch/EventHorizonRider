@@ -1,4 +1,5 @@
 ﻿using System;
+using EventHorizonRider.Core.Components.ForegroundComponents;
 using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine.States
@@ -28,7 +29,7 @@ namespace EventHorizonRider.Core.Engine.States
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (gameContext.Root.Space.Blackhole.ExtraScale == 0)
             {
-                gameContext.Root.Foreground.PlayButton.Show(restart: false);
+                gameContext.Root.Foreground.PlayButton.Show(state: PlayButtonState.Start);
             }
 
             if (gameTime.TotalGameTime > initInterval)

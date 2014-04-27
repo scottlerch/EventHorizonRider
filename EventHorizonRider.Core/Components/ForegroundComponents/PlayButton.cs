@@ -1,4 +1,6 @@
-﻿using EventHorizonRider.Core.Input;
+﻿using System.Collections.Generic;
+using EventHorizonRider.Core.Graphics;
+using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,19 +8,44 @@ using Microsoft.Xna.Framework.Input;
 
 namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
+    public enum PlayButtonState
+    {
+        Start,
+        Restart,
+        Resume,
+        Pause,
+    }
+
     internal class PlayButton : ComponentBase
     {
+        private class Info
+        {
+            public readonly string Text;
+            public readonly Vector2 Size;
+            public readonly Color Color;
+            public readonly Color HoverColor;
+
+            public Info(string text, Vector2 size, Color color, Color hoverColor)
+            {
+                Text = text;
+                Size = size;
+                Color = color;
+                HoverColor = hoverColor;
+            }
+        }
+
         private float fadeSpeed = 1.5f;
 
         private SpriteFont buttonFont;
 
         private float colorAlphaPercent = 1f;
 
-        private bool isRestart;
+        private PlayButtonState playButtonState;
         private bool isVisible = true;
-        private Vector2 restartTextSize;
+
         private Vector2 screenCenter;
-        private Vector2 startTextSize;
+
+        private Dictionary<PlayButtonState, Info> textInfo;
 
         public float Scale { get; set; }
 
@@ -28,8 +55,13 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             buttonFont = content.Load<SpriteFont>(@"Fonts\button_font");
 
-            restartTextSize = buttonFont.MeasureString("RESET");
-            startTextSize = buttonFont.MeasureString("START");
+            textInfo = new Dictionary<PlayButtonState, Info>
+            {
+                { PlayButtonState.Start, new Info("START", buttonFont.MeasureString("START"), Color.White, Color.Yellow) },
+                { PlayButtonState.Restart, new Info("RESET", buttonFont.MeasureString("RESET"), Color.White, Color.Yellow) },
+                { PlayButtonState.Resume, new Info("RESUME", buttonFont.MeasureString("RESUME"), Color.White, Color.Yellow) },
+                { PlayButtonState.Pause, new Info("PAUSE", buttonFont.MeasureString("PAUSE"), Color.DarkGray.AdjustLight(0.1f), Color.Gray.AdjustLight(0.1f)) },
+            };
 
             screenCenter = new Vector2(
                 DeviceInfo.LogicalWidth / 2f,
@@ -37,12 +69,14 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             const float buttonPadding = 100f;
 
+            var textSize = textInfo[PlayButtonState.Restart].Size;
+
             Button = new Button(
                 buttonBounds: new Rectangle(
-                    (int)(screenCenter.X - ((restartTextSize.X + buttonPadding) / 2f)),
-                    (int)(screenCenter.Y - ((restartTextSize.Y + buttonPadding) / 2f)),
-                    (int)(restartTextSize.X + buttonPadding),
-                    (int)(restartTextSize.Y + buttonPadding)),
+                    (int)(screenCenter.X - ((textSize.X + buttonPadding) / 2f)),
+                    (int)(screenCenter.Y - ((textSize.Y + buttonPadding) / 2f)),
+                    (int)(textSize.X + buttonPadding),
+                    (int)(textSize.Y + buttonPadding)),
                key: Keys.Space);
         }
 
@@ -62,10 +96,10 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             colorAlphaPercent = MathHelper.Clamp(colorAlphaPercent, 0, 1);
         }
 
-        public void Show(bool restart, bool fade = false, float newFadeSpeed = 1.5f)
+        public void Show(PlayButtonState state, bool fade = false, float newFadeSpeed = 1.5f)
         {
             isVisible = true;
-            isRestart = restart;
+            playButtonState = state;
 
             if (!fade)
             {
@@ -90,30 +124,17 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             if (colorAlphaPercent >= 0f)
             {
-                if (!isRestart)
-                {
-                    spriteBatch.DrawString(
-                        buttonFont, 
-                        "START", 
-                        screenCenter,
-                        (Button.Hover ? Color.Yellow : Color.White) * colorAlphaPercent, 
-                        0, 
-                        new Vector2(startTextSize.X / 2f, startTextSize.Y / 2f),
-                        Scale, 
-                        SpriteEffects.None, Depth);
-                }
-                else
-                {
-                    spriteBatch.DrawString(
-                        buttonFont, 
-                        "RESET", 
-                        screenCenter,
-                        (Button.Hover? Color.Yellow : Color.White) * colorAlphaPercent,
-                        0,
-                        new Vector2(restartTextSize.X / 2f, restartTextSize.Y / 2f), 
-                        Scale,
-                        SpriteEffects.None, Depth);
-                }
+                var info = textInfo[playButtonState];
+
+                spriteBatch.DrawString(
+                    buttonFont,
+                    info.Text,
+                    screenCenter,
+                    (Button.Hover ? info.HoverColor : info.Color) * colorAlphaPercent,
+                    0,
+                    new Vector2(info.Size.X / 2f, info.Size.Y / 2f),
+                    Scale,
+                    SpriteEffects.None, Depth);
             }
         }
     }

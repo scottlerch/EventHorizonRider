@@ -11,6 +11,6 @@ namespace EventHorizonRider.Core
         PixelShaderEffectsFull = 4,
         CollisionDetectionHalf = 8,
         CollisionDetectionFull = 16,
-        Full = 0x7fffffff,
+        Full = PixelShaderEffectsFull | CollisionDetectionFull,
     }
 }

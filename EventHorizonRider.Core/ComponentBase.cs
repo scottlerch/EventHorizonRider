@@ -27,6 +27,14 @@ namespace EventHorizonRider.Core
             set { visible = value; }
         }
 
+        private bool updating;
+
+        public bool Updating
+        {
+            get { return updating && (Parent == null || Parent.Updating); }
+            set { updating = value; }
+        }
+
         protected ComponentBase(params ComponentBase[] components)
         {
             Visible = true;
@@ -121,6 +129,8 @@ namespace EventHorizonRider.Core
 
         public void Update(GameTime gameTime, InputState inputState)
         {
+            if (Updating) return;
+
             ForEach<ComponentBase>(child => child.Update(gameTime, inputState));
 
             UpdateCore(gameTime, inputState);

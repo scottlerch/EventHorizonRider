@@ -26,7 +26,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Space.Rings.SetLevel(level);
             gameContext.Root.Space.Ship.Speed = level.ShipSpeed;
 
-            gameContext.Root.Music.Play();
+            gameContext.Root.Music.Start();
 
             gameContext.GameState = new RunningState();
         }

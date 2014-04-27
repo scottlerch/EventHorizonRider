@@ -20,6 +20,8 @@ namespace EventHorizonRider.Core.Engine
 
         public int CurrentLevelNumber { get; set; }
 
+        public bool Paused { get; set; }
+
         private Task ioTask;
 
         public Task IoTask

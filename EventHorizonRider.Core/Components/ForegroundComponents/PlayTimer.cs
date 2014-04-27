@@ -15,7 +15,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         const float TextVerticalSpacing = 5;
 
         private TimeSpan gameTimeElapsed;
-        private TimeSpan? gameStartTime;
         private bool updatingTime;
         private readonly PlayerData playerData;
 
@@ -92,8 +91,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             if (updatingTime)
             {
-                gameStartTime = gameStartTime ?? gameTime.TotalGameTime;
-                gameTimeElapsed = gameTime.TotalGameTime - gameStartTime.Value;
+                gameTimeElapsed += gameTime.ElapsedGameTime;
             }
 
             scoreColor = Color.White;
@@ -117,7 +115,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         public void Restart()
         {
             updatingTime = true;
-            gameStartTime = null;
             gameTimeElapsed = TimeSpan.Zero;
         }
 

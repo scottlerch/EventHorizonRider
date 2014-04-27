@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EventHorizonRider.Core.Components.ForegroundComponents;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace EventHorizonRider.Core.Engine.States
@@ -7,6 +8,7 @@ namespace EventHorizonRider.Core.Engine.States
     {
         private readonly TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(0.1);
         private TimeSpan levelEndTime = TimeSpan.Zero;
+        private TimeSpan totalElapsedGameTime = TimeSpan.Zero;
         private bool levelEnded;
 
         private void UpdateLevel(GameContext gameContext)
@@ -19,6 +21,27 @@ namespace EventHorizonRider.Core.Engine.States
 
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
+            UpdatePauseState(gameContext);
+
+            if (gameContext.Paused)
+            {
+                gameContext.Root.Music.Pause();
+                gameContext.Root.Foreground.PlayButton.Show(state:PlayButtonState.Resume);
+                gameContext.Root.Space.SetBlur(blurAmount: 1.5f);
+                gameContext.Root.Space.Updating = true;
+                gameContext.Root.Music.Updating = true;
+                gameContext.Root.Foreground.PlayTimer.Updating = true;
+                return;
+            }
+
+            gameContext.Root.Music.Play();
+            gameContext.Root.Foreground.PlayButton.Show(state:PlayButtonState.Pause);
+            gameContext.Root.Space.SetBlur(blurAmount: 0f);
+            gameContext.Root.Space.Updating = false;
+            gameContext.Root.Music.Updating = false;
+            gameContext.Root.Foreground.PlayTimer.Updating = false;
+
+            totalElapsedGameTime += gameTime.ElapsedGameTime;
             gameContext.Root.Foreground.PlayButton.Scale = gameContext.Root.Space.Blackhole.Scale.X;
 
             if (gameContext.Root.OverrideLevel.HasValue)
@@ -41,15 +64,38 @@ namespace EventHorizonRider.Core.Engine.States
                 {
                     if (!levelEnded)
                     {
-                        levelEndTime = gameTime.TotalGameTime + waitBetweenLevels;
+                        levelEndTime = totalElapsedGameTime + waitBetweenLevels;
                         levelEnded = true;
                     }
-                    else if (levelEndTime.Ticks < gameTime.TotalGameTime.Ticks)
+                    else if (levelEndTime.Ticks < totalElapsedGameTime.Ticks)
                     {
                         levelEnded = false;
                         gameContext.CurrentLevelNumber++;
 
                         UpdateLevel(gameContext);
+                    }
+                }
+            }
+        }
+
+        private void UpdatePauseState(GameContext gameContext)
+        {
+            // Check if use toggled pause manually with keyboard
+            if (gameContext.Root.PausePressed)
+            {
+                gameContext.Paused = !gameContext.Paused;
+            }
+            else
+            {
+                if (gameContext.Root.Foreground.PlayButton.Button.Pressed)
+                {
+                    if (gameContext.Paused)
+                    {
+                        gameContext.Paused = false;
+                    }
+                    else if (!gameContext.Paused)
+                    {
+                        gameContext.Paused = true;
                     }
                 }
             }

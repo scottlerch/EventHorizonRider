@@ -31,7 +31,11 @@ namespace EventHorizonRider.Core.Components
 
         public void SetBlur(float blurAmount)
         {
-            blurAmountMotion.Set(blurAmount);
+            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
+            {
+                blurAmountMotion.Set(blurAmount);
+                blur.BlueAmount = blurAmountMotion.Value * DeviceInfo.OutputScale;
+            }
         }
 
         public void StartBlur(float blurAmount, float speed)

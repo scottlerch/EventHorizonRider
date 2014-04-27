@@ -118,5 +118,25 @@ namespace EventHorizonRider.Core
 
             base.Draw(gameTime);
         }
+
+        protected override void OnActivated(object sender, EventArgs args)
+        {
+            if (gameContext != null)
+            {
+                gameContext.Paused = true;
+            }
+
+            base.OnActivated(sender, args);
+        }
+
+        protected override void OnDeactivated(object sender, EventArgs args)
+        {
+            if (gameContext != null)
+            {
+                gameContext.Paused = false;
+            }
+
+            base.OnDeactivated(sender, args);
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private TimeSpan? lastRingAdd;
         private TimeSpan lastRingDuration = TimeSpan.Zero;
+        private TimeSpan totalElapsedGameTime = TimeSpan.Zero;
 
         private Level level;
 
@@ -57,6 +58,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 return;
             }
 
+            // Track relative total elapsed game time since if we use gameTime.TotalGameTime it won't work when paused
+            totalElapsedGameTime += gameTime.ElapsedGameTime;
+
             ForEachReverse<Ring>(ring =>
             {
                 if (ring.OutterRadius <= (blackhole.Height * 0.2f))
@@ -78,9 +82,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 }
             });
 
-            lastRingAdd = lastRingAdd ?? gameTime.TotalGameTime;
+            lastRingAdd = lastRingAdd ?? totalElapsedGameTime;
 
-            if (gameTime.TotalGameTime - lastRingAdd > (level.RingInterval + lastRingDuration))
+            if (totalElapsedGameTime - lastRingAdd > (level.RingInterval + lastRingDuration))
             {
                 var ringInfo = currentSequence.Next();
 
@@ -92,7 +96,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 {
                     AddChild(ringFactory.Create(ringInfo, level), Depth);
 
-                    lastRingAdd = gameTime.TotalGameTime;
+                    lastRingAdd = totalElapsedGameTime;
                     lastRingDuration = TimeSpan.FromSeconds(ringInfo.SpiralRadius / level.RingSpeed);
                 }
             }

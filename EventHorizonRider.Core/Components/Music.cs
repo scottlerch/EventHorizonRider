@@ -15,7 +15,7 @@ namespace EventHorizonRider.Core.Components
 #endif
         }
 
-        public void Play()
+        public void Start()
         {
 #if !WINDOWS
             MediaPlayer.IsRepeating = true;
@@ -27,6 +27,26 @@ namespace EventHorizonRider.Core.Components
         {
 #if !WINDOWS
             MediaPlayer.Stop();
+#endif
+        }
+
+        public void Pause()
+        {
+#if !WINDOWS
+            if (MediaPlayer.State != MediaState.Paused)
+            {
+                MediaPlayer.Pause();
+            }
+#endif
+        }
+
+        public void Play()
+        {
+#if !WINDOWS
+            if (MediaPlayer.State != MediaState.Playing)
+            {
+                MediaPlayer.Resume();
+            }
 #endif
         }
     }
