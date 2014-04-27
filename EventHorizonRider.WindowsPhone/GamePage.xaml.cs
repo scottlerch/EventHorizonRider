@@ -1,19 +1,18 @@
-﻿using EventHorizonRider.Core;
-using Microsoft.Phone.Controls;
+﻿using System;
+using EventHorizonRider.Core;
 using MonoGame.Framework.WindowsPhone;
 
 namespace EventHorizonRider.WindowsPhone
 {
-    public partial class GamePage : PhoneApplicationPage
+    public partial class GamePage
     {
-        private MainGame game;
-
         public GamePage()
         {
             InitializeComponent();
 
-            this.game = XamlGame<MainGame>.Create("", this);
-            this.game.SetResolution(1280, 768);
+            MainGame game = XamlGame<MainGame>.Create("", this);
+            game.DetailLevel = DetailLevel.CollisionDetectionHalf | DetailLevel.PixelShaderEffectsNone;
+            game.TargetElapsedTime = TimeSpan.FromSeconds(1/30D);
         }
     }
 }

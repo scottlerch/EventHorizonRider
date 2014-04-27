@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Resources;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
@@ -10,7 +9,7 @@ using EventHorizonRider.WindowsPhone.Resources;
 
 namespace EventHorizonRider.WindowsPhone
 {
-    public partial class App : Application
+    public partial class App
     {
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
@@ -39,7 +38,7 @@ namespace EventHorizonRider.WindowsPhone
             if (Debugger.IsAttached)
             {
                 // Display the current frame rate counters.
-                Application.Current.Host.Settings.EnableFrameRateCounter = true;
+                Current.Host.Settings.EnableFrameRateCounter = true;
 
                 // Show the areas of the app that are being redrawn in each frame.
                 //Application.Current.Host.Settings.EnableRedrawRegions = true;
@@ -104,7 +103,7 @@ namespace EventHorizonRider.WindowsPhone
         #region Phone application initialization
 
         // Avoid double-initialization
-        private bool phoneApplicationInitialized = false;
+        private bool phoneApplicationInitialized;
 
         // Do not add any additional code to this method
         private void InitializePhoneApplication()
@@ -131,6 +130,7 @@ namespace EventHorizonRider.WindowsPhone
         private void CompleteInitializePhoneApplication(object sender, NavigationEventArgs e)
         {
             // Set the root visual to allow the application to render
+            // ReSharper disable once RedundantCheckBeforeAssignment
             if (RootVisual != RootFrame)
                 RootVisual = RootFrame;
 
@@ -158,7 +158,6 @@ namespace EventHorizonRider.WindowsPhone
             // For UI consistency, clear the entire page stack
             while (RootFrame.RemoveBackEntry() != null)
             {
-                ; // do nothing
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Engine;
+﻿using System;
+using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Engine.States;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
@@ -16,7 +17,8 @@ namespace EventHorizonRider.Core
         private InputState inputState;
         private SpriteBatch spriteBatch;
         private GameContext gameContext;
-        private readonly DetailLevel detailLevel;
+        private DetailLevel detailLevel;
+        private bool initialized;
 
         public MainGame() : this(DetailLevel.Full)
         {
@@ -30,6 +32,20 @@ namespace EventHorizonRider.Core
             Content.RootDirectory = "Content";
 
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+        }
+
+        public DetailLevel DetailLevel
+        {
+            get { return detailLevel; }
+            set
+            {
+                if (initialized)
+                {
+                    throw new InvalidOperationException("Detail level cannot be set, game already initialized");
+                }
+
+                detailLevel = value;
+            }
         }
 
         /// <remarks>
@@ -49,6 +65,8 @@ namespace EventHorizonRider.Core
         /// </summary>
         protected override void Initialize()
         {
+            initialized = true;
+
             DeviceInfo.Initialize(GraphicsDevice, detailLevel);
 
             gameContext = new GameContext(new InitializeState());

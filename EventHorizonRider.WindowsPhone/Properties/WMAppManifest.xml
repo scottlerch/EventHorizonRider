@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{0585c019-6a7f-49db-a6ec-c2ba902c1545}" Title="EventHorizonRider.WindowsPhone" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="EventHorizonRider.WindowsPhone author" Description="Sample description" Publisher="EventHorizonRider.WindowsPhone" PublisherID="{82d0b8e8-f7f3-4ea5-b1f7-bfd586af78d6}">
+  <App xmlns="" ProductID="{0585c019-6a7f-49db-a6ec-c2ba902c1545}" Title="Event Horizon" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Scott Lerch" Description="Ride the event horizon of a blackhole avoiding obstacles to a killer beat." Publisher="Scott Lerch" PublisherID="{82d0b8e8-f7f3-4ea5-b1f7-bfd586af78d6}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />

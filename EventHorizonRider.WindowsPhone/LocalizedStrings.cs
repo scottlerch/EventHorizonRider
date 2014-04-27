@@ -7,8 +7,8 @@ namespace EventHorizonRider.WindowsPhone
     /// </summary>
     public class LocalizedStrings
     {
-        private static AppResources _localizedResources = new AppResources();
+        private static readonly AppResources Resources = new AppResources();
 
-        public AppResources LocalizedResources { get { return _localizedResources; } }
+        public AppResources LocalizedResources { get { return Resources; } }
     }
 }

@@ -235,3 +235,9 @@ pip-log.txt
 /EventHorizonRider.iOS/Content/Music/*.xnb
 /EventHorizonRider.iOS/Content/Music/*.wma
 /temp
+/EventHorizonRider.WindowsPhone/Content/Effects/*.xnb
+/EventHorizonRider.WindowsPhone/Content/Fonts/*.xnb
+/EventHorizonRider.WindowsPhone/Content/Images/*.xnb
+/EventHorizonRider.WindowsPhone/Content/Music/*.xnb
+/EventHorizonRider.WindowsPhone/Content/Music/*.wma
+/EventHorizonRider.WindowsPhone/Content/Sounds/*.xnb

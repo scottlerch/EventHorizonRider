@@ -36,12 +36,18 @@ namespace EventHorizonRider.Core.Components
 
         public void StartBlur(float blurAmount, float speed)
         {
-            blurAmountMotion.UpdateTarget(blurAmount, speed);
+            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
+            {
+                blurAmountMotion.UpdateTarget(blurAmount, speed);
+            }
         }
 
         public void StopBlur()
         {
-            blurAmountMotion.UpdateTarget(0);
+            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
+            {
+                blurAmountMotion.UpdateTarget(0);
+            }
         }
 
         public Space(Background background, Halo halo, Shockwave shockwave, RingCollection ringCollection, Ship ship, Blackhole blackhole) 
@@ -60,22 +66,29 @@ namespace EventHorizonRider.Core.Components
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            renderTarget1 = new RenderTarget2D(graphics,
-                                              graphics.PresentationParameters.BackBufferWidth,
-                                              graphics.PresentationParameters.BackBufferHeight);
-
-            var scaleBackBuffer = 2f;
-
-            if (DeviceInfo.DetailLevel == DetailLevel.PixelShaderEffectsHalf)
+            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
             {
-                scaleBackBuffer = 4f;
+                renderTarget1 = new RenderTarget2D(graphics,
+                    graphics.PresentationParameters.BackBufferWidth,
+                    graphics.PresentationParameters.BackBufferHeight);
+
+                var scaleBackBuffer = 2f;
+
+                if (DeviceInfo.DetailLevel == DetailLevel.PixelShaderEffectsHalf)
+                {
+                    scaleBackBuffer = 4f;
+                }
+
+                renderTarget2 = new RenderTarget2D(graphics,
+                    (int)
+                        Math.Round((graphics.PresentationParameters.BackBufferWidth/scaleBackBuffer)*
+                                   DeviceInfo.InputScale),
+                    (int)
+                        Math.Round((graphics.PresentationParameters.BackBufferHeight/scaleBackBuffer)*
+                                   DeviceInfo.InputScale));
+
+                blur.LoadContent(content);
             }
-
-            renderTarget2 = new RenderTarget2D(graphics,
-                                  (int)Math.Round((graphics.PresentationParameters.BackBufferWidth / scaleBackBuffer) * DeviceInfo.InputScale),
-                                  (int)Math.Round((graphics.PresentationParameters.BackBufferHeight / scaleBackBuffer) * DeviceInfo.InputScale));
-
-            blur.LoadContent(content);
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -86,9 +99,12 @@ namespace EventHorizonRider.Core.Components
 
         protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            if (blurAmountMotion.Value > 0)
+            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
             {
-                graphics.SetRenderTarget(renderTarget1);
+                if (blurAmountMotion.Value > 0)
+                {
+                    graphics.SetRenderTarget(renderTarget1);
+                }
             }
 
             graphics.Clear(Background.BackgroundColor);
@@ -100,21 +116,24 @@ namespace EventHorizonRider.Core.Components
         {
             spriteBatch.End();
 
-            if (blurAmountMotion.Value > 0)
+            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
             {
-                graphics.SetRenderTarget(renderTarget2);
+                if (blurAmountMotion.Value > 0)
+                {
+                    graphics.SetRenderTarget(renderTarget2);
 
-                blur.SetBlurEffectParameters(1f / renderTarget2.Width, 0f);
-                spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
-                spriteBatch.Draw(renderTarget1, renderTarget2.Bounds, Color.White);
-                spriteBatch.End();
+                    blur.SetBlurEffectParameters(1f/renderTarget2.Width, 0f);
+                    spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
+                    spriteBatch.Draw(renderTarget1, renderTarget2.Bounds, Color.White);
+                    spriteBatch.End();
 
-                graphics.SetRenderTarget(null);
+                    graphics.SetRenderTarget(null);
 
-                blur.SetBlurEffectParameters(0f, 1f/renderTarget1.Height);
-                spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
-                spriteBatch.Draw(renderTarget2, renderTarget1.Bounds, Color.White);
-                spriteBatch.End();
+                    blur.SetBlurEffectParameters(0f, 1f/renderTarget1.Height);
+                    spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
+                    spriteBatch.Draw(renderTarget2, renderTarget1.Bounds, Color.White);
+                    spriteBatch.End();
+                }
             }
         }
     }

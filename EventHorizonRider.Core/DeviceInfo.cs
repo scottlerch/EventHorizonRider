@@ -25,6 +25,8 @@ namespace EventHorizonRider.Core
 
         public static DetailLevel DetailLevel { get; private set; }
 
+        public static int FrameRate { get; private set; }
+
         public static void Initialize(GraphicsDevice graphics, DetailLevel detailLevel)
         {
             // Original native resolution
