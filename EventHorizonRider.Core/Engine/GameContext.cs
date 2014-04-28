@@ -79,6 +79,7 @@ namespace EventHorizonRider.Core.Engine
                     menuButton: new MenuButton(),
                     playTime: new PlayTimer(PlayerData),
                     title: new Title(),
+                    controlsHelp: new ControlsHelp(), 
                     fpsCounter: new FpsCounter()));
         }
 

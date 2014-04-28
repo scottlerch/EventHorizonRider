@@ -121,6 +121,9 @@
     <Content Include="Content\Images\asteroid_4.xnb" />
     <Content Include="Content\Images\dust_1.xnb" />
     <Content Include="Content\Images\credits.xnb" />
+    <Content Include="Content\Images\help_left.xnb" />
+    <Content Include="Content\Images\help_right.xnb" />
+    <Content Include="Content\Images\help_start.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>

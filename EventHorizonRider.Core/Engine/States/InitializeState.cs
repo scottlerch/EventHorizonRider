@@ -10,6 +10,8 @@ namespace EventHorizonRider.Core.Engine.States
 
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
+            gameContext.Root.Foreground.ControlsHelp.Show(speed:2f);
+
             gameContext.Root.Menu.Visible = false;
 
             gameContext.Root.Space.Background.Scale = 1f;

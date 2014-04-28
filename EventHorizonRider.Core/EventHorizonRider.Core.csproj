@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="ComponentBase.cs" />
     <Compile Include="Components\Button.cs" />
+    <Compile Include="Components\ForegroundComponents\ControlsHelp.cs" />
     <Compile Include="Components\Menu.cs" />
     <Compile Include="Components\MenuComponents\Credits.cs" />
     <Compile Include="Components\MenuComponents\CreditsButton.cs" />

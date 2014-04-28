@@ -7,6 +7,8 @@ namespace EventHorizonRider.Core.Engine.States
     {
         public override void Handle(GameContext gameContext, GameTime gameTime)
         {
+            gameContext.Root.Foreground.ControlsHelp.Hide(speed:4f);
+
             gameContext.Root.Menu.Visible = true;
 
             gameContext.Root.Space.StartBlur(blurAmount:5f, speed:15f);

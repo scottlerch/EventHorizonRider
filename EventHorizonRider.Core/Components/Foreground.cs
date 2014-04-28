@@ -15,13 +15,16 @@ namespace EventHorizonRider.Core.Components
 
         public Title Title { get; private set; }
 
-        public Foreground(PlayButton playButton, MenuButton menuButton, PlayTimer playTime, Title title, FpsCounter fpsCounter) 
-            : base(playButton, menuButton, playTime, title, fpsCounter)
+        public ControlsHelp ControlsHelp { get; private set; }
+
+        public Foreground(PlayButton playButton, MenuButton menuButton, PlayTimer playTime, ControlsHelp controlsHelp, Title title, FpsCounter fpsCounter) 
+            : base(playButton, menuButton, playTime, controlsHelp, title, fpsCounter)
         {
             PlayButton = playButton;
             MenuButton = menuButton;
             PlayTimer = playTime;
             Title = title;
+            ControlsHelp = controlsHelp;
             FpsCounter = fpsCounter;
         }
 
