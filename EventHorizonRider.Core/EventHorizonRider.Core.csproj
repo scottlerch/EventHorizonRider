@@ -37,6 +37,7 @@
   <PropertyGroup>
     <DefineConstants Condition=" '$(SolutionName)' == 'EventHorizonRider.Windows' ">$(DefineConstants);WINDOWS</DefineConstants>
     <DefineConstants Condition=" '$(SolutionName)' == 'EventHorizonRider.WindowsPhone' ">$(DefineConstants);WINDOWS_PHONE</DefineConstants>
+    <DefineConstants Condition=" '$(SolutionName)' == 'EventHorizonRider.PSMobile.Core' ">$(DefineConstants);PSM</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ComponentBase.cs" />
