@@ -35,6 +35,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 Color.LightGray,
                 Color.DarkGray,
                 Color.Beige,
+                MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.DarkGray, 0.5),
             };
 
             sparseAsteroids = new RingTexturesInfo();
