@@ -45,8 +45,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             sparseAsteroids.ScaleRange = Range.Create(0.1f, 0.6f);
             sparseAsteroids.RadiusOffsetJitter = 10f;
             sparseAsteroids.AngleJitter = 0.8f;
-            sparseAsteroids.TaperAmount = 1;
-            sparseAsteroids.TaperScale = 1f;
+            sparseAsteroids.TaperAmount = 2;
+            sparseAsteroids.TaperScale = 0.8f;
             sparseAsteroids.TextureColors = new[]
             {
                 Color.DarkGray.AdjustLight(1.2f),
@@ -60,14 +60,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             dust.ScaleRange = Range.Create(0.3f, 1.2f);
             dust.RadiusOffsetJitter = 10f;
             dust.AngleJitter = 0.8f;
-            dust.TaperAmount = 4;
-            dust.TaperScale = 0.4f;
+            dust.TaperAmount = 6;
+            dust.TaperScale = 0.3f;
             dust.TextureColors = new []
             {
                 Color.Tan, 
                 Color.Tan.AdjustLight(0.8f),
+                MathUtilities.LinearInterpolate(Color.Tan, Color.Beige, 0.5),
                 Color.Beige,
                 Color.Beige.AdjustLight(0.9f),
+                MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.Beige.AdjustLight(0.9f), 0.5)
             };
 
             // TODO: calculate from viewport
