@@ -68,7 +68,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     if (!ring.ConsumedByBlackhole)
                     {
                         // TODO: pulse needs to handle spirals better, maybe slowly grow as spiral consumed?
-                        blackhole.Pulse(1.3f, level.RingSpeed / 200f);
+                        blackhole.Pulse(1.2f, level.RingSpeed / 200f);
                         ring.ConsumedByBlackhole = true;
 
                         if (ChildrenCount == 1)

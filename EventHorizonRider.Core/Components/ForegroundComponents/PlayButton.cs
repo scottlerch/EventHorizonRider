@@ -60,7 +60,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 { PlayButtonState.Start, new Info("START", buttonFont.MeasureString("START"), Color.White, Color.Yellow) },
                 { PlayButtonState.Restart, new Info("RESET", buttonFont.MeasureString("RESET"), Color.White, Color.Yellow) },
                 { PlayButtonState.Resume, new Info("RESUME", buttonFont.MeasureString("RESUME"), Color.White, Color.Yellow) },
-                { PlayButtonState.Pause, new Info("PAUSE", buttonFont.MeasureString("PAUSE"), Color.DarkGray.AdjustLight(0.1f), Color.Gray.AdjustLight(0.1f)) },
+                { PlayButtonState.Pause, new Info("PAUSE", buttonFont.MeasureString("PAUSE"), Color.DarkGray.AdjustLight(0.2f), Color.Gray.AdjustLight(0.3f)) },
             };
 
             screenCenter = new Vector2(
