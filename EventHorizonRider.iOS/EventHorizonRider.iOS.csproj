@@ -124,6 +124,10 @@
     <Content Include="Content\Images\help_left.xnb" />
     <Content Include="Content\Images\help_right.xnb" />
     <Content Include="Content\Images\help_start.xnb" />
+    <Content Include="Content\Images\asteroid_shadow_1.xnb" />
+    <Content Include="Content\Images\asteroid_shadow_2.xnb" />
+    <Content Include="Content\Images\asteroid_shadow_3.xnb" />
+    <Content Include="Content\Images\asteroid_shadow_4.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>

@@ -19,7 +19,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private Vector2 helpStartPosition;
         private Texture2D helpStart;
 
-        private Motion startMotion;
+        private Motion startMotion = new Motion();
 
         private bool fading;
         private float directionAlpha = MaxAlpha;
