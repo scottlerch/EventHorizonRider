@@ -101,6 +101,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     var ringObject = new RingObject
                     {
                         Texture = texturesInfo.Textures[textureIndex],
+                        ShadowTexture = texturesInfo.ShadowTextures != null ? texturesInfo.ShadowTextures[textureIndex] : null,
                         CollisionInfo = texturesInfo.CollisionInfos[textureIndex],
                         Rotation = MathHelper.WrapAngle((float) random.NextDouble()*MathHelper.TwoPi),
                         RotationRate = (float) random.NextDouble()*MathHelper.TwoPi/4f*(random.Next(2) == 0 ? -1f : 1f),
@@ -185,6 +186,18 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             foreach (var ringObject in ringObjects)
             {
+                if (ringObject.ShadowTexture != null)
+                {
+                    spriteBatch.Draw(
+                        ringObject.ShadowTexture,
+                        ringObject.Position + new Vector2(30, 30) * ringObject.Scale, // TODO: where to get shadow offset?
+                        origin: ringObject.Origin,
+                        color: Color.White * 0.8f,
+                        rotation: ringObject.Rotation,
+                        depth: ringObject.RelativeDepth + Depth - 0.000001f, // TODO: where to get this depth fudge factor?
+                        scale: ringObject.Scale);
+                }
+
                 spriteBatch.Draw(
                     ringObject.Texture,
                     ringObject.Position,

@@ -8,6 +8,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
     internal class Title : ComponentBase
     {
         private Texture2D texture;
+        private Vector2 position;
+        private Vector2 origin;
 
         private float alpha = 1f;
 
@@ -19,6 +21,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             texture = content.Load<Texture2D>(@"Images\title");
+
+            position = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
+            origin = new Vector2(texture.Width / 2f, texture.Height / 2f);
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -38,7 +43,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             if (Visible)
             {
-                spriteBatch.Draw(texture, position: Vector2.Zero, color: Color.White * alpha, depth: Depth);
+                spriteBatch.Draw(texture, position, origin: origin, color: Color.White * alpha, depth: Depth, scale:new Vector2(1.01f));
             }
         }
     }

@@ -22,7 +22,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             viewportCenter = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
 
-            asteroids = LoadData(content, "asteroid", 4);
+            asteroids = LoadData(content, "asteroid", 4, hasShadow:true);
             asteroids.DensityRange = Range.Create(15, 35);
             asteroids.ScaleRange = Range.Create(0.2f, 0.8f);
             asteroids.RadiusOffsetJitter = 10f;
@@ -38,6 +38,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             };
 
             sparseAsteroids = new RingTexturesInfo();
+            sparseAsteroids.ShadowTextures = asteroids.ShadowTextures;
             sparseAsteroids.Textures = asteroids.Textures;
             sparseAsteroids.CollisionInfos = asteroids.CollisionInfos;
             sparseAsteroids.DensityRange = Range.Create(5, 10);
@@ -54,7 +55,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 Color.Beige,
             };
 
-            dust = LoadData(content, "dust", 1);
+            dust = LoadData(content, "dust", 1, hasShadow:false);
             dust.DensityRange = Range.Create(85, 95);
             dust.ScaleRange = Range.Create(0.3f, 1.2f);
             dust.RadiusOffsetJitter = 10f;
@@ -73,17 +74,19 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             startRadius = 700;
         }
 
-        private RingTexturesInfo LoadData(ContentManager content, string imageBaseName, int count)
+        private RingTexturesInfo LoadData(ContentManager content, string imageBaseName, int count, bool hasShadow)
         {
             var texturesInfo = new RingTexturesInfo
             {
                 Textures = new Texture2D[count],
+                ShadowTextures = hasShadow? new Texture2D[count] : null,
                 CollisionInfos = new CollisionInfo[count],
             };
 
             for (var i = 0; i < count; i++)
             {
                 texturesInfo.Textures[i] = content.Load<Texture2D>(@"Images\" + imageBaseName + "_" + (i + 1));
+                if (hasShadow) texturesInfo.ShadowTextures[i] = content.Load<Texture2D>(@"Images\" + imageBaseName + "_shadow_" + (i + 1));
                 texturesInfo.CollisionInfos[i] = CollisionDetection.GetCollisionInfo(texturesInfo.Textures[i], resolution:DeviceInfo.DetailLevel.HasFlag(DetailLevel.CollisionDetectionFull)? 1f : 0.75f);
             }
 

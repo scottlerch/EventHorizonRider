@@ -13,6 +13,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     {
         public float RelativeDepth { get; set; }
         public Texture2D Texture { get; set; }
+        public Texture2D ShadowTexture { get; set; }
         public float Rotation { get; set; }
         public Vector2 Origin { get; set; }
         public Vector2 Scale { get; set; }

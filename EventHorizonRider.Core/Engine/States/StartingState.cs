@@ -28,7 +28,7 @@ namespace EventHorizonRider.Core.Engine.States
 
             gameContext.Root.Music.Start();
 
-            gameContext.Root.Foreground.ControlsHelp.Hide(speed:0.4f);
+            gameContext.Root.Foreground.ControlsHelp.Hide(speed:0.2f);
 
             gameContext.GameState = new RunningState();
         }

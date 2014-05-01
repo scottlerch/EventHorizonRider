@@ -211,6 +211,28 @@
       <Processor>MGTextureProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\asteroid_shadow_1.png">
+      <Name>asteroid_shadow_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\asteroid_shadow_2.png">
+      <Name>asteroid_shadow_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\asteroid_shadow_3.png">
+      <Name>asteroid_shadow_3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\asteroid_shadow_4.png">
+      <Name>asteroid_shadow_4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

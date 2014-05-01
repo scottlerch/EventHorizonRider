@@ -7,7 +7,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
     internal class ControlsHelp : ComponentBase
     {
-        private const float MaxAlpha = 0.7f;
+        private const float MaxAlpha = 0.3f;
 
         private Vector2 helpLeftPosition;
         private Texture2D helpLeft;
