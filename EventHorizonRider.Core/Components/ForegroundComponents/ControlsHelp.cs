@@ -1,4 +1,5 @@
 ﻿using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +19,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private Vector2 helpStartPosition;
         private Texture2D helpStart;
 
+        private Motion startMotion;
+
         private bool fading;
         private float directionAlpha = MaxAlpha;
         private float directionFadeSpeed;
@@ -36,6 +39,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             helpLeftPosition = new Vector2(0, (DeviceInfo.LogicalHeight / 2) - (helpLeft.Height / 2));
             helpRightPosition = new Vector2(DeviceInfo.LogicalWidth - helpRight.Width, (DeviceInfo.LogicalHeight / 2) - (helpLeft.Height / 2));
             helpStartPosition = new Vector2((DeviceInfo.LogicalWidth / 2) - (helpStart.Width / 2), (DeviceInfo.LogicalHeight / 2) + 125);
+
+            startMotion.Initialize(value:0, target:20, speed:80);
         }
 
         public void Hide(float speed)
@@ -59,6 +64,13 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
+            startMotion.Update(gameTime);
+
+            if (startMotion.IsDone)
+            {
+                startMotion.UpdateTarget(startMotion.Value > 0? 0 : 20);
+            }
+
             if (fading)
             {
                 directionAlpha += (float) gameTime.ElapsedGameTime.TotalSeconds*directionFadeSpeed;
@@ -84,7 +96,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             spriteBatch.Draw(helpLeft, color: Color.White * directionAlpha, position: helpLeftPosition, depth: Depth);
             spriteBatch.Draw(helpRight, color: Color.White * directionAlpha, position: helpRightPosition, depth: Depth);
-            spriteBatch.Draw(helpStart, color: Color.White * startAlpha, position: helpStartPosition, depth: Depth);
+            spriteBatch.Draw(helpStart, color: Color.White * startAlpha, position: new Vector2(helpStartPosition.X, helpStartPosition.Y - startMotion.Value), depth: Depth);
         }
     }
 }

@@ -12,6 +12,8 @@ namespace EventHorizonRider.Core.Physics
 
         public float Acceleration { get; private set; }
 
+        public bool IsDone { get; private set; }
+
         public void Initialize(float value, float target, float speed, float acceleration = 0f)
         {
             Value = value;
@@ -31,7 +33,7 @@ namespace EventHorizonRider.Core.Physics
         {
             Target = target;
 
-            if (Target < Value && Speed > 0)
+            if ((Target < Value && Speed > 0) || (Target > Value && Speed < 0))
             {
                 Speed *= -1f;
             }
@@ -44,15 +46,31 @@ namespace EventHorizonRider.Core.Physics
                 Speed *= Acceleration*(float) gameTime.ElapsedGameTime.TotalSeconds;
             }
 
+            Value += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
+
             if (Speed > 0)
             {
-                Value += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
-                Value = Value > Target ? Target : Value;
+                if (Value > Target)
+                {
+                    IsDone = true;
+                    Value = Target;
+                }
+                else
+                {
+                    IsDone = false;
+                }
             }
             else
             {
-                Value += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
-                Value = Value < Target ? Target : Value;
+                if (Value < Target)
+                {
+                    IsDone = true;
+                    Value = Target;
+                }
+                else
+                {
+                    IsDone = false;
+                }
             }
         }
 
