@@ -63,7 +63,7 @@ namespace EventHorizonRider.Core.Engine
             Root = new Root(
                 music: new Music(),
                 space: new Space(
-                    background: new Background(),
+                    background: new Background(new StarFactory()),
                     halo: new Halo(blackhole),
                     shockwave: shockwave,
                     ringCollection: new RingCollection(blackhole, shockwave),

@@ -11,6 +11,8 @@ namespace EventHorizonRider.Core
         PixelShaderEffectsFull = 4,
         CollisionDetectionHalf = 8,
         CollisionDetectionFull = 16,
-        Full = PixelShaderEffectsFull | CollisionDetectionFull,
+        StaticStars = 32,
+        DynamicStars = 64,
+        Full = PixelShaderEffectsFull | CollisionDetectionFull | DynamicStars,
     }
 }
