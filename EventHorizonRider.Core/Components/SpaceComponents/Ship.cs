@@ -22,6 +22,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public Texture2D Texture { get; set; }
         private Texture2D shieldTexture;
+        private SoundEffect thrustSound;
+        private SoundEffectInstance thrustSoundInstance;
 
         private SoundEffect crashSound;
         private bool stopped = true;
@@ -46,6 +48,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             viewportCenter = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
+
+            thrustSound = content.Load<SoundEffect>(@"Sounds\thrust");
+            thrustSoundInstance = thrustSound.CreateInstance();
+            thrustSoundInstance.IsLooped = true;
 
             Texture = content.Load<Texture2D>(@"Images\ship");
             CollisionInfo = CollisionDetection.GetCollisionInfo(Texture, resolution: DeviceInfo.DetailLevel.HasFlag(DetailLevel.CollisionDetectionFull) ? 1f : 0.75f);
@@ -144,6 +150,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             if (stopped)
             {
+                if (thrustSoundInstance.State == SoundState.Playing)
+                {
+                    thrustSoundInstance.Stop(true);
+                }
                 return;
             }
 
@@ -152,18 +162,21 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             sideThrustEmitter.Spawning = false;
 
             var left = false;
+            var isMoving = false;
 
             if (Left(inputState.KeyState, inputState.TouchState))
             {
                 Rotation -= (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
                 sideThrustEmitter.Spawning = true;
                 left = true;
+                isMoving = true;
             }
 
             if (Right(inputState.KeyState, inputState.TouchState))
             {
                 Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
                 sideThrustEmitter.Spawning = true;
+                isMoving = true;
             }
 
             Rotation = MathHelper.WrapAngle(Rotation);
@@ -192,6 +205,15 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             mainThrustEmitter.SpawnDirection.Normalize();
 
             particleSystem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            if (isMoving && thrustSoundInstance.State == SoundState.Stopped)
+            {
+                thrustSoundInstance.Play();
+            }
+            else if (!isMoving && thrustSoundInstance.State == SoundState.Playing)
+            {
+                thrustSoundInstance.Stop();
+            }
         }
 
         internal void Initialize()

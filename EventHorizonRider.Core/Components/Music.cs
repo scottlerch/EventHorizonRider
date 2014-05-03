@@ -10,14 +10,14 @@ namespace EventHorizonRider.Core.Components
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-#if !WINDOWS && !PSM
+#if !PSM
             musicSong = content.Load<Song>(@"Music\techno_song");
 #endif
         }
 
         public void Start()
         {
-#if !WINDOWS && !PSM
+#if !PSM
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(musicSong);
 #endif
@@ -25,14 +25,14 @@ namespace EventHorizonRider.Core.Components
 
         public void Stop()
         {
-#if !WINDOWS && !PSM
+#if !PSM
             MediaPlayer.Stop();
 #endif
         }
 
         public void Pause()
         {
-#if !WINDOWS && !PSM
+#if !PSM
             if (MediaPlayer.State != MediaState.Paused)
             {
                 MediaPlayer.Pause();
@@ -42,7 +42,7 @@ namespace EventHorizonRider.Core.Components
 
         public void Play()
         {
-#if !WINDOWS && !PSM
+#if !PSM
             if (MediaPlayer.State != MediaState.Playing)
             {
                 MediaPlayer.Resume();

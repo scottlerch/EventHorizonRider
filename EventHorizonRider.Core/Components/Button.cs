@@ -12,6 +12,8 @@ namespace EventHorizonRider.Core.Components
 
         public Keys? Key { get; private set; }
 
+        private bool keyPreviouslyPressed;
+
         public bool Pressed { get; private set; }
 
         public bool Hover { get; private set; }
@@ -33,12 +35,14 @@ namespace EventHorizonRider.Core.Components
 
             Pressed = IsPressed(inputState.MouseState, inputState.TouchState, inputState.KeyState);
             Hover = IsHover(inputState.MouseState, inputState.TouchState, inputState.KeyState);
+
+            keyPreviouslyPressed = Hover;
         }
 
         private bool IsPressed(MouseState mouseState, TouchCollection touchState, KeyboardState keyboardState)
         {
             return
-                (Key.HasValue && keyboardState.GetPressedKeys().Contains(Key.Value)) ||
+                (Key.HasValue && (keyPreviouslyPressed && !keyboardState.GetPressedKeys().Contains(Key.Value))) ||
                 touchState.Any(t => t.State == TouchLocationState.Released && ButtonBounds.Contains(t.Position)) ||
                 (mouseState.LeftButton == ButtonState.Released && ButtonBounds.Contains(mouseState.Position));
         }

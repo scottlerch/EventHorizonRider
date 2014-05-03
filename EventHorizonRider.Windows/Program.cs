@@ -16,6 +16,7 @@ namespace EventHorizonRider.Windows
         {
             using (var game = new MainGame())
             {
+                game.DetailLevel = DetailLevel.PixelShaderEffectsNone | DetailLevel.CollisionDetectionFull | DetailLevel.StaticStars;
                 game.Run();
             }
         }

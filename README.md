@@ -7,7 +7,7 @@ Build Requirements
 ------------------
  * Visual Studio 2013 with NuGet 2.8+
  * [XNA 4.0 Refresh (Visual Studio 2013)](https://msxna.codeplex.com/releases/view/117230)
- * [MonoGame Content Processors version 3.1.2+](https://github.com/mono/MonoGame) located at $(MSBuildExtensionsPath)/MonoGame/v3.0/
+ * [MonoGame Content Processors version 3.2+](http://www.monogame.net/2014/04/07/monogame-3-2/) located at $(MSBuildExtensionsPath)/MonoGame/v3.0/
  * [Xamarin iOS for Windows](http://xamarin.com/ios)
  * [Windows Phone 8.0 SDK](http://dev.windowsphone.com/en-us/downloadsdk)
 
