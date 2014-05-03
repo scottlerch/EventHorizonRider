@@ -2,6 +2,7 @@
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -9,6 +10,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Blackhole : ComponentBase
     {
+
         private readonly Spring spring = new Spring
         {
             Friction = -0.9f,
@@ -24,6 +26,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private float currentRotation;
 
+        private SoundEffect scaleSound;
+
         public float Height
         {
             get { return texture.Height*spring.BlockX; }
@@ -32,6 +36,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             texture = content.Load<Texture2D>(@"Images\blackhole");
+            scaleSound = content.Load<SoundEffect>(@"Sounds\open_menu");
 
             Position = new Vector2(
                 DeviceInfo.LogicalWidth/2f,
@@ -43,37 +48,44 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             spring.PullBlock(pullX, pullVelocity);
         }
 
-        private float extraBlackholdScale;
-        private float newExtraBlackholdScale;
+        private float extraBlackholeScale;
+        private float newExtraBlackholeScale;
         private float extraBlackholeScaleSpeed;
 
-        public float ExtraScale { get { return extraBlackholdScale; } }
+        public float ExtraScale { get { return extraBlackholeScale; } }
 
         public void SetExtraScale(float scaleSize, bool animate = false, float speed = 1f)
         {
-            newExtraBlackholdScale = scaleSize;
+            newExtraBlackholeScale = scaleSize;
 
             if (!animate)
             {
-                extraBlackholdScale = scaleSize;
+                extraBlackholeScale = scaleSize;
             }
             else
             {
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                if (scaleSize != extraBlackholeScale)
+                {
+                    scaleSound.Play();
+                }
+
                 extraBlackholeScaleSpeed = speed;
-                extraBlackholeScaleSpeed *= extraBlackholdScale < newExtraBlackholdScale ? 1f : -1f;
+                extraBlackholeScaleSpeed *= extraBlackholeScale < newExtraBlackholeScale ? 1f : -1f;
             }
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            if (extraBlackholdScale != newExtraBlackholdScale)
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            if (extraBlackholeScale != newExtraBlackholeScale)
             {
-                extraBlackholdScale += (float)gameTime.ElapsedGameTime.TotalSeconds * extraBlackholeScaleSpeed;
+                extraBlackholeScale += (float)gameTime.ElapsedGameTime.TotalSeconds * extraBlackholeScaleSpeed;
 
-                if ((extraBlackholeScaleSpeed > 0 && extraBlackholdScale > newExtraBlackholdScale) ||
-                    (extraBlackholeScaleSpeed < 0 && extraBlackholdScale < newExtraBlackholdScale))
+                if ((extraBlackholeScaleSpeed > 0 && extraBlackholeScale > newExtraBlackholeScale) ||
+                    (extraBlackholeScaleSpeed < 0 && extraBlackholeScale < newExtraBlackholeScale))
                 {
-                    extraBlackholdScale = newExtraBlackholdScale;
+                    extraBlackholeScale = newExtraBlackholeScale;
                 }
             }
 
@@ -84,7 +96,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             }
         }
 
-        public Vector2 Scale { get { return new Vector2(spring.BlockX + extraBlackholdScale, spring.BlockX + extraBlackholdScale); } }
+        public Vector2 Scale { get { return new Vector2(spring.BlockX + extraBlackholeScale, spring.BlockX + extraBlackholeScale); } }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {

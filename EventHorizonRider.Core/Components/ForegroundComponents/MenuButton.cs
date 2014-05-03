@@ -1,6 +1,7 @@
 ﻿using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,6 +13,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         public Button Button { get; private set; }
 
         private SpriteFont buttonFont;
+        private SoundEffect buttonSound;
 
         private bool isVisible = true;
         private bool isBack;
@@ -25,6 +27,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
+            buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
 
             menuTextSize = buttonFont.MeasureString("MENU");
             backTextSize = buttonFont.MeasureString("BACK");
@@ -48,6 +51,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
             Button.Update(inputState, Visible);
+
+            if (Button.Pressed)
+            {
+                buttonSound.Play();
+            }
         }
 
         public void Show(bool back = false)

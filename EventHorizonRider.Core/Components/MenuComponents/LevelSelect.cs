@@ -2,6 +2,7 @@
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -20,6 +21,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
         }
 
         private SpriteFont buttonFont;
+        private SoundEffect buttonSound;
 
         private Vector2 startLevelTextLocation;
         private Vector2 startLevelTextSize;
@@ -36,6 +38,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             MaximumStartLevel = 1;
 
             buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
+            buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
 
             startLevelTextSize = buttonFont.MeasureString("START LEVEL");
 
@@ -83,6 +86,11 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             if (Visible)
             {
                 Pressed = IsPressed(inputState);
+
+                if (Pressed.HasValue)
+                {
+                    buttonSound.Play();
+                }
             }
         }
 
