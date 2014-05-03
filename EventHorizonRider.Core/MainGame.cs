@@ -34,6 +34,8 @@ namespace EventHorizonRider.Core
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
         }
 
+        public event EventHandler Initialized = delegate { }; 
+
         public DetailLevel DetailLevel
         {
             get { return detailLevel; }
@@ -47,6 +49,8 @@ namespace EventHorizonRider.Core
                 detailLevel = value;
             }
         }
+
+        internal GameContext GameContext { get { return gameContext; } }
 
         /// <remarks>
         /// Only here for testing.  MonoGame should automatically select correct resolution.
@@ -73,6 +77,8 @@ namespace EventHorizonRider.Core
             inputState = new InputState();
 
             base.Initialize();
+
+            Initialized(this, EventArgs.Empty);
         }
 
         /// <summary>
