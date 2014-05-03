@@ -17,3 +17,7 @@ Each platform has it's own solution file but all solutions share same portable c
 and XNA/MonoGame content library.  There is very little platform specific code in each solution. 
 Just load up a solution and build.  When switching between platform solutions be sure to do
 a full rebuild so platform specific preprocessor directives are taken into consideration.
+
+Notes
+-----
+Using custom MonoGame libs from https://github.com/scottlerch/MonoGame
