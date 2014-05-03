@@ -20,7 +20,7 @@ namespace EventHorizonRider.Core
         private DetailLevel detailLevel;
         private bool initialized;
 
-        public MainGame() : this(DetailLevel.Full)
+        public MainGame() : this(DetailLevel.Default)
         {
         }
 

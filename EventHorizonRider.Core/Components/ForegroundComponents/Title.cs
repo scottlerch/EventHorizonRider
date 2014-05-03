@@ -18,6 +18,22 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             FadeSpeed = 1f;
         }
 
+        public float FadeSpeed { get; set; }
+
+        public bool FadingOut { get; private set; }
+
+        public bool Visible { get { return alpha > 0f; } }
+
+        internal void Show()
+        {
+            alpha = 1f;
+        }
+
+        public void Hide()
+        {
+            FadingOut = true;
+        }
+
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             texture = content.Load<Texture2D>(@"Images\title");
@@ -33,11 +49,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 alpha -= (float)gameTime.ElapsedGameTime.TotalSeconds*1f;
             }
         }
-        public float FadeSpeed { get; set; }
-
-        public bool FadingOut { get; set; }
-
-        public bool Visible { get { return alpha > 0f; } }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {

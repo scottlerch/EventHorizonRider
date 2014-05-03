@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Engine;
+﻿using System;
+using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
@@ -26,14 +27,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             starFactory = newStarFactory;
         }
 
-        public float Scale { get; set; }
-
         private bool UseStaticStars { get; set; }
+
+        public float Scale { get; set; }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            Scale = 1f;
-
             background = content.Load<Texture2D>(@"Images\background");
             starsBackground = content.Load<Texture2D>(@"Images\stars");
 
@@ -54,7 +53,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     origin: new Vector2(background.Width / 2f, background.Height / 2f),
                     depth:Depth,
                     color:Color.White * 0.5f,
-                    scale:(new Vector2(2f, 2f) * Scale));
+                    scale: (new Vector2(2f, 2f) * Scale));
 
 
                 if (UseStaticStars)
@@ -64,7 +63,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                         origin: new Vector2(starsBackground.Width/2f, starsBackground.Height/2f),
                         rotation: currentRotation,
                         color: Color.White*0.8f,
-                        scale: new Vector2(1.3f, 1.3f)*Scale,
+                        scale: new Vector2(1.3f, 1.3f) * Scale,
                         depth: Depth + 0.001f);
                 }
                 else

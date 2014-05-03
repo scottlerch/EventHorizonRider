@@ -78,12 +78,11 @@
     <Compile Include="Engine\RingInfoFactory.cs" />
     <Compile Include="Engine\RingType.cs" />
     <Compile Include="Engine\RingTypeSelection.cs" />
-    <Compile Include="Engine\States\EndingState.cs" />
     <Compile Include="Engine\States\MenuState.cs" />
     <Compile Include="Engine\States\OverState.cs" />
     <Compile Include="Engine\States\InitializeState.cs" />
     <Compile Include="Engine\States\RunningState.cs" />
-    <Compile Include="Engine\States\StartingState.cs" />
+    <Compile Include="Engine\States\StartState.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Engine\GameContext.cs" />
     <Compile Include="Graphics\ColorExtensions.cs" />

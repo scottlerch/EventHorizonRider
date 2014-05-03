@@ -11,15 +11,34 @@ namespace EventHorizonRider.Core.Engine.States
         private TimeSpan totalElapsedGameTime = TimeSpan.Zero;
         private bool levelEnded;
 
-        private void UpdateLevel(GameContext gameContext)
+        public override void OnBegin(GameContext gameContext, GameTime gameTime)
         {
-            var level = gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber);
+            gameContext.CurrentLevelNumber = gameContext.PlayerData.DefaultLevelNumber;
+
+            gameContext.Root.Foreground.PlayButton.Hide();
             gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
+            gameContext.Root.Foreground.PlayTimer.Restart();
+            gameContext.Root.Foreground.PlayTimer.ShowLevelAndScore();
+            gameContext.Root.Foreground.MenuButton.Hide();
+            gameContext.Root.Foreground.ControlsHelp.Hide(speed: 0.2f);
+
+            gameContext.Root.Space.Blackhole.Pulse(1.5f, 2.5f);
+            gameContext.Root.Space.StopBlur();
+            gameContext.Root.Space.Halo.Visible = true;
+            gameContext.Root.Space.Blackhole.SetExtraScale(0f);
+            gameContext.Root.Space.Blackhole.Start();
+            gameContext.Root.Space.Ship.Start();
+            gameContext.Root.Space.Rings.Start();
+            gameContext.Root.Space.Background.Start();
+
+            var level = gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber);
             gameContext.Root.Space.Rings.SetLevel(level);
             gameContext.Root.Space.Ship.Speed = level.ShipSpeed;
+
+            gameContext.Root.Music.Start();
         }
 
-        public override void Handle(GameContext gameContext, GameTime gameTime)
+        public override void OnProcess(GameContext gameContext, GameTime gameTime)
         {
             UpdatePauseState(gameContext);
 
@@ -58,7 +77,7 @@ namespace EventHorizonRider.Core.Engine.States
             {
                 if (gameContext.Root.Space.Rings.Intersects(gameContext.Root.Space.Ship))
                 {
-                    gameContext.GameState = new EndingState();
+                    gameContext.GameState = new OverState();
                 }
                 else if (!gameContext.Root.Space.Rings.HasMoreRings && gameContext.Root.Space.Rings.ChildrenCount == 0)
                 {
@@ -76,6 +95,31 @@ namespace EventHorizonRider.Core.Engine.States
                     }
                 }
             }
+        }
+
+        public override void OnEnd(GameContext gameContext, GameTime gameTime)
+        {
+            gameContext.Root.Music.Stop();
+
+            gameContext.Root.Space.SetBlur(blurAmount: 5f);
+            gameContext.Root.Space.Halo.Visible = false;
+            gameContext.Root.Space.Background.Gameover();
+            gameContext.Root.Space.Blackhole.Stop();
+            gameContext.Root.Space.Ship.Stop();
+            gameContext.Root.Space.Rings.Stop();
+
+            gameContext.Root.Foreground.PlayTimer.Stop();
+            gameContext.Root.Foreground.PlayButton.Show(state: PlayButtonState.Restart);
+
+            gameContext.IoTask = gameContext.PlayerData.UpdateBestTime(gameContext.Root.Foreground.PlayTimer.Elapsed, gameContext.CurrentLevelNumber);
+        }
+
+        private void UpdateLevel(GameContext gameContext)
+        {
+            var level = gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber);
+            gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
+            gameContext.Root.Space.Rings.SetLevel(level);
+            gameContext.Root.Space.Ship.Speed = level.ShipSpeed;
         }
 
         private void UpdatePauseState(GameContext gameContext)

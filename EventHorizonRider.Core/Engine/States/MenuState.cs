@@ -1,33 +1,34 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine.States
 {
     internal class MenuState : GameStateBase
     {
-        public override void Handle(GameContext gameContext, GameTime gameTime)
+        public override void OnBegin(GameContext gameContext, GameTime gameTime)
         {
-            gameContext.Root.Foreground.ControlsHelp.Hide(speed:4f);
+            gameContext.Root.Space.Blackhole.SetExtraScale(3.5f, animate: true, speed: 16f);
+            gameContext.Root.Space.StartBlur(blurAmount: 5f, speed: 15f);
 
-            gameContext.Root.Menu.Visible = true;
-
-            gameContext.Root.Space.StartBlur(blurAmount:5f, speed:15f);
+            gameContext.Root.Foreground.ControlsHelp.Hide(speed: 4f);
             gameContext.Root.Foreground.MenuButton.Show(true);
-            gameContext.Root.Foreground.PlayButton.Hide(fade: true, newFadeSpeed:10f);
-            gameContext.Root.Space.Blackhole.SetExtraScale(3.5f, animate:true, speed:16f);
-            gameContext.Root.Space.Background.Scale = gameContext.Root.Space.Blackhole.Scale.X;
-
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            gameContext.Root.Menu.Visible = gameContext.Root.Space.Blackhole.ExtraScale == 3.5f;
+            gameContext.Root.Foreground.PlayButton.Hide(fade: true, newFadeSpeed: 10f);
 
             gameContext.Root.Menu.LevelSelect.MaximumStartLevel = gameContext.PlayerData.HighestLevelNumber;
             gameContext.Root.Menu.LevelSelect.StartLevel = gameContext.PlayerData.DefaultLevelNumber;
+        }
+
+        public override void OnProcess(GameContext gameContext, GameTime gameTime)
+        {
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            gameContext.Root.Menu.Visible = gameContext.Root.Space.Blackhole.ExtraScale == 3.5f;
+            gameContext.Root.Space.Background.Scale = gameContext.Root.Space.Blackhole.Scale.X;
 
             var levelPressed = gameContext.Root.Menu.LevelSelect.Pressed;
 
             if (levelPressed.HasValue)
             {
                 gameContext.IoTask = gameContext.PlayerData.UpdateDefaultLevel(levelPressed.Value);
+                gameContext.Root.Menu.LevelSelect.StartLevel = gameContext.PlayerData.DefaultLevelNumber;
             }
             else if (gameContext.Root.Menu.ResetButton.Button.Pressed)
             {
@@ -51,9 +52,13 @@ namespace EventHorizonRider.Core.Engine.States
                 }
                 else
                 {
-                    gameContext.GameState = new InitializeState();
+                    gameContext.GameState = new StartState();
                 }
             }
+        }
+
+        public override void OnEnd(GameContext gameContext, GameTime gameTime)
+        {
         }
     }
 }
