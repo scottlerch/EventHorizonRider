@@ -146,6 +146,9 @@
     <Content Include="Content\Images\star_2.xnb" />
     <Content Include="Content\Images\star_3.xnb" />
     <Content Include="Content\Images\star_4.xnb" />
+    <Content Include="Content\Sounds\button_click.xnb" />
+    <Content Include="Content\Sounds\open_menu.xnb" />
+    <Content Include="Content\Sounds\thrust.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>

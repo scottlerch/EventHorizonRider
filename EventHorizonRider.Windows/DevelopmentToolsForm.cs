@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Windows
 {
