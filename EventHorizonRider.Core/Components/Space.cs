@@ -29,9 +29,11 @@ namespace EventHorizonRider.Core.Components
 
         public Shockwave Shockwave { get; private set; }
 
+        public bool BlurEnabled { get; set; }
+
         public void SetBlur(float blurAmount)
         {
-            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
+            if (BlurEnabled)
             {
                 blurAmountMotion.Set(blurAmount);
                 blur.BlueAmount = blurAmountMotion.Value * DeviceInfo.OutputScale;
@@ -40,7 +42,7 @@ namespace EventHorizonRider.Core.Components
 
         public void StartBlur(float blurAmount, float speed)
         {
-            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
+            if (BlurEnabled)
             {
                 blurAmountMotion.UpdateTarget(blurAmount, speed);
             }
@@ -48,7 +50,7 @@ namespace EventHorizonRider.Core.Components
 
         public void StopBlur()
         {
-            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
+            if (BlurEnabled)
             {
                 blurAmountMotion.UpdateTarget(0);
             }
@@ -57,6 +59,8 @@ namespace EventHorizonRider.Core.Components
         public Space(Background background, Halo halo, Shockwave shockwave, RingCollection ringCollection, Ship ship, Blackhole blackhole) 
             : base(background, halo, shockwave, ship,ringCollection, blackhole)
         {
+            BlurEnabled = !DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone);
+
             blurAmountMotion = new Motion();
             blurAmountMotion.Initialize(0, 0, 30);
 
@@ -70,7 +74,7 @@ namespace EventHorizonRider.Core.Components
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
+            if (BlurEnabled)
             {
                 renderTarget1 = new RenderTarget2D(graphics,
                     graphics.PresentationParameters.BackBufferWidth,
@@ -103,7 +107,7 @@ namespace EventHorizonRider.Core.Components
 
         protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
+            if (BlurEnabled)
             {
                 if (blurAmountMotion.Value > 0)
                 {
@@ -120,7 +124,7 @@ namespace EventHorizonRider.Core.Components
         {
             spriteBatch.End();
 
-            if (!DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone))
+            if (BlurEnabled)
             {
                 if (blurAmountMotion.Value > 0)
                 {

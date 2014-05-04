@@ -54,6 +54,8 @@
             this.treeView.Name = "treeView";
             this.treeView.Size = new System.Drawing.Size(282, 480);
             this.treeView.TabIndex = 1;
+            this.treeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.OnBeforeNodeSelected);
+            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.OnAfterNodeSelected);
             this.treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OnNodeClick);
             // 
             // splitContainer1

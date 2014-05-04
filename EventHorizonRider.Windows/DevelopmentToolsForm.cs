@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Windows
 {
@@ -116,6 +117,19 @@ namespace EventHorizonRider.Windows
             foreach (var child in node.Nodes.Cast<TreeNode>())
             {
                 SelectNodeRecursive(child, tag);
+            }
+        }
+
+        private void OnAfterNodeSelected(object sender, TreeViewEventArgs e)
+        {
+            e.Node.BackColor = System.Drawing.Color.Yellow;
+        }
+
+        private void OnBeforeNodeSelected(object sender, TreeViewCancelEventArgs e)
+        {
+            if (treeView.SelectedNode != null)
+            {
+                treeView.SelectedNode.BackColor = System.Drawing.Color.White;
             }
         }
     }
