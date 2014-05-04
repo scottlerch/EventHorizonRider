@@ -13,10 +13,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     {
         private const int NumberOfStars = 500;
 
+        private readonly Color gameOverColor = Color.Red.AdjustLight(0.8f);
+        private readonly float gameOverAlpha = 0.5f;
+        private readonly Color defaultColor = Color.Black;
+        private readonly float defaultAlpha = 0.8f;
+
         private Texture2D background;
         private Texture2D starsBackground;
 
         private Color backgroundColor = Color.Black;
+        private float backgroundAlpha = 1f;
         private Vector2 center;
         private float currentRotation;
         private readonly StarFactory starFactory;
@@ -48,13 +54,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            if (backgroundColor != Color.Red)
-            {
+            //if (backgroundColor != gameOverColor)
+            //{
                 spriteBatch.Draw(background,
                     position: center,
                     origin: new Vector2(background.Width / 2f, background.Height / 2f),
                     depth:Depth,
-                    color: StarBackgroundColor,
+                    color: StarBackgroundColor * backgroundAlpha,
                     scale: (new Vector2(2f, 2f) * Scale));
 
 
@@ -64,7 +70,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                         position: center,
                         origin: new Vector2(starsBackground.Width/2f, starsBackground.Height/2f),
                         rotation: currentRotation,
-                        color: Color.White*0.8f,
+                        color: Color.White * backgroundAlpha,
                         scale: new Vector2(1.3f, 1.3f) * Scale,
                         depth: Depth + 0.001f);
                 }
@@ -84,7 +90,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                             rotation: star.Angle * 20f);
                     }
                 }
-            }
+            //}
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -121,12 +127,14 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public void Start()
         {
-            backgroundColor = Color.Black;
+            backgroundColor = defaultColor;
+            backgroundAlpha = defaultAlpha;
         }
 
         public void Gameover()
         {
-            backgroundColor = Color.Red.AdjustLight(0.8f);
+            backgroundColor = gameOverColor;
+            backgroundAlpha = gameOverAlpha;
         }
     }
 }
