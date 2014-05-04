@@ -26,7 +26,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private string bestNumberText;
         private string timeNumberText;
 
-        private Color scoreColor;
+        private readonly Color scoreColor = Color.Yellow;
 
         private SpriteFont labelFont;
         private SpriteFont timeFont;
@@ -40,8 +40,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private bool isLevelAndScoreVisible;
 
-        //private Texture2D foreground;
-
         public PlayTimer(PlayerData playerData)
         {
             this.playerData = playerData;
@@ -50,6 +48,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         public TimeSpan Elapsed
         {
             get { return gameTimeElapsed; }
+            set { gameTimeElapsed = value; }
         }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
@@ -94,28 +93,15 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 gameTimeElapsed += gameTime.ElapsedGameTime;
             }
 
-            scoreColor = Color.White;
-
-            if (gameTimeElapsed >= playerData.BestTime)
-            {
-                scoreColor = Color.Yellow;
-            }
-            else
-            {
-                var percentComplete = 1f - (float) (gameTimeElapsed.TotalSeconds/playerData.BestTime.TotalSeconds);
-
-                scoreColor = Color.White.SetColors(percentComplete, 1f, percentComplete);
-            }
-
             bestNumberText = FormatTime(playerData.BestTime);
             levelNumberText = currentLevelNumber.ToString();
             timeNumberText = FormatTime(gameTimeElapsed);
         }
 
-        public void Restart()
+        public void Restart(TimeSpan initialElapsedTime)
         {
             updatingTime = true;
-            gameTimeElapsed = TimeSpan.Zero;
+            gameTimeElapsed = initialElapsedTime;
         }
 
         public void Stop()

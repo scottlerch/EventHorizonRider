@@ -15,7 +15,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private RingTexturesInfo sparseAsteroids;
         private RingTexturesInfo dust;
 
-        private float startRadius;
+        // TODO: refactor this and calculate from viewport size and maximum ring width
+        public static float StartRadius = 700;
+
         private Vector2 viewportCenter;
 
         internal void LoadContent(ContentManager content, GraphicsDevice graphics)
@@ -72,9 +74,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 Color.Beige.AdjustLight(0.9f),
                 MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.Beige.AdjustLight(0.9f), 0.5)
             };
-
-            // TODO: calculate from viewport
-            startRadius = 700;
         }
 
         private RingTexturesInfo LoadData(ContentManager content, string imageBaseName, int count, bool hasShadow)
@@ -117,7 +116,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 ringCollapseSpeed: level.RingSpeed,
                 rotationalVelocity: info.RotationalVelocity,
                 texturesInfoGroup: GetTexturesInfo(info.Type),
-                innerRadius: startRadius,
+                innerRadius: StartRadius,
                 origin: viewportCenter,
                 spiralRadius: info.SpiralRadius,
                 spiralSpeed: level.ShipSpeed,

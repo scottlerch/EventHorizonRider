@@ -1,4 +1,5 @@
 ﻿using EventHorizonRider.Core.Components.ForegroundComponents;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -6,18 +7,29 @@ namespace EventHorizonRider.Core.Engine.States
 {
     internal class RunningState : GameStateBase
     {
-        private readonly TimeSpan waitBetweenLevels = TimeSpan.FromSeconds(0.1);
-        private TimeSpan levelEndTime = TimeSpan.Zero;
-        private TimeSpan totalElapsedGameTime = TimeSpan.Zero;
-        private bool levelEnded;
+        public static readonly TimeSpan WaitBetweenLevels = TimeSpan.FromSeconds(0.1);
+
+        public Level CurrentLevel { get; private set; }
+
+        public Level NextLevel { get; private set; }
+
+        public TimeSpan NextLevelStartTime { get; private set; }
+
+        public TimeSpan LevelCurrentTime { get; private set; }
+
+        public TimeSpan TotalElapsedGameTime { get; private set; }
+
+        public bool HasLevelEnded { get; private set; }
 
         public override void OnBegin(GameContext gameContext, GameTime gameTime)
         {
             gameContext.CurrentLevelNumber = gameContext.PlayerData.DefaultLevelNumber;
+            CurrentLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
+            NextLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber + 1);
 
             gameContext.Root.Foreground.PlayButton.Hide();
             gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
-            gameContext.Root.Foreground.PlayTimer.Restart();
+            gameContext.Root.Foreground.PlayTimer.Restart(gameContext.LevelCollection.GetLevelStartTime(gameContext.CurrentLevelNumber));
             gameContext.Root.Foreground.PlayTimer.ShowLevelAndScore();
             gameContext.Root.Foreground.MenuButton.Hide();
             gameContext.Root.Foreground.ControlsHelp.Hide(speed: 0.2f);
@@ -60,7 +72,21 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Music.Updating = false;
             gameContext.Root.Foreground.PlayTimer.Updating = false;
 
-            totalElapsedGameTime += gameTime.ElapsedGameTime;
+            if (CurrentLevel.Duration.HasValue)
+            {
+                gameContext.Root.Space.Background.StarBackgroundColor = MathUtilities.LinearInterpolate(
+                    CurrentLevel.Color,
+                    NextLevel.Color,
+                    LevelCurrentTime.TotalSeconds/CurrentLevel.Duration.Value.TotalSeconds);
+            }
+
+            TotalElapsedGameTime += gameTime.ElapsedGameTime;
+
+            if (!HasLevelEnded)
+            {
+                LevelCurrentTime += gameTime.ElapsedGameTime;
+            }
+
             gameContext.Root.Foreground.PlayButton.Scale = gameContext.Root.Space.Blackhole.Scale.X;
 
             if (gameContext.Root.OverrideLevel.HasValue)
@@ -69,7 +95,7 @@ namespace EventHorizonRider.Core.Engine.States
 
                 gameContext.Root.Space.Rings.Clear();
                 
-                UpdateLevel(gameContext);
+                UpdateLevel(gameContext, gameTime);
 
                 gameContext.Root.OverrideLevel = null;
             }
@@ -81,17 +107,17 @@ namespace EventHorizonRider.Core.Engine.States
                 }
                 else if (!gameContext.Root.Space.Rings.HasMoreRings && gameContext.Root.Space.Rings.ChildrenCount == 0)
                 {
-                    if (!levelEnded)
+                    if (!HasLevelEnded)
                     {
-                        levelEndTime = totalElapsedGameTime + waitBetweenLevels;
-                        levelEnded = true;
+                        NextLevelStartTime = TotalElapsedGameTime + WaitBetweenLevels;
+                        HasLevelEnded = true;
                     }
-                    else if (levelEndTime.Ticks < totalElapsedGameTime.Ticks)
+                    else if (NextLevelStartTime.Ticks < TotalElapsedGameTime.Ticks)
                     {
-                        levelEnded = false;
+                        HasLevelEnded = false;
                         gameContext.CurrentLevelNumber++;
 
-                        UpdateLevel(gameContext);
+                        UpdateLevel(gameContext, gameTime);
                     }
                 }
             }
@@ -114,12 +140,16 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.IoTask = gameContext.PlayerData.UpdateBestTime(gameContext.Root.Foreground.PlayTimer.Elapsed, gameContext.CurrentLevelNumber);
         }
 
-        private void UpdateLevel(GameContext gameContext)
+        private void UpdateLevel(GameContext gameContext, GameTime gameTime)
         {
-            var level = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
+            LevelCurrentTime = TimeSpan.Zero;
+
+            CurrentLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
+            NextLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber + 1);
+
             gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
-            gameContext.Root.Space.Rings.SetLevel(level);
-            gameContext.Root.Space.Ship.Speed = level.ShipSpeed;
+            gameContext.Root.Space.Rings.SetLevel(CurrentLevel);
+            gameContext.Root.Space.Ship.Speed = CurrentLevel.ShipSpeed;
         }
 
         private void UpdatePauseState(GameContext gameContext)

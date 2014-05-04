@@ -9,6 +9,9 @@ namespace EventHorizonRider.Core.Engine.States
         {
             gameContext.Root.Menu.Visible = false;
 
+            gameContext.Root.Space.Background.StarBackgroundColor =
+                gameContext.LevelCollection.GetLevel(gameContext.PlayerData.DefaultLevelNumber).Color;
+
             gameContext.Root.Space.Blackhole.SetExtraScale(0f, animate: true, speed: 16f);
             gameContext.Root.Space.Background.Start();
             gameContext.Root.Space.Ship.Initialize();

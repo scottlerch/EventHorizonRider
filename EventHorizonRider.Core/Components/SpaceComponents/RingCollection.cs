@@ -15,10 +15,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     {
         private readonly Blackhole blackhole;
         private readonly Shockwave shockwave;
-        private readonly RingFactory ringFactory = new RingFactory();
+        private readonly RingFactory ringFactory;
         private IEnumerator<RingInfo> currentSequence;
 
-        private TimeSpan? lastRingAdd;
+        private TimeSpan? lastRingAddTime;
         private TimeSpan lastRingDuration = TimeSpan.Zero;
         private TimeSpan totalElapsedGameTime = TimeSpan.Zero;
 
@@ -28,13 +28,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private bool stopped = true;
 
-        public RingCollection(Blackhole blackhole, Shockwave shockwave)
+        public RingCollection(Blackhole blackhole, Shockwave shockwave, RingFactory ringFactory)
         {
             this.blackhole = blackhole;
             this.shockwave = shockwave;
+            this.ringFactory = ringFactory;
         }
 
         public bool HasMoreRings { get; private set; }
+
+        public bool CollisionDetectionDisabled { get; set; }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
@@ -53,14 +56,34 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            if (stopped)
-            {
-                return;
-            }
+            if (stopped) return;
+
+            RemoveConsumedRings();
 
             // Track relative total elapsed game time since if we use gameTime.TotalGameTime it won't work when paused
             totalElapsedGameTime += gameTime.ElapsedGameTime;
+            lastRingAddTime = lastRingAddTime ?? totalElapsedGameTime;
 
+            if ((totalElapsedGameTime - lastRingAddTime) >= (level.RingInterval + lastRingDuration))
+            {
+                var ringInfo = currentSequence.Next();
+
+                if (ringInfo == null)
+                {
+                    HasMoreRings = false;
+                }
+                else
+                {
+                    AddChild(ringFactory.Create(ringInfo, level), Depth);
+
+                    lastRingAddTime = totalElapsedGameTime;
+                    lastRingDuration = TimeSpan.FromSeconds(ringInfo.SpiralRadius / level.RingSpeed);
+                }
+            }
+        }
+
+        private void RemoveConsumedRings()
+        {
             ForEachReverse<Ring>(ring =>
             {
                 if (ring.OutterRadius <= (blackhole.Height * 0.2f))
@@ -81,29 +104,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     RemoveChild(ring);
                 }
             });
-
-            lastRingAdd = lastRingAdd ?? totalElapsedGameTime;
-
-            if (totalElapsedGameTime - lastRingAdd > (level.RingInterval + lastRingDuration))
-            {
-                var ringInfo = currentSequence.Next();
-
-                if (ringInfo == null)
-                {
-                    HasMoreRings = false;
-                }
-                else
-                {
-                    AddChild(ringFactory.Create(ringInfo, level), Depth);
-
-                    lastRingAdd = totalElapsedGameTime;
-                    lastRingDuration = TimeSpan.FromSeconds(ringInfo.SpiralRadius / level.RingSpeed);
-                }
-            }
         }
 
         public bool Intersects(Ship ship)
         {
+            if (CollisionDetectionDisabled) return false;
+
             // TODO: optimize collision detection, this is the biggest bottleneck right now
             return Children.Cast<Ring>().Any(ring => ring.Intersects(ship));
         }

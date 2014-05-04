@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using EventHorizonRider.Core.Components.SpaceComponents;
+using EventHorizonRider.Core.Engine.States;
 using EventHorizonRider.Core.Extensions;
 using Microsoft.Xna.Framework;
 
@@ -21,6 +24,7 @@ namespace EventHorizonRider.Core.Engine
                     shipSpeed: MathHelper.TwoPi*0.8f,
                     ringSeparation: maxRingRadius/1.5f,
                     ringInterval: TimeSpan.FromSeconds(2),
+                    color: Color.White,
                     infiniteSequence: false,
                     sequence: Enumerable.Empty<RingInfo>().Concat(
                         ringInfoFactory.GetRandomSequence(
@@ -56,6 +60,7 @@ namespace EventHorizonRider.Core.Engine
                     shipSpeed: MathHelper.TwoPi*0.9f,
                     ringSeparation: maxRingRadius/2f,
                     ringInterval: TimeSpan.FromSeconds(1.5),
+                    color: Color.DarkSalmon,
                     infiniteSequence: false,
                     sequence: Enumerable.Empty<RingInfo>().Concat(
                         ringInfoFactory.GetStepSequence(
@@ -77,6 +82,7 @@ namespace EventHorizonRider.Core.Engine
                     ringSeparation: maxRingRadius/3,
                     ringInterval: TimeSpan.FromSeconds(1),
                     infiniteSequence: false,
+                    color: Color.Green,
                     sequence: Enumerable.Empty<RingInfo>().Concat(
                         ringInfoFactory.GetZigZagSequence(
                             iterations: 15,
@@ -87,6 +93,7 @@ namespace EventHorizonRider.Core.Engine
                     shipSpeed: MathHelper.TwoPi*1.12f,
                     ringSeparation: maxRingRadius/3,
                     ringInterval: TimeSpan.FromSeconds(0.75),
+                    color: Color.Blue,
                     infiniteSequence: false,
                     sequence: ringInfoFactory.GetRandomSequence(
                         iterations: 20,
@@ -96,6 +103,7 @@ namespace EventHorizonRider.Core.Engine
                     shipSpeed: MathHelper.TwoPi*1.14f,
                     ringSeparation: maxRingRadius/3,
                     ringInterval: TimeSpan.FromSeconds(0.5),
+                    color: Color.Red,
                     infiniteSequence: true,
                     sequence: ringInfoFactory.GetRandomSequence(
                         gapSize: Range.Create(MathHelper.TwoPi/3f, MathHelper.TwoPi/4f)))
@@ -106,7 +114,18 @@ namespace EventHorizonRider.Core.Engine
 
         public Level GetLevel(int level)
         {
-            return levels[level - 1];
+            return level < levels.Count ? levels[level - 1] : levels[levels.Count-1];
+        }
+
+        public TimeSpan GetLevelStartTime(int levelNumber)
+        {
+            return levels.Take(levelNumber - 1)
+                .Aggregate(
+                    TimeSpan.Zero, 
+                    (duration, level) => 
+                        duration + (level.Duration.HasValue? 
+                            level.Duration.Value + RunningState.WaitBetweenLevels : 
+                            TimeSpan.Zero));
         }
     }
 }

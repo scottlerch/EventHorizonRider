@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EventHorizonRider.Core.Components.SpaceComponents;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine
 {
@@ -9,8 +10,9 @@ namespace EventHorizonRider.Core.Engine
     {
         private readonly IEnumerable<RingInfo> internalSequence; 
 
-        public Level(TimeSpan ringInterval, float ringSeparation, float shipSpeed, bool infiniteSequence, IEnumerable<RingInfo> sequence)
+        public Level(TimeSpan ringInterval, float ringSeparation, float shipSpeed, Color color, bool infiniteSequence, IEnumerable<RingInfo> sequence)
         {
+            Color = color;
             RingInterval = ringInterval;
             ShipSpeed = shipSpeed;
             RingSeparation = ringSeparation;
@@ -28,12 +30,19 @@ namespace EventHorizonRider.Core.Engine
                 var list = internalSequence as List<RingInfo>;
                 Duration = TimeSpan.Zero;
 
-                for (int i = 0; i < list.Count - 1; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
-                    Duration += ringInterval;
+                    Duration += ringInterval + TimeSpan.FromSeconds(list[i].SpiralRadius / RingSpeed);
+
+                    if (i == 0)
+                    {
+                        Duration += TimeSpan.FromSeconds(RingFactory.StartRadius/RingSpeed);
+                    }
                 }
             }
         }
+
+        public Color Color { get; private set; }
 
         public TimeSpan? Duration { get; private set; }
 

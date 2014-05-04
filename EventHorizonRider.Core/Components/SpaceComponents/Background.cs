@@ -33,6 +33,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
+            StarBackgroundColor = Color.White;
+
             background = content.Load<Texture2D>(@"Images\background");
             starsBackground = content.Load<Texture2D>(@"Images\stars");
 
@@ -52,7 +54,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     position: center,
                     origin: new Vector2(background.Width / 2f, background.Height / 2f),
                     depth:Depth,
-                    color:Color.White * 0.5f,
+                    color: StarBackgroundColor,
                     scale: (new Vector2(2f, 2f) * Scale));
 
 
@@ -109,7 +111,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             }
         }
 
-        public Color BackgroundColor { get { return backgroundColor; } }
+        public Color BackgroundColor
+        {
+            get { return backgroundColor; }
+            set { backgroundColor = value; }
+        }
+
+        public Color StarBackgroundColor { get; set; }
 
         public void Start()
         {

@@ -105,7 +105,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             var pressedLevelButton = levelButtons.FirstOrDefault(levelButton => levelButton.Button.Pressed);
 
-            if (pressedLevelButton != null)
+            if (pressedLevelButton != null && pressedLevelButton.LevelNumber <= MaximumStartLevel)
             {
                 return pressedLevelButton.LevelNumber;
             }
@@ -130,7 +130,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             {
                 var color = Color.LightGray.AdjustLight(0.4f);
 
-                if (levelButton.Button.Hover)
+                if (levelButton.Button.Hover && levelButton.LevelNumber <= MaximumStartLevel)
                 {
                     color = Color.Yellow;
                 }

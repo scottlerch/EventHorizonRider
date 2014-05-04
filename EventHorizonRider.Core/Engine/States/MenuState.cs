@@ -29,6 +29,8 @@ namespace EventHorizonRider.Core.Engine.States
             {
                 gameContext.IoTask = gameContext.PlayerData.UpdateDefaultLevel(levelPressed.Value);
                 gameContext.Root.Menu.LevelSelect.StartLevel = gameContext.PlayerData.DefaultLevelNumber;
+                gameContext.Root.Space.Background.StarBackgroundColor =
+                    gameContext.LevelCollection.GetLevel(gameContext.Root.Menu.LevelSelect.StartLevel).Color;
             }
             else if (gameContext.Root.Menu.ResetButton.Button.Pressed)
             {
