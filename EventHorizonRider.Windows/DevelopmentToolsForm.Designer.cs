@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.treeView = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -42,16 +44,17 @@
             this.propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyGrid.Location = new System.Drawing.Point(0, 0);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(338, 467);
+            this.propertyGrid.Size = new System.Drawing.Size(488, 480);
             this.propertyGrid.TabIndex = 0;
             // 
-            // treeView1
+            // treeView
             // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.Location = new System.Drawing.Point(0, 0);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(197, 467);
-            this.treeView1.TabIndex = 1;
+            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView.Location = new System.Drawing.Point(0, 0);
+            this.treeView.Name = "treeView";
+            this.treeView.Size = new System.Drawing.Size(282, 480);
+            this.treeView.TabIndex = 1;
+            this.treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OnNodeClick);
             // 
             // splitContainer1
             // 
@@ -61,20 +64,26 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.treeView1);
+            this.splitContainer1.Panel1.Controls.Add(this.treeView);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.propertyGrid);
-            this.splitContainer1.Size = new System.Drawing.Size(539, 467);
-            this.splitContainer1.SplitterDistance = 197;
+            this.splitContainer1.Size = new System.Drawing.Size(774, 480);
+            this.splitContainer1.SplitterDistance = 282;
             this.splitContainer1.TabIndex = 2;
+            // 
+            // timer
+            // 
+            this.timer.Enabled = true;
+            this.timer.Interval = 1000;
+            this.timer.Tick += new System.EventHandler(this.OnTimer);
             // 
             // DevelopmentToolsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(539, 467);
+            this.ClientSize = new System.Drawing.Size(774, 480);
             this.ControlBox = false;
             this.Controls.Add(this.splitContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
@@ -92,7 +101,8 @@
         #endregion
 
         private System.Windows.Forms.PropertyGrid propertyGrid;
-        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.TreeView treeView;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Timer timer;
     }
 }

@@ -19,6 +19,7 @@ namespace EventHorizonRider.Windows
             using (var game = new MainGame())
             {
                 game.DetailLevel = DetailLevel.PixelShaderEffectsFull | DetailLevel.CollisionDetectionFull | DetailLevel.StaticStars;
+                game.IsMouseVisible = true;
 
                 if (args.Length > 0 && args[0].Equals("Development", StringComparison.OrdinalIgnoreCase))
                 {
