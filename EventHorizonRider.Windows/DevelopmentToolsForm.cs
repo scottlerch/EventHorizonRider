@@ -29,7 +29,13 @@ namespace EventHorizonRider.Windows
 
             var root = CreateNode(mainGame);
             var gameContextNode = CreateNode(mainGame.GameContext);
-            var levelsNode = CreateNode(mainGame.GameContext.Levels);
+            var levelsNode = CreateNode(mainGame.GameContext.LevelCollection);
+
+            foreach (var level in mainGame.GameContext.LevelCollection.Levels)
+            {
+                levelsNode.Nodes.Add(CreateNode(level));
+            }
+
             var playerData = CreateNode(mainGame.GameContext.PlayerData);
             var gameState = CreateNode(mainGame.GameContext.GameState);
             var componentsNode = CreateGameComponentsNode(mainGame.GameContext.Root);

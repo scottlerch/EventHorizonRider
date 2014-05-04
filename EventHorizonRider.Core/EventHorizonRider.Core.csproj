@@ -72,7 +72,7 @@
     <Compile Include="Components\SpaceComponents\StarFactory.cs" />
     <Compile Include="DetailLevel.cs" />
     <Compile Include="Engine\Level.cs" />
-    <Compile Include="Engine\Levels.cs" />
+    <Compile Include="Engine\LevelCollection.cs" />
     <Compile Include="Engine\PlayerData.cs" />
     <Compile Include="Engine\RingInfo.cs" />
     <Compile Include="Engine\RingInfoFactory.cs" />

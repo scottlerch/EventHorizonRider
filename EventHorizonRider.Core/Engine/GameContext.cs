@@ -16,7 +16,7 @@ namespace EventHorizonRider.Core.Engine
 
         public PlayerData PlayerData { get; private set; }
 
-        public Levels Levels { get; private set; }
+        public LevelCollection LevelCollection { get; private set; }
 
         public int CurrentLevelNumber { get; set; }
 
@@ -50,7 +50,7 @@ namespace EventHorizonRider.Core.Engine
 
         private void InitializeEngine()
         {
-            Levels = new Levels(new RingInfoFactory());
+            LevelCollection = new LevelCollection(new RingInfoFactory());
             PlayerData = new PlayerData();
             IoTask = PlayerData.Load();
         }

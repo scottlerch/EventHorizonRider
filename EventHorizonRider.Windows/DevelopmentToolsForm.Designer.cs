@@ -44,7 +44,7 @@
             this.propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyGrid.Location = new System.Drawing.Point(0, 0);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(488, 480);
+            this.propertyGrid.Size = new System.Drawing.Size(488, 517);
             this.propertyGrid.TabIndex = 0;
             // 
             // treeView
@@ -52,7 +52,7 @@
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(282, 480);
+            this.treeView.Size = new System.Drawing.Size(282, 517);
             this.treeView.TabIndex = 1;
             this.treeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.OnBeforeNodeSelected);
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.OnAfterNodeSelected);
@@ -71,7 +71,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.propertyGrid);
-            this.splitContainer1.Size = new System.Drawing.Size(774, 480);
+            this.splitContainer1.Size = new System.Drawing.Size(774, 517);
             this.splitContainer1.SplitterDistance = 282;
             this.splitContainer1.TabIndex = 2;
             // 
@@ -85,7 +85,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(774, 480);
+            this.ClientSize = new System.Drawing.Size(774, 517);
             this.ControlBox = false;
             this.Controls.Add(this.splitContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;

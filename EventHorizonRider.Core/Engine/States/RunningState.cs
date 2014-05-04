@@ -31,7 +31,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Space.Rings.Start();
             gameContext.Root.Space.Background.Start();
 
-            var level = gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber);
+            var level = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
             gameContext.Root.Space.Rings.SetLevel(level);
             gameContext.Root.Space.Ship.Speed = level.ShipSpeed;
 
@@ -116,7 +116,7 @@ namespace EventHorizonRider.Core.Engine.States
 
         private void UpdateLevel(GameContext gameContext)
         {
-            var level = gameContext.Levels.GetLevel(gameContext.CurrentLevelNumber);
+            var level = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
             gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
             gameContext.Root.Space.Rings.SetLevel(level);
             gameContext.Root.Space.Ship.Speed = level.ShipSpeed;
