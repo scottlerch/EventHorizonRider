@@ -1,6 +1,7 @@
 ﻿using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +13,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
     internal class PlayTimer : ComponentBase
     {
         const float TextPadding = 10;
-        const float TextVerticalSpacing = 5;
+        const float TextVerticalSpacing = 15;
 
         private TimeSpan gameTimeElapsed;
         private bool updatingTime;
@@ -25,6 +26,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private string levelNumberText;
         private string bestNumberText;
         private string timeNumberText;
+
+        private float levelTextSize;
 
         private readonly Color scoreColor = Color.Yellow;
 
@@ -40,6 +43,10 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private bool isLevelAndScoreVisible;
 
+        private float progress;
+
+        private Texture2D progressBar;
+
         public PlayTimer(PlayerData playerData)
         {
             this.playerData = playerData;
@@ -53,6 +60,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
+            progressBar = new Texture2D(graphics, 1, 1);
+            progressBar.SetData(new[] { Color.White });
+
             viewSize = new Vector2(DeviceInfo.LogicalWidth, DeviceInfo.LogicalHeight);
 
             labelFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
@@ -69,11 +79,18 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 timeFont.MeasureString("0000.00").X,
                 timeFont.MeasureString("00000.00").X
             };
+
+            levelTextSize = labelFont.MeasureString(LevelText).X;
         }
 
         public void SetLevel(int newCurrentLevelNumber)
         {
             currentLevelNumber = newCurrentLevelNumber;
+        }
+
+        public void SetProgress(float progress)
+        {
+            this.progress = progress;
         }
 
         public void ShowLevelAndScore()
@@ -122,6 +139,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             {
                 DrawCurrentTime(spriteBatch);
                 DrawLevelNumber(spriteBatch);
+                DrawProgressBar(spriteBatch);
             }
         }
 
@@ -167,7 +185,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private void DrawLevelNumber(SpriteBatch spriteBatch)
         {
             var levelNumberTextSize = labelFont.MeasureString(levelNumberText).X;
-            var levelTextSize = labelFont.MeasureString(LevelText).X;
 
             spriteBatch.DrawString(
                 labelFont,
@@ -190,6 +207,35 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 1,
                 SpriteEffects.None,
                 Depth);
+        }
+
+        private void DrawProgressBar(SpriteBatch spriteBatch)
+        {
+            var levelNumberTextSize = labelFont.MeasureString("1").X;
+
+            var position = new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, bestTextSize.Y + 8);
+            var scale = new Vector2(levelNumberTextSize + levelTextSize - 2, 6);
+
+            spriteBatch.Draw(
+                progressBar,
+                position: new Vector2(position.X + 2, position.Y + 2),
+                color: Color.Black,
+                scale: scale,
+                depth: Depth);
+
+            spriteBatch.Draw(
+                progressBar,
+                position: position,
+                color: Color.DarkGray.AdjustLight(0.5f),
+                scale: scale,
+                depth: Depth + 0.00001f);
+
+            spriteBatch.Draw(
+                progressBar,
+                position: position,
+                color: Color.Green,
+                scale: new Vector2(MathUtilities.LinearInterpolate(0f, scale.X, progress), scale.Y),
+                depth: Depth + 0.00002f);
         }
     }
 }

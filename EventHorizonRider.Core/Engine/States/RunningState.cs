@@ -74,10 +74,14 @@ namespace EventHorizonRider.Core.Engine.States
 
             if (CurrentLevel.Duration.HasValue)
             {
+                var progress = (float)LevelCurrentTime.TotalSeconds/(float)CurrentLevel.Duration.Value.TotalSeconds;
+
                 gameContext.Root.Space.Background.StarBackgroundColor = MathUtilities.LinearInterpolate(
                     CurrentLevel.Color,
                     NextLevel.Color,
-                    LevelCurrentTime.TotalSeconds/CurrentLevel.Duration.Value.TotalSeconds);
+                    progress);
+
+                gameContext.Root.Foreground.PlayTimer.SetProgress(progress);
             }
 
             TotalElapsedGameTime += gameTime.ElapsedGameTime;
