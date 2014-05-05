@@ -47,8 +47,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private Texture2D progressBar;
 
+        private Motion levelNumberScaling = new Motion();
+
         public PlayTimer(PlayerData playerData)
         {
+            levelNumberScaling.Initialize(0f, 0f, 0f);
             this.playerData = playerData;
         }
 
@@ -83,9 +86,14 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             levelTextSize = labelFont.MeasureString(LevelText).X;
         }
 
-        public void SetLevel(int newCurrentLevelNumber)
+        public void SetLevel(int newCurrentLevelNumber, bool animate = false)
         {
             currentLevelNumber = newCurrentLevelNumber;
+
+            if (animate)
+            {
+                levelNumberScaling.Initialize(1f, 0f, 0.5f);
+            }
         }
 
         public void SetProgress(float progress)
@@ -105,6 +113,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
+            levelNumberScaling.Update(gameTime);
+
             if (updatingTime)
             {
                 gameTimeElapsed += gameTime.ElapsedGameTime;
@@ -197,16 +207,19 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 SpriteEffects.None,
                 Depth);
 
+            var scaleFactor = 10f*levelNumberScaling.Value;
+            var textScale = Vector2.One + (Vector2.One * scaleFactor);
+
             spriteBatch.DrawString(
                 labelFont,
                 levelNumberText,
-                new Vector2(viewSize.X - levelNumberTextSize - TextPadding, TextPadding),
-                Color.White,
-                0,
-                Vector2.Zero,
-                1,
-                SpriteEffects.None,
-                Depth);
+                new Vector2((viewSize.X - (levelNumberTextSize * textScale.X) - TextPadding), TextPadding),
+                Color.White * (1f - levelNumberScaling.Value),
+                rotation: 0,
+                origin: Vector2.Zero,
+                scale: textScale,
+                effect:SpriteEffects.None,
+                depth:Depth + 0.00003f);
         }
 
         private void DrawProgressBar(SpriteBatch spriteBatch)

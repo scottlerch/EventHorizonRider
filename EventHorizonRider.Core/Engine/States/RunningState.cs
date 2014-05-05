@@ -150,7 +150,7 @@ namespace EventHorizonRider.Core.Engine.States
             CurrentLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
             NextLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber + 1);
 
-            gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
+            gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber, animate: true);
             gameContext.Root.Space.Rings.SetLevel(CurrentLevel);
             gameContext.Root.Space.Ship.Speed = CurrentLevel.ShipSpeed;
             gameContext.Root.Space.Shockwave.SetColor(NextLevel.Color);

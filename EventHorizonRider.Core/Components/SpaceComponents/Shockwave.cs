@@ -41,7 +41,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     origin: new Vector2(texture.Width / 2f, texture.Height / 2f),
                     rotation: currentRotation,
                     scale: new Vector2(currentScale, currentScale),
-                    color: executeColor * 0.2f,
+                    color: executeColor * 0.3f,
                     depth: Depth);
             }
         }
