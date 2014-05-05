@@ -42,10 +42,9 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Space.Ship.Start();
             gameContext.Root.Space.Rings.Start();
             gameContext.Root.Space.Background.Start();
-
-            var level = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
-            gameContext.Root.Space.Rings.SetLevel(level);
-            gameContext.Root.Space.Ship.Speed = level.ShipSpeed;
+            gameContext.Root.Space.Rings.SetLevel(CurrentLevel);
+            gameContext.Root.Space.Ship.Speed = CurrentLevel.ShipSpeed;
+            gameContext.Root.Space.Shockwave.SetColor(NextLevel.Color);
 
             gameContext.Root.Music.Start();
         }
@@ -74,14 +73,14 @@ namespace EventHorizonRider.Core.Engine.States
 
             if (CurrentLevel.Duration.HasValue)
             {
-                var progress = (float)LevelCurrentTime.TotalSeconds/(float)CurrentLevel.Duration.Value.TotalSeconds;
+                var progress = LevelCurrentTime.TotalSeconds/CurrentLevel.Duration.Value.TotalSeconds;
 
                 gameContext.Root.Space.Background.StarBackgroundColor = MathUtilities.LinearInterpolate(
                     CurrentLevel.Color,
                     NextLevel.Color,
                     progress);
 
-                gameContext.Root.Foreground.PlayTimer.SetProgress(progress);
+                gameContext.Root.Foreground.PlayTimer.SetProgress((float)progress);
             }
 
             TotalElapsedGameTime += gameTime.ElapsedGameTime;
@@ -154,6 +153,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
             gameContext.Root.Space.Rings.SetLevel(CurrentLevel);
             gameContext.Root.Space.Ship.Speed = CurrentLevel.ShipSpeed;
+            gameContext.Root.Space.Shockwave.SetColor(NextLevel.Color);
         }
 
         private void UpdatePauseState(GameContext gameContext)

@@ -1,5 +1,6 @@
 ﻿using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,6 +17,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private float currentScale;
 
+        private Color currentColor;
+        private Color executeColor;
+
         public Shockwave(Blackhole newBlackhole)
         {
             blackhole = newBlackhole;
@@ -24,6 +28,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
+            currentColor = Color.White;
+
             texture = content.Load<Texture2D>(@"Images\shockwave");
         }
 
@@ -35,7 +41,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     origin: new Vector2(texture.Width / 2f, texture.Height / 2f),
                     rotation: currentRotation,
                     scale: new Vector2(currentScale, currentScale),
-                    color: Color.White * 0.2f,
+                    color: executeColor * 0.2f,
                     depth: Depth);
             }
         }
@@ -56,6 +62,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             Visible = true;
             currentScale = 0.4f;
+            executeColor = currentColor;
+        }
+
+        public void SetColor(Color color)
+        {
+            currentColor = color;
         }
     }
 }
