@@ -27,7 +27,7 @@ namespace EventHorizonRider.Core.Engine.States
             CurrentLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
             NextLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber + 1);
 
-            gameContext.Root.Foreground.PlayButton.Hide();
+            gameContext.Root.Foreground.PlayButton.Show(state: PlayButtonState.Pause);
             gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
             gameContext.Root.Foreground.PlayTimer.Restart(gameContext.LevelCollection.GetLevelStartTime(gameContext.CurrentLevelNumber));
             gameContext.Root.Foreground.PlayTimer.ShowLevelAndScore();
