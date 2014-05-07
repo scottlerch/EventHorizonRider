@@ -129,15 +129,15 @@ namespace EventHorizonRider.Core.Engine.States
                 }
             }
 
-            if (LevelCurrentTime > gameContext.PlayerData.BestTime)
+            if (TotalElapsedGameTime > gameContext.PlayerData.BestTime)
             {
                 if (!BestSurpassed)
                 {
-                    gameContext.Root.Foreground.PlayTimer.UpdateBest(LevelCurrentTime, isNew:true);
+                    gameContext.Root.Foreground.PlayTimer.UpdateBest(TotalElapsedGameTime, isNew: true);
                     BestSurpassed = true;
                 }
 
-                gameContext.Root.Foreground.PlayTimer.UpdateBest(LevelCurrentTime);
+                gameContext.Root.Foreground.PlayTimer.UpdateBest(TotalElapsedGameTime);
             }
         }
 

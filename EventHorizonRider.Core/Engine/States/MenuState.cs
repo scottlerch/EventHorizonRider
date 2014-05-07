@@ -37,6 +37,8 @@ namespace EventHorizonRider.Core.Engine.States
             {
                 gameContext.IoTask = gameContext.PlayerData.Reset();
                 gameContext.Root.Foreground.PlayTimer.UpdateBest(TimeSpan.Zero);
+                gameContext.Root.Menu.LevelSelect.MaximumStartLevel = 1;
+                gameContext.Root.Menu.LevelSelect.StartLevel = 1;
             }
             else if (gameContext.Root.Menu.CreditsButton.Button.Pressed)
             {

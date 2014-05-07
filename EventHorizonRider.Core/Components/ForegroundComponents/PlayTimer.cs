@@ -155,7 +155,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         }
 
         private TimeSpan newBestDuration;
-        private readonly TimeSpan newBestDurationMax = TimeSpan.FromSeconds(4);
+        private readonly TimeSpan newBestDurationMax = TimeSpan.FromSeconds(2);
         private float newBestAlpha;
 
         public void UpdateBest(TimeSpan best, bool isNew = false)
