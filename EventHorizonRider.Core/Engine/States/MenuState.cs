@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine.States
 {
@@ -35,6 +36,7 @@ namespace EventHorizonRider.Core.Engine.States
             else if (gameContext.Root.Menu.ResetButton.Button.Pressed)
             {
                 gameContext.IoTask = gameContext.PlayerData.Reset();
+                gameContext.Root.Foreground.PlayTimer.UpdateBest(TimeSpan.Zero);
             }
             else if (gameContext.Root.Menu.CreditsButton.Button.Pressed)
             {

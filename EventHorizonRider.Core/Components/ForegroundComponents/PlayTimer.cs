@@ -3,6 +3,7 @@ using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -17,7 +18,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private TimeSpan gameTimeElapsed;
         private bool updatingTime;
-        private readonly PlayerData playerData;
 
         private Vector2 bestTextSize;
 
@@ -34,6 +34,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private SpriteFont labelFont;
         private SpriteFont timeFont;
 
+        private SoundEffect newBestSound;
+
         private Vector2 viewSize;
 
         private List<float> textOffset;
@@ -49,10 +51,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private Motion levelNumberScaling = new Motion();
 
-        public PlayTimer(PlayerData playerData)
+        public PlayTimer()
         {
             levelNumberScaling.Initialize(0f, 0f, 0f);
-            this.playerData = playerData;
         }
 
         public TimeSpan Elapsed
@@ -60,6 +61,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             get { return gameTimeElapsed; }
             set { gameTimeElapsed = value; }
         }
+
+        public TimeSpan Best { get; private set; }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
@@ -70,6 +73,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             labelFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
             timeFont = content.Load<SpriteFont>(@"Fonts\time_font");
+
+            newBestSound = content.Load<SoundEffect>(@"Sounds\new_best");
 
             bestTextSize = labelFont.MeasureString(BestText);
             labelFont.MeasureString(LevelText);
@@ -113,6 +118,19 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
+            if (newBestDuration > TimeSpan.Zero)
+            {
+                newBestDuration -= gameTime.ElapsedGameTime;
+
+                var alpha = (float) Math.Sin(newBestDuration.TotalSeconds*15);
+                if (alpha < 0)
+                {
+                    alpha *= -1f;
+                }
+
+                newBestAlpha = MathUtilities.LinearInterpolate(0.5f, 1f, alpha);
+            }
+
             levelNumberScaling.Update(gameTime);
 
             if (updatingTime)
@@ -120,7 +138,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 gameTimeElapsed += gameTime.ElapsedGameTime;
             }
 
-            bestNumberText = FormatTime(playerData.BestTime);
+            bestNumberText = FormatTime(Best);
             levelNumberText = currentLevelNumber.ToString();
             timeNumberText = FormatTime(gameTimeElapsed);
         }
@@ -134,6 +152,22 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         public void Stop()
         {
             updatingTime = false;
+        }
+
+        private TimeSpan newBestDuration;
+        private readonly TimeSpan newBestDurationMax = TimeSpan.FromSeconds(4);
+        private float newBestAlpha;
+
+        public void UpdateBest(TimeSpan best, bool isNew = false)
+        {
+            Best = best;
+
+            if (isNew)
+            {
+                newBestSound.Play();
+                newBestAlpha = 0f;
+                newBestDuration = newBestDurationMax;
+            }
         }
 
         private string FormatTime(TimeSpan time)
@@ -176,6 +210,20 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 1,
                 SpriteEffects.None,
                 Depth);
+
+            if (newBestDuration > TimeSpan.Zero)
+            {
+                spriteBatch.DrawString(
+                    labelFont,
+                    "NEW!",
+                    new Vector2(TextPadding, (TextPadding + 5) + bestTextSize.Y),
+                    Color.Yellow * newBestAlpha,
+                    0,
+                    Vector2.Zero,
+                    1,
+                    SpriteEffects.None,
+                    Depth);
+            }
         }
 
         private void DrawCurrentTime(SpriteBatch spriteBatch)

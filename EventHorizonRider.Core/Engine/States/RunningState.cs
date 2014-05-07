@@ -21,8 +21,12 @@ namespace EventHorizonRider.Core.Engine.States
 
         public bool HasLevelEnded { get; private set; }
 
+        public bool BestSurpassed { get; private set; }
+
         public override void OnBegin(GameContext gameContext, GameTime gameTime)
         {
+            BestSurpassed = false;
+
             gameContext.CurrentLevelNumber = gameContext.PlayerData.DefaultLevelNumber;
             CurrentLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
             NextLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber + 1);
@@ -123,6 +127,17 @@ namespace EventHorizonRider.Core.Engine.States
                         UpdateLevel(gameContext, gameTime);
                     }
                 }
+            }
+
+            if (LevelCurrentTime > gameContext.PlayerData.BestTime)
+            {
+                if (!BestSurpassed)
+                {
+                    gameContext.Root.Foreground.PlayTimer.UpdateBest(LevelCurrentTime, isNew:true);
+                    BestSurpassed = true;
+                }
+
+                gameContext.Root.Foreground.PlayTimer.UpdateBest(LevelCurrentTime);
             }
         }
 
