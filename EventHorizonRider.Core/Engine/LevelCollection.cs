@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using EventHorizonRider.Core.Components.SpaceComponents;
-using EventHorizonRider.Core.Engine.States;
+﻿using EventHorizonRider.Core.Engine.States;
 using EventHorizonRider.Core.Extensions;
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EventHorizonRider.Core.Engine
 {
@@ -88,6 +86,24 @@ namespace EventHorizonRider.Core.Engine
                             numberOfSteps: 4,
                             gapSize: MathHelper.TwoPi/4f,
                             type: RingType.Dust | RingType.DustWithAsteroid,
+                            typeSelection: RingTypeSelection.RoundRobin),
+                        ringInfoFactory.GetZigZagSequence(
+                            iterations: 4,
+                            gapSize: MathHelper.TwoPi/4f,
+                            type: RingType.Asteroid | RingType.DustWithAsteroid,
+                            typeSelection: RingTypeSelection.RoundRobin),
+                        ringInfoFactory.GetSpirals(
+                            iterations: 1,
+                            spiralRadius: 500f,
+                            type: RingType.Asteroid),
+                        ringInfoFactory.GetZigZagSequence(
+                            iterations: 4,
+                            gapSize: MathHelper.TwoPi/4f,
+                            type: RingType.Asteroid),
+                        ringInfoFactory.GetStepSequence(
+                            numberOfSteps: 4,
+                            gapSize: MathHelper.TwoPi/4f,
+                            type: RingType.Asteroid,
                             typeSelection: RingTypeSelection.RoundRobin))),
                 new Level(
                     shipSpeed: MathHelper.TwoPi*1.1f,
@@ -97,10 +113,29 @@ namespace EventHorizonRider.Core.Engine
                     color: Color.Green,
                     sequence: Enumerable.Empty<RingInfo>().Concat(
                         ringInfoFactory.GetZigZagSequence(
-                            iterations: 15,
+                            iterations: 7,
                             gapSize: MathHelper.TwoPi/4f,
                             type: RingType.DustWithAsteroid,
-                            typeSelection: RingTypeSelection.RoundRobin))),
+                            typeSelection: RingTypeSelection.RoundRobin),
+                        ringInfoFactory.GetZigZagSequence(
+                            iterations: 7,
+                            gapSize: MathHelper.TwoPi/4f,
+                            type: RingType.Asteroid,
+                            typeSelection: RingTypeSelection.RoundRobin),
+                        ringInfoFactory.GetSpirals(
+                            iterations: 1,
+                            spiralRadius: 500f,
+                            type: RingType.DustWithAsteroid),
+                        ringInfoFactory.GetRandomSequence(
+                            iterations: 3,
+                            numberOfGaps: Range.Create(1),
+                            gapSize: Range.Create(MathHelper.TwoPi/4),
+                            type: RingType.DustWithAsteroid),
+                        ringInfoFactory.GetRandomSequence(
+                            iterations: 3,
+                            numberOfGaps: Range.Create(1),
+                            gapSize: Range.Create(MathHelper.TwoPi/4),
+                            type: RingType.Asteroid))),
                 new Level(
                     shipSpeed: MathHelper.TwoPi*1.12f,
                     ringSeparation: maxRingRadius/3,
@@ -108,7 +143,7 @@ namespace EventHorizonRider.Core.Engine
                     color: Color.Blue,
                     infiniteSequence: false,
                     sequence: ringInfoFactory.GetRandomSequence(
-                        iterations: 20,
+                        iterations: 40,
                         gapSize: Range.Create(MathHelper.TwoPi/4),
                         type: RingType.Asteroid)),
                 new Level(
