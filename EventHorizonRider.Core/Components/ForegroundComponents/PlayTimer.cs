@@ -160,14 +160,14 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         public void UpdateBest(TimeSpan best, bool isNew = false)
         {
-            Best = best;
-
-            if (isNew)
+            if (isNew && Best > TimeSpan.Zero)
             {
                 newBestSound.Play();
                 newBestAlpha = 0f;
                 newBestDuration = newBestDurationMax;
             }
+
+            Best = best;
         }
 
         private string FormatTime(TimeSpan time)
