@@ -152,7 +152,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Space.Ship.Stop();
             gameContext.Root.Space.Rings.Stop();
 
-            gameContext.Root.Foreground.PlayTimer.Stop();
+            gameContext.Root.Foreground.PlayTimer.Stop(BestSurpassed);
             gameContext.Root.Foreground.PlayButton.Show(state: PlayButtonState.Restart);
 
             gameContext.IoTask = gameContext.PlayerData.UpdateBestTime(gameContext.Root.Foreground.PlayTimer.Elapsed, gameContext.CurrentLevelNumber);

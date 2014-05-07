@@ -1,5 +1,4 @@
-﻿using EventHorizonRider.Core.Engine;
-using EventHorizonRider.Core.Graphics;
+﻿using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
@@ -50,6 +49,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private Texture2D progressBar;
 
         private Motion levelNumberScaling = new Motion();
+
+        private bool newBest;
 
         public PlayTimer()
         {
@@ -114,10 +115,17 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         public void HideLevelAndScore()
         {
             isLevelAndScoreVisible = false;
+            newBest = false;
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
+            if (newBest)
+            {
+                newBestAlpha = 1f;
+                newBestDuration = TimeSpan.Zero;
+            }
+
             if (newBestDuration > TimeSpan.Zero)
             {
                 newBestDuration -= gameTime.ElapsedGameTime;
@@ -149,8 +157,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             gameTimeElapsed = initialElapsedTime;
         }
 
-        public void Stop()
+        public void Stop(bool newBest = false)
         {
+            this.newBest = newBest;
             updatingTime = false;
         }
 
@@ -211,7 +220,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 SpriteEffects.None,
                 Depth);
 
-            if (newBestDuration > TimeSpan.Zero)
+            if (newBest || newBestDuration > TimeSpan.Zero)
             {
                 spriteBatch.DrawString(
                     labelFont,
