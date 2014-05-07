@@ -46,7 +46,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             startLevelTextLocation = new Vector2(
                 (DeviceInfo.LogicalWidth / 2f) - (startLevelTextSize.X / 2f),
-                (DeviceInfo.LogicalHeight / 2f) - 175f);
+                (DeviceInfo.LogicalHeight / 2f) - 185f);
 
             levelButtons = new LevelButton[LevelCollection.NumberOfLevels];
 

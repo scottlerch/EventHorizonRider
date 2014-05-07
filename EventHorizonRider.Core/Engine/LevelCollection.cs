@@ -28,8 +28,20 @@ namespace EventHorizonRider.Core.Engine
                     infiniteSequence: false,
                     sequence: Enumerable.Empty<RingInfo>().Concat(
                         ringInfoFactory.GetRandomSequence(
-                            iterations: 4,
+                            iterations: 2,
                             numberOfGaps: Range.Create(2),
+                            gapSize: Range.Create(MathHelper.TwoPi/4),
+                            type: RingType.Dust,
+                            typeSelection: RingTypeSelection.RoundRobin),
+                       ringInfoFactory.GetRandomSequence(
+                            iterations: 2,
+                            numberOfGaps: Range.Create(2),
+                            gapSize: Range.Create(MathHelper.TwoPi/4),
+                            type: RingType.Asteroid,
+                            typeSelection: RingTypeSelection.RoundRobin),
+                       ringInfoFactory.GetRandomSequence(
+                            iterations: 3,
+                            numberOfGaps: Range.Create(1),
                             gapSize: Range.Create(MathHelper.TwoPi/4),
                             type: RingType.Dust,
                             typeSelection: RingTypeSelection.RoundRobin),
@@ -54,7 +66,7 @@ namespace EventHorizonRider.Core.Engine
                         ringInfoFactory.GetRandomSequence(
                             iterations: 5,
                             numberOfGaps: Range.Create(1),
-                            gapSize: Range.Create(MathHelper.TwoPi/5),
+                            gapSize: Range.Create(MathHelper.TwoPi/4.5f),
                             type: RingType.Asteroid))),
                 new Level(
                     shipSpeed: MathHelper.TwoPi*0.9f,

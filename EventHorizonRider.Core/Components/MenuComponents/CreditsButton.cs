@@ -24,11 +24,11 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             textSize = buttonFont.MeasureString("CREDITS");
 
-            const float buttonPadding = 50f;
+            const float buttonPadding = 25f;
 
             textLocation = new Vector2(
                 (DeviceInfo.LogicalWidth / 2f) - (textSize.X / 2f),
-                (DeviceInfo.LogicalHeight / 2f) + 150f);
+                (DeviceInfo.LogicalHeight / 2f) + 20f);
 
             Button = new Button(
                 buttonBounds: new Rectangle(
