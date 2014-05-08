@@ -82,7 +82,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            Button.Update(inputState, isVisible);
+            Button.Update(gameTime, inputState, isVisible);
 
             if (isVisible && colorAlphaPercent < 1f)
             {

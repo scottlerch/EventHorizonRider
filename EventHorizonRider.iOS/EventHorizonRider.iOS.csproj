@@ -149,6 +149,7 @@
     <Content Include="Content\Sounds\button_click.xnb" />
     <Content Include="Content\Sounds\open_menu.xnb" />
     <Content Include="Content\Sounds\thrust.xnb" />
+    <Content Include="Content\Sounds\new_best.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>

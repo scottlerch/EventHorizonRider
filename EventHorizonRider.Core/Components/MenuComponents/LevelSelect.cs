@@ -85,7 +85,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             if (Visible)
             {
-                Pressed = IsPressed(inputState);
+                Pressed = IsPressed(gameTime, inputState);
 
                 if (Pressed.HasValue)
                 {
@@ -96,11 +96,11 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
         public int? Pressed { get; private set; }
 
-        private int? IsPressed(InputState inputState)
+        private int? IsPressed(GameTime gameTime, InputState inputState)
         {
             foreach (var levelButton in levelButtons)
             {
-                levelButton.Button.Update(inputState, Visible);
+                levelButton.Button.Update(gameTime, inputState, Visible);
             }
 
             var pressedLevelButton = levelButtons.FirstOrDefault(levelButton => levelButton.Button.Pressed);

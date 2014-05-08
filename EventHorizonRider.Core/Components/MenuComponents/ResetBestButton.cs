@@ -1,4 +1,6 @@
-﻿using EventHorizonRider.Core.Input;
+﻿using System;
+using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -9,11 +11,18 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 {
     internal class ResetButton : ComponentBase
     {
+        private const string Text = "RESET BEST";
+        private const string WarningText = "Hold to clear all stats!";
+
         private SpriteFont buttonFont;
         private SoundEffect buttonSound;
 
         private Vector2 textLocation;
         private Vector2 textSize;
+
+        private Vector2 warningTextLocation;
+        private Vector2 warningTextSize;
+        private float warningAlpha;
 
         public Button Button { get; set; }
 
@@ -22,11 +31,16 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
             buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
 
-            textSize = buttonFont.MeasureString("RESET BEST");
+            textSize = buttonFont.MeasureString(Text);
+            warningTextSize = buttonFont.MeasureString(WarningText);
 
             textLocation = new Vector2(
                 (DeviceInfo.LogicalWidth / 2f) - (textSize.X / 2f),
-                (DeviceInfo.LogicalHeight / 2f) + 140f);
+                (DeviceInfo.LogicalHeight / 2f) + 35f);
+
+            warningTextLocation = new Vector2(
+                (DeviceInfo.LogicalWidth / 2f) - (warningTextSize.X / 2f),
+                textLocation.Y - textSize.Y - 5f);
 
             const float buttonPadding = 25f;
 
@@ -36,16 +50,28 @@ namespace EventHorizonRider.Core.Components.MenuComponents
                     (int) (textLocation.Y - buttonPadding),
                     (int) (textSize.X + (buttonPadding*2)),
                     (int) (textSize.Y + (buttonPadding*2))),
-                key: Keys.R);
+                key: Keys.R,
+                holdDuration:TimeSpan.FromSeconds(3));
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            Button.Update(inputState, Visible);
+            Button.Update(gameTime, inputState, Visible);
 
             if (Button.Pressed)
             {
                 buttonSound.Play();
+            }
+
+            if (Button.Holding)
+            {
+                var alpha = (float) Math.Sin(Button.CurrentHoldDuration.TotalSeconds*15);
+                if (alpha < 0)
+                {
+                    alpha *= -1f;
+                }
+
+                warningAlpha = MathUtilities.LinearInterpolate(0.5f, 1f, alpha);
             }
         }
 
@@ -53,7 +79,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
         {
             spriteBatch.DrawString(
                 buttonFont,
-                "RESET BEST",
+                Text,
                 textLocation,
                 Button.Hover? Color.Yellow : Color.White,
                 0,
@@ -61,6 +87,31 @@ namespace EventHorizonRider.Core.Components.MenuComponents
                 1f,
                 SpriteEffects.None,
                 Depth);
+
+            if (Button.Holding && Button.HoldDurationRemaining > TimeSpan.Zero)
+            {
+                spriteBatch.DrawString(
+                    buttonFont,
+                    WarningText,
+                    warningTextLocation,
+                    Color.Red * warningAlpha,
+                    0,
+                    Vector2.Zero,
+                    1f,
+                    SpriteEffects.None,
+                    Depth);
+
+                spriteBatch.DrawString(
+                    buttonFont,
+                    (Button.HoldDurationRemaining.Seconds + 1).ToString(),
+                    new Vector2(textLocation.X + textSize.X + 20f, textLocation.Y), 
+                    Color.White,
+                    0,
+                    Vector2.Zero,
+                    1f,
+                    SpriteEffects.None,
+                    Depth);
+            }
         }
     }
 }

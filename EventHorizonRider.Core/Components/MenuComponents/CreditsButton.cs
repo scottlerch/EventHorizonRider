@@ -28,7 +28,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             textLocation = new Vector2(
                 (DeviceInfo.LogicalWidth / 2f) - (textSize.X / 2f),
-                (DeviceInfo.LogicalHeight / 2f) + 20f);
+                (DeviceInfo.LogicalHeight / 2f) + 140f);
 
             Button = new Button(
                 buttonBounds: new Rectangle(
@@ -41,7 +41,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            Button.Update(inputState, Visible);
+            Button.Update(gameTime, inputState, Visible);
 
             if (Button.Pressed)
             {

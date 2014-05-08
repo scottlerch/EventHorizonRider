@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Input;
+﻿using System;
+using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -18,13 +19,26 @@ namespace EventHorizonRider.Core.Components
 
         public bool Hover { get; private set; }
 
-        public Button(Rectangle buttonBounds, Keys? key = null)
+        public TimeSpan HoldDuration { get; set; }
+
+        public TimeSpan CurrentHoldDuration { get; private set; }
+
+        public TimeSpan HoldDurationRemaining { get { return CurrentHoldDuration >= HoldDuration? TimeSpan.Zero : HoldDuration - CurrentHoldDuration; } }
+
+        public bool Holding { get { return CurrentHoldDuration > TimeSpan.Zero; } }
+
+        public Button(Rectangle buttonBounds, Keys? key = null) : this(buttonBounds, key, TimeSpan.Zero)
         {
+        }
+
+        public Button(Rectangle buttonBounds, Keys? key, TimeSpan holdDuration)
+        {
+            HoldDuration = holdDuration;
             ButtonBounds = buttonBounds;
             Key = key;
         }
 
-        public void Update(InputState inputState, bool visible)
+        public void Update(GameTime gameTime, InputState inputState, bool visible)
         {
             if (!visible)
             {
@@ -37,6 +51,26 @@ namespace EventHorizonRider.Core.Components
             Hover = IsHover(inputState.MouseState, inputState.TouchState, inputState.KeyState);
 
             keyPreviouslyPressed = Key.HasValue && inputState.KeyState.GetPressedKeys().Contains(Key.Value);
+
+            if (HoldDuration > TimeSpan.Zero)
+            {
+                var isPressed = Pressed;
+                Pressed = false;
+
+                if (Hover)
+                {
+                    CurrentHoldDuration += gameTime.ElapsedGameTime;
+                }
+                else
+                {
+                    if (CurrentHoldDuration > HoldDuration)
+                    {
+                        Pressed = isPressed;
+                    }
+
+                    CurrentHoldDuration = TimeSpan.Zero;
+                }
+            }
         }
 
         private bool IsPressed(MouseState mouseState, TouchCollection touchState, KeyboardState keyboardState)

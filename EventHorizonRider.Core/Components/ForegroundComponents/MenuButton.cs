@@ -10,6 +10,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
     internal class MenuButton : ComponentBase
     {
+        private const string MenuText = "LEVEL SELECT";
+        private const string BackText = "BACK";
         public Button Button { get; private set; }
 
         private SpriteFont buttonFont;
@@ -29,8 +31,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
             buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
 
-            menuTextSize = buttonFont.MeasureString("MENU");
-            backTextSize = buttonFont.MeasureString("BACK");
+            menuTextSize = buttonFont.MeasureString(MenuText);
+            backTextSize = buttonFont.MeasureString(BackText);
 
             const float textPadding = 10;
 
@@ -50,7 +52,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            Button.Update(inputState, Visible);
+            Button.Update(gameTime, inputState, Visible);
 
             if (Button.Pressed)
             {
@@ -77,7 +79,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 {
                     spriteBatch.DrawString(
                         buttonFont,
-                        "BACK",
+                        BackText,
                         backTextLocation,
                         Button.Hover? Color.Yellow : Color.LightGray.AdjustLight(0.9f),
                         0,
@@ -90,7 +92,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 {
                     spriteBatch.DrawString(
                         buttonFont,
-                        "MENU",
+                        MenuText,
                         menuTextLocation,
                         Button.Hover ? Color.Yellow : Color.LightGray.AdjustLight(0.9f),
                         0,
