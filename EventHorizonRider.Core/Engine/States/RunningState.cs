@@ -28,8 +28,8 @@ namespace EventHorizonRider.Core.Engine.States
             BestSurpassed = false;
 
             gameContext.CurrentLevelNumber = gameContext.PlayerData.DefaultLevelNumber;
-            CurrentLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
-            NextLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber + 1);
+
+            UpdateLevel(gameContext, gameTime, animate: false);
 
             gameContext.Root.Foreground.PlayButton.Show(state: PlayButtonState.Pause);
             gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber);
@@ -46,9 +46,6 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Space.Ship.Start();
             gameContext.Root.Space.Rings.Start();
             gameContext.Root.Space.Background.Start();
-            gameContext.Root.Space.Rings.SetLevel(CurrentLevel);
-            gameContext.Root.Space.Ship.Speed = CurrentLevel.ShipSpeed;
-            gameContext.Root.Space.Shockwave.SetColor(NextLevel.Color);
 
             gameContext.Root.Music.Start();
         }
@@ -158,17 +155,19 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.IoTask = gameContext.PlayerData.UpdateBestTime(gameContext.Root.Foreground.PlayTimer.Elapsed, gameContext.CurrentLevelNumber);
         }
 
-        private void UpdateLevel(GameContext gameContext, GameTime gameTime)
+        private void UpdateLevel(GameContext gameContext, GameTime gameTime, bool animate = true)
         {
             LevelCurrentTime = TimeSpan.Zero;
 
             CurrentLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber);
             NextLevel = gameContext.LevelCollection.GetLevel(gameContext.CurrentLevelNumber + 1);
 
-            gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber, animate: true);
+            gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.CurrentLevelNumber, animate);
             gameContext.Root.Space.Rings.SetLevel(CurrentLevel);
             gameContext.Root.Space.Ship.Speed = CurrentLevel.ShipSpeed;
             gameContext.Root.Space.Shockwave.SetColor(NextLevel.Color);
+            gameContext.Root.Space.Background.RotationalVelocity = CurrentLevel.RotationalVelocity;
+            gameContext.Root.Space.Blackhole.RotationalVelocity = CurrentLevel.RotationalVelocity;
         }
 
         private void UpdatePauseState(GameContext gameContext)

@@ -33,6 +33,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             get { return texture.Height*spring.BlockX; }
         }
 
+        public float RotationalVelocity { get; set; }
+
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             texture = content.Load<Texture2D>(@"Images\blackhole");
@@ -92,7 +94,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             if (!isStopped)
             {
                 spring.Update(gameTime.ElapsedGameTime);
-                currentRotation += RingInfoFactory.DefaultRotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                currentRotation += RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
         }
 

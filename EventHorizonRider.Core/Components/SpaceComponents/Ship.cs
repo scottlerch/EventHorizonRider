@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Graphics;
+﻿using EventHorizonRider.Core.Engine;
+using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
@@ -15,7 +16,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     internal class Ship : ComponentBase, ISpriteInfo
     {
         private readonly Blackhole blackhole;
-        private const float DefaultRotationVelocity = MathHelper.TwoPi / 32;
 
         public Vector2 Position { get; set; }
         public float Rotation { get; set; }
@@ -157,7 +157,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 return;
             }
 
-            Rotation += DefaultRotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Rotation += blackhole.RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             sideThrustEmitter.Spawning = false;
 

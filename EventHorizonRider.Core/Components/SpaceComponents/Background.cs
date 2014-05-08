@@ -37,6 +37,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public float Scale { get; set; }
 
+        public float RotationalVelocity { get; set; }
+
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             StarBackgroundColor = Color.White;
@@ -50,12 +52,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             stars = starFactory.GetStars(NumberOfStars);
 
             UseStaticStars = DeviceInfo.DetailLevel.HasFlag(DetailLevel.StaticStars);
+
+            RotationalVelocity = Level.DefaultRotationalVelocity;
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            //if (backgroundColor != gameOverColor)
-            //{
                 spriteBatch.Draw(background,
                     position: center,
                     origin: new Vector2(background.Width / 2f, background.Height / 2f),
@@ -90,12 +92,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                             rotation: star.Angle * 20f);
                     }
                 }
-            //}
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            var changeInRotation = (RingInfoFactory.DefaultRotationVelocity/4f)*
+            var changeInRotation = (RotationalVelocity/4f)*
                                    (float) gameTime.ElapsedGameTime.TotalSeconds;
 
             currentRotation += changeInRotation;

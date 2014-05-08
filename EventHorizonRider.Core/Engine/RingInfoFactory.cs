@@ -7,6 +7,8 @@ namespace EventHorizonRider.Core.Engine
 {
     internal class RingInfoFactory
     {
+        public const float DefaultRotationVelocity = MathHelper.TwoPi / 32;
+
         private class RingTypeSelectionHelper
         {
             private int index;
@@ -32,7 +34,6 @@ namespace EventHorizonRider.Core.Engine
             }
         }
 
-        public const float DefaultRotationVelocity = MathHelper.TwoPi / 32;
         private static readonly Random Rand = new Random();
         private static readonly RingType[] AllRingTypes =
             Enum.GetValues(typeof (RingType))
@@ -56,7 +57,7 @@ namespace EventHorizonRider.Core.Engine
                     GapSize = 0,
                     NumberOfGaps = 0,
                     Angle = (float)Rand.NextDouble() * MathHelper.TwoPi,
-                    RotationalVelocity = DefaultRotationVelocity,
+                    RotationalVelocity = 0f,
                     SpiralRadius = 700f,
                 };
             }
@@ -89,7 +90,7 @@ namespace EventHorizonRider.Core.Engine
                     GapSize = currentGapSize,
                     NumberOfGaps = currentNumberOfGaps,
                     Angle = (float) Rand.NextDouble()*MathHelper.TwoPi,
-                    RotationalVelocity = DefaultRotationVelocity,
+                    RotationalVelocity = 0f,
                 };
             }
         }
@@ -111,7 +112,7 @@ namespace EventHorizonRider.Core.Engine
                     GapSize = gapSize,
                     NumberOfGaps = 1,
                     Angle = angleStep*i,
-                    RotationalVelocity = DefaultRotationVelocity,
+                    RotationalVelocity = 0f,
                 };
             }
         }
@@ -134,7 +135,7 @@ namespace EventHorizonRider.Core.Engine
                     GapSize = gapSize,
                     NumberOfGaps = 1,
                     Angle = baseAngle + ((i%2)*angleStep),
-                    RotationalVelocity = DefaultRotationVelocity,
+                    RotationalVelocity = 0f,
                 };
             }
         }

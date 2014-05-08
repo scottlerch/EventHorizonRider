@@ -30,8 +30,11 @@ namespace EventHorizonRider.Core.Engine.States
             {
                 gameContext.IoTask = gameContext.PlayerData.UpdateDefaultLevel(levelPressed.Value);
                 gameContext.Root.Menu.LevelSelect.StartLevel = gameContext.PlayerData.DefaultLevelNumber;
-                gameContext.Root.Space.Background.StarBackgroundColor =
-                    gameContext.LevelCollection.GetLevel(gameContext.Root.Menu.LevelSelect.StartLevel).Color;
+
+                var defaultLevel = gameContext.LevelCollection.GetLevel(gameContext.PlayerData.DefaultLevelNumber);
+                gameContext.Root.Space.Background.StarBackgroundColor = defaultLevel.Color;
+                gameContext.Root.Space.Background.RotationalVelocity = defaultLevel.RotationalVelocity;
+                gameContext.Root.Space.Blackhole.RotationalVelocity = defaultLevel.RotationalVelocity;
             }
             else if (gameContext.Root.Menu.ResetButton.Button.Pressed)
             {

@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using EventHorizonRider.Core.Components.SpaceComponents;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine
 {
     internal class Level
     {
+        public const float DefaultRotationalVelocity = MathHelper.TwoPi/32f;
+
         private readonly IEnumerable<RingInfo> internalSequence; 
 
-        public Level(TimeSpan ringInterval, float ringSeparation, float shipSpeed, Color color, bool infiniteSequence, IEnumerable<RingInfo> sequence)
+        public Level(TimeSpan ringInterval, float ringSeparation, float shipSpeed, float rotationVelocity, Color color, bool infiniteSequence, IEnumerable<RingInfo> sequence)
         {
             Color = color;
             RingInterval = ringInterval;
             ShipSpeed = shipSpeed;
+            RotationalVelocity = rotationVelocity;
             RingSeparation = ringSeparation;
             RingSpeed = ringSeparation/(float)ringInterval.TotalSeconds;
             IsInfiniteSequence = infiniteSequence;
@@ -57,5 +61,7 @@ namespace EventHorizonRider.Core.Engine
         public float RingSeparation { get; private set; }
 
         public float ShipSpeed { get; private set; }
+
+        public float RotationalVelocity { get; private set; }
     }
 }

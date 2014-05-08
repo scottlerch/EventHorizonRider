@@ -114,7 +114,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             return new Ring(
                 ringCollapseSpeed: level.RingSpeed,
-                rotationalVelocity: info.RotationalVelocity,
+                rotationalVelocity: info.RotationalVelocity + level.RotationalVelocity,
                 texturesInfoGroup: GetTexturesInfo(info.Type),
                 innerRadius: StartRadius,
                 origin: viewportCenter,

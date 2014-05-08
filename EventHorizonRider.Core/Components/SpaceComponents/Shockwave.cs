@@ -48,7 +48,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            currentRotation += RingInfoFactory.DefaultRotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            currentRotation += blackhole.RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             currentScale += (float)gameTime.ElapsedGameTime.TotalSeconds*1.2f;
 

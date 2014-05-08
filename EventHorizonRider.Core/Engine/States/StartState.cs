@@ -9,8 +9,10 @@ namespace EventHorizonRider.Core.Engine.States
         {
             gameContext.Root.Menu.Visible = false;
 
-            gameContext.Root.Space.Background.StarBackgroundColor =
-                gameContext.LevelCollection.GetLevel(gameContext.PlayerData.DefaultLevelNumber).Color;
+            var defaultLevel = gameContext.LevelCollection.GetLevel(gameContext.PlayerData.DefaultLevelNumber);
+            gameContext.Root.Space.Background.StarBackgroundColor = defaultLevel.Color;
+            gameContext.Root.Space.Background.RotationalVelocity = defaultLevel.RotationalVelocity;
+            gameContext.Root.Space.Blackhole.RotationalVelocity = defaultLevel.RotationalVelocity;
 
             gameContext.Root.Space.Blackhole.SetExtraScale(0f, animate: true, speed: 16f);
             gameContext.Root.Space.Background.Start();
