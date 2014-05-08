@@ -21,7 +21,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         public float Rotation { get; set; }
 
         public Texture2D Texture { get; set; }
-        private Texture2D shieldTexture;
+
+        private Texture2D shieldPusleTexture;
+        private Texture2D[] shieldTextures;
         private SoundEffect thrustSound;
         private SoundEffectInstance thrustSoundInstance;
 
@@ -56,7 +58,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             Texture = content.Load<Texture2D>(@"Images\ship");
             CollisionInfo = CollisionDetection.GetCollisionInfo(Texture, resolution: DeviceInfo.DetailLevel.HasFlag(DetailLevel.CollisionDetectionFull) ? 1f : 0.75f);
 
-            shieldTexture = content.Load<Texture2D>(@"Images\shield");
+            shieldPusleTexture = content.Load<Texture2D>(@"Images\shield_pulse");
+
+            shieldTextures = new Texture2D[3];
+            for (int i = 0; i < shieldTextures.Length; i++)
+            {
+                shieldTextures[i] = content.Load<Texture2D>(@"Images\shield_" + (i+1).ToString());
+            }
 
             crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
 
@@ -100,7 +108,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             mainThrustEmitter.Spawning = true;
 
             Origin = new Vector2(Texture.Width/2f, Texture.Height/2f);
+
+            shieldPulse.Initialize(0, 0, 0);
+
+            shieldTextureIndex = 0;
         }
+
+        private int shieldTextureIndex;
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
@@ -109,10 +123,24 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 return;
             }
 
-            spriteBatch.Draw(shieldTexture, Position,
-                origin: new Vector2(shieldTexture.Width / 2f, shieldTexture.Height / 2f),
+            spriteBatch.Draw(shieldTextures[shieldTextureIndex], 
+                Position,
+                origin: new Vector2(shieldTextures[shieldTextureIndex].Width / 2f, shieldTextures[shieldTextureIndex].Height / 2f),
+                color: Color.White * baseShieldAlpha,
+                scale: Vector2.One * 1f,
                 rotation: Rotation,
                 depth: Depth - 0.0002f);
+
+            if (shieldPulse.Value > 0f)
+            {
+                spriteBatch.Draw(shieldPusleTexture, 
+                    shieldPulseLocation,
+                    origin: new Vector2(shieldPusleTexture.Width / 2f, shieldPusleTexture.Height / 2f),
+                    color: Color.White*shieldPulseAlpha,
+                    scale: Vector2.One*shieldPulseScale,
+                    rotation: Rotation,
+                    depth: Depth - 0.0003f);
+            }
 
             particleSystem.Draw(spriteBatch, 1, Vector2.Zero, Depth - 0.0001f);
 
@@ -148,6 +176,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
+            const int frameInterval = 100;
+            shieldTextureIndex = (int)((((int)gameTime.TotalGameTime.TotalMilliseconds % frameInterval) / (float)frameInterval) * shieldTextures.Length);
+
             if (stopped)
             {
                 if (thrustSoundInstance.State == SoundState.Playing)
@@ -214,6 +245,23 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             {
                 thrustSoundInstance.Stop();
             }
+
+            shieldPulse.Update(gameTime);
+
+            shieldPulseAlpha = MathUtilities.LinearInterpolate(baseShieldAlpha, 0, shieldPulse.Value);
+            shieldPulseScale = (10f*shieldPulse.Value) + 1f;
+        }
+
+        private Motion shieldPulse;
+        private float shieldPulseAlpha;
+        private float shieldPulseScale;
+        private Vector2 shieldPulseLocation;
+        private const float baseShieldAlpha = 0.8f;
+
+        public void PulseShield()
+        {
+            shieldPulseLocation = Position;
+            shieldPulse.Initialize(0, 1, 1f);
         }
 
         internal void Initialize()

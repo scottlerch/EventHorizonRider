@@ -168,6 +168,11 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Space.Shockwave.SetColor(NextLevel.Color);
             gameContext.Root.Space.Background.RotationalVelocity = CurrentLevel.RotationalVelocity;
             gameContext.Root.Space.Blackhole.RotationalVelocity = CurrentLevel.RotationalVelocity;
+
+            if (animate)
+            {
+                gameContext.Root.Space.Ship.PulseShield();
+            }
         }
 
         private void UpdatePauseState(GameContext gameContext)

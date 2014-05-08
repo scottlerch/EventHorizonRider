@@ -69,7 +69,7 @@ namespace EventHorizonRider.Core.Engine
                             type: RingType.Asteroid))),
                 new Level(
                     shipSpeed: MathHelper.TwoPi*0.9f,
-                    rotationVelocity: MathHelper.TwoPi / 24f,
+                    rotationVelocity: MathHelper.TwoPi / 28f,
                     ringSeparation: maxRingRadius/2f,
                     ringInterval: TimeSpan.FromSeconds(1.5),
                     color: Color.DarkSalmon,
@@ -109,7 +109,7 @@ namespace EventHorizonRider.Core.Engine
                             typeSelection: RingTypeSelection.RoundRobin))),
                 new Level(
                     shipSpeed: MathHelper.TwoPi*1.1f,
-                    rotationVelocity: MathHelper.TwoPi / 16f,
+                    rotationVelocity: MathHelper.TwoPi / 24f,
                     ringSeparation: maxRingRadius/3,
                     ringInterval: TimeSpan.FromSeconds(1),
                     infiniteSequence: false,
@@ -141,7 +141,7 @@ namespace EventHorizonRider.Core.Engine
                             type: RingType.Asteroid))),
                 new Level(
                     shipSpeed: MathHelper.TwoPi*1.12f,
-                    rotationVelocity: MathHelper.TwoPi / 8f,
+                    rotationVelocity: MathHelper.TwoPi / 20f,
                     ringSeparation: maxRingRadius/3,
                     ringInterval: TimeSpan.FromSeconds(0.75),
                     color: Color.Blue,
@@ -152,7 +152,7 @@ namespace EventHorizonRider.Core.Engine
                         type: RingType.Asteroid)),
                 new Level(
                     shipSpeed: MathHelper.TwoPi*1.14f,
-                    rotationVelocity: MathHelper.TwoPi / 4f,
+                    rotationVelocity: MathHelper.TwoPi / 16f,
                     ringSeparation: maxRingRadius/3,
                     ringInterval: TimeSpan.FromSeconds(0.5),
                     color: Color.Red,
