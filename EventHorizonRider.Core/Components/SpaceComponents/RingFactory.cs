@@ -77,15 +77,15 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             };
 
             crystals = LoadData(content, "crystals", 1, hasShadow: false);
-            crystals.DensityRange = Range.Create(85, 95);
-            crystals.ScaleRange = Range.Create(0.3f, 0.7f);
+            crystals.DensityRange = Range.Create(65, 75);
+            crystals.ScaleRange = Range.Create(0.3f, 0.8f);
             crystals.RadiusOffsetJitter = 10f;
             crystals.AngleJitter = 0.8f;
             crystals.TaperAmount = 6;
             crystals.TaperScale = 0.4f;
             crystals.TextureColors = new[]
             {
-                Color.White * 1f,
+                Color.White * 0.8f,
             };
         }
 
@@ -120,6 +120,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     return new RingTexturesInfoGroup(new[] {dust, sparseAsteroids  }, RingTexturesInfoGroupMode.Sequential);
                 case RingType.IceCrystals:
                     return new RingTexturesInfoGroup(new[] { crystals }, RingTexturesInfoGroupMode.Sequential);
+                case RingType.IceCrystalsWithAsteroid:
+                    return new RingTexturesInfoGroup(new[] { crystals, sparseAsteroids }, RingTexturesInfoGroupMode.Sequential);
                 default:
                     throw new Exception("invalid ring type");
             }

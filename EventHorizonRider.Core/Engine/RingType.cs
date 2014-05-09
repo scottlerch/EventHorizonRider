@@ -9,6 +9,7 @@ namespace EventHorizonRider.Core.Engine
         Dust = 2,
         DustWithAsteroid = 4,
         IceCrystals = 8,
+        IceCrystalsWithAsteroid = 16,
         All = Asteroid | Dust | DustWithAsteroid | IceCrystals,
     }
 }

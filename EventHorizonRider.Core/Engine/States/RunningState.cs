@@ -76,6 +76,9 @@ namespace EventHorizonRider.Core.Engine.States
             {
                 var progress = LevelCurrentTime.TotalSeconds/CurrentLevel.Duration.Value.TotalSeconds;
 
+                // HACK: for some reason the timing is slightly off sometimes and we go past the end of level
+                progress = progress > 1D ? 1D : progress;
+
                 gameContext.Root.Space.Background.StarBackgroundColor = MathUtilities.LinearInterpolate(
                     CurrentLevel.Color,
                     NextLevel.Color,
