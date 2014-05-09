@@ -25,6 +25,8 @@ namespace EventHorizonRider.Core.Engine.States
 
         public override void OnBegin(GameContext gameContext, GameTime gameTime)
         {
+            gameContext.Paused = false;
+
             BestSurpassed = false;
 
             gameContext.CurrentLevelNumber = gameContext.PlayerData.DefaultLevelNumber;

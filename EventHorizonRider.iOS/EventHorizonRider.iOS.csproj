@@ -150,6 +150,12 @@
     <Content Include="Content\Sounds\open_menu.xnb" />
     <Content Include="Content\Sounds\thrust.xnb" />
     <Content Include="Content\Sounds\new_best.xnb" />
+    <Content Include="Content\Images\shield_1.xnb" />
+    <Content Include="Content\Images\shield_2.xnb" />
+    <Content Include="Content\Images\shield_3.xnb" />
+    <Content Include="Content\Images\shield_pulse.xnb" />
+    <Content Include="Content\Images\crystals_1.xnb" />
+    <Content Include="Content\Images\crystals_2.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
