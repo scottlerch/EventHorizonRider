@@ -47,7 +47,7 @@ namespace EventHorizonRider.Core.Components
                 return;
             }
 
-            Pressed = IsPressed(inputState.MouseState, inputState.TouchState, inputState.KeyState);
+            Pressed = !Pressed && IsPressed(inputState.MouseState, inputState.TouchState, inputState.KeyState);
             Hover = IsHover(inputState.MouseState, inputState.TouchState, inputState.KeyState);
 
             keyPreviouslyPressed = Key.HasValue && inputState.KeyState.GetPressedKeys().Contains(Key.Value);
