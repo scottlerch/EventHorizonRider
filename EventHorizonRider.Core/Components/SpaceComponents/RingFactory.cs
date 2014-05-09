@@ -14,6 +14,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private RingTexturesInfo asteroids;
         private RingTexturesInfo sparseAsteroids;
         private RingTexturesInfo dust;
+        private RingTexturesInfo crystals;
 
         // TODO: refactor this and calculate from viewport size and maximum ring width
         public static float StartRadius = 700;
@@ -74,6 +75,18 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 Color.Beige.AdjustLight(0.9f),
                 MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.Beige.AdjustLight(0.9f), 0.5)
             };
+
+            crystals = LoadData(content, "crystals", 1, hasShadow: false);
+            crystals.DensityRange = Range.Create(85, 95);
+            crystals.ScaleRange = Range.Create(0.3f, 0.7f);
+            crystals.RadiusOffsetJitter = 10f;
+            crystals.AngleJitter = 0.8f;
+            crystals.TaperAmount = 6;
+            crystals.TaperScale = 0.4f;
+            crystals.TextureColors = new[]
+            {
+                Color.White * 1f,
+            };
         }
 
         private RingTexturesInfo LoadData(ContentManager content, string imageBaseName, int count, bool hasShadow)
@@ -105,6 +118,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     return new RingTexturesInfoGroup(new[] { dust }, RingTexturesInfoGroupMode.Sequential);
                 case RingType.DustWithAsteroid:
                     return new RingTexturesInfoGroup(new[] {dust, sparseAsteroids  }, RingTexturesInfoGroupMode.Sequential);
+                case RingType.IceCrystals:
+                    return new RingTexturesInfoGroup(new[] { crystals }, RingTexturesInfoGroupMode.Sequential);
                 default:
                     throw new Exception("invalid ring type");
             }
