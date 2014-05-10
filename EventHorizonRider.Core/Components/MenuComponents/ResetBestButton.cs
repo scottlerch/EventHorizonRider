@@ -101,10 +101,25 @@ namespace EventHorizonRider.Core.Components.MenuComponents
                     SpriteEffects.None,
                     Depth);
 
+                var holdDurationText = (Button.HoldDurationRemaining.Seconds + 1).ToString();
+
                 spriteBatch.DrawString(
                     buttonFont,
-                    (Button.HoldDurationRemaining.Seconds + 1).ToString(),
+                    holdDurationText,
                     new Vector2(textLocation.X + textSize.X + 20f, textLocation.Y), 
+                    Color.White,
+                    0,
+                    Vector2.Zero,
+                    1f,
+                    SpriteEffects.None,
+                    Depth);
+
+                var holdDurationTextSize = buttonFont.MeasureString(holdDurationText);
+
+                spriteBatch.DrawString(
+                    buttonFont,
+                    holdDurationText,
+                    new Vector2(textLocation.X - holdDurationTextSize.X - 20f, textLocation.Y),
                     Color.White,
                     0,
                     Vector2.Zero,

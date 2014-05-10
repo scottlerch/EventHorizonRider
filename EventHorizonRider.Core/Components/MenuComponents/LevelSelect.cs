@@ -23,8 +23,13 @@ namespace EventHorizonRider.Core.Components.MenuComponents
         private SpriteFont buttonFont;
         private SoundEffect buttonSound;
 
+        private string startLevelText = "START LEVEL";
         private Vector2 startLevelTextLocation;
         private Vector2 startLevelTextSize;
+
+        private string unlockLevelText = "PLAY TO UNLOCK!";
+        private Vector2 unlockLevelTextLocation;
+        private Vector2 unlockLevelTextSize;
 
         private LevelButton[] levelButtons;
 
@@ -40,13 +45,19 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
             buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
 
-            startLevelTextSize = buttonFont.MeasureString("START LEVEL");
+            startLevelTextSize = buttonFont.MeasureString(startLevelText);
+            unlockLevelTextSize = buttonFont.MeasureString(unlockLevelText);
 
             const float buttonPadding = 50f;
+            const float startTextOffset = 185f;
 
             startLevelTextLocation = new Vector2(
                 (DeviceInfo.LogicalWidth / 2f) - (startLevelTextSize.X / 2f),
-                (DeviceInfo.LogicalHeight / 2f) - 185f);
+                (DeviceInfo.LogicalHeight / 2f) - startTextOffset);
+
+            unlockLevelTextLocation = new Vector2(
+                (DeviceInfo.LogicalWidth / 2f) - (unlockLevelTextSize.X / 2f),
+                (DeviceInfo.LogicalHeight / 2f) - startTextOffset);
 
             levelButtons = new LevelButton[LevelCollection.NumberOfLevels];
 
@@ -115,16 +126,32 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(
-                buttonFont,
-                "START LEVEL",
-                startLevelTextLocation,
-                Color.LightGray.AdjustLight(0.7f),
-                0,
-                Vector2.Zero,
-                1f,
-                SpriteEffects.None,
-                Depth);
+            if (MaximumStartLevel > 1)
+            {
+                spriteBatch.DrawString(
+                    buttonFont,
+                    startLevelText,
+                    startLevelTextLocation,
+                    Color.LightGray.AdjustLight(0.7f),
+                    0,
+                    Vector2.Zero,
+                    1f,
+                    SpriteEffects.None,
+                    Depth);
+            }
+            else
+            {
+                spriteBatch.DrawString(
+                    buttonFont,
+                    unlockLevelText,
+                    unlockLevelTextLocation,
+                    Color.LightGray.AdjustLight(0.7f),
+                    0,
+                    Vector2.Zero,
+                    1f,
+                    SpriteEffects.None,
+                    Depth);
+            }
 
             foreach (var levelButton in levelButtons)
             {
