@@ -1,5 +1,4 @@
-﻿using System;
-using EventHorizonRider.Core.Engine;
+﻿using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
@@ -13,11 +12,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     {
         private const int NumberOfStars = 500;
 
-        private readonly Color gameOverColor = Color.Red.AdjustLight(0.8f);
+        private readonly Color gameOverColor = Color.Red.AdjustLight(0.6f);
         private readonly float gameOverAlpha = 0.5f;
         private readonly Color defaultColor = Color.Black;
         private readonly float defaultAlpha = 0.8f;
 
+        private Texture2D radialGradient;
         private Texture2D background;
         private Texture2D starsBackground;
 
@@ -46,6 +46,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             background = content.Load<Texture2D>(@"Images\background");
             starsBackground = content.Load<Texture2D>(@"Images\stars");
+            radialGradient = content.Load<Texture2D>(@"Images\radial_gradient");
 
             center = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
 
@@ -59,14 +60,29 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(background,
-                position: center,
-                origin: new Vector2(background.Width / 2f, background.Height / 2f),
-                rotation: currentBackgroundRotation,
-                depth: Depth,
-                color: StarBackgroundColor * backgroundAlpha,
-                scale: (new Vector2(2f, 2f) * Scale));
+            if (backgroundColor != gameOverColor)
+            {
+                spriteBatch.Draw(background,
+                    position: center,
+                    origin: new Vector2(background.Width/2f, background.Height/2f),
+                    rotation: currentBackgroundRotation,
+                    depth: Depth,
+                    color: StarBackgroundColor*backgroundAlpha,
+                    scale: (new Vector2(2f, 2f)*Scale));
+            }
+            else
+            {
+                var scale = new Vector2(
+                    (float)DeviceInfo.LogicalWidth / radialGradient.Width,
+                    (float)DeviceInfo.LogicalWidth / radialGradient.Width);
 
+                spriteBatch.Draw(radialGradient,
+                    position: center,
+                    origin: new Vector2(radialGradient.Width / 2f, radialGradient.Height / 2f),
+                    depth: Depth,
+                    color: Color.White * 0.9f,
+                    scale: scale * Scale);
+            }
 
             if (UseStaticStars)
             {
@@ -98,6 +114,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
+            if (backgroundColor == gameOverColor) return;
+
             var changeInRotation = (RotationalVelocity / 4f) *
                                    (float)gameTime.ElapsedGameTime.TotalSeconds;
 
