@@ -25,6 +25,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private float backgroundAlpha = 1f;
         private Vector2 center;
         private float currentRotation;
+        private float currentBackgroundRotation;
         private readonly StarFactory starFactory;
         private Star[] stars;
 
@@ -58,48 +59,50 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-                spriteBatch.Draw(background,
+            spriteBatch.Draw(background,
+                position: center,
+                origin: new Vector2(background.Width / 2f, background.Height / 2f),
+                rotation: currentBackgroundRotation,
+                depth: Depth,
+                color: StarBackgroundColor * backgroundAlpha,
+                scale: (new Vector2(2f, 2f) * Scale));
+
+
+            if (UseStaticStars)
+            {
+                spriteBatch.Draw(starsBackground,
                     position: center,
-                    origin: new Vector2(background.Width / 2f, background.Height / 2f),
-                    depth:Depth,
-                    color: StarBackgroundColor * backgroundAlpha,
-                    scale: (new Vector2(2f, 2f) * Scale));
+                    origin: new Vector2(starsBackground.Width / 2f, starsBackground.Height / 2f),
+                    rotation: currentRotation,
+                    color: Color.White * backgroundAlpha,
+                    scale: new Vector2(1.3f, 1.3f) * Scale,
+                    depth: Depth + 0.001f);
+            }
+            else
+            {
+                const float depthOffset = 0.0001f;
 
-
-                if (UseStaticStars)
+                for (var i = 0; i < stars.Length; i++)
                 {
-                    spriteBatch.Draw(starsBackground,
-                        position: center,
-                        origin: new Vector2(starsBackground.Width/2f, starsBackground.Height/2f),
-                        rotation: currentRotation,
-                        color: Color.White * backgroundAlpha,
-                        scale: new Vector2(1.3f, 1.3f) * Scale,
-                        depth: Depth + 0.001f);
+                    var star = stars[i];
+                    spriteBatch.Draw(star.Texture,
+                        position: star.Position,
+                        origin: star.Origin,
+                        depth: Depth + (depthOffset * i),
+                        color: star.Color * star.Transparency,
+                        scale: new Vector2(star.Scale * Scale),
+                        rotation: star.Angle * 20f);
                 }
-                else
-                {
-                    const float depthOffset = 0.0001f;
-
-                    for (var i = 0; i < stars.Length; i++)
-                    {
-                        var star = stars[i];
-                        spriteBatch.Draw(star.Texture,
-                            position: star.Position,
-                            origin: star.Origin,
-                            depth: Depth + (depthOffset * i),
-                            color: star.Color * star.Transparency,
-                            scale: new Vector2(star.Scale * Scale),
-                            rotation: star.Angle * 20f);
-                    }
-                }
+            }
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            var changeInRotation = (RotationalVelocity/4f)*
-                                   (float) gameTime.ElapsedGameTime.TotalSeconds;
+            var changeInRotation = (RotationalVelocity / 4f) *
+                                   (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             currentRotation += changeInRotation;
+            currentBackgroundRotation += changeInRotation/2f;
 
             if (!UseStaticStars)
             {
@@ -108,11 +111,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     stars[MathUtilities.GetRandomBetween(0, stars.Length - 1)].Twinkle();
                 }
 
-                var timeElapsed = (float) gameTime.ElapsedGameTime.TotalSeconds;
+                var timeElapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 foreach (var star in stars)
                 {
-                    star.Angle += changeInRotation + (star.RotationSpeed*timeElapsed);
+                    star.Angle += changeInRotation + (star.RotationSpeed * timeElapsed);
                     star.Update(gameTime, Scale);
                 }
             }
