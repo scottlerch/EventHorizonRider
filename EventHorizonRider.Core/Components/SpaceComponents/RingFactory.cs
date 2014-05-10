@@ -76,7 +76,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.Beige.AdjustLight(0.9f), 0.5)
             };
 
-            crystals = LoadData(content, "crystals", 1, hasShadow: false);
+            crystals = LoadData(content, "crystals", 2, hasShadow: false);
             crystals.DensityRange = Range.Create(65, 75);
             crystals.ScaleRange = Range.Create(0.2f, 0.8f);
             crystals.RadiusOffsetJitter = 10f;

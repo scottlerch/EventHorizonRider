@@ -60,7 +60,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             RotationalVelocity = Level.DefaultRotationalVelocity;
 
             // HACK: This fudge factor helps hide intermitent red border caused by some issue in gaussian blur code
-            const float fudgeFactor = 1.0001f;
+            const float fudgeFactor = 1.1f;
             radialGradientScale = new Vector2(
                 (float)DeviceInfo.LogicalWidth / radialGradient.Width,
                 (float)DeviceInfo.LogicalWidth / radialGradient.Width) * fudgeFactor;
