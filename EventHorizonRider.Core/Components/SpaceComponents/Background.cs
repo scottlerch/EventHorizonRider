@@ -29,6 +29,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private readonly StarFactory starFactory;
         private Star[] stars;
 
+        private Vector2 radialGradientScale;
+
         public Background(StarFactory newStarFactory)
         {
             starFactory = newStarFactory;
@@ -56,6 +58,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             UseStaticStars = DeviceInfo.DetailLevel.HasFlag(DetailLevel.StaticStars);
 
             RotationalVelocity = Level.DefaultRotationalVelocity;
+
+            // HACK: This fudge factor helps hide intermitent red border caused by some issue in gaussian blur code
+            const float fudgeFactor = 1.0001f;
+            radialGradientScale = new Vector2(
+                (float)DeviceInfo.LogicalWidth / radialGradient.Width,
+                (float)DeviceInfo.LogicalWidth / radialGradient.Width) * fudgeFactor;
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
@@ -72,16 +80,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             }
             else
             {
-                var scale = new Vector2(
-                    (float)DeviceInfo.LogicalWidth / radialGradient.Width,
-                    (float)DeviceInfo.LogicalWidth / radialGradient.Width);
-
                 spriteBatch.Draw(radialGradient,
                     position: center,
                     origin: new Vector2(radialGradient.Width / 2f, radialGradient.Height / 2f),
                     depth: Depth,
                     color: Color.White * 0.9f,
-                    scale: scale * Scale);
+                    scale: radialGradientScale * Scale);
             }
 
             if (UseStaticStars)

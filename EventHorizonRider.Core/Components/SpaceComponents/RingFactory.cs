@@ -78,7 +78,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             crystals = LoadData(content, "crystals", 1, hasShadow: false);
             crystals.DensityRange = Range.Create(65, 75);
-            crystals.ScaleRange = Range.Create(0.3f, 0.8f);
+            crystals.ScaleRange = Range.Create(0.2f, 0.8f);
             crystals.RadiusOffsetJitter = 10f;
             crystals.AngleJitter = 0.8f;
             crystals.TaperAmount = 6;
@@ -86,6 +86,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             crystals.TextureColors = new[]
             {
                 Color.White * 0.8f,
+                Color.White,
+                Color.Thistle * 0.9f,
             };
         }
 
