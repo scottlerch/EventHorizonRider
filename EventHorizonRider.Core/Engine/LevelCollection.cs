@@ -169,11 +169,11 @@ namespace EventHorizonRider.Core.Engine
                     color: Color.Red,
                     infiniteSequence: true,
                     sequence: ringInfoFactory.GetRandomSequence(
-                        gapSize: Range.Create(MathHelper.TwoPi/3f, MathHelper.TwoPi/4f)))
+                        gapSize: Range.Create(MathHelper.TwoPi/3f, MathHelper.TwoPi/4f))),
             };
         }
 
-        public static int NumberOfLevels { get { return 5; } }
+        public int NumberOfLevels { get { return levels.Count; } }
 
         public Level GetLevel(int level)
         {

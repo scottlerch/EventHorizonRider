@@ -74,20 +74,22 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Music.Updating = false;
             gameContext.Root.Foreground.PlayTimer.Updating = false;
 
+            var progress = 0D;
+
             if (CurrentLevel.Duration.HasValue)
             {
-                var progress = LevelCurrentTime.TotalSeconds/CurrentLevel.Duration.Value.TotalSeconds;
+                progress = LevelCurrentTime.TotalSeconds/CurrentLevel.Duration.Value.TotalSeconds;
 
                 // HACK: for some reason the timing is slightly off sometimes and we go past the end of level
                 progress = progress > 1D ? 1D : progress;
-
-                gameContext.Root.Space.Background.StarBackgroundColor = MathUtilities.LinearInterpolate(
-                    CurrentLevel.Color,
-                    NextLevel.Color,
-                    progress);
-
-                gameContext.Root.Foreground.PlayTimer.SetProgress((float)progress);
             }
+
+            gameContext.Root.Space.Background.StarBackgroundColor = MathUtilities.LinearInterpolate(
+                CurrentLevel.Color,
+                NextLevel.Color,
+                progress);
+
+            gameContext.Root.Foreground.PlayTimer.SetProgress((float)progress);
 
             TotalElapsedGameTime += gameTime.ElapsedGameTime;
 

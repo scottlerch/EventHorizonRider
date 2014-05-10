@@ -37,6 +37,13 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
         public int MaximumStartLevel { get; set; }
 
+        private LevelCollection levelsCollection;
+
+        public LevelSelect(LevelCollection levelsCollection)
+        {
+            this.levelsCollection = levelsCollection;
+        }
+
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             StartLevel = 1;
@@ -49,7 +56,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             unlockLevelTextSize = buttonFont.MeasureString(unlockLevelText);
 
             const float buttonPadding = 50f;
-            const float startTextOffset = 185f;
+            const float startTextOffset = 200f;
 
             startLevelTextLocation = new Vector2(
                 (DeviceInfo.LogicalWidth / 2f) - (startLevelTextSize.X / 2f),
@@ -59,14 +66,21 @@ namespace EventHorizonRider.Core.Components.MenuComponents
                 (DeviceInfo.LogicalWidth / 2f) - (unlockLevelTextSize.X / 2f),
                 (DeviceInfo.LogicalHeight / 2f) - startTextOffset);
 
-            levelButtons = new LevelButton[LevelCollection.NumberOfLevels];
+            levelButtons = new LevelButton[levelsCollection.NumberOfLevels];
 
+            // We know last level is infinite, so will treat differently
+            var numberOfFiniteLevels = levelButtons.Length - 1;
+
+            var infiniteLevelText = "INFINITE";
+            var infiniteButtonSize = buttonFont.MeasureString(infiniteLevelText);
+
+            var levelsButtonTotalWidth = 500f;
             var levelButtonY = startLevelTextLocation.Y + 75f;
-            var levelButtonsWidth = 500f;
-            var levelButtonSpacing = levelButtonsWidth/(LevelCollection.NumberOfLevels - 1);
-            var levelButtonXBase = (DeviceInfo.LogicalWidth / 2f) - (levelButtonsWidth / 2f);
+            var levelButtonsWidth = levelsButtonTotalWidth - infiniteButtonSize.X;
+            var levelButtonSpacing = levelButtonsWidth / (numberOfFiniteLevels);
+            var levelButtonXBase = (DeviceInfo.LogicalWidth / 2f) - (levelsButtonTotalWidth / 2f);
 
-            for (int i = 0; i < LevelCollection.NumberOfLevels; i++)
+            for (int i = 0; i < numberOfFiniteLevels; i++)
             {
                 var position = new Vector2(
                     levelButtonXBase + (i * levelButtonSpacing), 
@@ -88,6 +102,25 @@ namespace EventHorizonRider.Core.Components.MenuComponents
                         key: Keys.D1 + i),
                 };
             }
+
+            // Infinite level button
+            var inifiniteButtonPosition = new Vector2(
+                (DeviceInfo.LogicalWidth / 2f) + (levelsButtonTotalWidth / 2) - infiniteButtonSize.X,
+                levelButtonY);
+
+            levelButtons[levelButtons.Length - 1] = new LevelButton
+            {
+                LevelNumber = levelButtons.Length,
+                Text = infiniteLevelText,
+                Position = inifiniteButtonPosition,
+                Button = new Button(
+                    buttonBounds: new Rectangle(
+                        (int)(inifiniteButtonPosition.X),
+                        (int)(inifiniteButtonPosition.Y),
+                        (int)(infiniteButtonSize.X + buttonPadding),
+                        (int)(infiniteButtonSize.Y + buttonPadding)),
+                    key: Keys.I),
+            };
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)

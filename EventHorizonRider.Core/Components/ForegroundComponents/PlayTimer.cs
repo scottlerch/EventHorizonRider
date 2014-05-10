@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Graphics;
+﻿using EventHorizonRider.Core.Engine;
+using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
@@ -52,8 +53,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private bool newBest;
 
-        public PlayTimer()
+        public PlayTimer(LevelCollection levelsCollection)
         {
+            this.levelsCollection = levelsCollection;
             levelNumberScaling.Initialize(0f, 0f, 0f);
         }
 
@@ -64,6 +66,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         }
 
         public TimeSpan Best { get; private set; }
+
+        private LevelCollection levelsCollection;
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
@@ -251,37 +255,44 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private void DrawLevelNumber(SpriteBatch spriteBatch)
         {
-            var levelNumberTextSize = labelFont.MeasureString(levelNumberText).X;
+            var infiniteText = "Infinite";
 
-            spriteBatch.DrawString(
-                labelFont,
-                LevelText,
-                new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, TextPadding),
-                Color.LightGray.AdjustLight(0.9f),
-                0,
-                Vector2.Zero,
-                1,
-                SpriteEffects.None,
-                Depth);
+            var isInifiniteLevel = levelsCollection.GetLevel(currentLevelNumber).IsInfiniteSequence;
+            var text = isInifiniteLevel ? infiniteText : levelNumberText;
+            var levelNumberTextSize = labelFont.MeasureString(text).X;
 
-            var scaleFactor = 10f*levelNumberScaling.Value;
-            var textScale = Vector2.One + (Vector2.One * scaleFactor);
+            if (!isInifiniteLevel)
+            {
+                spriteBatch.DrawString(
+                    labelFont,
+                    LevelText,
+                    new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, TextPadding),
+                    Color.LightGray.AdjustLight(0.9f),
+                    0,
+                    Vector2.Zero,
+                    1,
+                    SpriteEffects.None,
+                    Depth);
+            }
 
-            spriteBatch.DrawString(
-                labelFont,
-                levelNumberText,
-                new Vector2((viewSize.X - (levelNumberTextSize * textScale.X) - TextPadding), TextPadding),
-                Color.White * (1f - levelNumberScaling.Value),
-                rotation: 0,
-                origin: Vector2.Zero,
-                scale: textScale,
-                effect:SpriteEffects.None,
-                depth:Depth + 0.00003f);
+            var scaleFactor = 10f * levelNumberScaling.Value;
+                var textScale = Vector2.One + (Vector2.One * scaleFactor);
+
+                spriteBatch.DrawString(
+                    labelFont,
+                    text,
+                    new Vector2((viewSize.X - (levelNumberTextSize * textScale.X) - TextPadding), TextPadding),
+                    Color.White * (1f - levelNumberScaling.Value),
+                    rotation: 0,
+                    origin: Vector2.Zero,
+                    scale: textScale,
+                    effect: SpriteEffects.None,
+                    depth: Depth + 0.00003f);
         }
 
         private void DrawProgressBar(SpriteBatch spriteBatch)
         {
-            var levelNumberTextSize = labelFont.MeasureString("1").X;
+            var levelNumberTextSize = labelFont.MeasureString("5").X;
 
             var position = new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, bestTextSize.Y + 8);
             var scale = new Vector2(levelNumberTextSize + levelTextSize - 2, 6);

@@ -70,14 +70,14 @@ namespace EventHorizonRider.Core.Engine
                     ship: new Ship(blackhole),
                     blackhole: blackhole),
                 menu: new Menu(
-                    levelSelect: new LevelSelect(), 
+                    levelSelect: new LevelSelect(LevelCollection), 
                     resetButton: new ResetButton(),
                     creditsButton: new CreditsButton(),
                     credits: new Credits()),
                 foreground: new Foreground(
                     playButton: new PlayButton(),
                     menuButton: new MenuButton(),
-                    playTime: new PlayTimer(),
+                    playTime: new PlayTimer(LevelCollection),
                     title: new Title(),
                     controlsHelp: new ControlsHelp(), 
                     fpsCounter: new FpsCounter()));

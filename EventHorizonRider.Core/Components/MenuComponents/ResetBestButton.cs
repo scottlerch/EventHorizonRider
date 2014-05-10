@@ -36,7 +36,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 
             textLocation = new Vector2(
                 (DeviceInfo.LogicalWidth / 2f) - (textSize.X / 2f),
-                (DeviceInfo.LogicalHeight / 2f) + 35f);
+                (DeviceInfo.LogicalHeight / 2f) + 45f);
 
             warningTextLocation = new Vector2(
                 (DeviceInfo.LogicalWidth / 2f) - (warningTextSize.X / 2f),
