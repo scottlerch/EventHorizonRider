@@ -35,6 +35,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private SpriteFont timeFont;
 
         private SoundEffect newBestSound;
+        private SoundEffect newLevelSound;
 
         private Vector2 viewSize;
 
@@ -52,6 +53,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private Motion levelNumberScaling = new Motion();
 
         private bool newBest;
+
+        private bool animatingNewLevel;
 
         public PlayTimer(LevelCollection levelsCollection)
         {
@@ -79,6 +82,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             labelFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
             timeFont = content.Load<SpriteFont>(@"Fonts\time_font");
 
+            newLevelSound = content.Load<SoundEffect>(@"Sounds\newlevel_sound");
             newBestSound = content.Load<SoundEffect>(@"Sounds\new_best");
 
             bestTextSize = labelFont.MeasureString(BestText);
@@ -103,12 +107,13 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             if (animate)
             {
                 levelNumberScaling.Initialize(1f, 0f, 0.5f);
+                animatingNewLevel = true;
             }
         }
 
-        public void SetProgress(float progress)
+        public void SetProgress(float newProgress)
         {
-            this.progress = progress;
+            progress = newProgress;
         }
 
         public void ShowLevelAndScore()
@@ -134,7 +139,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             {
                 newBestDuration -= gameTime.ElapsedGameTime;
 
-                var alpha = (float) Math.Sin(newBestDuration.TotalSeconds*15);
+                var alpha = (float)Math.Sin(newBestDuration.TotalSeconds * 15);
                 if (alpha < 0)
                 {
                     alpha *= -1f;
@@ -144,6 +149,13 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             }
 
             levelNumberScaling.Update(gameTime);
+
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            if (animatingNewLevel && levelNumberScaling.Value == 0f)
+            {
+                animatingNewLevel = false;
+                newLevelSound.Play(0.5f, 0f, 0f);
+            }
 
             if (updatingTime)
             {
@@ -161,9 +173,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             gameTimeElapsed = initialElapsedTime;
         }
 
-        public void Stop(bool newBest = false)
+        public void Stop(bool newNewBest = false)
         {
-            this.newBest = newBest;
+            newBest = newNewBest;
             updatingTime = false;
         }
 
@@ -276,18 +288,18 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             }
 
             var scaleFactor = 10f * levelNumberScaling.Value;
-                var textScale = Vector2.One + (Vector2.One * scaleFactor);
+            var textScale = Vector2.One + (Vector2.One * scaleFactor);
 
-                spriteBatch.DrawString(
-                    labelFont,
-                    text,
-                    new Vector2((viewSize.X - (levelNumberTextSize * textScale.X) - TextPadding), TextPadding),
-                    Color.White * (1f - levelNumberScaling.Value),
-                    rotation: 0,
-                    origin: Vector2.Zero,
-                    scale: textScale,
-                    effect: SpriteEffects.None,
-                    depth: Depth + 0.00003f);
+            spriteBatch.DrawString(
+                labelFont,
+                text,
+                new Vector2((viewSize.X - (levelNumberTextSize * textScale.X) - TextPadding), TextPadding),
+                Color.White * (1f - levelNumberScaling.Value),
+                rotation: 0,
+                origin: Vector2.Zero,
+                scale: textScale,
+                effect: SpriteEffects.None,
+                depth: Depth + 0.00003f);
         }
 
         private void DrawProgressBar(SpriteBatch spriteBatch)

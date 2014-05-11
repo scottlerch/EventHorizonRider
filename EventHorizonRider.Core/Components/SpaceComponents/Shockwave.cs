@@ -2,6 +2,7 @@
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,6 +11,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     internal class Shockwave : ComponentBase
     {
         private Texture2D texture;
+        private SoundEffect sound;
 
         private float currentRotation;
 
@@ -31,6 +33,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             currentColor = Color.White;
 
             texture = content.Load<Texture2D>(@"Images\shockwave");
+            sound = content.Load<SoundEffect>(@"Sounds\shockwave");
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
@@ -63,6 +66,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             Visible = true;
             currentScale = 0.4f;
             executeColor = currentColor;
+            sound.Play();
         }
 
         public void SetColor(Color color)

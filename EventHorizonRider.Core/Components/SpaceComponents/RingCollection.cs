@@ -24,8 +24,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private Level level;
 
-        private SoundEffect newLevelSound;
-
         private bool stopped = true;
 
         public RingCollection(Blackhole blackhole, Shockwave shockwave, RingFactory ringFactory)
@@ -42,8 +40,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             ringFactory.LoadContent(content, graphics);
-
-            newLevelSound = content.Load<SoundEffect>(@"Sounds\newlevel_sound");
         }
 
         public void SetLevel(Level newLevel)
@@ -97,7 +93,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                         if (ChildrenCount == 1)
                         {
                             shockwave.Execute();
-                            newLevelSound.Play();
                         }
                     }
 
