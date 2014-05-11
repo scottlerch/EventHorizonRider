@@ -2,7 +2,7 @@
 
 namespace EventHorizonRider.Core.Physics
 {
-    internal struct Motion
+    internal class Motion
     {
         public float Target { get; private set; }
 

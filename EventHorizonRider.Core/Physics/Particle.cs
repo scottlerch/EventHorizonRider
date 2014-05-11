@@ -5,7 +5,7 @@ namespace EventHorizonRider.Core.Physics
 {
     internal class Particle
     {
-        public Vector2 Position;
+        public Vector2 Position { get; set; }
         
         private readonly Vector2 startDirection;
         private readonly Vector2 endDirection;

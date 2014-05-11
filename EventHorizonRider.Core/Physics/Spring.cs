@@ -9,18 +9,31 @@ namespace EventHorizonRider.Core.Physics
          *      |====================|--------------[    ]
          */
 
-        public float BlockMass = 0.5f;
-        public float BlockVelocity = 0f;
-        public float BlockX = 1f;
+        public float BlockMass { get; set; }
+        public float BlockVelocity { get; set; }
+        public float BlockX { get; set; }
 
-        public float Friction = -0.5f;
-        public float SpringLength = 1f;
-        public float Stiffness = -20f;
-        public float WallVelocity = 0f;
-        public float WallX = 0f;
+        public float Friction { get; set; }
+        public float SpringLength { get; set; }
+        public float Stiffness { get; set; }
+        public float WallVelocity { get; set; }
+        public float WallX { get; set; }
 
         private float x;
         private float pullVelocity;
+
+        public Spring()
+        {
+            BlockMass = 0.5f;
+            BlockVelocity = 0f;
+            BlockX = 1f;
+
+            Friction = -0.5f;
+            SpringLength = 1f;
+            Stiffness = -20f;
+            WallVelocity = 0f;
+            WallX = 0f;
+        }
 
         public void PullBlock(float newX, float newPullVelocity)
         {

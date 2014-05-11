@@ -56,7 +56,22 @@ namespace EventHorizonRider.Windows
 
         private TreeNode CreateNode(object obj)
         {
-            return new TreeNode(obj.ToString().Split(new [] {'.'}).Last()) {Tag = obj };
+            var node = new TreeNode(obj.ToString().Split(new [] {'.'}).Last()) {Tag = obj };
+
+            var properties = obj.GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                if (property.PropertyType.IsClass)
+                {
+                    node.Nodes.Add(new TreeNode(property.PropertyType.ToString().Split(new[] {'.'}).Last())
+                    {
+                        Tag = property.GetValue(obj)
+                    });
+                }
+            }
+
+            return node;
         }
 
         private TreeNode CreateGameComponentsNode(ComponentBase component)
@@ -85,16 +100,6 @@ namespace EventHorizonRider.Windows
 
         private void OnTimer(object sender, EventArgs e)
         {
-            object currentObj = null;
-
-            if (treeView.SelectedNode != null)
-            {
-                currentObj = treeView.SelectedNode.Tag;
-            }
-
-            UpdateTreeView();
-
-            SelectNode(treeView.Nodes, currentObj);
         }
 
         private void SelectNode(TreeNodeCollection nodes, object tag)
@@ -136,6 +141,20 @@ namespace EventHorizonRider.Windows
             {
                 treeView.SelectedNode.BackColor = System.Drawing.Color.White;
             }
+        }
+
+        private void OnRefresh(object sender, EventArgs e)
+        {
+            object currentObj = null;
+
+            if (treeView.SelectedNode != null)
+            {
+                currentObj = treeView.SelectedNode.Tag;
+            }
+
+            UpdateTreeView();
+
+            SelectNode(treeView.Nodes, currentObj);
         }
     }
 }

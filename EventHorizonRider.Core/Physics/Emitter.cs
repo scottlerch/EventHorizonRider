@@ -10,26 +10,26 @@ namespace EventHorizonRider.Core.Physics
         private readonly Random random; 
         private float nextSpawnIn;
         private float secPassed;
-        private readonly LinkedList<Particle> activeParticles; 
+        private readonly LinkedList<Particle> activeParticles;
 
-        public Vector2 RelPosition;
-        public int Budget;
-        public Texture2D ParticleSprite;
-        public Range<float> SecPerSpawn;
-        public Vector2 SpawnDirection;
-        public Range<float> SpawnNoiseAngle;
-        public Range<float> StartLife;
-        public Range<float> StartScale;
-        public Range<float> EndScale;
-        public Range<Color> StartColor;
-        public Range<Color> EndColor;
-        public Range<float> StartSpeed;
-        public Range<float> EndSpeed;
-        public bool Spawning;
-        public Vector2 GravityCenter;
-        public float GravityForce;
+        public Vector2 RelPosition { get; set; }
+        public int Budget { get; set; }
+        public Texture2D ParticleSprite { get; set; }
+        public Range<float> SecPerSpawn { get; set; }
+        public Vector2 SpawnDirection { get; set; }
+        public Range<float> SpawnNoiseAngle { get; set; }
+        public Range<float> StartLife { get; set; }
+        public Range<float> StartScale { get; set; }
+        public Range<float> EndScale { get; set; }
+        public Range<Color> StartColor { get; set; }
+        public Range<Color> EndColor { get; set; }
+        public Range<float> StartSpeed { get; set; }
+        public Range<float> EndSpeed { get; set; }
+        public bool Spawning { get; set; }
+        public Vector2 GravityCenter { get; set; }
+        public float GravityForce { get; set; }
 
-        public ParticleSystem Parent;
+        public ParticleSystem Parent { get; set; }
 
         public Emitter(
             Range<float> secPerSpawn, 

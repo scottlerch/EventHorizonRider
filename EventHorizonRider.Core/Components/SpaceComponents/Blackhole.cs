@@ -10,13 +10,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Blackhole : ComponentBase
     {
-
-        private readonly Spring spring = new Spring
-        {
-            Friction = -0.9f,
-            Stiffness = -100f,
-            BlockMass = 0.1f,
-        };
+        public Spring Spring { get; private set; }
 
         public Vector2 Position { get; private set; }
 
@@ -30,10 +24,20 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public float Height
         {
-            get { return texture.Height*spring.BlockX; }
+            get { return texture.Height*Spring.BlockX; }
         }
 
         public float RotationalVelocity { get; set; }
+
+        public Blackhole()
+        {
+            Spring = new Spring
+            {
+                Friction = -0.9f,
+                Stiffness = -100f,
+                BlockMass = 0.1f,
+            };
+        }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
@@ -47,7 +51,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public void Pulse(float pullX = 1.15f, float pullVelocity = 1.5f)
         {
-            spring.PullBlock(pullX, pullVelocity);
+            Spring.PullBlock(pullX, pullVelocity);
         }
 
         private float extraBlackholeScale;
@@ -93,12 +97,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             if (!isStopped)
             {
-                spring.Update(gameTime.ElapsedGameTime);
+                Spring.Update(gameTime.ElapsedGameTime);
                 currentRotation += RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
         }
 
-        public Vector2 Scale { get { return new Vector2(spring.BlockX + extraBlackholeScale, spring.BlockX + extraBlackholeScale); } }
+        public Vector2 Scale { get { return new Vector2(Spring.BlockX + extraBlackholeScale, Spring.BlockX + extraBlackholeScale); } }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {

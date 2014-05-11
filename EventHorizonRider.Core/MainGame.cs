@@ -127,6 +127,8 @@ namespace EventHorizonRider.Core
 
         protected override void OnActivated(object sender, EventArgs args)
         {
+            if (IsMouseVisible) return;
+
             if (gameContext != null)
             {
                 gameContext.Paused = true;
@@ -137,6 +139,8 @@ namespace EventHorizonRider.Core
 
         protected override void OnDeactivated(object sender, EventArgs args)
         {
+            if (IsMouseVisible) return;
+
             if (gameContext != null)
             {
                 gameContext.Paused = false;
