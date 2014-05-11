@@ -21,3 +21,15 @@ a full rebuild so platform specific preprocessor directives are taken into consi
 Notes
 -----
 Using custom MonoGame libs from https://github.com/scottlerch/MonoGame
+
+Development Notes
+-----------------
+The following software was used to help develop the content:
+ * [Audacity](http://audacity.sourceforge.net/)
+ * [Paint.NET](http://www.getpaint.net/)
+ * [Gimp](http://www.gimp.org/)
+
+The following sites were used to obtain royalty free content:
+ * http://www.soundjay.com/
+ * http://teknoaxe.com/
+ * https://www.freesound.org
