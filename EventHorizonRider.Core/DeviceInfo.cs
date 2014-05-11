@@ -19,13 +19,13 @@ namespace EventHorizonRider.Core
 
         public static int LogicalHeight { get; private set; }
 
+        public static Vector2 LogicalCenter { get; private set; }
+
         public static int NativeWidth { get; private set; }
 
         public static int NativeHeight { get; private set; }
 
         public static DetailLevel DetailLevel { get; private set; }
-
-        public static int FrameRate { get; private set; }
 
         public static void Initialize(GraphicsDevice graphics, DetailLevel detailLevel)
         {
@@ -46,6 +46,8 @@ namespace EventHorizonRider.Core
 
             LogicalHeight = baseHeight;
             LogicalWidth = (int)Math.Round(NativeWidth * (baseHeight / (float)NativeHeight));
+
+            LogicalCenter = new Vector2(LogicalWidth / 2f, LogicalHeight / 2f);
         }
     }
 }

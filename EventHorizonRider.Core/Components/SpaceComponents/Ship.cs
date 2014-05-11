@@ -31,8 +31,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private bool stopped = true;
         private bool visible = true;
 
-        private Vector2 viewportCenter;
-
         private Texture2D particleBase;
         private ParticleSystem particleSystem;
         private Emitter sideThrustEmitter;
@@ -49,8 +47,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            viewportCenter = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
-
             thrustSound = content.Load<SoundEffect>(@"Sounds\thrust");
             thrustSoundInstance = thrustSound.CreateInstance();
             thrustSoundInstance.IsLooped = true;
@@ -85,7 +81,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 relPosition:Vector2.Zero, 
                 particleSprite:particleBase);
 
-            sideThrustEmitter.GravityCenter = viewportCenter;
+            sideThrustEmitter.GravityCenter = DeviceInfo.LogicalCenter;
             sideThrustEmitter.GravityForce = 1.3f;
 
             mainThrustEmitter = particleSystem.AddEmitter(
@@ -103,7 +99,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 relPosition: Vector2.Zero,
                 particleSprite: particleBase);
 
-            mainThrustEmitter.GravityCenter = viewportCenter;
+            mainThrustEmitter.GravityCenter = DeviceInfo.LogicalCenter;
             mainThrustEmitter.GravityForce = 1.3f;
             mainThrustEmitter.Spawning = true;
 
@@ -160,7 +156,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                  touchState.All(
                      t =>
                          (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                         t.Position.X < (viewportCenter.X - (blackhole.Height / 2f))));
+                         t.Position.X < (DeviceInfo.LogicalCenter.X - (blackhole.Height / 2f))));
         }
 
         private bool Right(KeyboardState keyState, TouchCollection touchState)
@@ -171,7 +167,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                  touchState.All(
                      t =>
                          (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                         t.Position.X > (viewportCenter.X  + (blackhole.Height / 2f))));
+                         t.Position.X > (DeviceInfo.LogicalCenter.X + (blackhole.Height / 2f))));
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -222,7 +218,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             particleSystem.Position = Position;
 
-            sideThrustEmitter.SpawnDirection = (viewportCenter - Position);
+            sideThrustEmitter.SpawnDirection = (DeviceInfo.LogicalCenter - Position);
             sideThrustEmitter.SpawnDirection = new Vector2(-sideThrustEmitter.SpawnDirection.Y, sideThrustEmitter.SpawnDirection.X);
 
             if (left)
@@ -232,7 +228,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             
             sideThrustEmitter.SpawnDirection.Normalize();
 
-            mainThrustEmitter.SpawnDirection = (viewportCenter - Position);
+            mainThrustEmitter.SpawnDirection = (DeviceInfo.LogicalCenter - Position);
             mainThrustEmitter.SpawnDirection.Normalize();
 
             particleSystem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);

@@ -43,8 +43,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private PlayButtonState playButtonState;
         private bool isVisible = true;
 
-        private Vector2 screenCenter;
-
         private Dictionary<PlayButtonState, Info> textInfo;
 
         public float Scale { get; set; }
@@ -63,18 +61,14 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 { PlayButtonState.Pause, new Info("PAUSE", buttonFont.MeasureString("PAUSE"), Color.DarkGray.AdjustLight(0.2f), Color.Gray.AdjustLight(0.3f)) },
             };
 
-            screenCenter = new Vector2(
-                DeviceInfo.LogicalWidth / 2f,
-                DeviceInfo.LogicalHeight / 2f);
-
             const float buttonPadding = 100f;
 
             var textSize = textInfo[PlayButtonState.Restart].Size;
 
             Button = new Button(
                 buttonBounds: new Rectangle(
-                    (int)(screenCenter.X - ((textSize.X + buttonPadding) / 2f)),
-                    (int)(screenCenter.Y - ((textSize.Y + buttonPadding) / 2f)),
+                    (int)(DeviceInfo.LogicalCenter.X - ((textSize.X + buttonPadding) / 2f)),
+                    (int)(DeviceInfo.LogicalCenter.Y - ((textSize.Y + buttonPadding) / 2f)),
                     (int)(textSize.X + buttonPadding),
                     (int)(textSize.Y + buttonPadding)),
                key: Keys.Space);
@@ -129,7 +123,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 spriteBatch.DrawString(
                     buttonFont,
                     info.Text,
-                    screenCenter,
+                    DeviceInfo.LogicalCenter,
                     (Button.Hover ? info.HoverColor : info.Color) * colorAlphaPercent,
                     0,
                     new Vector2(info.Size.X / 2f, info.Size.Y / 2f),

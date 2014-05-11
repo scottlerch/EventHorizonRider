@@ -19,12 +19,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         // TODO: refactor this and calculate from viewport size and maximum ring width
         public static float StartRadius = 700;
 
-        private Vector2 viewportCenter;
-
         internal void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
-            viewportCenter = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
-
             asteroids = LoadData(content, "asteroid", 4, hasShadow:true);
             asteroids.DensityRange = Range.Create(15, 35);
             asteroids.ScaleRange = Range.Create(0.2f, 0.8f);
@@ -136,7 +132,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 rotationalVelocity: info.RotationalVelocity + level.RotationalVelocity,
                 texturesInfoGroup: GetTexturesInfo(info.Type),
                 innerRadius: StartRadius,
-                origin: viewportCenter,
+                origin: DeviceInfo.LogicalCenter,
                 spiralRadius: info.SpiralRadius,
                 spiralSpeed: level.ShipSpeed,
                 gaps: Enumerable.Range(0, info.NumberOfGaps).Select(i =>
