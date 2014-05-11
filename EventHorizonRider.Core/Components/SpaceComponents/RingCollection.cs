@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Engine;
+﻿using EventHorizonRider.Core.Components.SpaceComponents.Rings;
+using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Extensions;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;

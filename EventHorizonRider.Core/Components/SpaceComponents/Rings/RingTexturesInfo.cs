@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EventHorizonRider.Core.Components.SpaceComponents
+namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 {
     internal class RingTexturesInfo
     {

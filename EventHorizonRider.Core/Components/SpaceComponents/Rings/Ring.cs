@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EventHorizonRider.Core.Components.SpaceComponents
+namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 {
     internal class Ring : ComponentBase
     {

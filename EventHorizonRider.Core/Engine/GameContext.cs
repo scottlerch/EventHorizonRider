@@ -3,6 +3,7 @@ using EventHorizonRider.Core.Components;
 using EventHorizonRider.Core.Components.ForegroundComponents;
 using EventHorizonRider.Core.Components.MenuComponents;
 using EventHorizonRider.Core.Components.SpaceComponents;
+using EventHorizonRider.Core.Components.SpaceComponents.Rings;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 

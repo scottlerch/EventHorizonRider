@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 
-namespace EventHorizonRider.Core.Components.SpaceComponents
+namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 {
     internal class RingFactory
     {

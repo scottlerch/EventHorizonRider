@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EventHorizonRider.Core.Components.SpaceComponents;
+using EventHorizonRider.Core.Components.SpaceComponents.Rings;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 

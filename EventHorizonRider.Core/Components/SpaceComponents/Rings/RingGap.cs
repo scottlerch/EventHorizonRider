@@ -1,6 +1,6 @@
 ﻿using EventHorizonRider.Core.Extensions;
 
-namespace EventHorizonRider.Core.Components.SpaceComponents
+namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 {
     internal class RingGap
     {

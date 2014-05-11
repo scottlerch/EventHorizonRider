@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace EventHorizonRider.Core.Components.SpaceComponents
+namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 {
     internal enum RingTexturesInfoGroupMode
     {
