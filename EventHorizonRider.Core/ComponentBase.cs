@@ -27,7 +27,7 @@ namespace EventHorizonRider.Core
             set { visible = value; }
         }
 
-        private bool updating;
+        private bool updating = true;
 
         public bool Updating
         {
@@ -42,6 +42,11 @@ namespace EventHorizonRider.Core
             if (components.Length > 0)
             {
                 children = new List<ComponentBase>(components);
+
+                foreach (var child in children)
+                {
+                    child.Parent = this;
+                }
             }
 
             var depthStep = 1f/(components.Length + 2);
@@ -129,7 +134,7 @@ namespace EventHorizonRider.Core
 
         public void Update(GameTime gameTime, InputState inputState)
         {
-            if (Updating) return;
+            if (!Updating) return;
 
             ForEach<ComponentBase>(child => child.Update(gameTime, inputState));
 

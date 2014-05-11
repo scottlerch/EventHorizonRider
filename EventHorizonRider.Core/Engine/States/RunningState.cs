@@ -61,18 +61,18 @@ namespace EventHorizonRider.Core.Engine.States
                 gameContext.Root.Music.Pause();
                 gameContext.Root.Foreground.PlayButton.Show(state:PlayButtonState.Resume);
                 gameContext.Root.Space.SetBlur(blurAmount: 1.5f);
-                gameContext.Root.Space.Updating = true;
-                gameContext.Root.Music.Updating = true;
-                gameContext.Root.Foreground.PlayTimer.Updating = true;
+                gameContext.Root.Space.Updating = false;
+                gameContext.Root.Music.Updating = false;
+                gameContext.Root.Foreground.PlayTimer.Updating = false;
                 return;
             }
 
             gameContext.Root.Music.Play();
             gameContext.Root.Foreground.PlayButton.Show(state:PlayButtonState.Pause);
             gameContext.Root.Space.SetBlur(blurAmount: 0f);
-            gameContext.Root.Space.Updating = false;
-            gameContext.Root.Music.Updating = false;
-            gameContext.Root.Foreground.PlayTimer.Updating = false;
+            gameContext.Root.Space.Updating = true;
+            gameContext.Root.Music.Updating = true;
+            gameContext.Root.Foreground.PlayTimer.Updating = true;
 
             var progress = 0D;
 
@@ -178,7 +178,7 @@ namespace EventHorizonRider.Core.Engine.States
 
             if (animate)
             {
-                gameContext.Root.Space.Ship.PulseShield();
+                gameContext.Root.Space.Ship.Shield.Pulse();
             }
         }
 

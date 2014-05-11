@@ -67,6 +67,7 @@
     <Compile Include="Components\SpaceComponents\RingCollection.cs" />
     <Compile Include="Components\SpaceComponents\RingFactory.cs" />
     <Compile Include="Components\SpaceComponents\RingGap.cs" />
+    <Compile Include="Components\SpaceComponents\ShipShield.cs" />
     <Compile Include="Components\SpaceComponents\Shockwave.cs" />
     <Compile Include="Components\SpaceComponents\Star.cs" />
     <Compile Include="Components\SpaceComponents\StarFactory.cs" />

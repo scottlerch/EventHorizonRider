@@ -1,5 +1,4 @@
-﻿using EventHorizonRider.Core.Engine;
-using EventHorizonRider.Core.Graphics;
+﻿using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
@@ -17,13 +16,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     {
         private readonly Blackhole blackhole;
 
-        public Vector2 Position { get; set; }
-        public float Rotation { get; set; }
-
-        public Texture2D Texture { get; set; }
-
-        private Texture2D shieldPusleTexture;
-        private Texture2D[] shieldTextures;
         private SoundEffect thrustSound;
         private SoundEffectInstance thrustSoundInstance;
 
@@ -36,14 +28,60 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private Emitter sideThrustEmitter;
         private Emitter mainThrustEmitter;
 
-        public Ship(Blackhole blackhole)
+        public Ship(Blackhole blackhole) : base(new ShipShield())
         {
             this.blackhole = blackhole;
+            Shield = Children.First() as ShipShield;
         }
 
-        internal float Radius { get; private set; }
+        public Vector2 Position { get; set; }
+
+        public float Rotation { get; set; }
+
+        public Texture2D Texture { get; set; }
+
+        public ShipShield Shield { get; private set; }
+
+        public float Radius { get; private set; }
 
         public float Speed { get; set; }
+
+        public Vector2 Origin{ get; set; }
+
+        public Vector2 Scale{ get { return Vector2.One; } }
+
+        public CollisionInfo CollisionInfo { get; private set; }
+
+        public void Initialize()
+        {
+            Rotation = 0;
+
+            Position = new Vector2(
+                blackhole.Position.X,
+                blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f));
+
+            mainThrustEmitter.Clear();
+            sideThrustEmitter.Clear();
+        }
+
+        public void Start()
+        {
+            Rotation = 0;
+
+            Position = new Vector2(
+                blackhole.Position.X,
+                blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f));
+
+            stopped = false;
+            visible = true;
+        }
+
+        public void Stop()
+        {
+            crashSound.Play();
+
+            stopped = true;
+        }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
@@ -53,14 +91,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             Texture = content.Load<Texture2D>(@"Images\ship");
             CollisionInfo = CollisionDetection.GetCollisionInfo(Texture, resolution: DeviceInfo.DetailLevel.HasFlag(DetailLevel.CollisionDetectionFull) ? 1f : 0.75f);
-
-            shieldPusleTexture = content.Load<Texture2D>(@"Images\shield_pulse");
-
-            shieldTextures = new Texture2D[3];
-            for (int i = 0; i < shieldTextures.Length; i++)
-            {
-                shieldTextures[i] = content.Load<Texture2D>(@"Images\shield_" + (i+1).ToString());
-            }
 
             crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
 
@@ -104,38 +134,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             mainThrustEmitter.Spawning = true;
 
             Origin = new Vector2(Texture.Width/2f, Texture.Height/2f);
-
-            shieldPulse.Initialize(0, 0, 0);
-
-            shieldTextureIndex = 0;
         }
-
-        private int shieldTextureIndex;
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
             if (!visible)
             {
                 return;
-            }
-
-            spriteBatch.Draw(shieldTextures[shieldTextureIndex], 
-                Position,
-                origin: new Vector2(shieldTextures[shieldTextureIndex].Width / 2f, shieldTextures[shieldTextureIndex].Height / 2f),
-                color: Color.White * baseShieldAlpha,
-                scale: Vector2.One * 1f,
-                rotation: Rotation,
-                depth: Depth - 0.0002f);
-
-            if (shieldPulse.Value > 0f)
-            {
-                spriteBatch.Draw(shieldPusleTexture, 
-                    shieldPulseLocation,
-                    origin: new Vector2(shieldPusleTexture.Width / 2f, shieldPusleTexture.Height / 2f),
-                    color: Color.White*shieldPulseAlpha,
-                    scale: Vector2.One*shieldPulseScale,
-                    rotation: Rotation,
-                    depth: Depth - 0.0003f);
             }
 
             particleSystem.Draw(spriteBatch, 1, Vector2.Zero, Depth - 0.0001f);
@@ -148,33 +153,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 depth: Depth);
         }
 
-        private bool Left(KeyboardState keyState, TouchCollection touchState)
-        {
-            return
-                (keyState.IsKeyDown(Keys.Left) && !keyState.IsKeyDown(Keys.Right)) ||
-                (touchState.Count > 0 &&
-                 touchState.All(
-                     t =>
-                         (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                         t.Position.X < (DeviceInfo.LogicalCenter.X - (blackhole.Height / 2f))));
-        }
-
-        private bool Right(KeyboardState keyState, TouchCollection touchState)
-        {
-            return
-                (keyState.IsKeyDown(Keys.Right) && !keyState.IsKeyDown(Keys.Left)) ||
-                (touchState.Count > 0 &&
-                 touchState.All(
-                     t =>
-                         (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                         t.Position.X > (DeviceInfo.LogicalCenter.X + (blackhole.Height / 2f))));
-        }
-
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
-            const int frameInterval = 100;
-            shieldTextureIndex = (int)((((int)gameTime.TotalGameTime.TotalMilliseconds % frameInterval) / (float)frameInterval) * shieldTextures.Length);
-
             if (stopped)
             {
                 if (thrustSoundInstance.State == SoundState.Playing)
@@ -241,67 +221,28 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             {
                 thrustSoundInstance.Stop();
             }
-
-            shieldPulse.Update(gameTime);
-
-            shieldPulseAlpha = MathUtilities.LinearInterpolate(baseShieldAlpha, 0, shieldPulse.Value);
-            shieldPulseScale = (10f*shieldPulse.Value) + 1f;
         }
 
-        private Motion shieldPulse;
-        private float shieldPulseAlpha;
-        private float shieldPulseScale;
-        private Vector2 shieldPulseLocation;
-        private const float baseShieldAlpha = 0.8f;
-
-        public void PulseShield()
+        private bool Left(KeyboardState keyState, TouchCollection touchState)
         {
-            shieldPulseLocation = Position;
-            shieldPulse.Initialize(0, 1, 1f);
+            return
+                (keyState.IsKeyDown(Keys.Left) && !keyState.IsKeyDown(Keys.Right)) ||
+                (touchState.Count > 0 &&
+                 touchState.All(
+                     t =>
+                         (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
+                         t.Position.X < (DeviceInfo.LogicalCenter.X - (blackhole.Height / 2f))));
         }
 
-        internal void Initialize()
+        private bool Right(KeyboardState keyState, TouchCollection touchState)
         {
-            Rotation = 0;
-
-            Position = new Vector2(
-                blackhole.Position.X,
-                blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f));
-
-            mainThrustEmitter.Clear();
-            sideThrustEmitter.Clear();
+            return
+                (keyState.IsKeyDown(Keys.Right) && !keyState.IsKeyDown(Keys.Left)) ||
+                (touchState.Count > 0 &&
+                 touchState.All(
+                     t =>
+                         (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
+                         t.Position.X > (DeviceInfo.LogicalCenter.X + (blackhole.Height / 2f))));
         }
-
-        internal void Start()
-        {
-            Rotation = 0;
-
-            Position = new Vector2(
-                blackhole.Position.X,
-                blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f));
-
-            stopped = false;
-            visible = true;
-        }
-
-        internal void Stop()
-        {
-            crashSound.Play();
-
-            stopped = true;
-            //visible = false;
-        }
-
-        public Vector2 Origin
-        {
-            get; set;
-        }
-
-        public Vector2 Scale
-        {
-            get { return Vector2.One; }
-        }
-
-        public CollisionInfo CollisionInfo {get; private set; }
     }
 }

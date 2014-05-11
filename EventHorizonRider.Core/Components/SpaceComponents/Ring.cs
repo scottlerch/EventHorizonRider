@@ -58,7 +58,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             Vector2 origin,
             float spiralRadius,
             float spiralSpeed,
-            List<RingGap> gaps)
+            IList<RingGap> gaps)
         {
             InnerRadius = innerRadius;
             Width = spiralRadius;
