@@ -90,7 +90,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             thrustSoundInstance.IsLooped = true;
 
             Texture = content.Load<Texture2D>(@"Images\ship");
-            CollisionInfo = CollisionDetection.GetCollisionInfo(Texture, resolution: DeviceInfo.DetailLevel.HasFlag(DetailLevel.CollisionDetectionFull) ? 1f : 0.75f);
+            CollisionInfo = CollisionDetection.GetCollisionInfo(
+                Texture, 
+                resolution: DeviceInfo.Platform.CollisionDetectionDetail == CollisionDetectionDetail.Full ? 1f : 0.75f);
 
             crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
 

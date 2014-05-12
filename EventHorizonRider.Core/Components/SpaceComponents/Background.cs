@@ -10,25 +10,34 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Background : ComponentBase
     {
+        // Number of stars if using dynamically generated stars.
         private const int NumberOfStars = 500;
 
         private readonly Color gameOverColor = Color.Red.AdjustLight(0.6f);
-        private readonly float gameOverAlpha = 0.5f;
+        private const float gameOverAlpha = 0.5f;
+
         private readonly Color defaultColor = Color.Black;
-        private readonly float defaultAlpha = 0.8f;
+        private const float defaultAlpha = 0.8f;
 
         private Texture2D radialGradient;
         private Texture2D background;
         private Texture2D starsBackground;
 
+        private Vector2 starsBackgroundOrigin;
+        private Vector2 radialGradientOrigin;
+        private Vector2 backgroundOrigin;
+
         private Color backgroundColor = Color.Black;
         private float backgroundAlpha = 1f;
-        private Vector2 center;
+
         private float currentRotation;
         private float currentBackgroundRotation;
+
         private readonly StarFactory starFactory;
         private Star[] stars;
 
+        private Vector2 starsBackgroundScale;
+        private Vector2 backgroundScale;
         private Vector2 radialGradientScale;
 
         public Background(StarFactory newStarFactory)
@@ -42,6 +51,26 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public float RotationalVelocity { get; set; }
 
+        public Color BackgroundColor
+        {
+            get { return backgroundColor; }
+            set { backgroundColor = value; }
+        }
+
+        public Color StarBackgroundColor { get; set; }
+
+        public void Start()
+        {
+            backgroundColor = defaultColor;
+            backgroundAlpha = defaultAlpha;
+        }
+
+        public void Gameover()
+        {
+            backgroundColor = gameOverColor;
+            backgroundAlpha = gameOverAlpha;
+        }
+
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             StarBackgroundColor = Color.White;
@@ -50,13 +79,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             starsBackground = content.Load<Texture2D>(@"Images\stars");
             radialGradient = content.Load<Texture2D>(@"Images\radial_gradient");
 
-            center = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
-
             starFactory.LoadContent(content, graphics);
             stars = starFactory.GetStars(NumberOfStars);
 
-            UseStaticStars = DeviceInfo.DetailLevel.HasFlag(DetailLevel.StaticStars);
-
+            UseStaticStars = !DeviceInfo.Platform.UseDynamicStars;
             RotationalVelocity = Level.DefaultRotationalVelocity;
 
             // HACK: This fudge factor helps hide intermitent red border caused by some issue in gaussian blur code
@@ -64,25 +90,34 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             radialGradientScale = new Vector2(
                 (float)DeviceInfo.LogicalWidth / radialGradient.Width,
                 (float)DeviceInfo.LogicalWidth / radialGradient.Width) * fudgeFactor;
+
+            starsBackgroundOrigin = new Vector2(starsBackground.Width/2f, starsBackground.Height/2f);
+            radialGradientOrigin = new Vector2(radialGradient.Width/2f, radialGradient.Height/2f);
+            backgroundOrigin = new Vector2(background.Width/2f, background.Height/2f);
+
+            backgroundScale = new Vector2(2f, 2f);
+            starsBackgroundScale = new Vector2(1.3f, 1.3f);
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
             if (backgroundColor != gameOverColor)
             {
-                spriteBatch.Draw(background,
-                    position: center,
-                    origin: new Vector2(background.Width/2f, background.Height/2f),
+                spriteBatch.Draw(
+                    background,
+                    position: DeviceInfo.LogicalCenter,
+                    origin: backgroundOrigin,
                     rotation: currentBackgroundRotation,
                     depth: Depth,
                     color: StarBackgroundColor*backgroundAlpha,
-                    scale: (new Vector2(2f, 2f)*Scale));
+                    scale: backgroundScale*Scale);
             }
             else
             {
-                spriteBatch.Draw(radialGradient,
-                    position: center,
-                    origin: new Vector2(radialGradient.Width / 2f, radialGradient.Height / 2f),
+                spriteBatch.Draw(
+                    radialGradient,
+                    position: DeviceInfo.LogicalCenter,
+                    origin: radialGradientOrigin,
                     depth: Depth,
                     color: Color.White * 0.9f,
                     scale: radialGradientScale * Scale);
@@ -90,12 +125,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             if (UseStaticStars)
             {
-                spriteBatch.Draw(starsBackground,
-                    position: center,
-                    origin: new Vector2(starsBackground.Width / 2f, starsBackground.Height / 2f),
+                spriteBatch.Draw(
+                    starsBackground,
+                    position: DeviceInfo.LogicalCenter,
+                    origin: starsBackgroundOrigin,
                     rotation: currentRotation,
                     color: Color.White * backgroundAlpha,
-                    scale: new Vector2(1.3f, 1.3f) * Scale,
+                    scale: starsBackgroundScale * Scale,
                     depth: Depth + 0.001f);
             }
             else
@@ -141,26 +177,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     star.Update(gameTime, Scale);
                 }
             }
-        }
-
-        public Color BackgroundColor
-        {
-            get { return backgroundColor; }
-            set { backgroundColor = value; }
-        }
-
-        public Color StarBackgroundColor { get; set; }
-
-        public void Start()
-        {
-            backgroundColor = defaultColor;
-            backgroundAlpha = defaultAlpha;
-        }
-
-        public void Gameover()
-        {
-            backgroundColor = gameOverColor;
-            backgroundAlpha = gameOverAlpha;
         }
     }
 }

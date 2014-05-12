@@ -1,30 +1,48 @@
-﻿using System.Threading.Tasks;
-using EventHorizonRider.Core.Components;
+﻿using EventHorizonRider.Core.Components;
 using EventHorizonRider.Core.Components.ForegroundComponents;
 using EventHorizonRider.Core.Components.MenuComponents;
 using EventHorizonRider.Core.Components.SpaceComponents;
 using EventHorizonRider.Core.Components.SpaceComponents.Rings;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
+using System.Threading.Tasks;
 
 namespace EventHorizonRider.Core.Engine
 {
     internal class GameContext
     {
+        /// <summary>
+        /// This is the current state of the game.  The logic for each state is contained
+        /// in subclasses of GameStateBase in the States namespace.
+        /// </summary>
         public GameStateBase GameState { get; set; }
 
+        /// <summary>
+        /// This is the root components of all (mostly) visible game components.
+        /// </summary>
         public Root Root { get; private set; }
 
+        /// <summary>
+        /// This is the persisted user data like high score.
+        /// </summary>
         public PlayerData PlayerData { get; private set; }
 
-        public LevelCollection LevelCollection { get; private set; }
+        /// <summary>
+        /// This contains all the information about the levels (how to generate), current, next, timings, etc.
+        /// </summary>
+        public LevelCollection Levels { get; private set; }
 
-        public int CurrentLevelNumber { get; set; }
-
+        /// <summary>
+        /// Indicates if the game is paused or not.  
+        /// This really only applies to when the GameState is set to RunningState.
+        /// </summary>
         public bool Paused { get; set; }
 
         private Task ioTask;
 
+        /// <summary>
+        /// This is the task where all IO operations are performed in a non-blocking way.
+        /// </summary>
         public Task IoTask
         {
             get { return ioTask; }
@@ -51,7 +69,7 @@ namespace EventHorizonRider.Core.Engine
 
         private void InitializeEngine()
         {
-            LevelCollection = new LevelCollection(new RingInfoFactory());
+            Levels = new LevelCollection(new RingInfoFactory());
             PlayerData = new PlayerData();
             IoTask = PlayerData.Load();
         }
@@ -71,14 +89,14 @@ namespace EventHorizonRider.Core.Engine
                     ship: new Ship(blackhole),
                     blackhole: blackhole),
                 menu: new Menu(
-                    levelSelect: new LevelSelect(LevelCollection), 
+                    levelSelect: new LevelSelect(Levels), 
                     resetButton: new ResetButton(),
                     creditsButton: new CreditsButton(),
                     credits: new Credits()),
                 foreground: new Foreground(
                     playButton: new PlayButton(),
                     menuButton: new MenuButton(),
-                    playTime: new PlayTimer(LevelCollection),
+                    playTime: new PlayTimer(Levels),
                     title: new Title(),
                     controlsHelp: new ControlsHelp(), 
                     fpsCounter: new FpsCounter()));

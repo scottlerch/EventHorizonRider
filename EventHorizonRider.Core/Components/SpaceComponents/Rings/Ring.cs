@@ -29,27 +29,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
         private bool isStopped;
         private readonly float ringCollapseSpeed;
 
-        public float InnerRadius
-        {
-            get { return innerRadius; }
-            set
-            {
-                // ReSharper disable once CompareOfFloatsByEqualityOperator
-                if (innerRadius == 0)
-                {
-                    maxRadius = value;
-                }
-
-                innerRadius = value;
-            }
-        }
-
-        public float OutterRadius { get { return InnerRadius + Width; } }
-
-        public float Width { get; private set; }
-
-        public bool ConsumedByBlackhole { get; set; }
-
         public Ring(
             float ringCollapseSpeed,
             float rotationalVelocity,
@@ -138,6 +117,47 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             ringObjects = newRingObjects;
         }
 
+        public float InnerRadius
+        {
+            get { return innerRadius; }
+            set
+            {
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                if (innerRadius == 0)
+                {
+                    maxRadius = value;
+                }
+
+                innerRadius = value;
+            }
+        }
+
+        public float OutterRadius { get { return InnerRadius + Width; } }
+
+        public float Width { get; private set; }
+
+        public bool ConsumedByBlackhole { get; set; }
+
+        public bool Intersects(Ship ship)
+        {
+            // TODO: add heuristics to optimize collision detection
+
+            for (var i = 0; i < ringObjects.Count; i++)
+            {
+                if (CollisionDetection.Collides(ship, ringObjects[i]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void Stop()
+        {
+            isStopped = true;
+        }
+
         private EdgeModifier CalculateEdgeModifer(IList<RingGap> gaps, float angle, float minimumAngleSpacing, float maximumAngle, bool isSpiral, int taperAmount, float taperScale)
         {
             // When object is closer to gap edge make sure it's scaled smaller with less random jitter
@@ -168,18 +188,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             }
 
             return edgeModifier;
-        }
-
-        private void RandomizeDepthOrder(List<RingObject> objects, int startIndex, int count, float baseDepth = 0f)
-        {
-            var index = startIndex;
-            foreach (var depthOffset in Enumerable
-                .Range(0, count)
-                .Select(i => i * DepthStep)
-                .OrderBy(x => random.Next()))
-            {
-                objects[index++].RelativeDepth = baseDepth + depthOffset;
-            }
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
@@ -238,24 +246,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             }
         }
 
-        internal bool Intersects(Ship ship)
+        private void RandomizeDepthOrder(List<RingObject> objects, int startIndex, int count, float baseDepth = 0f)
         {
-            // TODO: add heuristics to optimize collision detection
-
-            for (var i = 0; i < ringObjects.Count; i++)
+            var index = startIndex;
+            foreach (var depthOffset in Enumerable
+                .Range(0, count)
+                .Select(i => i * DepthStep)
+                .OrderBy(x => random.Next()))
             {
-                if (CollisionDetection.Collides(ship, ringObjects[i]))
-                {
-                    return true;
-                }
+                objects[index++].RelativeDepth = baseDepth + depthOffset;
             }
-
-            return false;
-        }
-
-        internal void Stop()
-        {
-            isStopped = true;
         }
     }
 }

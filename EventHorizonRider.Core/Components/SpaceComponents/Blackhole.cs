@@ -1,5 +1,4 @@
-﻿using EventHorizonRider.Core.Engine;
-using EventHorizonRider.Core.Input;
+﻿using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -10,9 +9,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Blackhole : ComponentBase
     {
-        public Spring Spring { get; private set; }
-
-        public Vector2 Position { get; private set; }
+        private float extraBlackholeScale;
+        private float newExtraBlackholeScale;
+        private float extraBlackholeScaleSpeed;
 
         private Texture2D texture;
 
@@ -22,13 +21,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         private SoundEffect scaleSound;
 
-        public float Height
-        {
-            get { return texture.Height*Spring.BlockX; }
-        }
-
-        public float RotationalVelocity { get; set; }
-
         public Blackhole()
         {
             Spring = new Spring
@@ -37,6 +29,31 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 Stiffness = -100f,
                 BlockMass = 0.1f,
             };
+        }
+
+        public Spring Spring { get; private set; }
+
+        public Vector2 Position { get; private set; }
+
+        public float Height
+        {
+            get { return texture.Height*Spring.BlockX; }
+        }
+
+        public float RotationalVelocity { get; set; }
+
+        public float ExtraScale { get { return extraBlackholeScale; } }
+
+        public Vector2 Scale { get { return new Vector2(Spring.BlockX + extraBlackholeScale, Spring.BlockX + extraBlackholeScale); } }
+
+        public void Stop()
+        {
+            isStopped = true;
+        }
+
+        public void Start()
+        {
+            isStopped = false;
         }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
@@ -53,12 +70,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             Spring.PullBlock(pullX, pullVelocity);
         }
-
-        private float extraBlackholeScale;
-        private float newExtraBlackholeScale;
-        private float extraBlackholeScaleSpeed;
-
-        public float ExtraScale { get { return extraBlackholeScale; } }
 
         public void SetExtraScale(float scaleSize, bool animate = false, float speed = 1f)
         {
@@ -102,8 +113,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             }
         }
 
-        public Vector2 Scale { get { return new Vector2(Spring.BlockX + extraBlackholeScale, Spring.BlockX + extraBlackholeScale); } }
-
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Position,
@@ -111,16 +120,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 rotation: currentRotation,
                 scale: new Vector2(Scale.X, Scale.Y),
                 depth: Depth);
-        }
-
-        internal void Stop()
-        {
-            isStopped = true;
-        }
-
-        internal void Start()
-        {
-            isStopped = false;
         }
     }
 }

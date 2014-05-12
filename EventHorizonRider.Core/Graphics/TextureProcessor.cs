@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace EventHorizonRider.Core.Graphics
 {
+    /// <summary>
+    /// Helper methods to process texture data like scaling, cropping, anti-aliasing, etc.
+    /// </summary>
     internal class TextureProcessor
     {
         public static PixelData<byte> GetScaledData(PixelData<byte> data, float scale)

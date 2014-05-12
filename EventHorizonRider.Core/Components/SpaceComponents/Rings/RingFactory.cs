@@ -34,7 +34,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                 Color.LightGray,
                 Color.DarkGray,
                 Color.Beige,
-                MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.DarkGray, 0.5),
+                MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.DarkGray, 0.5f)
             };
 
             sparseAsteroids = new RingTexturesInfo();
@@ -52,7 +52,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                 Color.DarkGray.AdjustLight(1.2f),
                 Color.LightGray,
                 Color.DarkGray,
-                Color.Beige,
+                Color.Beige
             };
 
             dust = LoadData(content, "dust", 1, hasShadow:false);
@@ -66,10 +66,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             {
                 Color.Tan, 
                 Color.Tan.AdjustLight(0.8f),
-                MathUtilities.LinearInterpolate(Color.Tan, Color.Beige, 0.5),
+                MathUtilities.LinearInterpolate(Color.Tan, Color.Beige, 0.5f),
                 Color.Beige,
                 Color.Beige.AdjustLight(0.9f),
-                MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.Beige.AdjustLight(0.9f), 0.5)
+                MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.Beige.AdjustLight(0.9f), 0.5f)
             };
 
             crystals = LoadData(content, "crystals", 2, hasShadow: false);
@@ -83,7 +83,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             {
                 Color.White * 0.8f,
                 Color.White,
-                Color.Thistle * 0.9f,
+                Color.Thistle * 0.9f
             };
         }
 
@@ -100,7 +100,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             {
                 texturesInfo.Textures[i] = content.Load<Texture2D>(@"Images\" + imageBaseName + "_" + (i + 1));
                 if (hasShadow) texturesInfo.ShadowTextures[i] = content.Load<Texture2D>(@"Images\" + imageBaseName + "_shadow_" + (i + 1));
-                texturesInfo.CollisionInfos[i] = CollisionDetection.GetCollisionInfo(texturesInfo.Textures[i], resolution:DeviceInfo.DetailLevel.HasFlag(DetailLevel.CollisionDetectionFull)? 1f : 0.75f);
+                texturesInfo.CollisionInfos[i] = CollisionDetection.GetCollisionInfo(
+                    texturesInfo.Textures[i], 
+                    resolution: DeviceInfo.Platform.CollisionDetectionDetail == CollisionDetectionDetail.Full ? 1f : 0.75f);
             }
 
             return texturesInfo;

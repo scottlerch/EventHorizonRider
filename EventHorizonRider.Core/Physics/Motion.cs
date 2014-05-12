@@ -2,6 +2,9 @@
 
 namespace EventHorizonRider.Core.Physics
 {
+    /// <summary>
+    /// Helper class used to calculate motion in 1 dimension.
+    /// </summary>
     internal class Motion
     {
         public float Target { get; private set; }
@@ -13,6 +16,11 @@ namespace EventHorizonRider.Core.Physics
         public float Acceleration { get; private set; }
 
         public bool IsDone { get; private set; }
+
+        public Motion(float value = 0f, float target = 0f, float speed = 0f, float acceleration = 0f)
+        {
+            Initialize(value, target, speed, acceleration);
+        }
 
         public void Initialize(float value, float target, float speed, float acceleration = 0f)
         {

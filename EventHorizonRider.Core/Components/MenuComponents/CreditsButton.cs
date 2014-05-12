@@ -9,6 +9,8 @@ namespace EventHorizonRider.Core.Components.MenuComponents
 {
     internal class CreditsButton : ComponentBase
     {
+        private const string ButtonText = "CREDITS";
+
         private SpriteFont buttonFont;
         private SoundEffect buttonSound;
 
@@ -22,7 +24,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
             buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
 
-            textSize = buttonFont.MeasureString("CREDITS");
+            textSize = buttonFont.MeasureString(ButtonText);
 
             const float buttonPadding = 25f;
 
@@ -53,7 +55,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
         {
             spriteBatch.DrawString(
                 buttonFont,
-                "CREDITS",
+                ButtonText,
                 textLocation,
                 Button.Hover? Color.Yellow : Color.White,
                 0,

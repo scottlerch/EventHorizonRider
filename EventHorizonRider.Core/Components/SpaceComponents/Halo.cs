@@ -7,11 +7,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Halo : ComponentBase
     {
-        private Texture2D texture;
-
-        private float currentRotation;
-
         private readonly Blackhole blackhole;
+
+        private Texture2D texture;
+        private Vector2 textureOrigin;
+        private float currentRotation;
 
         public Halo(Blackhole newBlackhole)
         {
@@ -21,6 +21,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             texture = content.Load<Texture2D>(@"Images\halo");
+            textureOrigin = new Vector2(texture.Width/2f, texture.Height/2f);
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
@@ -28,7 +29,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             if (Visible)
             {
                 spriteBatch.Draw(texture, blackhole.Position,
-                    origin: new Vector2(texture.Width/2f, texture.Height/2f),
+                    origin: textureOrigin,
                     rotation: currentRotation,
                     scale: blackhole.Scale,
                     color: Color.White * 0.4f,

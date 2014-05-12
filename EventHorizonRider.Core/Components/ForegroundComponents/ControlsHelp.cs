@@ -19,7 +19,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private Vector2 helpStartPosition;
         private Texture2D helpStart;
 
-        private Motion startMotion = new Motion();
+        private Motion startMotion;
 
         private bool fading;
         private float directionAlpha = MaxAlpha;
@@ -40,7 +40,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             helpRightPosition = new Vector2(DeviceInfo.LogicalWidth - helpRight.Width, (DeviceInfo.LogicalHeight / 2) - (helpLeft.Height / 2));
             helpStartPosition = new Vector2((DeviceInfo.LogicalWidth / 2) - (helpStart.Width / 2), (DeviceInfo.LogicalHeight / 2) + 125);
 
-            startMotion.Initialize(value:0, target:20, speed:80);
+            startMotion = new Motion(value:0, target:20, speed:80);
         }
 
         public void Hide(float speed)
@@ -96,7 +96,12 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             spriteBatch.Draw(helpLeft, color: Color.White * directionAlpha, position: helpLeftPosition, depth: Depth);
             spriteBatch.Draw(helpRight, color: Color.White * directionAlpha, position: helpRightPosition, depth: Depth);
-            spriteBatch.Draw(helpStart, color: Color.White * startAlpha, position: new Vector2(helpStartPosition.X, helpStartPosition.Y - startMotion.Value), depth: Depth);
+
+            spriteBatch.Draw(
+                helpStart, 
+                color: Color.White * startAlpha, 
+                position: new Vector2(helpStartPosition.X, helpStartPosition.Y - startMotion.Value), 
+                depth: Depth);
         }
     }
 }

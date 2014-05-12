@@ -3,7 +3,6 @@ using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Extensions;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -20,15 +19,17 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private IEnumerator<RingInfo> currentSequence;
 
         private TimeSpan? lastRingAddTime;
-        private TimeSpan lastRingDuration = TimeSpan.Zero;
-        private TimeSpan totalElapsedGameTime = TimeSpan.Zero;
+        private TimeSpan lastRingDuration;
+        private TimeSpan totalElapsedGameTime;
 
         private Level level;
 
-        private bool stopped = true;
+        private bool stopped;
 
         public RingCollection(Blackhole blackhole, Shockwave shockwave, RingFactory ringFactory)
         {
+            stopped = true;
+
             this.blackhole = blackhole;
             this.shockwave = shockwave;
             this.ringFactory = ringFactory;
@@ -38,17 +39,48 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public bool CollisionDetectionDisabled { get; set; }
 
-        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
-        {
-            ringFactory.LoadContent(content, graphics);
-        }
-
         public void SetLevel(Level newLevel)
         {
             level = newLevel;
 
             currentSequence = level.Sequence.GetEnumerator();
             HasMoreRings = true;
+        }
+
+        public bool Intersects(Ship ship)
+        {
+            if (CollisionDetectionDisabled) return false;
+
+            // TODO: optimize collision detection, this is the biggest bottleneck right now
+            return Children.Cast<Ring>().Any(ring => ring.Intersects(ship));
+        }
+
+        public void Start()
+        {
+            ClearChildren();
+            stopped = false;
+        }
+
+        public void Remove(Ring ring)
+        {
+            RemoveChild(ring);
+        }
+
+        public void Stop()
+        {
+            stopped = true;
+
+            ForEach<Ring>(ring => ring.Stop());
+        }
+
+        public void Clear()
+        {
+            ClearChildren();
+        }
+
+        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
+        {
+            ringFactory.LoadContent(content, graphics);
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -100,37 +132,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     RemoveChild(ring);
                 }
             });
-        }
-
-        public bool Intersects(Ship ship)
-        {
-            if (CollisionDetectionDisabled) return false;
-
-            // TODO: optimize collision detection, this is the biggest bottleneck right now
-            return Children.Cast<Ring>().Any(ring => ring.Intersects(ship));
-        }
-
-        public void Start()
-        {
-            ClearChildren();
-            stopped = false;
-        }
-
-        public void Remove(Ring ring)
-        {
-            RemoveChild(ring);
-        }
-
-        internal void Stop()
-        {
-            stopped = true;
-
-            ForEach<Ring>(ring => ring.Stop());
-        }
-
-        internal void Clear()
-        {
-            ClearChildren();
         }
     }
 }

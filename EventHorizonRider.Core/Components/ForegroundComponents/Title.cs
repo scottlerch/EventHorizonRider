@@ -22,9 +22,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         public bool FadingOut { get; private set; }
 
-        public bool Visible { get { return alpha > 0f; } }
+        public new bool Visible { get { return alpha > 0f; } }
 
-        internal void Show()
+        public void Show()
         {
             alpha = 1f;
         }
@@ -54,7 +54,13 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             if (Visible)
             {
-                spriteBatch.Draw(texture, position, origin: origin, color: Color.White * alpha, depth: Depth, scale:new Vector2(1.01f));
+                spriteBatch.Draw(
+                    texture, 
+                    position,
+                    origin: origin, 
+                    color: Color.White * alpha, 
+                    depth: Depth, 
+                    scale:new Vector2(1.01f));
             }
         }
     }

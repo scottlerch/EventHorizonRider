@@ -4,8 +4,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 {
     internal class RingGap
     {
-        public float GapAngle;
-        public float GapSize;
+        public float GapAngle { get; set; }
+
+        public float GapSize { get; set; }
+
 
         public float GapStart
         {

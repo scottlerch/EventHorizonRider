@@ -7,8 +7,6 @@ namespace EventHorizonRider.Core.Engine
 {
     internal class RingInfoFactory
     {
-        public const float DefaultRotationVelocity = MathHelper.TwoPi / 32;
-
         private class RingTypeSelectionHelper
         {
             private int index;

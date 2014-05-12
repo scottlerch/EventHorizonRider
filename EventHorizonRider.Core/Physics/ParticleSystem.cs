@@ -30,33 +30,33 @@ namespace EventHorizonRider.Core.Physics
 
         public void Update(float dt)
         {
-            for (int i = 0; i < EmitterList.Count; i++)
+            foreach (var emitter in EmitterList)
             {
-                if (EmitterList[i].Budget > 0)
+                if (emitter.Budget > 0)
                 {
-                    EmitterList[i].Update(dt);
+                    emitter.Update(dt);
                 }
             }
         }
 
         public void Draw(SpriteBatch spriteBatch, int scale, Vector2 offset, float depth)
         {
-            for (int i = 0; i < EmitterList.Count; i++)
+            foreach (var emitter in EmitterList)
             {
-                if (EmitterList[i].Budget > 0)
+                if (emitter.Budget > 0)
                 {
-                    EmitterList[i].Draw(spriteBatch, scale, offset, depth);
+                    emitter.Draw(spriteBatch, scale, offset, depth);
                 }
             }
         }
 
         public void Clear()
         {
-            for (int i = 0; i < EmitterList.Count; i++)
+            foreach (var emitter in EmitterList)
             {
-                if (EmitterList[i].Budget > 0)
+                if (emitter.Budget > 0)
                 {
-                    EmitterList[i].Clear();
+                    emitter.Clear();
                 }
             }
         }

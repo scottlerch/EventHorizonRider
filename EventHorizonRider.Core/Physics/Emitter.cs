@@ -63,7 +63,7 @@ namespace EventHorizonRider.Core.Physics
             ParticleSprite = particleSprite;
             Parent = parent;
             activeParticles = new LinkedList<Particle>();
-            nextSpawnIn = MathUtilities.LinearInterpolate(secPerSpawn, random.NextDouble());
+            nextSpawnIn = MathUtilities.LinearInterpolate(secPerSpawn, (float)random.NextDouble());
             secPassed = 0.0f;
             this.random = random;
         }
@@ -77,28 +77,33 @@ namespace EventHorizonRider.Core.Physics
                 if (activeParticles.Count < Budget && Spawning)
                 {
                     // Spawn a particle
-                    var startDirection = Vector2.Transform(SpawnDirection, Matrix.CreateRotationZ(MathUtilities.LinearInterpolate(SpawnNoiseAngle, random.NextDouble())));
-                    startDirection.Normalize();
-                    var endDirection = startDirection * MathUtilities.LinearInterpolate(EndSpeed, random.NextDouble());
+                    var startDirection = Vector2.Transform(
+                        SpawnDirection,
+                        Matrix.CreateRotationZ(MathUtilities.LinearInterpolate(SpawnNoiseAngle, (float)random.NextDouble())));
 
-                    startDirection *= MathUtilities.LinearInterpolate(StartSpeed, random.NextDouble());
+                    startDirection.Normalize();
+
+                    var endDirection = startDirection * MathUtilities.LinearInterpolate(EndSpeed, (float)random.NextDouble());
+
+                    startDirection *= MathUtilities.LinearInterpolate(StartSpeed, (float)random.NextDouble());
 
                     activeParticles.AddLast(
                         new Particle(
                             RelPosition + MathUtilities.LinearInterpolate(Parent.LastPos, Parent.Position, secPassed / dt),
                             startDirection,
                             endDirection,
-                            MathUtilities.LinearInterpolate(StartLife, random.NextDouble()),
-                            MathUtilities.LinearInterpolate(StartScale, random.NextDouble()),
-                            MathUtilities.LinearInterpolate(EndScale, random.NextDouble()),
-                            MathUtilities.LinearInterpolate(StartColor, random.NextDouble()),
-                            MathUtilities.LinearInterpolate(EndColor, random.NextDouble()),
-                            this)
-                    );
+                            MathUtilities.LinearInterpolate(StartLife, (float)random.NextDouble()),
+                            MathUtilities.LinearInterpolate(StartScale, (float)random.NextDouble()),
+                            MathUtilities.LinearInterpolate(EndScale, (float)random.NextDouble()),
+                            MathUtilities.LinearInterpolate(StartColor, (float)random.NextDouble()),
+                            MathUtilities.LinearInterpolate(EndColor, (float)random.NextDouble()),
+                            this));
+
                     activeParticles.Last.Value.Update(secPassed);
                 }
+
                 secPassed -= nextSpawnIn;
-                nextSpawnIn = MathUtilities.LinearInterpolate(SecPerSpawn, random.NextDouble());
+                nextSpawnIn = MathUtilities.LinearInterpolate(SecPerSpawn, (float)random.NextDouble());
             }
 
             var node = activeParticles.First;
@@ -123,7 +128,8 @@ namespace EventHorizonRider.Core.Physics
 
         public void Draw(SpriteBatch spriteBatch, int scale, Vector2 offset, float depth)
         {
-            LinkedListNode<Particle> node = activeParticles.First;
+            var node = activeParticles.First;
+
             while (node != null)
             {
                 node.Value.Draw(spriteBatch, scale, offset, depth);

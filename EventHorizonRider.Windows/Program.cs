@@ -2,6 +2,7 @@ using EventHorizonRider.Core;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
+using SharpDX.DXGI;
 
 namespace EventHorizonRider.Windows
 {
@@ -16,11 +17,16 @@ namespace EventHorizonRider.Windows
         [STAThread]
         internal static void Main(string[] args)
         {
+            DeviceInfo.InitializePlatform(new Platform
+            {
+                IsMouseVisible = true,
+                UseDynamicStars = false,
+                PixelShaderDetail = PixelShaderDetail.Full,
+                CollisionDetectionDetail = CollisionDetectionDetail.Full,
+            });
+
             using (var game = new MainGame())
             {
-                game.DetailLevel = DetailLevel.PixelShaderEffectsFull | DetailLevel.CollisionDetectionFull | DetailLevel.StaticStars;
-                game.IsMouseVisible = true;
-
                 if (args.Length > 0 && args[0].Equals("Development", StringComparison.OrdinalIgnoreCase))
                 {
                     var developmentToolsForm = new DevelopmentToolsForm(game);

@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Physics
 {
+    /// <summary>
+    /// Information used to determine if two sprites have collided.
+    /// </summary>
     internal class CollisionInfo
     {
         public PixelData<byte> PixelData { get; private set; }

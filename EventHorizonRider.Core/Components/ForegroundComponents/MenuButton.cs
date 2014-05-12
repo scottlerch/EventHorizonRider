@@ -12,7 +12,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
     {
         private const string MenuText = "LEVEL SELECT";
         private const string BackText = "BACK";
-        public Button Button { get; private set; }
 
         private SpriteFont buttonFont;
         private SoundEffect buttonSound;
@@ -25,6 +24,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private Vector2 backTextLocation;
         private Vector2 backTextSize;
+
+        public Button Button { get; private set; }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {

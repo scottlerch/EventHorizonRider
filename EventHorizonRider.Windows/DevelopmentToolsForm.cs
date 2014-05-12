@@ -29,9 +29,9 @@ namespace EventHorizonRider.Windows
 
             var root = CreateNode(mainGame);
             var gameContextNode = CreateNode(mainGame.GameContext);
-            var levelsNode = CreateNode(mainGame.GameContext.LevelCollection);
+            var levelsNode = CreateNode(mainGame.GameContext.Levels);
 
-            foreach (var level in mainGame.GameContext.LevelCollection.Levels)
+            foreach (var level in mainGame.GameContext.Levels.Levels)
             {
                 levelsNode.Nodes.Add(CreateNode(level));
             }
@@ -62,7 +62,7 @@ namespace EventHorizonRider.Windows
 
             foreach (var property in properties)
             {
-                if (property.PropertyType.IsClass)
+                if (property.PropertyType.IsClass && property.GetValue(obj) != null)
                 {
                     node.Nodes.Add(new TreeNode(property.PropertyType.ToString().Split(new[] {'.'}).Last())
                     {

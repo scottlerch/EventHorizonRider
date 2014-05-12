@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using EventHorizonRider.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,11 +6,22 @@ using Microsoft.Xna.Framework.Graphics;
 namespace EventHorizonRider.Core.Physics
 {
     /// <summary>
-    /// Collision detection helper methods mostly from:
+    /// Collision detection helper methods modified and extended from:
     /// https://github.com/CartBlanche/MonoGame-Samples/blob/master/TransformedCollisionSample/Game1.cs
     /// </summary>
     internal class CollisionDetection
     {
+        /// <summary>
+        /// Get collision detection information for the specific texture.
+        /// </summary>
+        /// <param name="texture">Texture to get collision info.</param>
+        /// <param name="alphaThreshold">
+        /// Alpha threshold to consider pixel a collision.  Range is 0 to 255.
+        /// </param>
+        /// <param name="resolution">
+        /// Resolution of collision detection.  Range 0 to 1, lower to improve performance but have less accurate collision detection.
+        /// </param>
+        /// <returns></returns>
         public static CollisionInfo GetCollisionInfo(Texture2D texture, byte alphaThreshold = 255, float resolution = 1f)
         {
             var data = TextureProcessor.GetAlphaData(texture);
@@ -111,27 +121,27 @@ namespace EventHorizonRider.Core.Physics
         {
             // Calculate a matrix which transforms from A's local space into
             // world space and then into B's local space
-            Matrix transformAtoB = transformA * Matrix.Invert(transformB);
+            var transformAtoB = transformA * Matrix.Invert(transformB);
 
             // When a point moves in A's local space, it moves in B's local space with a
             // fixed direction and distance proportional to the movement in A.
             // This algorithm steps through A one pixel at a time along A's X and Y axes
             // Calculate the analogous steps in B:
-            Vector2 stepX = Vector2.TransformNormal(Vector2.UnitX, transformAtoB);
-            Vector2 stepY = Vector2.TransformNormal(Vector2.UnitY, transformAtoB);
+            var stepX = Vector2.TransformNormal(Vector2.UnitX, transformAtoB);
+            var stepY = Vector2.TransformNormal(Vector2.UnitY, transformAtoB);
 
             // Calculate the top left corner of A in B's local space
             // This variable will be reused to keep track of the start of each row
-            Vector2 yPosInB = Vector2.Transform(Vector2.Zero, transformAtoB);
+            var yPosInB = Vector2.Transform(Vector2.Zero, transformAtoB);
 
             // For each row of pixels in A
-            for (int yA = 0; yA < heightA; yA++)
+            for (var yA = 0; yA < heightA; yA++)
             {
                 // Low at the beginning of the row
-                Vector2 posInB = yPosInB;
+                var posInB = yPosInB;
 
                 // For each pixel in this row
-                for (int xA = 0; xA < widthA; xA++)
+                for (var xA = 0; xA < widthA; xA++)
                 {
                     // Round to the nearest pixel
                     var xB = (int)Math.Round(posInB.X);
@@ -142,8 +152,8 @@ namespace EventHorizonRider.Core.Physics
                         0 <= yB && yB < heightB)
                     {
                         // Get the colors of the overlapping pixels
-                        byte colorA = dataA[xA + yA * widthA];
-                        byte colorB = dataB[xB + yB * widthB];
+                        var colorA = dataA[xA + yA * widthA];
+                        var colorB = dataB[xB + yB * widthB];
 
                         // If both pixels are completely opaque,
                         if (colorA >= tolerance && colorB >= tolerance)
@@ -188,14 +198,16 @@ namespace EventHorizonRider.Core.Physics
             Vector2.Transform(ref rightBottom, ref transform, out rightBottom);
 
             // Find the minimum and maximum extents of the rectangle in world space
-            Vector2 min = Vector2.Min(Vector2.Min(leftTop, rightTop),
-                                      Vector2.Min(leftBottom, rightBottom));
-            Vector2 max = Vector2.Max(Vector2.Max(leftTop, rightTop),
-                                      Vector2.Max(leftBottom, rightBottom));
+            var min = Vector2.Min(
+                Vector2.Min(leftTop, rightTop),
+                Vector2.Min(leftBottom, rightBottom));
+
+            var max = Vector2.Max(
+                Vector2.Max(leftTop, rightTop),
+                Vector2.Max(leftBottom, rightBottom));
 
             // Return that as a rectangle
-            return new Rectangle((int)min.X, (int)min.Y,
-                                 (int)(max.X - min.X), (int)(max.Y - min.Y));
+            return new Rectangle((int)min.X, (int)min.Y, (int)(max.X - min.X), (int)(max.Y - min.Y));
         }
     }
 }

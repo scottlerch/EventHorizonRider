@@ -20,29 +20,31 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             public Button Button;
         }
 
+        private readonly LevelCollection levelsCollection;
+
         private SpriteFont buttonFont;
         private SoundEffect buttonSound;
 
-        private string startLevelText = "START LEVEL";
+        private const string startLevelText = "START LEVEL";
         private Vector2 startLevelTextLocation;
         private Vector2 startLevelTextSize;
 
-        private string unlockLevelText = "PLAY TO UNLOCK!";
+        private const string unlockLevelText = "PLAY TO UNLOCK!";
         private Vector2 unlockLevelTextLocation;
         private Vector2 unlockLevelTextSize;
 
         private LevelButton[] levelButtons;
 
-        public int StartLevel { get; set; }
-
-        public int MaximumStartLevel { get; set; }
-
-        private LevelCollection levelsCollection;
-
         public LevelSelect(LevelCollection levelsCollection)
         {
             this.levelsCollection = levelsCollection;
         }
+
+        public int StartLevel { get; set; }
+
+        public int MaximumStartLevel { get; set; }
+
+        public int? Pressed { get; private set; }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
@@ -71,10 +73,10 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             // We know last level is infinite, so will treat differently
             var numberOfFiniteLevels = levelButtons.Length - 1;
 
-            var infiniteLevelText = "INFINITE";
+            const string infiniteLevelText = "INFINITE";
             var infiniteButtonSize = buttonFont.MeasureString(infiniteLevelText);
 
-            var levelsButtonTotalWidth = 500f;
+            const float levelsButtonTotalWidth = 500f;
             var levelButtonY = startLevelTextLocation.Y + 75f;
             var levelButtonsWidth = levelsButtonTotalWidth - infiniteButtonSize.X;
             var levelButtonSpacing = levelButtonsWidth / (numberOfFiniteLevels);
@@ -138,25 +140,6 @@ namespace EventHorizonRider.Core.Components.MenuComponents
             }
         }
 
-        public int? Pressed { get; private set; }
-
-        private int? IsPressed(GameTime gameTime, InputState inputState)
-        {
-            foreach (var levelButton in levelButtons)
-            {
-                levelButton.Button.Update(gameTime, inputState, Visible);
-            }
-
-            var pressedLevelButton = levelButtons.FirstOrDefault(levelButton => levelButton.Button.Pressed);
-
-            if (pressedLevelButton != null && pressedLevelButton.LevelNumber <= MaximumStartLevel)
-            {
-                return pressedLevelButton.LevelNumber;
-            }
-
-            return null;
-        }
-
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
             if (MaximumStartLevel > 1)
@@ -214,6 +197,23 @@ namespace EventHorizonRider.Core.Components.MenuComponents
                     SpriteEffects.None,
                     Depth);
             }
+        }
+
+        private int? IsPressed(GameTime gameTime, InputState inputState)
+        {
+            foreach (var levelButton in levelButtons)
+            {
+                levelButton.Button.Update(gameTime, inputState, Visible);
+            }
+
+            var pressedLevelButton = levelButtons.FirstOrDefault(levelButton => levelButton.Button.Pressed);
+
+            if (pressedLevelButton != null && pressedLevelButton.LevelNumber <= MaximumStartLevel)
+            {
+                return pressedLevelButton.LevelNumber;
+            }
+
+            return null;
         }
     }
 }

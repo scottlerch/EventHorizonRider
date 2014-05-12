@@ -1,5 +1,4 @@
-﻿using System;
-using EventHorizonRider.Core.Input;
+﻿using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -39,10 +38,12 @@ namespace EventHorizonRider.Core.Components
 
             foreach (var key in keys)
             {
+#if DEBUG
                 if (key >= Keys.D0 && key <= Keys.D9)
                 {
                     OverrideLevel = (int) key - (int) Keys.D0;
                 }
+#endif
 
                 if (key == Keys.P)
                 {

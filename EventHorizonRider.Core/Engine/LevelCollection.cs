@@ -12,10 +12,10 @@ namespace EventHorizonRider.Core.Engine
         private readonly float maxRingRadius = DeviceInfo.LogicalWidth / 2f;
         private readonly List<Level> levels;
 
-        public IEnumerable<Level> Levels { get { return levels; } }
- 
         public LevelCollection(RingInfoFactory ringInfoFactory)
         {
+            CurrentLevelNumber = 1;
+
             levels = new List<Level>
             {
                 new Level(
@@ -173,21 +173,44 @@ namespace EventHorizonRider.Core.Engine
             };
         }
 
+        public int CurrentLevelNumber { get; private set; }
+
+        public Level CurrentLevel { get { return GetLevel(CurrentLevelNumber); } }
+
+        public Level NextLevel { get { return GetLevel(CurrentLevelNumber + 1); } }
+
+        public IEnumerable<Level> Levels { get { return levels; } }
+
         public int NumberOfLevels { get { return levels.Count; } }
+
+        public void SetCurrentLevel(int currentLevelNumber)
+        {
+            CurrentLevelNumber = currentLevelNumber;
+        }
+
+        public void IncrementCurrentLevel()
+        {
+            CurrentLevelNumber++;
+        }
 
         public Level GetLevel(int level)
         {
-            return level < levels.Count ? levels[level - 1] : levels[levels.Count-1];
+            return level < levels.Count ? levels[level - 1] : levels[levels.Count - 1];
+        }
+
+        public TimeSpan GetCurrentLevelStartTime()
+        {
+            return GetLevelStartTime(CurrentLevelNumber);
         }
 
         public TimeSpan GetLevelStartTime(int levelNumber)
         {
             return levels.Take(levelNumber - 1)
                 .Aggregate(
-                    TimeSpan.Zero, 
-                    (duration, level) => 
-                        duration + (level.Duration.HasValue? 
-                            level.Duration.Value + RunningState.WaitBetweenLevels : 
+                    TimeSpan.Zero,
+                    (duration, level) =>
+                        duration + (level.Duration.HasValue ?
+                            level.Duration.Value + RunningState.WaitBetweenLevels :
                             TimeSpan.Zero));
         }
     }

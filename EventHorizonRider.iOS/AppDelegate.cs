@@ -11,21 +11,26 @@ namespace EventHorizonRider.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            var detailLevel = DetailLevel.Full;
+            var platform = new Platform
+            {
+                IsMouseVisible = false,
+                UseDynamicStars = false,
+                PixelShaderDetail = PixelShaderDetail.Full,
+                CollisionDetectionDetail = CollisionDetectionDetail.Full,
+            };
 
             // TODO: determine detail level on other devices
             switch (DeviceHardware.Version)
             {
                 case HardwareType.iPad3:
-                    detailLevel = DetailLevel.PixelShaderEffectsHalf | DetailLevel.CollisionDetectionHalf | DetailLevel.StaticStars;
-                    break;
-                case HardwareType.iPhone5CDMAGSM:
-                case HardwareType.iPhone5GSM:
-                    detailLevel = DetailLevel.PixelShaderEffectsFull | DetailLevel.CollisionDetectionFull | DetailLevel.StaticStars;
+                    platform.PixelShaderDetail = PixelShaderDetail.Half;
+                    platform.CollisionDetectionDetail = CollisionDetectionDetail.Half;
                     break;
             }
 
-            game = new MainGame(detailLevel);
+            DeviceInfo.InitializePlatform(platform);
+
+            game = new MainGame();
             game.Run();
 
             return true;

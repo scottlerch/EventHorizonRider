@@ -7,7 +7,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
     internal class RingTexturesInfo
     {
         public Texture2D[] Textures { get; set; }
+
         public Texture2D[] ShadowTextures { get; set; }
+
         public CollisionInfo[] CollisionInfos { get; set; }
 
         /// <summary>

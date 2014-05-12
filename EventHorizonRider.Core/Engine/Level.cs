@@ -1,10 +1,8 @@
-﻿using System;
+﻿using EventHorizonRider.Core.Components.SpaceComponents.Rings;
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using EventHorizonRider.Core.Components.SpaceComponents;
-using EventHorizonRider.Core.Components.SpaceComponents.Rings;
-using EventHorizonRider.Core.Physics;
-using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine
 {
@@ -35,6 +33,7 @@ namespace EventHorizonRider.Core.Engine
                 var list = internalSequence as List<RingInfo>;
                 Duration = TimeSpan.Zero;
 
+                // ReSharper disable once PossibleNullReferenceException
                 for (int i = 0; i < list.Count; i++)
                 {
                     Duration += ringInterval + TimeSpan.FromSeconds(list[i].SpiralRadius / RingSpeed);

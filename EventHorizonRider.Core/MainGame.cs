@@ -12,44 +12,28 @@ namespace EventHorizonRider.Core
     /// </summary>
     public class MainGame : Game
     {
-        private readonly GraphicsDeviceManager graphics;
+        private readonly GraphicsDeviceManager graphicsDeviceManager;
 
         private InputState inputState;
         private SpriteBatch spriteBatch;
         private GameContext gameContext;
-        private DetailLevel detailLevel;
-        private bool initialized;
 
-        public MainGame() : this(DetailLevel.Default)
+        public MainGame()
         {
-        }
-
-        public MainGame(DetailLevel gameDetailLevel)
-        {
-            detailLevel = gameDetailLevel;
-
-            graphics = new GraphicsDeviceManager(this);
+            graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+            graphicsDeviceManager.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
         }
 
+        /// <summary>
+        /// Event for when game is initialized.  This is useful for development tools to know when to attach to GameContext.
+        /// </summary>
         public event EventHandler Initialized = delegate { }; 
 
-        public DetailLevel DetailLevel
-        {
-            get { return detailLevel; }
-            set
-            {
-                if (initialized)
-                {
-                    throw new InvalidOperationException("Detail level cannot be set, game already initialized");
-                }
-
-                detailLevel = value;
-            }
-        }
-
+        /// <summary>
+        /// This exposes the entire game state for use by development tools.
+        /// </summary>
         internal GameContext GameContext { get { return gameContext; } }
 
         /// <remarks>
@@ -57,21 +41,21 @@ namespace EventHorizonRider.Core
         /// </remarks>
         public void SetResolution(int width, int height)
         {
-            graphics.PreferredBackBufferWidth = width;
-            graphics.PreferredBackBufferHeight = height;
+            graphicsDeviceManager.PreferredBackBufferWidth = width;
+            graphicsDeviceManager.PreferredBackBufferHeight = height;
         }
 
         /// <summary>
-        ///     Allows the game to perform any initialization it needs to before starting to run.
-        ///     This is where it can query for any required services and load any non-graphic
-        ///     related content.  Calling base.Initialize will enumerate through any components
-        ///     and initialize them as well.
+        /// Allows the game to perform any initialization it needs to before starting to run.
+        /// This is where it can query for any required services and load any non-graphic
+        /// related content.  Calling base.Initialize will enumerate through any components
+        /// and initialize them as well.
         /// </summary>
         protected override void Initialize()
         {
-            initialized = true;
+            DeviceInfo.InitializeGraphics(GraphicsDevice);
 
-            DeviceInfo.Initialize(GraphicsDevice, detailLevel);
+            IsMouseVisible = DeviceInfo.Platform.IsMouseVisible;
 
             gameContext = new GameContext(new InitializeState());
             inputState = new InputState();
@@ -82,8 +66,8 @@ namespace EventHorizonRider.Core
         }
 
         /// <summary>
-        ///     LoadContent will be called once per game and is the place to load
-        ///     all of your content.
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
         /// </summary>
         protected override void LoadContent()
         {
@@ -93,8 +77,8 @@ namespace EventHorizonRider.Core
         }
 
         /// <summary>
-        ///     UnloadContent will be called once per game and is the place to unload
-        ///     all content.
+        /// UnloadContent will be called once per game and is the place to unload
+        /// all content.
         /// </summary>
         protected override void UnloadContent()
         {
@@ -102,8 +86,8 @@ namespace EventHorizonRider.Core
         }
 
         /// <summary>
-        ///     Allows the game to run logic such as updating the world,
-        ///     checking for collisions, gathering input, and playing audio.
+        /// Allows the game to run logic such as updating the world,
+        /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
@@ -115,7 +99,7 @@ namespace EventHorizonRider.Core
         }
 
         /// <summary>
-        ///     This is called when the game should draw itself.
+        /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
@@ -125,6 +109,9 @@ namespace EventHorizonRider.Core
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// When window/screen/app is activated/deactivate automatically pause game, unless running in windowed moused based environment.
+        /// </summary>
         protected override void OnActivated(object sender, EventArgs args)
         {
             if (IsMouseVisible) return;
@@ -137,13 +124,16 @@ namespace EventHorizonRider.Core
             base.OnActivated(sender, args);
         }
 
+        /// <summary>
+        /// When window/screen/app is activated/deactivate automatically pause game, unless running in windowed moused based environment.
+        /// </summary>
         protected override void OnDeactivated(object sender, EventArgs args)
         {
             if (IsMouseVisible) return;
 
             if (gameContext != null)
             {
-                gameContext.Paused = false;
+                gameContext.Paused = true;
             }
 
             base.OnDeactivated(sender, args);

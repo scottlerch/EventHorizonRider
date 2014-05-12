@@ -25,7 +25,7 @@ namespace EventHorizonRider.Core.Graphics
             var offsetsParameter = Effect.Parameters["SampleOffsets"];
 
             // Look up how many samples our gaussian blur effect supports.
-            int sampleCount = weightsParameter.Elements.Count;
+            var sampleCount = weightsParameter.Elements.Count;
 
             // Create temporary arrays for computing our filter settings.
             var sampleWeights = new float[sampleCount];
@@ -36,14 +36,14 @@ namespace EventHorizonRider.Core.Graphics
             sampleOffsets[0] = new Vector2(0);
 
             // Maintain a sum of all the weighting values.
-            float totalWeights = sampleWeights[0];
+            var totalWeights = sampleWeights[0];
 
             // Add pairs of additional sample taps, positioned
             // along a line in both directions from the center.
-            for (int i = 0; i < sampleCount / 2; i++)
+            for (var i = 0; i < sampleCount / 2; i++)
             {
                 // Store weights for the positive and negative taps.
-                float weight = ComputeGaussian(i + 1);
+                var weight = ComputeGaussian(i + 1);
 
                 sampleWeights[i * 2 + 1] = weight;
                 sampleWeights[i * 2 + 2] = weight;
@@ -58,9 +58,9 @@ namespace EventHorizonRider.Core.Graphics
                 // This allows us to step in units of two texels per sample, rather
                 // than just one at a time. The 1.5 offset kicks things off by
                 // positioning us nicely in between two texels.
-                float sampleOffset = i * 2 + 1.5f;
+                var sampleOffset = i * 2 + 1.5f;
 
-                Vector2 delta = new Vector2(dx, dy) * sampleOffset;
+                var delta = new Vector2(dx, dy) * sampleOffset;
 
                 // Store texture coordinate offsets for the positive and negative taps.
                 sampleOffsets[i * 2 + 1] = delta;
@@ -68,7 +68,7 @@ namespace EventHorizonRider.Core.Graphics
             }
 
             // Normalize the list of sample weightings, so they will always sum to one.
-            for (int i = 0; i < sampleWeights.Length; i++)
+            for (var i = 0; i < sampleWeights.Length; i++)
             {
                 sampleWeights[i] /= totalWeights;
             }
@@ -85,7 +85,7 @@ namespace EventHorizonRider.Core.Graphics
         /// </summary>
         private float ComputeGaussian(float n)
         {
-            float theta = BlueAmount;
+            var theta = BlueAmount;
 
             return (float)((1.0 / Math.Sqrt(2 * Math.PI * theta)) *
                            Math.Exp(-(n * n) / (2 * theta * theta)));

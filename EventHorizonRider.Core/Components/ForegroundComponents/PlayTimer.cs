@@ -16,6 +16,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         const float TextPadding = 10;
         const float TextVerticalSpacing = 15;
 
+        private readonly LevelCollection levelsCollection;
+
         private TimeSpan gameTimeElapsed;
         private bool updatingTime;
 
@@ -46,20 +48,23 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private bool isLevelAndScoreVisible;
 
-        private float progress;
-
-        private Texture2D progressBar;
-
-        private Motion levelNumberScaling = new Motion();
+        private readonly Motion levelNumberScaling;
 
         private bool newBest;
 
         private bool animatingNewLevel;
 
+        private TimeSpan newBestDuration;
+        private readonly TimeSpan newBestDurationMax = TimeSpan.FromSeconds(2);
+        private float newBestAlpha;
+
         public PlayTimer(LevelCollection levelsCollection)
         {
             this.levelsCollection = levelsCollection;
-            levelNumberScaling.Initialize(0f, 0f, 0f);
+            levelNumberScaling = new Motion();
+
+            ProgressBar = new ProgressBar();
+            AddChild(ProgressBar, Depth);
         }
 
         public TimeSpan Elapsed
@@ -70,13 +75,58 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         public TimeSpan Best { get; private set; }
 
-        private LevelCollection levelsCollection;
+        public ProgressBar ProgressBar { get; private set; }
+
+        public void ShowLevelAndScore()
+        {
+            isLevelAndScoreVisible = true;
+            ProgressBar.Visible = true;
+        }
+
+        public void HideLevelAndScore()
+        {
+            isLevelAndScoreVisible = false;
+            newBest = false;
+            ProgressBar.Visible = false;
+        }
+
+        public void Restart(TimeSpan initialElapsedTime)
+        {
+            updatingTime = true;
+            gameTimeElapsed = initialElapsedTime;
+        }
+
+        public void Stop(bool newNewBest = false)
+        {
+            newBest = newNewBest;
+            updatingTime = false;
+        }
+
+        public void SetLevel(int newCurrentLevelNumber, bool animate = false)
+        {
+            currentLevelNumber = newCurrentLevelNumber;
+
+            if (animate)
+            {
+                levelNumberScaling.Initialize(1f, 0f, 0.5f);
+                animatingNewLevel = true;
+            }
+        }
+
+        public void UpdateBest(TimeSpan best, bool isNew = false)
+        {
+            if (isNew && Best > TimeSpan.Zero)
+            {
+                newBestSound.Play();
+                newBestAlpha = 0f;
+                newBestDuration = newBestDurationMax;
+            }
+
+            Best = best;
+        }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            progressBar = new Texture2D(graphics, 1, 1);
-            progressBar.SetData(new[] { Color.White });
-
             viewSize = new Vector2(DeviceInfo.LogicalWidth, DeviceInfo.LogicalHeight);
 
             labelFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
@@ -98,33 +148,12 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             };
 
             levelTextSize = labelFont.MeasureString(LevelText).X;
-        }
 
-        public void SetLevel(int newCurrentLevelNumber, bool animate = false)
-        {
-            currentLevelNumber = newCurrentLevelNumber;
+            var levelNumberTextSize = labelFont.MeasureString("5").X;
 
-            if (animate)
-            {
-                levelNumberScaling.Initialize(1f, 0f, 0.5f);
-                animatingNewLevel = true;
-            }
-        }
-
-        public void SetProgress(float newProgress)
-        {
-            progress = newProgress;
-        }
-
-        public void ShowLevelAndScore()
-        {
-            isLevelAndScoreVisible = true;
-        }
-
-        public void HideLevelAndScore()
-        {
-            isLevelAndScoreVisible = false;
-            newBest = false;
+            ProgressBar.Initialize(
+                new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, bestTextSize.Y + 8),
+                new Vector2(levelNumberTextSize + levelTextSize - 2, 6));
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -167,39 +196,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             timeNumberText = FormatTime(gameTimeElapsed);
         }
 
-        public void Restart(TimeSpan initialElapsedTime)
-        {
-            updatingTime = true;
-            gameTimeElapsed = initialElapsedTime;
-        }
-
-        public void Stop(bool newNewBest = false)
-        {
-            newBest = newNewBest;
-            updatingTime = false;
-        }
-
-        private TimeSpan newBestDuration;
-        private readonly TimeSpan newBestDurationMax = TimeSpan.FromSeconds(2);
-        private float newBestAlpha;
-
-        public void UpdateBest(TimeSpan best, bool isNew = false)
-        {
-            if (isNew && Best > TimeSpan.Zero)
-            {
-                newBestSound.Play();
-                newBestAlpha = 0f;
-                newBestDuration = newBestDurationMax;
-            }
-
-            Best = best;
-        }
-
-        private string FormatTime(TimeSpan time)
-        {
-            return string.Format("{0:0.00}", time.TotalSeconds);
-        }
-
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
             DrawBestTime(spriteBatch);
@@ -208,7 +204,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             {
                 DrawCurrentTime(spriteBatch);
                 DrawLevelNumber(spriteBatch);
-                DrawProgressBar(spriteBatch);
             }
         }
 
@@ -256,7 +251,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             spriteBatch.DrawString(
               timeFont,
               timeNumberText,
-              new Vector2(viewSize.X - textOffset[timeNumberText.Length - 4] - TextPadding, TextPadding + bestTextSize.Y + TextVerticalSpacing),
+              new Vector2(
+                  viewSize.X - textOffset[timeNumberText.Length - 4] - TextPadding, 
+                  TextPadding + bestTextSize.Y + TextVerticalSpacing),
               scoreColor,
               0,
               Vector2.Zero,
@@ -267,7 +264,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         private void DrawLevelNumber(SpriteBatch spriteBatch)
         {
-            var infiniteText = "Infinite";
+            const string infiniteText = "Infinite";
 
             var isInifiniteLevel = levelsCollection.GetLevel(currentLevelNumber).IsInfiniteSequence;
             var text = isInifiniteLevel ? infiniteText : levelNumberText;
@@ -278,7 +275,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 spriteBatch.DrawString(
                     labelFont,
                     LevelText,
-                    new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, TextPadding),
+                    new Vector2(
+                        viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, 
+                        TextPadding),
                     Color.LightGray.AdjustLight(0.9f),
                     0,
                     Vector2.Zero,
@@ -293,7 +292,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             spriteBatch.DrawString(
                 labelFont,
                 text,
-                new Vector2((viewSize.X - (levelNumberTextSize * textScale.X) - TextPadding), TextPadding),
+                new Vector2(
+                    (viewSize.X - (levelNumberTextSize * textScale.X) - TextPadding), 
+                    TextPadding),
                 Color.White * (1f - levelNumberScaling.Value),
                 rotation: 0,
                 origin: Vector2.Zero,
@@ -302,33 +303,9 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 depth: Depth + 0.00003f);
         }
 
-        private void DrawProgressBar(SpriteBatch spriteBatch)
+                private string FormatTime(TimeSpan time)
         {
-            var levelNumberTextSize = labelFont.MeasureString("5").X;
-
-            var position = new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, bestTextSize.Y + 8);
-            var scale = new Vector2(levelNumberTextSize + levelTextSize - 2, 6);
-
-            spriteBatch.Draw(
-                progressBar,
-                position: new Vector2(position.X + 2, position.Y + 2),
-                color: Color.Black,
-                scale: scale,
-                depth: Depth);
-
-            spriteBatch.Draw(
-                progressBar,
-                position: position,
-                color: Color.DarkGray.AdjustLight(0.5f),
-                scale: scale,
-                depth: Depth + 0.00001f);
-
-            spriteBatch.Draw(
-                progressBar,
-                position: position,
-                color: Color.Green,
-                scale: new Vector2(MathUtilities.LinearInterpolate(0f, scale.X, progress), scale.Y),
-                depth: Depth + 0.00002f);
+            return string.Format("{0:0.00}", time.TotalSeconds);
         }
     }
 }

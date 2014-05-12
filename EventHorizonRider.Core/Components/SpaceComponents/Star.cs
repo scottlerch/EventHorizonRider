@@ -5,9 +5,10 @@ using System;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents
 {
-    public class Star
+    internal class Star
     {
         public Texture2D Texture { get; set; }
+
         public float Scale { get; set; }
 
         public Vector2 Position { get; private set; }
@@ -52,7 +53,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             twinkleSpeed = MathUtilities.GetRandomBetween(0.4f, 1.5f);
             twinkleMax = MathUtilities.GetRandomBetween(twinkleStrenth - 0.1f, twinkleStrenth);
         }
-
 
         public void Update(GameTime gameTime, float scale)
         {

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents
 {
-    public class StarFactory
+    internal class StarFactory
     {
         private Vector2 rotationOrigin;
         private Texture2D[] starTextures;
@@ -44,6 +44,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             for (var i = 0; i < stars.Length; i++)
             {
                 var radius = MathUtilities.GetRandomBetween(0, maxRadius);
+
                 stars[i] = new Star
                 {
                     Texture = starTextures[MathUtilities.GetRandomBetween(0, starTextures.Length - 1)],

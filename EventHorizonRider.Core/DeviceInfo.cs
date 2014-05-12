@@ -7,8 +7,12 @@ namespace EventHorizonRider.Core
     /// <summary>
     /// Information to scale game based on hardware device it's running on in a platform agnostic way.
     /// </summary>
-    internal class DeviceInfo
+    public class DeviceInfo
     {
+        private static readonly object initLock = new object();
+        private static bool graphicsInitialized;
+        private static bool platformInitialized;
+
         public static Matrix OutputScaleMatrix { get; private set; }
 
         public static float InputScale { get; private set; }
@@ -25,29 +29,66 @@ namespace EventHorizonRider.Core
 
         public static int NativeHeight { get; private set; }
 
-        public static DetailLevel DetailLevel { get; private set; }
+        /// <summary>
+        /// Get platform specific settings like whether to use a mouse or the graphical detail level to use.
+        /// </summary>
+        public static Platform Platform { get; private set; }
 
-        public static void Initialize(GraphicsDevice graphics, DetailLevel detailLevel)
+        /// <summary>
+        /// Initialize platform.  This must be called before the main game object is created.
+        /// </summary>
+        public static void InitializePlatform(Platform platform)
         {
-            // Original native resolution
-            const int baseHeight = 640;
-            // const int baseWidth = 1136;
+            lock (initLock)
+            {
+                if (platformInitialized)
+                {
+                    throw new InvalidOperationException("Platform already initialized");
+                }
 
-            DetailLevel = detailLevel;
+                Platform = platform;
 
-            NativeHeight = graphics.Viewport.Height;
-            NativeWidth = graphics.Viewport.Width;
+                platformInitialized = true;
+            }
+        }
 
-            // Only scale output on Height since the game is run in portrait mode
-            OutputScale = NativeHeight / (float)baseHeight;
-            OutputScaleMatrix = Matrix.CreateScale(OutputScale, OutputScale, 1);
+        /// <summary>
+        /// Initialize graphics settings.  This must be called in the game initialization logic.
+        /// </summary>
+        public static void InitializeGraphics(GraphicsDevice graphics)
+        {
+            if (!platformInitialized)
+            {
+                throw new InvalidOperationException("Platform must first be initialized");
+            }
 
-            InputScale = 1f / OutputScale;
+            lock (initLock)
+            {
+                if (graphicsInitialized)
+                {
+                    throw new InvalidOperationException("Graphics already initialized");
+                }
 
-            LogicalHeight = baseHeight;
-            LogicalWidth = (int)Math.Round(NativeWidth * (baseHeight / (float)NativeHeight));
+                // Original native resolution
+                const int baseHeight = 640;
+                // const int baseWidth = 1136;
 
-            LogicalCenter = new Vector2(LogicalWidth / 2f, LogicalHeight / 2f);
+                NativeHeight = graphics.Viewport.Height;
+                NativeWidth = graphics.Viewport.Width;
+
+                // Only scale output on Height since the game is run in portrait mode
+                OutputScale = NativeHeight/(float) baseHeight;
+                OutputScaleMatrix = Matrix.CreateScale(OutputScale, OutputScale, 1);
+
+                InputScale = 1f/OutputScale;
+
+                LogicalHeight = baseHeight;
+                LogicalWidth = (int) Math.Round(NativeWidth*(baseHeight/(float) NativeHeight));
+
+                LogicalCenter = new Vector2(LogicalWidth/2f, LogicalHeight/2f);
+
+                graphicsInitialized = true;
+            }
         }
     }
 }

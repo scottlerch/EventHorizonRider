@@ -59,7 +59,7 @@ namespace EventHorizonRider.Core.Components
         public Space(Background background, Halo halo, Shockwave shockwave, RingCollection ringCollection, Ship ship, Blackhole blackhole) 
             : base(background, halo, shockwave, ship,ringCollection, blackhole)
         {
-            BlurEnabled = !DeviceInfo.DetailLevel.HasFlag(DetailLevel.PixelShaderEffectsNone);
+            BlurEnabled = DeviceInfo.Platform.IsPixelShaderEnabled;
 
             blurAmountMotion = new Motion();
             blurAmountMotion.Initialize(0, 0, 30);
@@ -76,24 +76,22 @@ namespace EventHorizonRider.Core.Components
         {
             if (BlurEnabled)
             {
-                renderTarget1 = new RenderTarget2D(graphics,
+                renderTarget1 = new RenderTarget2D(
+                    graphics,
                     graphics.PresentationParameters.BackBufferWidth,
                     graphics.PresentationParameters.BackBufferHeight);
 
                 var scaleBackBuffer = 2f;
 
-                if (DeviceInfo.DetailLevel == DetailLevel.PixelShaderEffectsHalf)
+                if (DeviceInfo.Platform.PixelShaderDetail == PixelShaderDetail.Half)
                 {
                     scaleBackBuffer = 4f;
                 }
 
-                renderTarget2 = new RenderTarget2D(graphics,
-                    (int)
-                        Math.Round((graphics.PresentationParameters.BackBufferWidth/scaleBackBuffer)*
-                                   DeviceInfo.InputScale),
-                    (int)
-                        Math.Round((graphics.PresentationParameters.BackBufferHeight/scaleBackBuffer)*
-                                   DeviceInfo.InputScale));
+                renderTarget2 = new RenderTarget2D(
+                    graphics,
+                    (int)Math.Round((graphics.PresentationParameters.BackBufferWidth/scaleBackBuffer)*DeviceInfo.InputScale),
+                    (int)Math.Round((graphics.PresentationParameters.BackBufferHeight/scaleBackBuffer)*DeviceInfo.InputScale));
 
                 blur.LoadContent(content);
             }

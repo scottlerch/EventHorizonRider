@@ -31,7 +31,7 @@ namespace EventHorizonRider.Core.Engine.States
                 gameContext.IoTask = gameContext.PlayerData.UpdateDefaultLevel(levelPressed.Value);
                 gameContext.Root.Menu.LevelSelect.StartLevel = gameContext.PlayerData.DefaultLevelNumber;
 
-                var defaultLevel = gameContext.LevelCollection.GetLevel(gameContext.PlayerData.DefaultLevelNumber);
+                var defaultLevel = gameContext.Levels.GetLevel(gameContext.PlayerData.DefaultLevelNumber);
                 gameContext.Root.Space.Background.StarBackgroundColor = defaultLevel.Color;
                 gameContext.Root.Space.Background.RotationalVelocity = defaultLevel.RotationalVelocity;
                 gameContext.Root.Space.Blackhole.RotationalVelocity = defaultLevel.RotationalVelocity;

@@ -2,11 +2,16 @@
 {
     internal class RingInfo
     {
-        public RingType Type;
-        public float Angle;
-        public float GapSize;
-        public int NumberOfGaps;
-        public float RotationalVelocity;
-        public float SpiralRadius;
+        public RingType Type { get; set; }
+
+        public float Angle { get; set; }
+
+        public float GapSize { get; set; }
+
+        public int NumberOfGaps { get; set; }
+
+        public float RotationalVelocity { get; set; }
+
+        public float SpiralRadius { get; set; }
     }
 }

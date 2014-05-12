@@ -10,13 +10,19 @@ namespace EventHorizonRider.Core.Physics
          */
 
         public float BlockMass { get; set; }
+
         public float BlockVelocity { get; set; }
+
         public float BlockX { get; set; }
 
         public float Friction { get; set; }
+
         public float SpringLength { get; set; }
+
         public float Stiffness { get; set; }
+
         public float WallVelocity { get; set; }
+
         public float WallX { get; set; }
 
         private float x;

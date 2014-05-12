@@ -49,6 +49,30 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         public Button Button { get; private set; }
 
+        public void Show(PlayButtonState state, bool fade = false, float newFadeSpeed = 1.5f)
+        {
+            isVisible = true;
+            playButtonState = state;
+
+            if (!fade)
+            {
+                colorAlphaPercent = 1f;
+            }
+
+            fadeSpeed = newFadeSpeed;
+        }
+
+        public void Hide(bool fade = true, float newFadeSpeed = 1.5f)
+        {
+            if (!fade)
+            {
+                colorAlphaPercent = 0f;    
+            }
+
+            isVisible = false;
+            fadeSpeed = newFadeSpeed;
+        }
+
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             buttonFont = content.Load<SpriteFont>(@"Fonts\button_font");
@@ -88,30 +112,6 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             }
 
             colorAlphaPercent = MathHelper.Clamp(colorAlphaPercent, 0, 1);
-        }
-
-        public void Show(PlayButtonState state, bool fade = false, float newFadeSpeed = 1.5f)
-        {
-            isVisible = true;
-            playButtonState = state;
-
-            if (!fade)
-            {
-                colorAlphaPercent = 1f;
-            }
-
-            fadeSpeed = newFadeSpeed;
-        }
-
-        public void Hide(bool fade = true, float newFadeSpeed = 1.5f)
-        {
-            if (!fade)
-            {
-                colorAlphaPercent = 0f;    
-            }
-
-            isVisible = false;
-            fadeSpeed = newFadeSpeed;
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
