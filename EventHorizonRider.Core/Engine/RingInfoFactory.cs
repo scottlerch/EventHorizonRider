@@ -64,7 +64,8 @@ namespace EventHorizonRider.Core.Engine
         public IEnumerable<RingInfo> GetRandomSequence(
             int? iterations = null, 
             Range<int> numberOfGaps = null, 
-            Range<float> gapSize = null, 
+            Range<float> gapSize = null,
+            Range<float> rotation = null,
             RingType type = RingType.All,
             RingTypeSelection typeSelection = RingTypeSelection.UniformRandom)
         {
@@ -72,6 +73,7 @@ namespace EventHorizonRider.Core.Engine
 
             gapSize = gapSize ?? Range.Create(MathHelper.TwoPi/8, MathHelper.TwoPi/4);
             numberOfGaps = numberOfGaps ?? Range.Create(1, 4);
+            rotation = rotation ?? Range.Create(0f);
 
             for (var i = 0; i < iterations || iterations == null; i++)
             {
@@ -88,7 +90,7 @@ namespace EventHorizonRider.Core.Engine
                     GapSize = currentGapSize,
                     NumberOfGaps = currentNumberOfGaps,
                     Angle = (float) Rand.NextDouble()*MathHelper.TwoPi,
-                    RotationalVelocity = 0f,
+                    RotationalVelocity = rotation.GetRandom(),
                 };
             }
         }
@@ -96,11 +98,14 @@ namespace EventHorizonRider.Core.Engine
         public IEnumerable<RingInfo> GetStepSequence(
             int numberOfSteps, 
             float gapSize,
+            Range<float> rotation = null,
             RingType type = RingType.All, 
             RingTypeSelection typeSelection = RingTypeSelection.UniformRandom)
         {
             var ringTypeSelector = new RingTypeSelectionHelper(type, typeSelection);
             var angleStep = MathHelper.TwoPi/numberOfSteps;
+
+            rotation = rotation ?? Range.Create(0f);
 
             for (var i = 0; i < numberOfSteps; i++)
             {
@@ -110,20 +115,24 @@ namespace EventHorizonRider.Core.Engine
                     GapSize = gapSize,
                     NumberOfGaps = 1,
                     Angle = angleStep*i,
-                    RotationalVelocity = 0f,
+                    RotationalVelocity = rotation.GetRandom(),
                 };
             }
         }
 
         public IEnumerable<RingInfo> GetZigZagSequence(
             int iterations, 
-            float gapSize, 
+            float gapSize,
+            float? angleStep = null,
+            Range<float> rotation = null,
             RingType type = RingType.All, 
             RingTypeSelection typeSelection = RingTypeSelection.UniformRandom)
         {
             var ringTypeSelector = new RingTypeSelectionHelper(type, typeSelection);
             var baseAngle = (float) Rand.NextDouble()*MathHelper.TwoPi;
-            const float angleStep = MathHelper.TwoPi/4;
+            
+            angleStep = angleStep ?? MathHelper.TwoPi/4;
+            rotation = rotation ?? Range.Create(0f);
 
             for (var i = 0; i < iterations; i++)
             {
@@ -132,8 +141,8 @@ namespace EventHorizonRider.Core.Engine
                     Type = ringTypeSelector.GetNext(),
                     GapSize = gapSize,
                     NumberOfGaps = 1,
-                    Angle = baseAngle + ((i%2)*angleStep),
-                    RotationalVelocity = 0f,
+                    Angle = baseAngle + ((i%2)*angleStep.Value),
+                    RotationalVelocity = rotation.GetRandom(),
                 };
             }
         }

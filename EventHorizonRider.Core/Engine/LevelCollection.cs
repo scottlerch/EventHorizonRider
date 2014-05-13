@@ -77,21 +77,37 @@ namespace EventHorizonRider.Core.Engine
                     sequence: Enumerable.Empty<RingInfo>().Concat(
                         ringInfoFactory.GetStepSequence(
                             numberOfSteps: 4,
-                            gapSize: MathHelper.TwoPi/4f,
+                            gapSize: MathHelper.TwoPi*0.25f,
                             type: RingType.Dust | RingType.DustWithAsteroid,
                             typeSelection: RingTypeSelection.RoundRobin),
+                        ringInfoFactory.GetZigZagSequence(
+                            iterations: 4,
+                            gapSize: MathHelper.TwoPi*0.2f,
+                            angleStep: MathHelper.TwoPi*0.5f,
+                            type: RingType.DustWithAsteroid,
+                            typeSelection: RingTypeSelection.RoundRobin),
+                        ringInfoFactory.GetRandomSequence(
+                            iterations: 4,
+                            numberOfGaps: Range.Create(3),
+                            gapSize: Range.Create(MathHelper.TwoPi*0.2f),
+                            type: RingType.Asteroid),
                         ringInfoFactory.GetSpirals(
                             iterations: 1,
                             spiralRadius: 500f,
                             type: RingType.DustWithAsteroid),
                         ringInfoFactory.GetStepSequence(
                             numberOfSteps: 4,
-                            gapSize: MathHelper.TwoPi/4f,
+                            gapSize: MathHelper.TwoPi*0.25f,
                             type: RingType.Dust | RingType.DustWithAsteroid,
                             typeSelection: RingTypeSelection.RoundRobin),
+                        ringInfoFactory.GetRandomSequence(
+                            iterations: 2,
+                            numberOfGaps: Range.Create(3),
+                            gapSize: Range.Create(MathHelper.TwoPi*0.19f),
+                            type: RingType.Asteroid),
                         ringInfoFactory.GetZigZagSequence(
                             iterations: 4,
-                            gapSize: MathHelper.TwoPi/4f,
+                            gapSize: MathHelper.TwoPi*0.25f,
                             type: RingType.Asteroid | RingType.DustWithAsteroid,
                             typeSelection: RingTypeSelection.RoundRobin),
                         ringInfoFactory.GetSpirals(
@@ -100,11 +116,11 @@ namespace EventHorizonRider.Core.Engine
                             type: RingType.Asteroid),
                         ringInfoFactory.GetZigZagSequence(
                             iterations: 4,
-                            gapSize: MathHelper.TwoPi/4f,
+                            gapSize: MathHelper.TwoPi*0.25f,
                             type: RingType.Asteroid),
                         ringInfoFactory.GetStepSequence(
                             numberOfSteps: 4,
-                            gapSize: MathHelper.TwoPi/4f,
+                            gapSize: MathHelper.TwoPi*0.25f,
                             type: RingType.Asteroid,
                             typeSelection: RingTypeSelection.RoundRobin))),
                 new Level(
@@ -117,13 +133,19 @@ namespace EventHorizonRider.Core.Engine
                     sequence: Enumerable.Empty<RingInfo>().Concat(
                         ringInfoFactory.GetZigZagSequence(
                             iterations: 7,
-                            gapSize: MathHelper.TwoPi/4f,
+                            gapSize: MathHelper.TwoPi*0.25f,
                             type: RingType.DustWithAsteroid,
                             typeSelection: RingTypeSelection.RoundRobin),
                         ringInfoFactory.GetZigZagSequence(
                             iterations: 7,
-                            gapSize: MathHelper.TwoPi/4f,
+                            gapSize: MathHelper.TwoPi*0.25f,
                             type: RingType.Asteroid,
+                            typeSelection: RingTypeSelection.RoundRobin),
+                        ringInfoFactory.GetZigZagSequence(
+                            iterations: 4,
+                            gapSize: MathHelper.TwoPi*0.2f,
+                            angleStep: MathHelper.TwoPi*0.5f,
+                            type: RingType.DustWithAsteroid | RingType.Asteroid,
                             typeSelection: RingTypeSelection.RoundRobin),
                         ringInfoFactory.GetSpirals(
                             iterations: 1,
@@ -135,9 +157,19 @@ namespace EventHorizonRider.Core.Engine
                             gapSize: Range.Create(MathHelper.TwoPi/4),
                             type: RingType.DustWithAsteroid),
                         ringInfoFactory.GetRandomSequence(
+                            iterations: 4,
+                            numberOfGaps: Range.Create(1, 3),
+                            gapSize: Range.Create(MathHelper.TwoPi*0.2f),
+                            type: RingType.Asteroid),
+                        ringInfoFactory.GetRandomSequence(
                             iterations: 3,
                             numberOfGaps: Range.Create(1),
-                            gapSize: Range.Create(MathHelper.TwoPi/4),
+                            gapSize: Range.Create(MathHelper.TwoPi*0.28f),
+                            type: RingType.IceCrystalsWithAsteroid),
+                        ringInfoFactory.GetRandomSequence(
+                            iterations: 3,
+                            numberOfGaps: Range.Create(1),
+                            gapSize: Range.Create(MathHelper.TwoPi*0.2f),
                             type: RingType.IceCrystals))),
                 new Level(
                     shipSpeed: MathHelper.TwoPi*1.12f,
@@ -157,9 +189,15 @@ namespace EventHorizonRider.Core.Engine
                             gapSize: MathHelper.TwoPi/4f,
                             type: RingType.IceCrystalsWithAsteroid,
                             typeSelection: RingTypeSelection.RoundRobin),
+                        ringInfoFactory.GetZigZagSequence(
+                            iterations: 4,
+                            gapSize: MathHelper.TwoPi*0.3f,
+                            angleStep:  MathHelper.TwoPi*0.5f,
+                            type: RingType.IceCrystals,
+                            typeSelection: RingTypeSelection.RoundRobin),
                         ringInfoFactory.GetRandomSequence(
                             iterations: 40,
-                            gapSize: Range.Create(MathHelper.TwoPi/4),
+                            gapSize: Range.Create(MathHelper.TwoPi*0.18f, MathHelper.TwoPi*0.25f),
                             type: RingType.Asteroid))),
                 new Level(
                     shipSpeed: MathHelper.TwoPi*1.14f,
