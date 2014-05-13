@@ -25,7 +25,13 @@ namespace EventHorizonRider.Windows
             for (var i = 1; i <= mainGame.GameContext.Levels.NumberOfLevels; i++)
             {
                 var levelNumber = i;
-                levelsMenu.DropDownItems.Add(new ToolStripMenuItem("Level " + i, null, (s, a) => { mainGame.GameContext.Root.OverrideLevel = levelNumber; }));
+                var menuItem = new ToolStripMenuItem("Level " + i);
+                menuItem.Click += (s, a) =>
+                {
+                    mainGame.GameContext.Root.OverrideLevel = levelNumber;
+                };
+                menuItem.ShortcutKeys = (Keys.D0 + i) | Keys.Control;
+                levelsMenu.DropDownItems.Add(menuItem);
             }
         }
 

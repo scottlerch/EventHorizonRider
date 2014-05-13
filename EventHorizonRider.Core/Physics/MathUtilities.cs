@@ -12,6 +12,11 @@ namespace EventHorizonRider.Core.Physics
         /// </summary>
         public static int GetRandomBetween(int low, int high)
         {
+            if (low > high)
+            {
+                return Random.Next(high, low + 1);
+            }
+
             return Random.Next(low, high + 1);
         }
 

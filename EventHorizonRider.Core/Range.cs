@@ -2,10 +2,11 @@
 
 namespace EventHorizonRider.Core
 {
-    internal struct Range<T>
+    internal class Range<T>
     {
-        public T Low;
-        public T High;
+        public T Low { get; set; }
+
+        public T High { get; set; }
     }
 
     internal static class Range

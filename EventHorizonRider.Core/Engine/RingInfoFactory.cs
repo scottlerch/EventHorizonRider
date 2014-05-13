@@ -63,8 +63,8 @@ namespace EventHorizonRider.Core.Engine
 
         public IEnumerable<RingInfo> GetRandomSequence(
             int? iterations = null, 
-            Range<int>? numberOfGaps = null, 
-            Range<float>? gapSize = null, 
+            Range<int> numberOfGaps = null, 
+            Range<float> gapSize = null, 
             RingType type = RingType.All,
             RingTypeSelection typeSelection = RingTypeSelection.UniformRandom)
         {
@@ -75,8 +75,8 @@ namespace EventHorizonRider.Core.Engine
 
             for (var i = 0; i < iterations || iterations == null; i++)
             {
-                var currentGapSize = gapSize.Value.GetRandom();
-                var currentNumberOfGaps = numberOfGaps.Value.GetRandom();
+                var currentGapSize = gapSize.GetRandom();
+                var currentNumberOfGaps = numberOfGaps.GetRandom();
 
                 var maxNumberOfGaps = (int)(MathHelper.TwoPi/currentGapSize) - 1;
 
