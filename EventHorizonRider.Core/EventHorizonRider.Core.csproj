@@ -67,7 +67,7 @@
     <Compile Include="Components\ForegroundComponents\PlayTimer.cs" />
     <Compile Include="Components\Root.cs" />
     <Compile Include="Components\Space.cs" />
-    <Compile Include="Components\SpaceComponents\Halo.cs" />
+    <Compile Include="Components\SpaceComponents\BlackholeHalo.cs" />
     <Compile Include="Components\SpaceComponents\ShipShield.cs" />
     <Compile Include="Components\SpaceComponents\Shockwave.cs" />
     <Compile Include="Components\SpaceComponents\Star.cs" />

@@ -7,9 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core
 {
-    /// <summary>
-    ///     This is the main type for your game
-    /// </summary>
     public class MainGame : Game
     {
         private readonly GraphicsDeviceManager graphicsDeviceManager;

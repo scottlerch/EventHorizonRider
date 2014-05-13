@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents
 {
-    internal class Halo : ComponentBase
+    internal class BlackholeHalo : ComponentBase
     {
         private readonly Blackhole blackhole;
 
@@ -13,7 +13,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private Vector2 textureOrigin;
         private float currentRotation;
 
-        public Halo(Blackhole newBlackhole)
+        public BlackholeHalo(Blackhole newBlackhole)
         {
             blackhole = newBlackhole;
         }

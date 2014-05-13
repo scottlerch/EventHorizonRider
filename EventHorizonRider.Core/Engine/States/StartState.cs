@@ -19,7 +19,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Space.Ship.Initialize();
             gameContext.Root.Space.Rings.Clear();
             gameContext.Root.Space.StopBlur();
-            gameContext.Root.Space.Halo.Visible = true;
+            gameContext.Root.Space.BlackholeHalo.Visible = true;
             gameContext.Root.Space.Ship.Initialize();
 
             gameContext.Root.Foreground.PlayButton.Scale = 1f;

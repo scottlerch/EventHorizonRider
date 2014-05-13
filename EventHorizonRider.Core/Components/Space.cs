@@ -15,11 +15,11 @@ namespace EventHorizonRider.Core.Components
         private RenderTarget2D renderTarget2;
         private readonly GaussianBlur blur = new GaussianBlur();
 
-        private Motion blurAmountMotion;
+        private readonly Motion blurAmountMotion;
 
         public Blackhole Blackhole { get; private set; }
 
-        public Halo Halo { get; private set; }
+        public BlackholeHalo BlackholeHalo { get; private set; }
 
         public RingCollection Rings { get; private set; }
 
@@ -56,8 +56,8 @@ namespace EventHorizonRider.Core.Components
             }
         }
 
-        public Space(Background background, Halo halo, Shockwave shockwave, RingCollection ringCollection, Ship ship, Blackhole blackhole) 
-            : base(background, halo, shockwave, ship,ringCollection, blackhole)
+        public Space(Background background, BlackholeHalo blackholeHalo, Shockwave shockwave, RingCollection ringCollection, Ship ship, Blackhole blackhole) 
+            : base(background, blackholeHalo, shockwave, ship,ringCollection, blackhole)
         {
             BlurEnabled = DeviceInfo.Platform.IsPixelShaderEnabled;
 
@@ -65,7 +65,7 @@ namespace EventHorizonRider.Core.Components
             blurAmountMotion.Initialize(0, 0, 30);
 
             Background = background;
-            Halo = halo;
+            BlackholeHalo = blackholeHalo;
             Shockwave = shockwave;
             Rings = ringCollection;
             Ship = ship;

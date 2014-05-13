@@ -38,13 +38,6 @@ namespace EventHorizonRider.Core.Components
 
             foreach (var key in keys)
             {
-#if DEBUG
-                if (key >= Keys.D0 && key <= Keys.D9)
-                {
-                    OverrideLevel = (int) key - (int) Keys.D0;
-                }
-#endif
-
                 if (key == Keys.P)
                 {
                     pausedPressed = true;

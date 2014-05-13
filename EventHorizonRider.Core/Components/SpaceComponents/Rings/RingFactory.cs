@@ -11,24 +11,27 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 {
     internal class RingFactory
     {
-        private RingTexturesInfo asteroids;
-        private RingTexturesInfo sparseAsteroids;
-        private RingTexturesInfo dust;
-        private RingTexturesInfo crystals;
+        public RingTexturesInfo Asteroids { get; private set; }
+
+        public RingTexturesInfo SparseAsteroids { get; private set; }
+
+        public RingTexturesInfo Dust { get; private set; }
+
+        public RingTexturesInfo Crystals { get; private set; }
 
         // TODO: refactor this and calculate from viewport size and maximum ring width
         public static float StartRadius = 700;
 
         internal void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
-            asteroids = LoadData(content, "asteroid", 4, hasShadow:true);
-            asteroids.DensityRange = Range.Create(15, 35);
-            asteroids.ScaleRange = Range.Create(0.2f, 0.8f);
-            asteroids.RadiusOffsetJitter = 10f;
-            asteroids.AngleJitter = 0.8f;
-            asteroids.TaperAmount = 1;
-            asteroids.TaperScale = 1f;
-            asteroids.TextureColors = new[]
+            Asteroids = LoadData(content, "asteroid", 4, hasShadow:true);
+            Asteroids.DensityRange = Range.Create(15, 35);
+            Asteroids.ScaleRange = Range.Create(0.2f, 0.8f);
+            Asteroids.RadiusOffsetJitter = 10f;
+            Asteroids.AngleJitter = 0.8f;
+            Asteroids.TaperAmount = 1;
+            Asteroids.TaperScale = 1f;
+            Asteroids.TextureColors = new[]
             {
                 Color.DarkGray.AdjustLight(1.2f),
                 Color.LightGray,
@@ -37,17 +40,17 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                 MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.DarkGray, 0.5f)
             };
 
-            sparseAsteroids = new RingTexturesInfo();
-            sparseAsteroids.ShadowTextures = asteroids.ShadowTextures;
-            sparseAsteroids.Textures = asteroids.Textures;
-            sparseAsteroids.CollisionInfos = asteroids.CollisionInfos;
-            sparseAsteroids.DensityRange = Range.Create(5, 10);
-            sparseAsteroids.ScaleRange = Range.Create(0.1f, 0.6f);
-            sparseAsteroids.RadiusOffsetJitter = 10f;
-            sparseAsteroids.AngleJitter = 0.8f;
-            sparseAsteroids.TaperAmount = 2;
-            sparseAsteroids.TaperScale = 0.8f;
-            sparseAsteroids.TextureColors = new[]
+            SparseAsteroids = new RingTexturesInfo();
+            SparseAsteroids.ShadowTextures = Asteroids.ShadowTextures;
+            SparseAsteroids.Textures = Asteroids.Textures;
+            SparseAsteroids.CollisionInfos = Asteroids.CollisionInfos;
+            SparseAsteroids.DensityRange = Range.Create(5, 10);
+            SparseAsteroids.ScaleRange = Range.Create(0.1f, 0.6f);
+            SparseAsteroids.RadiusOffsetJitter = 10f;
+            SparseAsteroids.AngleJitter = 0.8f;
+            SparseAsteroids.TaperAmount = 2;
+            SparseAsteroids.TaperScale = 0.8f;
+            SparseAsteroids.TextureColors = new[]
             {
                 Color.DarkGray.AdjustLight(1.2f),
                 Color.LightGray,
@@ -55,14 +58,14 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                 Color.Beige
             };
 
-            dust = LoadData(content, "dust", 1, hasShadow:false);
-            dust.DensityRange = Range.Create(85, 95);
-            dust.ScaleRange = Range.Create(0.3f, 1.2f);
-            dust.RadiusOffsetJitter = 10f;
-            dust.AngleJitter = 0.8f;
-            dust.TaperAmount = 6;
-            dust.TaperScale = 0.3f;
-            dust.TextureColors = new []
+            Dust = LoadData(content, "dust", 1, hasShadow:false);
+            Dust.DensityRange = Range.Create(85, 95);
+            Dust.ScaleRange = Range.Create(0.3f, 1.2f);
+            Dust.RadiusOffsetJitter = 10f;
+            Dust.AngleJitter = 0.8f;
+            Dust.TaperAmount = 6;
+            Dust.TaperScale = 0.3f;
+            Dust.TextureColors = new []
             {
                 Color.Tan, 
                 Color.Tan.AdjustLight(0.8f),
@@ -72,14 +75,14 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                 MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.Beige.AdjustLight(0.9f), 0.5f)
             };
 
-            crystals = LoadData(content, "crystals", 2, hasShadow: false);
-            crystals.DensityRange = Range.Create(65, 75);
-            crystals.ScaleRange = Range.Create(0.2f, 0.8f);
-            crystals.RadiusOffsetJitter = 10f;
-            crystals.AngleJitter = 0.8f;
-            crystals.TaperAmount = 6;
-            crystals.TaperScale = 0.4f;
-            crystals.TextureColors = new[]
+            Crystals = LoadData(content, "crystals", 2, hasShadow: false);
+            Crystals.DensityRange = Range.Create(65, 75);
+            Crystals.ScaleRange = Range.Create(0.2f, 0.8f);
+            Crystals.RadiusOffsetJitter = 10f;
+            Crystals.AngleJitter = 0.8f;
+            Crystals.TaperAmount = 6;
+            Crystals.TaperScale = 0.4f;
+            Crystals.TextureColors = new[]
             {
                 Color.White * 0.8f,
                 Color.White,
@@ -113,15 +116,15 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             switch (type)
             {
                 case RingType.Asteroid:
-                    return new RingTexturesInfoGroup(new[] { asteroids }, RingTexturesInfoGroupMode.Sequential);
+                    return new RingTexturesInfoGroup(new[] { Asteroids }, RingTexturesInfoGroupMode.Sequential);
                 case RingType.Dust:
-                    return new RingTexturesInfoGroup(new[] { dust }, RingTexturesInfoGroupMode.Sequential);
+                    return new RingTexturesInfoGroup(new[] { Dust }, RingTexturesInfoGroupMode.Sequential);
                 case RingType.DustWithAsteroid:
-                    return new RingTexturesInfoGroup(new[] {dust, sparseAsteroids  }, RingTexturesInfoGroupMode.Sequential);
+                    return new RingTexturesInfoGroup(new[] {Dust, SparseAsteroids  }, RingTexturesInfoGroupMode.Sequential);
                 case RingType.IceCrystals:
-                    return new RingTexturesInfoGroup(new[] { crystals }, RingTexturesInfoGroupMode.Sequential);
+                    return new RingTexturesInfoGroup(new[] { Crystals }, RingTexturesInfoGroupMode.Sequential);
                 case RingType.IceCrystalsWithAsteroid:
-                    return new RingTexturesInfoGroup(new[] { crystals, sparseAsteroids }, RingTexturesInfoGroupMode.Sequential);
+                    return new RingTexturesInfoGroup(new[] { Crystals, SparseAsteroids }, RingTexturesInfoGroupMode.Sequential);
                 default:
                     throw new Exception("invalid ring type");
             }

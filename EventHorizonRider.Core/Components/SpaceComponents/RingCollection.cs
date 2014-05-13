@@ -15,7 +15,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
     {
         private readonly Blackhole blackhole;
         private readonly Shockwave shockwave;
-        private readonly RingFactory ringFactory;
+
         private IEnumerator<RingInfo> currentSequence;
 
         private TimeSpan? lastRingAddTime;
@@ -32,8 +32,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             this.blackhole = blackhole;
             this.shockwave = shockwave;
-            this.ringFactory = ringFactory;
+
+            RingFactory = ringFactory;
         }
+
+        public RingFactory RingFactory { get; private set; }
 
         public bool HasMoreRings { get; private set; }
 
@@ -80,7 +83,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
-            ringFactory.LoadContent(content, graphics);
+            RingFactory.LoadContent(content, graphics);
         }
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -103,7 +106,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 }
                 else
                 {
-                    AddChild(ringFactory.Create(ringInfo, level), Depth);
+                    AddChild(RingFactory.Create(ringInfo, level), Depth);
 
                     lastRingAddTime = totalElapsedGameTime;
                     lastRingDuration = TimeSpan.FromSeconds(ringInfo.SpiralRadius / level.RingSpeed);

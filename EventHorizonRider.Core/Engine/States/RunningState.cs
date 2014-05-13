@@ -38,7 +38,7 @@ namespace EventHorizonRider.Core.Engine.States
 
             gameContext.Root.Space.Blackhole.Pulse(1.5f, 2.5f);
             gameContext.Root.Space.StopBlur();
-            gameContext.Root.Space.Halo.Visible = true;
+            gameContext.Root.Space.BlackholeHalo.Visible = true;
             gameContext.Root.Space.Blackhole.SetExtraScale(0f);
             gameContext.Root.Space.Blackhole.Start();
             gameContext.Root.Space.Ship.Start();
@@ -146,7 +146,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Music.Stop();
 
             gameContext.Root.Space.SetBlur(blurAmount: 5f);
-            gameContext.Root.Space.Halo.Visible = false;
+            gameContext.Root.Space.BlackholeHalo.Visible = false;
             gameContext.Root.Space.Background.Gameover();
             gameContext.Root.Space.Blackhole.Stop();
             gameContext.Root.Space.Ship.Stop();

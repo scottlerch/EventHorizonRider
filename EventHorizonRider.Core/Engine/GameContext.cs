@@ -83,7 +83,7 @@ namespace EventHorizonRider.Core.Engine
                 music: new Music(),
                 space: new Space(
                     background: new Background(new StarFactory()),
-                    halo: new Halo(blackhole),
+                    blackholeHalo: new BlackholeHalo(blackhole),
                     shockwave: shockwave,
                     ringCollection: new RingCollection(blackhole, shockwave, new RingFactory()),
                     ship: new Ship(blackhole),

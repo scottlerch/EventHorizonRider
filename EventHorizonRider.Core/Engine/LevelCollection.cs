@@ -36,7 +36,7 @@ namespace EventHorizonRider.Core.Engine
                             iterations: 2,
                             numberOfGaps: Range.Create(2),
                             gapSize: Range.Create(MathHelper.TwoPi/4),
-                            type: RingType.Asteroid,
+                            type: RingType.DustWithAsteroid,
                             typeSelection: RingTypeSelection.RoundRobin),
                        ringInfoFactory.GetRandomSequence(
                             iterations: 3,
@@ -185,12 +185,17 @@ namespace EventHorizonRider.Core.Engine
 
         public void SetCurrentLevel(int currentLevelNumber)
         {
+            if (currentLevelNumber < 1 || currentLevelNumber >= levels.Count)
+            {
+                throw new ArgumentException("Invalid level number");
+            }
+
             CurrentLevelNumber = currentLevelNumber;
         }
 
         public void IncrementCurrentLevel()
         {
-            CurrentLevelNumber++;
+            SetCurrentLevel(CurrentLevelNumber + 1);
         }
 
         public Level GetLevel(int level)

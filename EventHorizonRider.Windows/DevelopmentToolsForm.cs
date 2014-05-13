@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using EventHorizonRider.Core.Engine;
 
 namespace EventHorizonRider.Windows
 {
@@ -20,6 +21,12 @@ namespace EventHorizonRider.Windows
         {
             propertyGrid.SelectedObject = mainGame.GameContext;
             UpdateTreeView();
+
+            for (var i = 1; i <= mainGame.GameContext.Levels.NumberOfLevels; i++)
+            {
+                var levelNumber = i;
+                levelsMenu.DropDownItems.Add(new ToolStripMenuItem("Level " + i, null, (s, a) => { mainGame.GameContext.Root.OverrideLevel = levelNumber; }));
+            }
         }
 
         private void UpdateTreeView()
@@ -27,23 +34,18 @@ namespace EventHorizonRider.Windows
             treeView.BeginUpdate();
             treeView.Nodes.Clear();
 
-            var root = CreateNode(mainGame);
-            var gameContextNode = CreateNode(mainGame.GameContext);
-            var levelsNode = CreateNode(mainGame.GameContext.Levels);
+            var root = CreateNode("MainGame", mainGame);
+            var gameContextNode = CreateNode("GameContext", mainGame.GameContext);
 
+            var levels = new TreeNode("Levels");
+            root.Nodes.Add(levels);
+
+            var levelNumber = 1;
             foreach (var level in mainGame.GameContext.Levels.Levels)
             {
-                levelsNode.Nodes.Add(CreateNode(level));
+                levels.Nodes.Add(CreateNode("Level " + levelNumber, level));
+                levelNumber++;
             }
-
-            var playerData = CreateNode(mainGame.GameContext.PlayerData);
-            var gameState = CreateNode(mainGame.GameContext.GameState);
-            var componentsNode = CreateGameComponentsNode(mainGame.GameContext.Root);
-
-            gameContextNode.Nodes.Add(levelsNode);
-            gameContextNode.Nodes.Add(playerData);
-            gameContextNode.Nodes.Add(gameState);
-            gameContextNode.Nodes.Add(componentsNode);
 
             root.Nodes.Add(gameContextNode);
 
@@ -54,35 +56,19 @@ namespace EventHorizonRider.Windows
             treeView.ExpandAll();
         }
 
-        private TreeNode CreateNode(object obj)
+        private TreeNode CreateNode(string name, object obj)
         {
-            var node = new TreeNode(obj.ToString().Split(new [] {'.'}).Last()) {Tag = obj };
+            var node = new TreeNode(name) {Tag = obj };
 
             var properties = obj.GetType().GetProperties();
 
             foreach (var property in properties)
             {
-                if (property.PropertyType.IsClass && property.GetValue(obj) != null)
+                if (property.PropertyType.IsClass && 
+                    property.PropertyType.FullName.StartsWith("EventHorizon") && 
+                    property.GetValue(obj) != null)
                 {
-                    node.Nodes.Add(new TreeNode(property.PropertyType.ToString().Split(new[] {'.'}).Last())
-                    {
-                        Tag = property.GetValue(obj)
-                    });
-                }
-            }
-
-            return node;
-        }
-
-        private TreeNode CreateGameComponentsNode(ComponentBase component)
-        {
-            var node = CreateNode(component);
-
-            if (!component.ChildrenIsEmpty)
-            {
-                foreach (var child in component.Children)
-                {
-                    node.Nodes.Add(CreateGameComponentsNode(child));
+                    node.Nodes.Add(CreateNode(property.Name, property.GetValue(obj)));
                 }
             }
 
@@ -155,6 +141,11 @@ namespace EventHorizonRider.Windows
             UpdateTreeView();
 
             SelectNode(treeView.Nodes, currentObj);
+        }
+
+        private void OnLoad(object sender, EventArgs e)
+        {
+
         }
     }
 }
