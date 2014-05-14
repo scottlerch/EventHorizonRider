@@ -124,15 +124,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="Content\Images\radial_gradient.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sounds\shockwave.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\techno_song.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Content\Images\radial_gradient.xnb" />
+    <Content Include="Content\Sounds\shockwave.xnb" />
+    <Content Include="Content\Music\techno_song.xnb" />
     <None Include="EventHorizonRider.WindowsStore_StoreKey.pfx" />
     <None Include="TemporaryKey.pfx" />
     <None Include="packages.config" />
@@ -145,144 +139,52 @@
     <Content Include="Assets\SplashScreen.scale-180.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
     <None Include="Package.StoreAssociation.xml" />
-    <Content Include="Content\Effects\blur_effect.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Effects\gaussianblur_effect.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Effects\grayscale_effect.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Fonts\button_font.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Fonts\fps_font.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Fonts\highscore_font.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Fonts\time_font.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\background.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\blackhole.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\halo.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\ship.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sounds\crash_sound.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sounds\newlevel_sound.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\title.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\particle_base.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\shield.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\shockwave.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\stars.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\asteroid_1.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\asteroid_2.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\asteroid_3.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\asteroid_4.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\dust_1.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\credits.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\help_left.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\help_right.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\help_start.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\asteroid_shadow_1.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\asteroid_shadow_2.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\asteroid_shadow_3.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\asteroid_shadow_4.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\star_1.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\star_2.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\star_3.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\star_4.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sounds\button_click.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sounds\open_menu.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sounds\thrust.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sounds\new_best.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\shield_1.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\shield_2.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\shield_3.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\shield_pulse.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\crystals_1.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Images\crystals_2.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\techno_song.wma">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Content\Effects\blur_effect.xnb" />
+    <Content Include="Content\Effects\gaussianblur_effect.xnb" />
+    <Content Include="Content\Effects\grayscale_effect.xnb" />
+    <Content Include="Content\Fonts\button_font.xnb" />
+    <Content Include="Content\Fonts\fps_font.xnb" />
+    <Content Include="Content\Fonts\highscore_font.xnb" />
+    <Content Include="Content\Fonts\time_font.xnb" />
+    <Content Include="Content\Images\background.xnb" />
+    <Content Include="Content\Images\blackhole.xnb" />
+    <Content Include="Content\Images\halo.xnb" />
+    <Content Include="Content\Images\ship.xnb" />
+    <Content Include="Content\Sounds\crash_sound.xnb" />
+    <Content Include="Content\Sounds\newlevel_sound.xnb" />
+    <Content Include="Content\Images\title.xnb" />
+    <Content Include="Content\Images\particle_base.xnb" />
+    <Content Include="Content\Images\shield.xnb" />
+    <Content Include="Content\Images\shockwave.xnb" />
+    <Content Include="Content\Images\stars.xnb" />
+    <Content Include="Content\Images\asteroid_1.xnb" />
+    <Content Include="Content\Images\asteroid_2.xnb" />
+    <Content Include="Content\Images\asteroid_3.xnb" />
+    <Content Include="Content\Images\asteroid_4.xnb" />
+    <Content Include="Content\Images\dust_1.xnb" />
+    <Content Include="Content\Images\credits.xnb" />
+    <Content Include="Content\Images\help_left.xnb" />
+    <Content Include="Content\Images\help_right.xnb" />
+    <Content Include="Content\Images\help_start.xnb" />
+    <Content Include="Content\Images\asteroid_shadow_1.xnb" />
+    <Content Include="Content\Images\asteroid_shadow_2.xnb" />
+    <Content Include="Content\Images\asteroid_shadow_3.xnb" />
+    <Content Include="Content\Images\asteroid_shadow_4.xnb" />
+    <Content Include="Content\Images\star_1.xnb" />
+    <Content Include="Content\Images\star_2.xnb" />
+    <Content Include="Content\Images\star_3.xnb" />
+    <Content Include="Content\Images\star_4.xnb" />
+    <Content Include="Content\Sounds\button_click.xnb" />
+    <Content Include="Content\Sounds\open_menu.xnb" />
+    <Content Include="Content\Sounds\thrust.xnb" />
+    <Content Include="Content\Sounds\new_best.xnb" />
+    <Content Include="Content\Images\shield_1.xnb" />
+    <Content Include="Content\Images\shield_2.xnb" />
+    <Content Include="Content\Images\shield_3.xnb" />
+    <Content Include="Content\Images\shield_pulse.xnb" />
+    <Content Include="Content\Images\crystals_1.xnb" />
+    <Content Include="Content\Images\crystals_2.xnb" />
+    <Content Include="Content\Music\techno_song.wma" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
