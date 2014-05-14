@@ -248,3 +248,11 @@ pip-log.txt
 /EventHorizonRider.PSMobile/Content/Music/*.xnb
 /EventHorizonRider.PSMobile/Content/Sounds/*.xnb
 /EventHorizonRider.PSMobile/*.userprefs
+/EventHorizonRider.WindowsStore/Content/Effects/*.xnb
+/EventHorizonRider.WindowsStore/Content/Fonts/*.xnb
+/EventHorizonRider.WindowsStore/Content/Images/*.xnb
+/EventHorizonRider.WindowsStore/Content/Music/*.xnb
+/EventHorizonRider.WindowsStore/Content/Music/*.wma
+/EventHorizonRider.WindowsStore/Content/Music/*.mp3
+/EventHorizonRider.WindowsStore/Content/Sounds/*.xnb
+/EventHorizonRider.WindowsStore/BundleArtifacts
