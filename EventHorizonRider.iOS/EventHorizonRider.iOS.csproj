@@ -116,7 +116,6 @@
     <Content Include="Content\Fonts\time_font.xnb" />
     <Content Include="Content\Images\background.xnb" />
     <Content Include="Content\Images\blackhole.xnb" />
-    <Content Include="Content\Images\foreground.xnb" />
     <Content Include="Content\Images\halo.xnb" />
     <Content Include="Content\Images\ship.xnb" />
     <Content Include="Content\Sounds\crash_sound.xnb" />
