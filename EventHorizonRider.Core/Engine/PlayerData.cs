@@ -1,4 +1,6 @@
-﻿#if !PSM
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Storage;
+#if !PSM
 using Newtonsoft.Json;
 using PCLStorage;
 #endif
@@ -24,36 +26,52 @@ namespace EventHorizonRider.Core.Engine
 		#if !PSM
         public async Task Save()
         {
-            var rootFolder = FileSystem.Current.LocalStorage;
-            var folder = await rootFolder.CreateFolderAsync("EventHorizon", CreationCollisionOption.OpenIfExists);
-            var file = await folder.CreateFileAsync("player1.json", CreationCollisionOption.ReplaceExisting);
-            await file.WriteAllTextAsync(JsonConvert.SerializeObject(this));
+            try
+            {
+                var rootFolder = FileSystem.Current.LocalStorage;
+                var folder = await rootFolder.CreateFolderAsync("EventHorizon", CreationCollisionOption.OpenIfExists);
+                var file = await folder.CreateFileAsync("player1.json", CreationCollisionOption.ReplaceExisting);
+                await file.WriteAllTextAsync(JsonConvert.SerializeObject(this));
+            }
+            catch (Exception)
+            {
+                // TODO: add logging infrastructure
+            }
         }
 
         public async Task Load()
         {
-            var rootFolder = FileSystem.Current.LocalStorage;
-            var folder = await rootFolder.GetFolderAsync("EventHorizon");
-
-            var fileExists = await folder.CheckExistsAsync("player1.json");
-
-            if (fileExists == ExistenceCheckResult.FileExists)
+            try
             {
-                var file = await folder.GetFileAsync("player1.json");
-                var text = await file.ReadAllTextAsync();
+                var rootFolder = FileSystem.Current.LocalStorage;
 
-                if (!string.IsNullOrEmpty(text))
+                var folder = await rootFolder.CreateFolderAsync("EventHorizon", CreationCollisionOption.OpenIfExists);
+                var fileExists = await folder.CheckExistsAsync("player1.json");
+
+                if (fileExists == ExistenceCheckResult.FileExists)
                 {
-                    var data = JsonConvert.DeserializeObject<PlayerData>(text);
+                    var file = await folder.GetFileAsync("player1.json");
+                    var text = await file.ReadAllTextAsync();
 
-                    BestTime = data.BestTime;
-                    HighestLevelNumber = data.HighestLevelNumber;
-                    DefaultLevelNumber = data.DefaultLevelNumber;
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        var data = JsonConvert.DeserializeObject<PlayerData>(text);
+
+                        BestTime = data.BestTime;
+                        HighestLevelNumber = data.HighestLevelNumber;
+                        DefaultLevelNumber = data.DefaultLevelNumber;
+                    }
                 }
             }
-
-            if (HighestLevelNumber < 1) HighestLevelNumber = 1;
-            if (DefaultLevelNumber < 1) DefaultLevelNumber = 1;
+            catch (Exception ex)
+            {
+                // TODO: add logging infrastructure
+            }
+            finally
+            {
+                if (HighestLevelNumber < 1) HighestLevelNumber = 1;
+                if (DefaultLevelNumber < 1) DefaultLevelNumber = 1;
+            }
         }
 
         internal async Task UpdateDefaultLevel(int defaultLevelNumber)

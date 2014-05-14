@@ -10,8 +10,17 @@ namespace EventHorizonRider.WindowsPhone
         {
             InitializeComponent();
 
-            MainGame game = XamlGame<MainGame>.Create("", this);
-            game.DetailLevel = DetailLevel.CollisionDetectionHalf | DetailLevel.PixelShaderEffectsNone;
+            var platform = new Platform
+            {
+                IsMouseVisible = false,
+                UseDynamicStars = false,
+                PixelShaderDetail = PixelShaderDetail.None,
+                CollisionDetectionDetail = CollisionDetectionDetail.Half,
+            };
+
+            DeviceInfo.InitializePlatform(platform);
+
+            var game = XamlGame<MainGame>.Create("", this);
             game.TargetElapsedTime = TimeSpan.FromSeconds(1/30D);
         }
     }

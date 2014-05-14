@@ -243,15 +243,15 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>..\libs\WindowsPhone\$(Platform)\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PCLStorage">
-      <HintPath>..\packages\PCLStorage.0.9.3\lib\wp8\PCLStorage.dll</HintPath>
+      <HintPath>..\packages\PCLStorage.0.9.6\lib\wp8\PCLStorage.dll</HintPath>
     </Reference>
     <Reference Include="PCLStorage.Abstractions">
-      <HintPath>..\packages\PCLStorage.0.9.3\lib\wp8\PCLStorage.Abstractions.dll</HintPath>
+      <HintPath>..\packages\PCLStorage.0.9.6\lib\wp8\PCLStorage.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>..\libs\WindowsPhone\$(Platform)\SharpDX.dll</HintPath>

@@ -50,10 +50,12 @@
       <HintPath>..\libs\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="PCLStorage">
-      <HintPath>..\packages\PCLStorage.0.9.3\lib\net45\PCLStorage.dll</HintPath>
+      <HintPath>..\packages\PCLStorage.0.9.6\lib\net45\PCLStorage.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PCLStorage.Abstractions">
-      <HintPath>..\packages\PCLStorage.0.9.3\lib\net45\PCLStorage.Abstractions.dll</HintPath>
+      <HintPath>..\packages\PCLStorage.0.9.6\lib\net45\PCLStorage.Abstractions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX, Version=2.4.2.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
