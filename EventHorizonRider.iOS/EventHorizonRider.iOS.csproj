@@ -155,6 +155,8 @@
     <Content Include="Content\Images\shield_pulse.xnb" />
     <Content Include="Content\Images\crystals_1.xnb" />
     <Content Include="Content\Images\crystals_2.xnb" />
+    <Content Include="Content\Images\radial_gradient.xnb" />
+    <Content Include="Content\Sounds\shockwave.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
