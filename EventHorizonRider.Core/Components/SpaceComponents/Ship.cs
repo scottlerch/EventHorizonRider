@@ -73,12 +73,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public void Start()
         {
-            Rotation = 0;
-
-            Position = new Vector2(
-                blackhole.Position.X,
-                blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f));
-
             stopped = false;
             visible = true;
             rotationEnabled = true;
