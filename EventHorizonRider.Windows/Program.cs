@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using EventHorizonRider.Core;
 using System;
 using System.Reflection;
@@ -23,6 +24,7 @@ namespace EventHorizonRider.Windows
                 UseDynamicStars = false,
                 PixelShaderDetail = PixelShaderDetail.Full,
                 CollisionDetectionDetail = CollisionDetectionDetail.Full,
+                TouchEnabled = GetSystemMetrics(95) > 0,
             });
 
             using (var game = new MainGame())
@@ -37,5 +39,8 @@ namespace EventHorizonRider.Windows
                 game.Run();
             }
         }
+
+        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+        private static extern int GetSystemMetrics(int nIndex);
     }
 }

@@ -333,6 +333,18 @@
       <Processor>MGSoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\help_key_left.png">
+      <Name>help_key_left</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\help_key_right.png">
+      <Name>help_key_right</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>MGTextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

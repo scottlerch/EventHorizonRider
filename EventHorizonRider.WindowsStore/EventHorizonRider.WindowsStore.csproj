@@ -127,6 +127,8 @@
     <Content Include="Content\Images\radial_gradient.xnb" />
     <Content Include="Content\Sounds\shockwave.xnb" />
     <Content Include="Content\Music\techno_song.xnb" />
+    <Content Include="Content\Images\help_key_left.xnb" />
+    <Content Include="Content\Images\help_key_right.xnb" />
     <None Include="EventHorizonRider.WindowsStore_StoreKey.pfx" />
     <None Include="TemporaryKey.pfx" />
     <None Include="packages.config" />

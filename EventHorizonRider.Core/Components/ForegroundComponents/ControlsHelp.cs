@@ -28,12 +28,25 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         private float startAlpha = MaxAlpha;
         private float startFadeSpeed;
 
+        private bool touchEnabled;
+
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             Visible = true;
 
-            helpLeft = content.Load<Texture2D>(@"Images\help_left");
-            helpRight = content.Load<Texture2D>(@"Images\help_right");
+            touchEnabled = DeviceInfo.Platform.TouchEnabled;
+
+            if (touchEnabled)
+            {
+                helpLeft = content.Load<Texture2D>(@"Images\help_left");
+                helpRight = content.Load<Texture2D>(@"Images\help_right");
+            }
+            else
+            {
+                helpLeft = content.Load<Texture2D>(@"Images\help_key_left");
+                helpRight = content.Load<Texture2D>(@"Images\help_key_right");
+            }
+
             helpStart = content.Load<Texture2D>(@"Images\help_start");
 
             helpLeftPosition = new Vector2(0, (DeviceInfo.LogicalHeight / 2) - (helpLeft.Height / 2));
@@ -94,8 +107,8 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(helpLeft, color: Color.White * directionAlpha, position: helpLeftPosition, depth: Depth);
-            spriteBatch.Draw(helpRight, color: Color.White * directionAlpha, position: helpRightPosition, depth: Depth);
+            spriteBatch.Draw(helpLeft, color: Color.White*directionAlpha, position: helpLeftPosition, depth: Depth);
+            spriteBatch.Draw(helpRight, color: Color.White*directionAlpha, position: helpRightPosition, depth: Depth);
 
             spriteBatch.Draw(
                 helpStart, 

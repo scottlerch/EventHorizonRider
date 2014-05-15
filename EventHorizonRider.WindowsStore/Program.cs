@@ -15,6 +15,7 @@ namespace EventHorizonRider.WindowsStore
                 UseDynamicStars = false,
                 PixelShaderDetail = PixelShaderDetail.Full,
                 CollisionDetectionDetail = CollisionDetectionDetail.Full,
+                TouchEnabled = new Windows.Devices.Input.TouchCapabilities().TouchPresent > 0,
             });
 
             var factory = new MonoGame.Framework.GameFrameworkViewSource<MainGame>();

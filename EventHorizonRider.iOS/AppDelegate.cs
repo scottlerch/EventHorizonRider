@@ -17,6 +17,7 @@ namespace EventHorizonRider.iOS
                 UseDynamicStars = false,
                 PixelShaderDetail = PixelShaderDetail.Full,
                 CollisionDetectionDetail = CollisionDetectionDetail.Full,
+                TouchEnabled = true,
             };
 
             // TODO: determine detail level on other devices

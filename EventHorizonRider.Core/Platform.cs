@@ -17,6 +17,8 @@
     {
         public bool IsMouseVisible { get; set; }
 
+        public bool TouchEnabled { get; set; }
+
         public bool UseDynamicStars { get; set; }
 
         public bool IsPixelShaderEnabled { get { return PixelShaderDetail != PixelShaderDetail.None; } }
@@ -31,6 +33,7 @@
             UseDynamicStars = false;
             PixelShaderDetail = PixelShaderDetail.Full;
             CollisionDetectionDetail = CollisionDetectionDetail.Full;
+            TouchEnabled = true;
         }
     }
 }
