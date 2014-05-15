@@ -173,7 +173,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             var left = false;
             var isMoving = false;
 
-            if (Left(inputState.KeyState, inputState.TouchState))
+            if (Left(inputState.KeyState, inputState.TouchState, inputState.MouseState))
             {
                 Rotation -= (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
                 sideThrustEmitter.Spawning = true;
@@ -181,7 +181,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 isMoving = true;
             }
 
-            if (Right(inputState.KeyState, inputState.TouchState))
+            if (Right(inputState.KeyState, inputState.TouchState, inputState.MouseState))
             {
                 Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
                 sideThrustEmitter.Spawning = true;
@@ -225,26 +225,30 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             }
         }
 
-        private bool Left(KeyboardState keyState, TouchCollection touchState)
+        private bool Left(KeyboardState keyState, TouchCollection touchState, MouseState mouseState)
         {
+            var threshold = (DeviceInfo.LogicalCenter.X - (blackhole.Height/2f));
             return
                 (keyState.IsKeyDown(Keys.Left) && !keyState.IsKeyDown(Keys.Right)) ||
+                (mouseState.LeftButton == ButtonState.Pressed && mouseState.Position.X < threshold) ||
                 (touchState.Count > 0 &&
                  touchState.All(
                      t =>
                          (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                         t.Position.X < (DeviceInfo.LogicalCenter.X - (blackhole.Height / 2f))));
+                         t.Position.X < threshold));
         }
 
-        private bool Right(KeyboardState keyState, TouchCollection touchState)
+        private bool Right(KeyboardState keyState, TouchCollection touchState, MouseState mouseState)
         {
+            var threshold = (DeviceInfo.LogicalCenter.X + (blackhole.Height/2f));
             return
                 (keyState.IsKeyDown(Keys.Right) && !keyState.IsKeyDown(Keys.Left)) ||
+                (mouseState.LeftButton == ButtonState.Pressed && mouseState.Position.X > threshold) ||
                 (touchState.Count > 0 &&
                  touchState.All(
                      t =>
                          (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                         t.Position.X > (DeviceInfo.LogicalCenter.X + (blackhole.Height / 2f))));
+                         t.Position.X > threshold));
         }
     }
 }

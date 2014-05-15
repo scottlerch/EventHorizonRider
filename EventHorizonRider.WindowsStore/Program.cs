@@ -11,7 +11,7 @@ namespace EventHorizonRider.WindowsStore
         {
             DeviceInfo.InitializePlatform(new Platform
             {
-                IsMouseVisible = false,
+                IsMouseVisible = true,
                 UseDynamicStars = false,
                 PixelShaderDetail = PixelShaderDetail.Full,
                 CollisionDetectionDetail = CollisionDetectionDetail.Full,

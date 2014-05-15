@@ -28,10 +28,20 @@ namespace EventHorizonRider.Core.Input
                         touch.Position.Y * DeviceInfo.InputScale));
 			}
 			
-			TouchState = new TouchCollection(scaledTouchLocations);		
+			TouchState = new TouchCollection(scaledTouchLocations);
 
-            // TODO: detect if device supports mouse, on iOS mouse gets values from touch which can mess things up
-            // MouseState = Mouse.GetState();
+            var currentMouseState = Mouse.GetState();
+            var scaledMouseState = new MouseState(
+                (int)(currentMouseState.X * DeviceInfo.InputScale),
+                (int)(currentMouseState.Y * DeviceInfo.InputScale),
+                currentMouseState.ScrollWheelValue, 
+                currentMouseState.LeftButton, 
+                currentMouseState.MiddleButton,
+                currentMouseState.RightButton, 
+                currentMouseState.XButton1, 
+                currentMouseState.XButton2);
+
+            MouseState = scaledMouseState;
         }
     }
 }

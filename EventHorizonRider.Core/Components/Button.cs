@@ -14,6 +14,7 @@ namespace EventHorizonRider.Core.Components
         public Keys? Key { get; private set; }
 
         private bool keyPreviouslyPressed;
+        private bool mousePreviouslyPressed;
 
         public bool Pressed { get; private set; }
 
@@ -51,6 +52,7 @@ namespace EventHorizonRider.Core.Components
             Hover = IsHover(inputState.MouseState, inputState.TouchState, inputState.KeyState);
 
             keyPreviouslyPressed = Key.HasValue && inputState.KeyState.GetPressedKeys().Contains(Key.Value);
+            mousePreviouslyPressed = inputState.MouseState.LeftButton == ButtonState.Pressed && ButtonBounds.Contains(inputState.MouseState.Position);
 
             if (HoldDuration > TimeSpan.Zero)
             {
@@ -78,7 +80,7 @@ namespace EventHorizonRider.Core.Components
             return
                 (Key.HasValue && (keyPreviouslyPressed && !keyboardState.GetPressedKeys().Contains(Key.Value))) ||
                 touchState.Any(t => t.State == TouchLocationState.Released && ButtonBounds.Contains(t.Position)) ||
-                (mouseState.LeftButton == ButtonState.Released && ButtonBounds.Contains(mouseState.Position));
+                (mousePreviouslyPressed && mouseState.LeftButton == ButtonState.Released && ButtonBounds.Contains(mouseState.Position));
         }
 
         private bool IsHover(MouseState mouseState, TouchCollection touchState, KeyboardState keyboardState)
@@ -86,7 +88,7 @@ namespace EventHorizonRider.Core.Components
             return
                 (Key.HasValue && keyboardState.GetPressedKeys().Contains(Key.Value)) ||
                 touchState.Any(t => (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) && ButtonBounds.Contains(t.Position)) ||
-                (mouseState.LeftButton == ButtonState.Pressed && ButtonBounds.Contains(mouseState.Position));
+                (mousePreviouslyPressed && mouseState.LeftButton == ButtonState.Pressed && ButtonBounds.Contains(mouseState.Position));
         }
     }
 }
