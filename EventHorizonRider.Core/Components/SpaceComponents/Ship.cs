@@ -14,6 +14,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 {
     internal class Ship : ComponentBase, ISpriteInfo
     {
+        private const float yTouchThreshold = 90f;
+
         private readonly Blackhole blackhole;
 
         private SoundEffect thrustSound;
@@ -22,6 +24,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private SoundEffect crashSound;
         private bool stopped = true;
         private bool visible = true;
+        private bool rotationEnabled = false;
 
         private Texture2D particleBase;
         private ParticleSystem particleSystem;
@@ -62,6 +65,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             mainThrustEmitter.Clear();
             sideThrustEmitter.Clear();
+
+            stopped = false;
+            visible = true;
+            rotationEnabled = false;
         }
 
         public void Start()
@@ -74,6 +81,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             stopped = false;
             visible = true;
+            rotationEnabled = true;
         }
 
         public void Stop()
@@ -81,6 +89,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             crashSound.Play();
 
             stopped = true;
+            rotationEnabled = false;
         }
 
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
@@ -166,7 +175,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 return;
             }
 
-            Rotation += blackhole.RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (rotationEnabled)
+            {
+                Rotation += blackhole.RotationalVelocity*(float) gameTime.ElapsedGameTime.TotalSeconds;
+            }
 
             sideThrustEmitter.Spawning = false;
 
@@ -230,12 +242,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             var threshold = (DeviceInfo.LogicalCenter.X - (blackhole.Height/2f));
             return
                 (keyState.IsKeyDown(Keys.Left) && !keyState.IsKeyDown(Keys.Right)) ||
-                (mouseState.LeftButton == ButtonState.Pressed && mouseState.Position.X < threshold) ||
+                (mouseState.LeftButton == ButtonState.Pressed && mouseState.Position.X < threshold && mouseState.Y > yTouchThreshold) ||
                 (touchState.Count > 0 &&
                  touchState.All(
                      t =>
                          (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                         t.Position.X < threshold));
+                         t.Position.X < threshold && t.Position.Y > yTouchThreshold));
         }
 
         private bool Right(KeyboardState keyState, TouchCollection touchState, MouseState mouseState)
@@ -243,12 +255,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             var threshold = (DeviceInfo.LogicalCenter.X + (blackhole.Height/2f));
             return
                 (keyState.IsKeyDown(Keys.Right) && !keyState.IsKeyDown(Keys.Left)) ||
-                (mouseState.LeftButton == ButtonState.Pressed && mouseState.Position.X > threshold) ||
+                (mouseState.LeftButton == ButtonState.Pressed && mouseState.Position.X > threshold && mouseState.Y > yTouchThreshold) ||
                 (touchState.Count > 0 &&
                  touchState.All(
                      t =>
                          (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                         t.Position.X > threshold));
+                         t.Position.X > threshold && t.Position.Y > yTouchThreshold));
         }
     }
 }

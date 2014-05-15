@@ -20,7 +20,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Space.Rings.Clear();
             gameContext.Root.Space.StopBlur();
             gameContext.Root.Space.BlackholeHalo.Visible = true;
-            gameContext.Root.Space.Ship.Initialize();
+            gameContext.Root.Space.Ship.Speed = gameContext.Levels.CurrentLevel.ShipSpeed;
 
             gameContext.Root.Foreground.PlayButton.Scale = 1f;
             gameContext.Root.Foreground.ControlsHelp.Show(speed: 2f);
