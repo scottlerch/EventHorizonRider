@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="11033ScottLerch.EventHorizonRider" Publisher="CN=427E0D6A-DF11-4676-8850-592258173525" Version="1.1.0.7" />
+  <Identity Name="11033ScottLerch.EventHorizonRider" Publisher="CN=427E0D6A-DF11-4676-8850-592258173525" Version="1.1.0.8" />
   <Properties>
     <DisplayName>Event Horizon Rider</DisplayName>
     <PublisherDisplayName>Scott Lerch</PublisherDisplayName>
@@ -15,10 +15,10 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="EventHorizonRider.WindowsStore.App">
-      <m2:VisualElements DisplayName="Event Horizon" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Ride along the event horizon of a blackhole and avoid obstacles in this skill based game that requires fast reaction and precise timings." ForegroundText="light" BackgroundColor="#464646">
-        <m2:DefaultTile ShortName="Event Horizon">
+      <m2:VisualElements DisplayName="Event Horizon" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Ride along the event horizon of a blackhole and avoid obstacles in this skill based game that requires fast reaction and precise timings." ForegroundText="light" BackgroundColor="#000000">
+        <m2:DefaultTile ShortName="Event Horizon Rider" DefaultSize="square150x150Logo" Square70x70Logo="Assets\Square70x70Logo.png">
         </m2:DefaultTile>
-        <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="black" />
+        <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#000000" />
         <m2:InitialRotationPreference>
           <m2:Rotation Preference="landscape" />
           <m2:Rotation Preference="landscapeFlipped" />
