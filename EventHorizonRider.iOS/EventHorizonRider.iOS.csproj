@@ -157,6 +157,8 @@
     <Content Include="Content\Images\crystals_2.xnb" />
     <Content Include="Content\Images\radial_gradient.xnb" />
     <Content Include="Content\Sounds\shockwave.xnb" />
+    <Content Include="Content\Images\help_key_left.xnb" />
+    <Content Include="Content\Images\help_key_right.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
