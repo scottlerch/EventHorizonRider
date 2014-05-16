@@ -17,7 +17,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private const float gameOverAlpha = 0.5f;
 
         private readonly Color defaultColor = Color.Black;
-        private const float defaultAlpha = 0.8f;
+        private const float defaultAlpha = 1f;
 
         private Texture2D radialGradient;
         private Texture2D background;
@@ -96,7 +96,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             backgroundOrigin = new Vector2(background.Width/2f, background.Height/2f);
 
             backgroundScale = new Vector2(2f, 2f);
-            starsBackgroundScale = new Vector2(1.3f, 1.3f);
+            starsBackgroundScale = new Vector2(DeviceInfo.LogicalCenter.Length() / starsBackgroundOrigin.X);
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)

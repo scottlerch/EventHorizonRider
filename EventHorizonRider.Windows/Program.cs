@@ -29,6 +29,8 @@ namespace EventHorizonRider.Windows
 
             using (var game = new MainGame())
             {
+                game.SetResolution(1366, 768);
+
                 if (args.Length > 0 && args[0].Equals("Development", StringComparison.OrdinalIgnoreCase))
                 {
                     var developmentToolsForm = new DevelopmentToolsForm(game);
