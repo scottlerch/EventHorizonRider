@@ -37,6 +37,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 
         public float RadiusOffset { get; set; }
 
+        public int LayerIndex { get; set; }
+
         public void UpdatePosition(Vector2 ringOrigin, float ringRadius)
         {
             Position = new Vector2(

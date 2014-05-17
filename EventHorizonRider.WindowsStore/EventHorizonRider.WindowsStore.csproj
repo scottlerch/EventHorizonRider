@@ -149,6 +149,7 @@
     <Content Include="Content\Music\techno_song.xnb" />
     <Content Include="Content\Images\help_key_left.xnb" />
     <Content Include="Content\Images\help_key_right.xnb" />
+    <Content Include="Content\Images\dust_shadow_1.xnb" />
     <None Include="EventHorizonRider.WindowsStore_StoreKey.pfx" />
     <None Include="TemporaryKey.pfx" />
     <None Include="packages.config" />

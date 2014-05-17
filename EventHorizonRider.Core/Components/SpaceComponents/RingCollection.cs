@@ -118,7 +118,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             ForEachReverse<Ring>(ring =>
             {
-                if (ring.OutterRadius <= (blackhole.Height * 0.2f))
+                if (ring.OutterRadius <= (blackhole.Height * 0.3f))
                 {
                     if (!ring.ConsumedByBlackhole)
                     {
@@ -131,7 +131,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                             shockwave.Execute();
                         }
                     }
-
+                }
+                
+                if (ring.OutterRadius <= (blackhole.Height * 0.01f))
+                {
                     RemoveChild(ring);
                 }
             });

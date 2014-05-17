@@ -25,6 +25,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
         internal void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
             Asteroids = LoadData(content, "asteroid", 4, hasShadow:true);
+            Asteroids.ShadowOffset = new Vector2(30, 30);
             Asteroids.DensityRange = Range.Create(15, 35);
             Asteroids.ScaleRange = Range.Create(0.2f, 0.8f);
             Asteroids.RadiusOffsetJitter = 10f;
@@ -41,6 +42,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             };
 
             SparseAsteroids = new RingTexturesInfo();
+            SparseAsteroids.ShadowOffset = new Vector2(30, 30);
             SparseAsteroids.ShadowTextures = Asteroids.ShadowTextures;
             SparseAsteroids.Textures = Asteroids.Textures;
             SparseAsteroids.CollisionInfos = Asteroids.CollisionInfos;
@@ -58,7 +60,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                 Color.Beige
             };
 
-            Dust = LoadData(content, "dust", 1, hasShadow:false);
+            Dust = LoadData(content, "dust", 1, hasShadow:true);
+            Dust.MergeShadows = true;
+            Dust.ShadowOffset = new Vector2(10, 10);
             Dust.DensityRange = Range.Create(85, 95);
             Dust.ScaleRange = Range.Create(0.3f, 1.2f);
             Dust.RadiusOffsetJitter = 10f;

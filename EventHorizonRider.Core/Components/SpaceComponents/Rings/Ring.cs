@@ -17,11 +17,19 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             public float EdgeScale;
         }
 
+        private class RingLayer
+        {
+            public Vector2 ShadowOffset { get; set; }
+
+            public float ShadowDepth { get; set; }
+        }
+
         private const float DepthStep = 0.0001f;
 
         private readonly Random random = new Random();
         private readonly Vector2 origin;
         private readonly List<RingObject> ringObjects;
+        private readonly List<RingLayer> ringLayers; 
         private readonly float rotationalVelocity;
 
         private float innerRadius;
@@ -53,6 +61,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             var isSpiral = spiralRadius > 0;
             var maximumAngle = isSpiral ? MathHelper.TwoPi * spiralRotations : MathHelper.TwoPi;
 
+            ringLayers = new List<RingLayer>();
+
             foreach (var texturesInfo in texturesInfoGroup.TextureInfos)
             {
                 var maximumAsteroidsPerRing = texturesInfo.DensityRange.GetRandom();
@@ -79,6 +89,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 
                     var ringObject = new RingObject
                     {
+                        LayerIndex = ringLayers.Count,
                         Texture = texturesInfo.Textures[textureIndex],
                         ShadowTexture = texturesInfo.ShadowTextures != null ? texturesInfo.ShadowTextures[textureIndex] : null,
                         CollisionInfo = texturesInfo.CollisionInfos[textureIndex],
@@ -104,6 +115,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                 }
 
                 currentDepthOffset = newRingObjects.Count * DepthStep;
+
+                ringLayers.Add(new RingLayer
+                {
+                    ShadowOffset = texturesInfo.ShadowOffset,
+                    ShadowDepth = texturesInfo.MergeShadows ? DepthStep * count : DepthStep / 10,
+                });
             }
 
             if (texturesInfoGroup.Mode == RingTexturesInfoGroupMode.Interleave)
@@ -198,11 +215,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                 {
                     spriteBatch.Draw(
                         ringObject.ShadowTexture,
-                        ringObject.Position + new Vector2(30, 30) * ringObject.Scale, // TODO: where to get shadow offset?
+                        ringObject.Position + ringLayers[ringObject.LayerIndex].ShadowOffset * ringObject.Scale,
                         origin: ringObject.Origin,
                         color: Color.White * 0.8f,
                         rotation: ringObject.Rotation,
-                        depth: ringObject.RelativeDepth + Depth - 0.000001f, // TODO: where to get this depth fudge factor?
+                        depth: ringObject.RelativeDepth + Depth - ringLayers[ringObject.LayerIndex].ShadowDepth,
                         scale: ringObject.Scale);
                 }
 
