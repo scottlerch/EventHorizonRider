@@ -62,9 +62,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 
             Dust = LoadData(content, "dust", 1, hasShadow:true);
             Dust.MergeShadows = true;
-            Dust.ShadowOffset = new Vector2(10, 10);
+            Dust.ShadowOffset = new Vector2(4, 4);
             Dust.DensityRange = Range.Create(85, 95);
-            Dust.ScaleRange = Range.Create(0.3f, 1.2f);
+            Dust.ScaleRange = Range.Create(0.3f * 4f, 1.2f * 4f);
             Dust.RadiusOffsetJitter = 10f;
             Dust.AngleJitter = 0.8f;
             Dust.TaperAmount = 6;
