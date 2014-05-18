@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="EventHorizonRider.WindowsStore.App">
-      <m2:VisualElements DisplayName="Event Horizon" Square150x150Logo="Assets\LogoSquare150x150.png" Square30x30Logo="Assets\LogoSquare30x30.png" Description="Ride along the event horizon of a blackhole and avoid obstacles in this skill based game that requires fast reaction and precise timings." ForegroundText="light" BackgroundColor="#000000">
+      <m2:VisualElements DisplayName="Event Horizon" Square150x150Logo="Assets\LogoSquare150x150.png" Square30x30Logo="Assets\LogoSquare30x30.png" Description="Ride along the event horizon of a blackhole and avoid obstacles in this skill based game that requires fast reaction and precise timings." ForegroundText="light" BackgroundColor="#66317a">
         <m2:DefaultTile ShortName="Event Horizon Rider" DefaultSize="wide310x150Logo" Square70x70Logo="Assets\LogoSquare70x70.png" Wide310x150Logo="Assets\LogoWide310x150.png">
         </m2:DefaultTile>
         <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#000000" />
