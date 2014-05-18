@@ -159,6 +159,7 @@
     <Content Include="Content\Sounds\shockwave.xnb" />
     <Content Include="Content\Images\help_key_left.xnb" />
     <Content Include="Content\Images\help_key_right.xnb" />
+    <Content Include="Content\Images\dust_shadow_1.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
