@@ -125,25 +125,29 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="Assets\BadgeLogo.scale-100.png" />
-    <Content Include="Assets\BadgeLogo.scale-140.png" />
-    <Content Include="Assets\BadgeLogo.scale-180.png" />
-    <Content Include="Assets\Logo.scale-140.png" />
-    <Content Include="Assets\Logo.scale-180.png" />
-    <Content Include="Assets\Logo.scale-80.png" />
-    <Content Include="Assets\SmallLogo.scale-140.png" />
-    <Content Include="Assets\SmallLogo.scale-180.png" />
-    <Content Include="Assets\SmallLogo.scale-80.png" />
-    <Content Include="Assets\SmallLogo.targetsize-16.png" />
-    <Content Include="Assets\SmallLogo.targetsize-256.png" />
-    <Content Include="Assets\SmallLogo.targetsize-32.png" />
-    <Content Include="Assets\SmallLogo.targetsize-48.png" />
-    <Content Include="Assets\Square70x70Logo.scale-100.png" />
-    <Content Include="Assets\Square70x70Logo.scale-140.png" />
-    <Content Include="Assets\Square70x70Logo.scale-180.png" />
-    <Content Include="Assets\Square70x70Logo.scale-80.png" />
-    <Content Include="Assets\StoreLogo.scale-140.png" />
-    <Content Include="Assets\StoreLogo.scale-180.png" />
+    <Content Include="Assets\LogoSquare150x150.scale-100.png" />
+    <Content Include="Assets\LogoSquare150x150.scale-140.png" />
+    <Content Include="Assets\LogoSquare150x150.scale-180.png" />
+    <Content Include="Assets\LogoSquare150x150.scale-80.png" />
+    <Content Include="Assets\LogoSquare30x30.scale-100.png" />
+    <Content Include="Assets\LogoSquare30x30.scale-140.png" />
+    <Content Include="Assets\LogoSquare30x30.scale-180.png" />
+    <Content Include="Assets\LogoSquare30x30.scale-80.png" />
+    <Content Include="Assets\LogoSquare30x30.targetsize-16.png" />
+    <Content Include="Assets\LogoSquare30x30.targetsize-256.png" />
+    <Content Include="Assets\LogoSquare30x30.targetsize-32.png" />
+    <Content Include="Assets\LogoSquare30x30.targetsize-48.png" />
+    <Content Include="Assets\LogoSquare70x70.scale-100.png" />
+    <Content Include="Assets\LogoSquare70x70.scale-140.png" />
+    <Content Include="Assets\LogoSquare70x70.scale-180.png" />
+    <Content Include="Assets\LogoSquare70x70.scale-80.png" />
+    <Content Include="Assets\LogoStore.scale-100.png" />
+    <Content Include="Assets\LogoStore.scale-140.png" />
+    <Content Include="Assets\LogoStore.scale-180.png" />
+    <Content Include="Assets\LogoWide310x150.scale-100.png" />
+    <Content Include="Assets\LogoWide310x150.scale-140.png" />
+    <Content Include="Assets\LogoWide310x150.scale-180.png" />
+    <Content Include="Assets\LogoWide310x150.scale-80.png" />
     <Content Include="Content\Images\radial_gradient.xnb" />
     <Content Include="Content\Sounds\shockwave.xnb" />
     <Content Include="Content\Music\techno_song.xnb" />
@@ -155,12 +159,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Logo.scale-100.png" />
-    <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-140.png" />
     <Content Include="Assets\SplashScreen.scale-180.png" />
-    <Content Include="Assets\StoreLogo.scale-100.png" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Content\Effects\blur_effect.xnb" />
     <Content Include="Content\Effects\gaussianblur_effect.xnb" />
