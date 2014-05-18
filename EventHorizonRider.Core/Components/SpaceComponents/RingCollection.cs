@@ -42,6 +42,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public bool CollisionDetectionDisabled { get; set; }
 
+        public float ShadowDepth { get; set; }
+
         public void SetLevel(Level newLevel)
         {
             level = newLevel;
@@ -106,7 +108,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 }
                 else
                 {
-                    AddChild(RingFactory.Create(ringInfo, level), Depth);
+                    var ring = RingFactory.Create(ringInfo, level);
+                    ring.ShadowDepth = ShadowDepth;
+
+                    AddChild(ring, Depth);
 
                     lastRingAddTime = totalElapsedGameTime;
                     lastRingDuration = TimeSpan.FromSeconds(ringInfo.SpiralRadius / level.RingSpeed);

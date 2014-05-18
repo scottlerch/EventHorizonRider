@@ -56,7 +56,7 @@ namespace EventHorizonRider.Core.Engine
                     NumberOfGaps = 0,
                     Angle = (float)Rand.NextDouble() * MathHelper.TwoPi,
                     RotationalVelocity = 0f,
-                    SpiralRadius = 700f,
+                    SpiralRadius = spiralRadius,
                 };
             }
         }

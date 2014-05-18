@@ -44,6 +44,7 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Space.Ship.Start();
             gameContext.Root.Space.Rings.Start();
             gameContext.Root.Space.Background.Start();
+            gameContext.Root.Space.Rings.ShadowDepth = gameContext.Root.Space.Ship.Depth + 0.00001f;
 
             gameContext.Root.Music.Start();
         }

@@ -48,7 +48,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             IList<RingGap> gaps)
         {
             InnerRadius = innerRadius;
-            Width = spiralRadius;
+            Width = Math.Abs(spiralRadius);
 
             this.ringCollapseSpeed = ringCollapseSpeed;
             this.rotationalVelocity = rotationalVelocity;
@@ -57,8 +57,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             var newRingObjects = new List<RingObject>();
             var currentDepthOffset = 0f;
             int index = 0;
-            var spiralRotations = (spiralSpeed*(spiralRadius/ringCollapseSpeed)) / MathHelper.TwoPi;
-            var isSpiral = spiralRadius > 0;
+            var spiralRotations = (spiralSpeed*(Math.Abs(spiralRadius)/ringCollapseSpeed)) / MathHelper.TwoPi;
+            var isSpiral = spiralRadius > 0 || spiralRadius < 0;
             var maximumAngle = isSpiral ? MathHelper.TwoPi * spiralRotations : MathHelper.TwoPi;
 
             ringLayers = new List<RingLayer>();
@@ -72,9 +72,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                 var count = 0;
                 var radiusOffset = 0f;
 
-                var spiralRadiusOffset = spiralRadius / (maximumAsteroidsPerRing * spiralRotations);
+                var spiralRadiusOffset = Math.Abs(spiralRadius) / (maximumAsteroidsPerRing * spiralRotations);
 
-                for (var angle = 0f; angle < maximumAngle; angle += angleSpacing)
+                Action<float, float, Action<float>> angleIterator = spiralRadius >= 0 ? (Action<float, float, Action<float>>)ClockwiseAngles : CounterClockwiseAngles;
+
+                // TODO: counter-clockwise spirals don't render correctly
+
+                angleIterator(maximumAngle, angleSpacing, angle =>
                 {
                     if (isSpiral)
                     {
@@ -82,7 +86,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                     }
 
                     if (gaps.Any(gap => gap.IsInsideGap(angle)))
-                        continue;
+                        return;
 
                     var edgeModifier = CalculateEdgeModifer(gaps, angle, minimumAngleSpacing, maximumAngle, isSpiral, texturesInfo.TaperAmount, texturesInfo.TaperScale);
                     var textureIndex = random.Next(0, texturesInfo.Textures.Length);
@@ -106,7 +110,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 
                     newRingObjects.Add(ringObject);
                     count++;
-                }
+                });
 
                 if (texturesInfoGroup.Mode == RingTexturesInfoGroupMode.Sequential)
                 {
@@ -133,6 +137,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 
             ringObjects = newRingObjects;
         }
+
+        public float ShadowDepth { get; set; }
 
         public float InnerRadius
         {
@@ -173,6 +179,22 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
         public void Stop()
         {
             isStopped = true;
+        }
+
+        private void ClockwiseAngles(float maximumAngle, float angleSpacing, Action<float> action)
+        {
+            for (var angle = 0f; angle < maximumAngle; angle += angleSpacing)
+            {
+                action(angle);
+            }
+        }
+
+        private void CounterClockwiseAngles(float maximumAngle, float angleSpacing, Action<float> action)
+        {
+            for (var angle = maximumAngle; angle > 0f; angle -= angleSpacing)
+            {
+                action(angle);
+            }
         }
 
         private EdgeModifier CalculateEdgeModifer(IList<RingGap> gaps, float angle, float minimumAngleSpacing, float maximumAngle, bool isSpiral, int taperAmount, float taperScale)
@@ -219,7 +241,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                         origin: ringObject.Origin,
                         color: Color.White * 0.8f,
                         rotation: ringObject.Rotation,
-                        depth: ringObject.RelativeDepth + Depth - ringLayers[ringObject.LayerIndex].ShadowDepth,
+                        depth: ringObject.RelativeDepth + ShadowDepth - ringLayers[ringObject.LayerIndex].ShadowDepth,
                         scale: ringObject.Scale);
                 }
 

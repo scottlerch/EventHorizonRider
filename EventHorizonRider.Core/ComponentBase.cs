@@ -15,7 +15,7 @@ namespace EventHorizonRider.Core
     {
         private List<ComponentBase> children;
 
-        protected float Depth { get; private set; }
+        public float Depth { get; private set; }
 
         protected ComponentBase Parent { get; private set; }
 
