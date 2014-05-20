@@ -1,4 +1,5 @@
-﻿using EventHorizonRider.Core.Graphics;
+﻿using EventHorizonRider.Core.Audio;
+using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
@@ -19,7 +20,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         private readonly Blackhole blackhole;
 
         private SoundEffect thrustSound;
-        private SoundEffectInstance thrustSoundInstance;
+        private SoundComponent thrustSoundInstanceLeft;
+        private SoundComponent thrustSoundInstanceRight;
 
         private SoundEffect crashSound;
         private bool stopped = true;
@@ -89,8 +91,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             thrustSound = content.Load<SoundEffect>(@"Sounds\thrust");
-            thrustSoundInstance = thrustSound.CreateInstance();
-            thrustSoundInstance.IsLooped = true;
+            thrustSoundInstanceLeft = new SoundComponent(thrustSound) { FadeSpeed = 3f };
+            thrustSoundInstanceRight = new SoundComponent(thrustSound) { FadeSpeed = 3f };
 
             Texture = content.Load<Texture2D>(@"Images\ship");
             CollisionInfo = CollisionDetection.GetCollisionInfo(
@@ -158,14 +160,21 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 depth: Depth);
         }
 
+        protected override void OnUpdatingChanged()
+        {
+            if (!Updating)
+            {
+                thrustSoundInstanceLeft.Pause();
+                thrustSoundInstanceRight.Pause();
+            }
+        }
+
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
             if (stopped)
             {
-                if (thrustSoundInstance.State == SoundState.Playing)
-                {
-                    thrustSoundInstance.Stop(true);
-                }
+                thrustSoundInstanceLeft.PlayMin(immediate:true);
+                thrustSoundInstanceRight.PlayMin(immediate: true);
                 return;
             }
 
@@ -177,21 +186,30 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             sideThrustEmitter.Spawning = false;
 
             var left = false;
-            var isMoving = false;
 
             if (Left(inputState.KeyState, inputState.TouchState, inputState.MouseState))
             {
                 Rotation -= (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
                 sideThrustEmitter.Spawning = true;
                 left = true;
-                isMoving = true;
+
+                thrustSoundInstanceLeft.PlayMax();
+            }
+            else
+            {
+                thrustSoundInstanceLeft.PlayMin();
             }
 
             if (Right(inputState.KeyState, inputState.TouchState, inputState.MouseState))
             {
                 Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
                 sideThrustEmitter.Spawning = true;
-                isMoving = true;
+  
+                thrustSoundInstanceRight.PlayMax();
+            }
+            else
+            {
+                thrustSoundInstanceRight.PlayMin();
             }
 
             Rotation = MathHelper.WrapAngle(Rotation);
@@ -221,14 +239,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             particleSystem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            if (isMoving && thrustSoundInstance.State == SoundState.Stopped)
-            {
-                thrustSoundInstance.Play();
-            }
-            else if (!isMoving && thrustSoundInstance.State == SoundState.Playing)
-            {
-                thrustSoundInstance.Stop();
-            }
+            thrustSoundInstanceLeft.Update(gameTime);
+            thrustSoundInstanceRight.Update(gameTime);
         }
 
         private bool Left(KeyboardState keyState, TouchCollection touchState, MouseState mouseState)

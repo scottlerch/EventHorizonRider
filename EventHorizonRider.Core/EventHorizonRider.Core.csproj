@@ -40,6 +40,7 @@
     <DefineConstants Condition=" '$(SolutionName)' == 'EventHorizonRider.PSMobile.Core' ">$(DefineConstants);PSM</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Audio\SoundComponent.cs" />
     <Compile Include="ComponentBase.cs" />
     <Compile Include="Components\Button.cs" />
     <Compile Include="Components\ForegroundComponents\ControlsHelp.cs" />

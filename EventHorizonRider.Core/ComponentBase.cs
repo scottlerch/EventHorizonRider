@@ -24,7 +24,15 @@ namespace EventHorizonRider.Core
         public bool Visible
         {
             get { return visible && (Parent == null || Parent.Visible); }
-            set { visible = value; }
+            set
+            {
+                if (visible != value)
+                {
+                    visible = value;
+                    OnVisibleChanged();
+                    ForEach<ComponentBase>(child => child.OnVisibleChanged());
+                }
+            }
         }
 
         private bool updating = true;
@@ -32,7 +40,15 @@ namespace EventHorizonRider.Core
         public bool Updating
         {
             get { return updating && (Parent == null || Parent.Updating); }
-            set { updating = value; }
+            set
+            {
+                if (updating != value)
+                {
+                    updating = value;
+                    OnUpdatingChanged();
+                    ForEach<ComponentBase>(child => child.OnUpdatingChanged());
+                }
+            }
         }
 
         protected ComponentBase(params ComponentBase[] components)
@@ -167,6 +183,14 @@ namespace EventHorizonRider.Core
         }
 
         protected virtual void DrawCore(SpriteBatch spriteBatch)
+        {
+        }
+
+        protected virtual void OnUpdatingChanged()
+        {
+        }
+
+        protected virtual void OnVisibleChanged()
         {
         }
     }
