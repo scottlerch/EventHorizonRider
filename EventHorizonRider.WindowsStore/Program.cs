@@ -16,6 +16,7 @@ namespace EventHorizonRider.WindowsStore
                 PixelShaderDetail = PixelShaderDetail.Full,
                 CollisionDetectionDetail = CollisionDetectionDetail.Full,
                 TouchEnabled = new Windows.Devices.Input.TouchCapabilities().TouchPresent > 0,
+                PauseOnLoseFocus = true,
             });
 
             var factory = new MonoGame.Framework.GameFrameworkViewSource<MainGame>();

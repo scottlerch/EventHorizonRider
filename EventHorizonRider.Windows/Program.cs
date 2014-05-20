@@ -25,6 +25,7 @@ namespace EventHorizonRider.Windows
                 PixelShaderDetail = PixelShaderDetail.Full,
                 CollisionDetectionDetail = CollisionDetectionDetail.Full,
                 TouchEnabled = GetSystemMetrics(95) > 0,
+                PauseOnLoseFocus = false,
             });
 
             using (var game = new MainGame())

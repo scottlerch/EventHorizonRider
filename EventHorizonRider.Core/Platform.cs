@@ -15,6 +15,8 @@
 
     public class Platform
     {
+        public bool PauseOnLoseFocus { get; set; }
+
         public bool IsMouseVisible { get; set; }
 
         public bool TouchEnabled { get; set; }
@@ -34,6 +36,7 @@
             PixelShaderDetail = PixelShaderDetail.Full;
             CollisionDetectionDetail = CollisionDetectionDetail.Full;
             TouchEnabled = true;
+            PauseOnLoseFocus = true;
         }
     }
 }

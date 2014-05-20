@@ -111,11 +111,12 @@ namespace EventHorizonRider.Core
         /// </summary>
         protected override void OnActivated(object sender, EventArgs args)
         {
-            if (IsMouseVisible) return;
-
-            if (gameContext != null)
+            if (DeviceInfo.Platform.PauseOnLoseFocus)
             {
-                gameContext.Paused = true;
+                if (gameContext != null)
+                {
+                    gameContext.Paused = true;
+                }
             }
 
             base.OnActivated(sender, args);
@@ -126,11 +127,12 @@ namespace EventHorizonRider.Core
         /// </summary>
         protected override void OnDeactivated(object sender, EventArgs args)
         {
-            if (IsMouseVisible) return;
-
-            if (gameContext != null)
+            if (DeviceInfo.Platform.PauseOnLoseFocus)
             {
-                gameContext.Paused = true;
+                if (gameContext != null)
+                {
+                    gameContext.Paused = true;
+                }
             }
 
             base.OnDeactivated(sender, args);
