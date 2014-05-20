@@ -38,9 +38,17 @@ technique Technique1
 	pass Pass1
 	{
 #if SM4
+#if WINDOWS_PHONE
+		PixelShader = compile ps_4_0_level_9_3 PixelShaderFunction();
+#else
 		PixelShader = compile ps_4_0_level_9_1 PixelShaderFunction();
+#endif
 #elif SM3
+#if IOS
+		PixelShader = compile ps_3_0_level PixelShaderFunction();
+#else
 		PixelShader = compile ps_3_0_level_9_1 PixelShaderFunction();
+#endif
 #else
 		PixelShader = compile ps_2_0 PixelShaderFunction();
 #endif
