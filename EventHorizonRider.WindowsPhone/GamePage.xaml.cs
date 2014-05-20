@@ -14,8 +14,10 @@ namespace EventHorizonRider.WindowsPhone
             {
                 IsMouseVisible = false,
                 UseDynamicStars = false,
-                PixelShaderDetail = PixelShaderDetail.None,
-                CollisionDetectionDetail = CollisionDetectionDetail.Half,
+                PixelShaderDetail = PixelShaderDetail.Full,
+                CollisionDetectionDetail = CollisionDetectionDetail.Full,
+                PauseOnLoseFocus = true,
+                TouchEnabled = true,
             };
 
             DeviceInfo.InitializePlatform(platform);

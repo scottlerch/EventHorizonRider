@@ -256,3 +256,4 @@ pip-log.txt
 /EventHorizonRider.WindowsStore/Content/Music/*.mp3
 /EventHorizonRider.WindowsStore/Content/Sounds/*.xnb
 /EventHorizonRider.WindowsStore/BundleArtifacts
+/EventHorizonRider.WindowsPhone/Content/Music/*.mp3
