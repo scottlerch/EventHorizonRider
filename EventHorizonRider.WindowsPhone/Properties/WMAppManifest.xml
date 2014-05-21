@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{0585c019-6a7f-49db-a6ec-c2ba902c1545}" Title="Event Horizon" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Scott Lerch" Description="Ride the event horizon of a blackhole avoiding obstacles to a killer beat." Publisher="Scott Lerch" PublisherID="{82d0b8e8-f7f3-4ea5-b1f7-bfd586af78d6}">
+  <App xmlns="" ProductID="{0585c019-6a7f-49db-a6ec-c2ba902c1545}" Title="Event Horizon Rider" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Scott Lerch" Description="Ride along the event horizon of a black hole and avoid obstacles in this skill based game that requires fast reaction and precise timings." Publisher="Scott Lerch" PublisherID="{82d0b8e8-f7f3-4ea5-b1f7-bfd586af78d6}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
@@ -15,22 +15,25 @@
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="EventHorizonRider.WindowsPhoneToken" TaskName="_default">
-        <TemplateFlip>
-          <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
+        <TemplateIconic>
+          <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\IconicTileSmall.png</SmallImageURI>
           <Count>0</Count>
-          <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
-          <Title>EventHorizonRider.WindowsPhone</Title>
-          <BackContent>
-          </BackContent>
-          <BackBackgroundImageURI>
-          </BackBackgroundImageURI>
-          <BackTitle>
-          </BackTitle>
-          <DeviceLockImageURI>
+          <IconImageURI IsRelative="true" IsResource="false">Assets\Tiles\IconicTileMediumLarge.png</IconImageURI>
+          <Title>Event Horizon Rider</Title>
+          <Message>
+          </Message>
+          <BackgroundColor>
+          </BackgroundColor>
+          <HasLarge>False</HasLarge>
+          <LargeContent1>
+          </LargeContent1>
+          <LargeContent2>
+          </LargeContent2>
+          <LargeContent3>
+          </LargeContent3>
+          <DeviceLockImageURI IsRelative="true" IsResource="false">
           </DeviceLockImageURI>
-          <HasLarge>
-          </HasLarge>
-        </TemplateFlip>
+        </TemplateIconic>
       </PrimaryToken>
     </Tokens>
     <ScreenResolutions>

@@ -257,3 +257,6 @@ pip-log.txt
 /EventHorizonRider.WindowsStore/Content/Sounds/*.xnb
 /EventHorizonRider.WindowsStore/BundleArtifacts
 /EventHorizonRider.WindowsPhone/Content/Music/*.mp3
+/EventHorizonRider.WindowsPhone/*.sap
+/EventHorizonRider.WindowsPhone/SubmissionInfo/ManualTestResults.xml
+/EventHorizonRider.WindowsPhone/SubmissionInfo

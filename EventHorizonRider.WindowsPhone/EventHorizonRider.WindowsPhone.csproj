@@ -171,6 +171,7 @@
     <Content Include="Content\Sounds\open_menu.xnb" />
     <Content Include="Content\Sounds\shockwave.xnb" />
     <Content Include="Content\Sounds\thrust.xnb" />
+    <None Include="EventHorizonRider.WindowsPhone_2014_05_20_21_49_07.sap" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
