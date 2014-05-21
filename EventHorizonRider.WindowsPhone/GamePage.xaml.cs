@@ -23,7 +23,6 @@ namespace EventHorizonRider.WindowsPhone
             DeviceInfo.InitializePlatform(platform);
 
             var game = XamlGame<MainGame>.Create("", this);
-            game.TargetElapsedTime = TimeSpan.FromSeconds(1/30D);
         }
     }
 }
