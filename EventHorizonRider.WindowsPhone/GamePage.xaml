@@ -13,6 +13,10 @@
     SupportedOrientations="Landscape" Orientation="Landscape"
     shell:SystemTray.IsVisible="False">
 
-    <DrawingSurface x:Name="XnaSurface" />
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <DrawingSurfaceBackgroundGrid x:Name="XnaSurface" Background="Transparent">
+        <DrawingSurface />
+        <MediaElement />
+    </DrawingSurfaceBackgroundGrid>
 
 </phone:PhoneApplicationPage>
