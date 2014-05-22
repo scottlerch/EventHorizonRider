@@ -47,7 +47,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             if (twinkling) return;
 
             var maxRadius = RotationOrigin.Length();
-            var twinkleStrenth = MathUtilities.LinearInterpolate(0.5f, 1f, Radius / maxRadius);
+            var twinkleStrenth = MathHelper.Lerp(0.5f, 1f, Radius / maxRadius);
 
             twinkling = true;
             twinkleSpeed = MathUtilities.GetRandomBetween(0.4f, 1.5f);

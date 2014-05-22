@@ -38,7 +38,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                 Color.LightGray,
                 Color.DarkGray,
                 Color.Beige,
-                MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.DarkGray, 0.5f)
+                Color.Lerp(Color.Tan.AdjustLight(0.8f), Color.DarkGray, 0.5f)
             };
 
             SparseAsteroids = new RingTexturesInfo();
@@ -73,10 +73,10 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             {
                 Color.Tan, 
                 Color.Tan.AdjustLight(0.8f),
-                MathUtilities.LinearInterpolate(Color.Tan, Color.Beige, 0.5f),
+                Color.Lerp(Color.Tan, Color.Beige, 0.5f),
                 Color.Beige,
                 Color.Beige.AdjustLight(0.9f),
-                MathUtilities.LinearInterpolate(Color.Tan.AdjustLight(0.8f), Color.Beige.AdjustLight(0.9f), 0.5f)
+                Color.Lerp(Color.Tan.AdjustLight(0.8f), Color.Beige.AdjustLight(0.9f), 0.5f)
             };
 
             Crystals = LoadData(content, "crystals", 2, hasShadow: false);

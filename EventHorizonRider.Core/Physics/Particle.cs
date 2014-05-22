@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Physics
 {
-    internal class Particle
+    internal struct Particle
     {
-        public Vector2 Position { get; set; }
+        public bool IsAlive;
         
         private readonly Vector2 startDirection;
         private readonly Vector2 endDirection;
@@ -14,10 +14,15 @@ namespace EventHorizonRider.Core.Physics
         private readonly float scaleEnd;
         private readonly Color startColor;
         private readonly Color endColor;
-        private readonly Emitter parent;
+        private readonly Vector2 gravityCenter;
+        private readonly float gravityForce;
+        private readonly Texture2D texture;
 
+        private Vector2 position;
         private float lifePhase;
         private float lifeLeft;
+        private Color currColor;
+        private Rectangle drawRectangle;
 
         public Particle(
             Vector2 position, 
@@ -28,47 +33,66 @@ namespace EventHorizonRider.Core.Physics
             float scaleEnd,
             Color startColor, 
             Color endColor, 
-            Emitter yourself)
+            Emitter emitter)
         {
-            Position = position;
+            this.position = position;
             this.startDirection = startDirection;
             this.endDirection = endDirection;
-            this.startingLife = startingLife;
-            lifeLeft = startingLife;
+            this.startingLife = 1f / startingLife;
             this.scaleBegin = scaleBegin;
             this.scaleEnd = scaleEnd;
             this.startColor = startColor;
             this.endColor = endColor;
-            parent = yourself;
+            gravityCenter = emitter.GravityCenter;
+            gravityForce = emitter.GravityForce;
+            texture = emitter.ParticleSprite;
+            IsAlive = true;
+            lifePhase = 1f;
+            lifeLeft = startingLife;
+            currColor = Color.White;
+            drawRectangle = new Rectangle();
         }
 
         public bool Update(float dt)
         {
             lifeLeft -= dt;
-            if (lifeLeft <= 0)
-                return false;
 
-            lifePhase = lifeLeft / startingLife;      // 1 means newly created 0 means dead.
-            Position += MathUtilities.LinearInterpolate(endDirection, startDirection, lifePhase) * dt;
-            Position += (parent.GravityCenter - Position)*parent.GravityForce*dt;
+            if (lifeLeft <= 0)
+            {
+                IsAlive = false;
+                return false;
+            }
+
+            lifePhase = lifeLeft * startingLife;      // 1 means newly created 0 means dead.
+
+            position += 
+                (
+                    Vector2.Lerp(endDirection, startDirection, lifePhase) + 
+                    ((gravityCenter - position) * gravityForce)
+                ) * dt;
+
+            currColor = Color.Lerp(endColor, startColor, lifePhase);
+            var currScale = MathHelper.Lerp(scaleEnd, scaleBegin, lifePhase);
+
+            drawRectangle = new Rectangle(
+                (int) ((position.X - 0.5f*currScale)),
+                (int) ((position.Y - 0.5f*currScale)),
+                (int) (currScale),
+                (int) (currScale));
 
             return true;
         }
 
-        public void Draw(SpriteBatch spriteBatch, int scale, Vector2 offset, float depth)
+        public void Draw(SpriteBatch spriteBatch, float depth)
         {
-            var currScale = MathUtilities.LinearInterpolate(scaleEnd, scaleBegin, lifePhase);
-            var currCol = MathUtilities.LinearInterpolate(endColor, startColor, lifePhase);
-
-            spriteBatch.Draw(
-                parent.ParticleSprite, 
-                drawRectangle: new Rectangle(
-                    (int)((Position.X - 0.5f * currScale) * scale + offset.X), 
-                    (int)((Position.Y - 0.5f * currScale) * scale + offset.Y),
-                    (int)(currScale * scale),
-                    (int)(currScale * scale)),
-                color: currCol, 
-                depth: depth);
+            if (IsAlive)
+            {
+                spriteBatch.Draw(
+                    texture,
+                    drawRectangle: drawRectangle,
+                    color: currColor,
+                    depth: depth);
+            }
         }
     }
 }

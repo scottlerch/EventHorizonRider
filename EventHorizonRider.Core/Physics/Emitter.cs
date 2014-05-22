@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,8 @@ namespace EventHorizonRider.Core.Physics
         private readonly Random random; 
         private float nextSpawnIn;
         private float secPassed;
-        private readonly LinkedList<Particle> activeParticles;
+        private Particle[] particles;
+        private Queue<int> activeParticleIndices; 
 
         public Vector2 RelPosition { get; set; }
         public int Budget { get; set; }
@@ -62,8 +64,9 @@ namespace EventHorizonRider.Core.Physics
             RelPosition = relPosition;
             ParticleSprite = particleSprite;
             Parent = parent;
-            activeParticles = new LinkedList<Particle>();
-            nextSpawnIn = MathUtilities.LinearInterpolate(secPerSpawn, (float)random.NextDouble());
+            particles = new Particle[budget];
+            activeParticleIndices = new Queue<int>(Enumerable.Range(0, budget));
+            nextSpawnIn = MathUtilities.Lerp(secPerSpawn, (float)random.NextDouble());
             secPassed = 0.0f;
             this.random = random;
         }
@@ -74,72 +77,64 @@ namespace EventHorizonRider.Core.Physics
 
             while (secPassed > nextSpawnIn)
             {
-                if (activeParticles.Count < Budget && Spawning)
+                if (activeParticleIndices.Count > 0 && Spawning)
                 {
                     // Spawn a particle
                     var startDirection = Vector2.Transform(
                         SpawnDirection,
-                        Matrix.CreateRotationZ(MathUtilities.LinearInterpolate(SpawnNoiseAngle, (float)random.NextDouble())));
+                        Matrix.CreateRotationZ(MathUtilities.Lerp(SpawnNoiseAngle, (float)random.NextDouble())));
 
                     startDirection.Normalize();
 
-                    var endDirection = startDirection * MathUtilities.LinearInterpolate(EndSpeed, (float)random.NextDouble());
+                    var endDirection = startDirection * MathUtilities.Lerp(EndSpeed, (float)random.NextDouble());
 
-                    startDirection *= MathUtilities.LinearInterpolate(StartSpeed, (float)random.NextDouble());
+                    startDirection *= MathUtilities.Lerp(StartSpeed, (float)random.NextDouble());
 
-                    activeParticles.AddLast(
+                    int nextParticleIndex = activeParticleIndices.Dequeue();
+
+                    particles[nextParticleIndex] = 
                         new Particle(
-                            RelPosition + MathUtilities.LinearInterpolate(Parent.LastPos, Parent.Position, secPassed / dt),
+                            RelPosition + Vector2.Lerp(Parent.LastPos, Parent.Position, secPassed / dt),
                             startDirection,
                             endDirection,
-                            MathUtilities.LinearInterpolate(StartLife, (float)random.NextDouble()),
-                            MathUtilities.LinearInterpolate(StartScale, (float)random.NextDouble()),
-                            MathUtilities.LinearInterpolate(EndScale, (float)random.NextDouble()),
-                            MathUtilities.LinearInterpolate(StartColor, (float)random.NextDouble()),
-                            MathUtilities.LinearInterpolate(EndColor, (float)random.NextDouble()),
-                            this));
+                            MathUtilities.Lerp(StartLife, (float)random.NextDouble()),
+                            MathUtilities.Lerp(StartScale, (float)random.NextDouble()),
+                            MathUtilities.Lerp(EndScale, (float)random.NextDouble()),
+                            MathUtilities.Lerp(StartColor, (float)random.NextDouble()),
+                            MathUtilities.Lerp(EndColor, (float)random.NextDouble()),
+                            this);
 
-                    activeParticles.Last.Value.Update(secPassed);
+                    particles[nextParticleIndex].Update(secPassed);
                 }
 
                 secPassed -= nextSpawnIn;
-                nextSpawnIn = MathUtilities.LinearInterpolate(SecPerSpawn, (float)random.NextDouble());
+                nextSpawnIn = MathUtilities.Lerp(SecPerSpawn, (float)random.NextDouble());
             }
 
-            var node = activeParticles.First;
-
-            while (node != null)
+            int count = particles.Length;
+            for (int i = 0; i < count; i++)
             {
-                var isAlive = node.Value.Update(dt);
-                node = node.Next;
-
-                if (isAlive) continue;
-
-                if (node == null)
+                if (particles[i].IsAlive)
                 {
-                    activeParticles.RemoveLast();
-                }
-                else
-                {
-                    activeParticles.Remove(node.Previous);
+                    var isAlive = particles[i].Update(dt);
+                    if (!isAlive) activeParticleIndices.Enqueue(i);
                 }
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, int scale, Vector2 offset, float depth)
+        public void Draw(SpriteBatch spriteBatch, float depth)
         {
-            var node = activeParticles.First;
-
-            while (node != null)
+            int count = particles.Length;
+            for (int i = 0; i < count; i++)
             {
-                node.Value.Draw(spriteBatch, scale, offset, depth);
-                node = node.Next;
+                particles[i].Draw(spriteBatch, depth);
             }
         }
 
         public void Clear()
         {
-            activeParticles.Clear();
+            particles = new Particle[particles.Length];
+            activeParticleIndices = new Queue<int>(Enumerable.Range(0, particles.Length));
         }
     }
 }

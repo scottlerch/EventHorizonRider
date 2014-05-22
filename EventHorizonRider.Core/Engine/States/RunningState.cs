@@ -81,7 +81,7 @@ namespace EventHorizonRider.Core.Engine.States
                 progress = progress > 1f ? 1f : progress;
             }
 
-            gameContext.Root.Space.Background.StarBackgroundColor = MathUtilities.LinearInterpolate(
+            gameContext.Root.Space.Background.StarBackgroundColor = Color.Lerp(
                 gameContext.Levels.CurrentLevel.Color,
                 gameContext.Levels.NextLevel.Color,
                 progress);

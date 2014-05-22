@@ -150,7 +150,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 return;
             }
 
-            particleSystem.Draw(spriteBatch, 1, Vector2.Zero, Depth - 0.0001f);
+            particleSystem.Draw(spriteBatch, Depth - 0.0001f);
 
             spriteBatch.Draw(
                 Texture, 

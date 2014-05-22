@@ -71,7 +71,7 @@ namespace EventHorizonRider.Core.Components.MenuComponents
                     alpha *= -1f;
                 }
 
-                warningAlpha = MathUtilities.LinearInterpolate(0.5f, 1f, alpha);
+                warningAlpha = MathHelper.Lerp(0.5f, 1f, alpha);
             }
         }
 

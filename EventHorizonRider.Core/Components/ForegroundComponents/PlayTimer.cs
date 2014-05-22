@@ -174,7 +174,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                     alpha *= -1f;
                 }
 
-                newBestAlpha = MathUtilities.LinearInterpolate(0.5f, 1f, alpha);
+                newBestAlpha = MathHelper.Lerp(0.5f, 1f, alpha);
             }
 
             levelNumberScaling.Update(gameTime);

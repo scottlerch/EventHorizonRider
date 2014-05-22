@@ -38,7 +38,7 @@ namespace EventHorizonRider.Core
 
         public static float LinearInterpolate(this Range<float> range, float scale)
         {
-            return MathUtilities.LinearInterpolate(range, scale);
+            return MathUtilities.Lerp(range, scale);
         }
 
         public static Range<float> ScaleHigh(this Range<float> range, float scale)

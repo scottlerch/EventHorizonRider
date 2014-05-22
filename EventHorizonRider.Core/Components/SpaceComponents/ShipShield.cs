@@ -66,7 +66,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             shieldPulseMotion.Update(gameTime);
 
-            shieldPulseAlpha = MathUtilities.LinearInterpolate(BaseShieldAlpha, 0, shieldPulseMotion.Value);
+            shieldPulseAlpha = MathHelper.Lerp(BaseShieldAlpha, 0, shieldPulseMotion.Value);
             shieldPulseScale = (10f * shieldPulseMotion.Value) + 1f;
         }
 

@@ -50,7 +50,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 progressBar,
                 position: position,
                 color: Color.Green,
-                scale: new Vector2(MathUtilities.LinearInterpolate(0f, scale.X, progress), scale.Y),
+                scale: new Vector2(MathHelper.Lerp(0f, scale.X, progress), scale.Y),
                 depth: Depth + 0.00002f);
         }
     }

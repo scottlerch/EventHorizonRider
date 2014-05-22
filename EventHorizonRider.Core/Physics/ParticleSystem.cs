@@ -39,13 +39,13 @@ namespace EventHorizonRider.Core.Physics
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, int scale, Vector2 offset, float depth)
+        public void Draw(SpriteBatch spriteBatch, float depth)
         {
             foreach (var emitter in EmitterList)
             {
                 if (emitter.Budget > 0)
                 {
-                    emitter.Draw(spriteBatch, scale, offset, depth);
+                    emitter.Draw(spriteBatch, depth);
                 }
             }
         }
