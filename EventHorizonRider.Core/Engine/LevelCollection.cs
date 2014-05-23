@@ -55,7 +55,7 @@ namespace EventHorizonRider.Core.Engine
                             type: RingType.DustWithAsteroid),
                         ringInfoFactory.GetSpirals(
                             iterations: 1,
-                            spiralRadius: 700f,
+                            spiralRadius: -700f,
                             type: RingType.Dust),
                         ringInfoFactory.GetRandomSequence(
                             iterations: 5,

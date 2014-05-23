@@ -114,7 +114,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 endColor: Range.Create(Color.Orange.AdjustAlpha(0), Color.Orange.AdjustAlpha(0)),
                 startSpeed: Range.Create(400f, 500f),
                 endSpeed: Range.Create(100f, 120f), 
-                budget:500, 
+                budget: DeviceInfo.Platform.ParticleEffectsDetails == ParticleEffectsDetails.Full? 500 : 0, 
                 relPosition:Vector2.Zero, 
                 particleSprite:particleBase);
 

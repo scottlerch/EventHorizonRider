@@ -114,7 +114,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     AddChild(ring, Depth);
 
                     lastRingAddTime = totalElapsedGameTime;
-                    lastRingDuration = TimeSpan.FromSeconds(ringInfo.SpiralRadius / level.RingSpeed);
+                    lastRingDuration = TimeSpan.FromSeconds(Math.Abs(ringInfo.SpiralRadius) / level.RingSpeed);
                 }
             }
         }

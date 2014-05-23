@@ -36,7 +36,7 @@ namespace EventHorizonRider.Core.Engine
                 // ReSharper disable once PossibleNullReferenceException
                 for (int i = 0; i < list.Count; i++)
                 {
-                    Duration += ringInterval + TimeSpan.FromSeconds(list[i].SpiralRadius / RingSpeed);
+                    Duration += ringInterval + TimeSpan.FromSeconds(Math.Abs(list[i].SpiralRadius) / RingSpeed);
 
                     if (i == 0)
                     {
