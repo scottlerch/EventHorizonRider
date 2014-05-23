@@ -21,8 +21,9 @@
     <RestorePackages>true</RestorePackages>
     <PackageCertificateThumbprint>B1A943D84EDF63EC3814E9B3AF5B5188B2D58369</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <AppxBundle>Always</AppxBundle>
+    <EnableProjectNCompatibleProfile>true</EnableProjectNCompatibleProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -154,6 +155,10 @@
     <Content Include="Content\Images\help_key_left.xnb" />
     <Content Include="Content\Images\help_key_right.xnb" />
     <Content Include="Content\Images\dust_shadow_1.xnb" />
+    <Content Include="default.rd.xml" />
+    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MSBuild\Microsoft\.NetNative\NextSteps.mht">
+      <Link>NextSteps.mht</Link>
+    </None>
     <None Include="EventHorizonRider.WindowsStore_StoreKey.pfx" />
     <None Include="TemporaryKey.pfx" />
     <None Include="packages.config" />

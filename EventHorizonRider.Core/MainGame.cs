@@ -54,6 +54,8 @@ namespace EventHorizonRider.Core
             DeviceInfo.InitializeGraphics(GraphicsDevice);
 
             IsMouseVisible = DeviceInfo.Platform.IsMouseVisible;
+            IsFixedTimeStep = DeviceInfo.Platform.IsFixedTimeStep;
+            TargetElapsedTime = DeviceInfo.Platform.TargetElapsedTime;
 
             gameContext = new GameContext(new InitializeState());
             inputState = new InputState();

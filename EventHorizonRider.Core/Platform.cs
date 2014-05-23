@@ -1,4 +1,6 @@
-﻿namespace EventHorizonRider.Core
+﻿using System;
+
+namespace EventHorizonRider.Core
 {
     public enum PixelShaderDetail
     {
@@ -10,6 +12,12 @@
     public enum CollisionDetectionDetail
     {
         Half,
+        Full,
+    }
+
+    public enum ParticleEffectsDetails
+    {
+        None,
         Full,
     }
 
@@ -29,6 +37,12 @@
 
         public CollisionDetectionDetail CollisionDetectionDetail { get; set; }
 
+        public TimeSpan TargetElapsedTime { get; set; }
+
+        public bool IsFixedTimeStep { get; set; }
+
+        public ParticleEffectsDetails ParticleEffectsDetails { get; set; }
+
         public Platform()
         {
             IsMouseVisible = false;
@@ -37,6 +51,9 @@
             CollisionDetectionDetail = CollisionDetectionDetail.Full;
             TouchEnabled = true;
             PauseOnLoseFocus = true;
+            TargetElapsedTime = TimeSpan.FromSeconds(1/60D);
+            IsFixedTimeStep = true;
+            ParticleEffectsDetails = ParticleEffectsDetails.Full;
         }
     }
 }
