@@ -109,7 +109,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 else
                 {
                     var ring = RingFactory.Create(ringInfo, level);
-                    ring.ShadowDepth = ShadowDepth;
 
                     AddChild(ring, Depth);
 

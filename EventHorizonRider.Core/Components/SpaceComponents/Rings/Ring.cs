@@ -138,8 +138,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             ringObjects = newRingObjects;
         }
 
-        public float ShadowDepth { get; set; }
-
         public float InnerRadius
         {
             get { return innerRadius; }
@@ -241,7 +239,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                         origin: ringObject.Origin,
                         color: Color.White * 0.8f,
                         rotation: ringObject.Rotation,
-                        depth: ringObject.RelativeDepth + ShadowDepth - ringLayers[ringObject.LayerIndex].ShadowDepth,
+                        depth: ringObject.RelativeDepth + (Depth - 0.00001f) - ringLayers[ringObject.LayerIndex].ShadowDepth,
                         scale: ringObject.Scale);
                 }
 
