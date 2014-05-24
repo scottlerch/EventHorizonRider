@@ -96,6 +96,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 
         private RingTexturesInfo LoadData(ContentManager content, string imageBaseName, int count, bool hasShadow)
         {
+            // TODO: figure out count from image names
             var texturesInfo = new RingTexturesInfo
             {
                 Textures = new Texture2D[count],
