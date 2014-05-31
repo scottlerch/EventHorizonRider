@@ -9,7 +9,7 @@ namespace EventHorizonRider.Core.Engine
 {
     internal class LevelCollection
     {
-        private readonly float maxRingRadius = DeviceInfo.LogicalWidth / 2f;
+        private readonly float maxRingRadius = DeviceInfo.LogicalWidthOriginal / 2f;
         private readonly List<Level> levels;
 
         public LevelCollection(RingInfoFactory ringInfoFactory)

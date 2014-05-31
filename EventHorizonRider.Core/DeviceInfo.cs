@@ -20,6 +20,8 @@ namespace EventHorizonRider.Core
 
         public static int LogicalWidth { get; private set; }
 
+        public static int LogicalWidthOriginal { get; private set; }
+
         public static int LogicalHeight { get; private set; }
 
         public static Vector2 LogicalCenter { get; private set; }
@@ -63,9 +65,9 @@ namespace EventHorizonRider.Core
                 throw new InvalidOperationException("Graphics already initialized");
             }
 
-            // Original native resolution
+            // Original native resolution game was developed for (iPhone 4inch Retina)
             const int baseHeight = 640;
-            // const int baseWidth = 1136;
+            const int baseWidth = 1136;
 
             NativeHeight = graphics.Viewport.Height;
             NativeWidth = graphics.Viewport.Width;
@@ -78,6 +80,7 @@ namespace EventHorizonRider.Core
 
             LogicalHeight = baseHeight;
             LogicalWidth = (int)Math.Round(NativeWidth * (baseHeight / (float)NativeHeight));
+            LogicalWidthOriginal = baseWidth;
 
             LogicalCenter = new Vector2(LogicalWidth / 2f, LogicalHeight / 2f);
 
