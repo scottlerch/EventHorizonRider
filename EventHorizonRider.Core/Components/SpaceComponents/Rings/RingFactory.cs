@@ -24,7 +24,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 
         internal void LoadContent(ContentManager content, GraphicsDevice graphics)
         {
-            Asteroids = LoadData(content, "asteroid", 4, hasShadow:true);
+            Asteroids = LoadData(content, "asteroid", 3, hasShadow:true);
             Asteroids.ShadowOffset = new Vector2(30, 30);
             Asteroids.DensityRange = Range.Create(15, 35);
             Asteroids.ScaleRange = Range.Create(0.2f, 0.8f);
