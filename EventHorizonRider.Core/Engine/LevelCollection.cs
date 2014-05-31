@@ -112,7 +112,7 @@ namespace EventHorizonRider.Core.Engine
                             typeSelection: RingTypeSelection.RoundRobin),
                         ringInfoFactory.GetSpirals(
                             iterations: 1,
-                            spiralRadius: 700f,
+                            spiralRadius: -700f,
                             type: RingType.Asteroid),
                         ringInfoFactory.GetZigZagSequence(
                             iterations: 4,
@@ -158,7 +158,7 @@ namespace EventHorizonRider.Core.Engine
                             type: RingType.DustWithAsteroid),
                         ringInfoFactory.GetSpirals(
                             iterations: 1,
-                            spiralRadius: 700f,
+                            spiralRadius: -700f,
                             type: RingType.Asteroid),
                         ringInfoFactory.GetRandomSequence(
                             iterations: 4,
@@ -209,7 +209,7 @@ namespace EventHorizonRider.Core.Engine
                             typeSelection: RingTypeSelection.RoundRobin),
                         ringInfoFactory.GetSpirals(
                             iterations: 1,
-                            spiralRadius: 700f,
+                            spiralRadius: -700f,
                             type: RingType.Asteroid),
                         ringInfoFactory.GetZigZagSequence(
                             iterations: 4,
