@@ -17,7 +17,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Horizon</string>
 	<key>CFBundleIdentifier</key>
-	<string>EventHorizonRider</string>
+	<string>com.eventhorizonrider</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>NSMainNibFile</key>
@@ -36,6 +36,19 @@
 		<string>Default.png</string>
 		<string>Default@2x.png</string>
 		<string>Default-568h@2x.png</string>
+		<string>Icon-72@2x.png</string>
+		<string>Icon-72.png</string>
+		<string>Icon-76.png</string>
+		<string>Icon-76@2x.png</string>
+		<string>Default-Landscape.png</string>
+		<string>Default-Landscape@2x.png</string>
+		<string>Default-Portrait.png</string>
+		<string>Default-Portrait@2x.png</string>
+		<string>Icon-Small-50@2x.png</string>
+		<string>Icon-Small-50.png</string>
+		<string>Icon-Small-40.png</string>
+		<string>Icon-Small-40@2x.png</string>
+		<string>Icon-Small.png</string>
 	</array>
 	<key>NSMainNibFile~ipad</key>
 	<string></string>

@@ -18,16 +18,10 @@ namespace EventHorizonRider.iOS
                 PixelShaderDetail = PixelShaderDetail.Full,
                 CollisionDetectionDetail = CollisionDetectionDetail.Full,
                 TouchEnabled = true,
+                PauseOnLoseFocus = true,
             };
 
-            // TODO: determine detail level on other devices
-            switch (DeviceHardware.Version)
-            {
-                case HardwareType.iPad3:
-                    platform.PixelShaderDetail = PixelShaderDetail.Half;
-                    platform.CollisionDetectionDetail = CollisionDetectionDetail.Half;
-                    break;
-            }
+            // TODO: determine detail level on other devices using DeviceHardware.Version
 
             DeviceInfo.InitializePlatform(platform);
 

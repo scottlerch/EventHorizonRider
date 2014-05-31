@@ -82,6 +82,10 @@
     <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <MtouchOptimizePNGs>True</MtouchOptimizePNGs>
     <MtouchI18n />
+    <CodesignProvision />
+    <CodesignEntitlements />
+    <CodesignResourceRules />
+    <CodesignExtraArgs />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -101,8 +105,19 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignProvision />
+    <CodesignEntitlements />
+    <CodesignResourceRules />
+    <CodesignExtraArgs />
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>EventHorizonRider.iOS.Application</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\Default%402x.png" />
+    <BundleResource Include="Resources\Default-568h%402x.png" />
+    <BundleResource Include="Resources\Default.png" />
+    <BundleResource Include="Resources\Icon.png" />
     <Compile Include="DeviceHardware.cs" />
     <Compile Include="HardwareType.cs" />
     <Compile Include="Main.cs" />
@@ -120,9 +135,8 @@
     <Content Include="Content\Images\ship.xnb" />
     <Content Include="Content\Sounds\crash_sound.xnb" />
     <Content Include="Content\Sounds\newlevel_sound.xnb" />
-    <BundleResource Include="Resources\Icon-60%402x.png" />
     <BundleResource Include="Resources\Icon%402x.png" />
-    <BundleResource Include="Resources\Icon.png" />
+    <BundleResource Include="Resources\Icon-60%402x.png" />
     <Content Include="Content\Images\title.xnb" />
     <Content Include="Content\Images\particle_base.xnb" />
     <Content Include="Content\Images\shield.xnb" />
@@ -160,16 +174,29 @@
     <Content Include="Content\Images\help_key_left.xnb" />
     <Content Include="Content\Images\help_key_right.xnb" />
     <Content Include="Content\Images\dust_shadow_1.xnb" />
+    <BundleResource Include="Resources\Icon-76%402x.png" />
+    <BundleResource Include="Resources\Icon-72%402x.png" />
+    <BundleResource Include="Resources\Icon-76.png" />
+    <BundleResource Include="Resources\Icon-72.png" />
+    <BundleResource Include="Resources\Icon-Small-40%402x.png" />
+    <BundleResource Include="Resources\Icon-Small-50%402x.png" />
+    <BundleResource Include="Resources\Icon-Small%402x.png" />
+    <BundleResource Include="Resources\Icon-Small-50.png" />
+    <BundleResource Include="Resources\Icon-Small-40.png" />
+    <BundleResource Include="Resources\Icon-Small.png" />
+    <BundleResource Include="Resources\Default-Landscape.png" />
+    <BundleResource Include="Resources\Default-Portrait.png" />
+    <BundleResource Include="Resources\Default-Portrait%402x.png" />
+    <BundleResource Include="Resources\Default-Landscape%402x.png" />
+    <Content Include="Content\Images\asteroid_5.xnb" />
+    <Content Include="Content\Images\asteroid_shadow_5.xnb" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <ITunesArtwork Include="iTunesArtwork" />
+    <ITunesArtwork Include="iTunesArtwork%402x" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Default.png" />
-    <BundleResource Include="Resources\Default@2x.png" />
-    <BundleResource Include="Resources\Default-568h@2x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EventHorizonRider.Core\EventHorizonRider.Core.csproj">
