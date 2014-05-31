@@ -160,22 +160,21 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
         {
             if (newBest)
             {
-                newBestAlpha = 1f;
                 newBestDuration = TimeSpan.Zero;
             }
 
             if (newBestDuration > TimeSpan.Zero)
             {
                 newBestDuration -= gameTime.ElapsedGameTime;
-
-                var alpha = (float)Math.Sin(newBestDuration.TotalSeconds * 15);
-                if (alpha < 0)
-                {
-                    alpha *= -1f;
-                }
-
-                newBestAlpha = MathHelper.Lerp(0.5f, 1f, alpha);
             }
+
+            var alpha = (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds * 15);
+            if (alpha < 0)
+            {
+                alpha *= -1f;
+            }
+
+            newBestAlpha = MathHelper.Lerp(0.5f, 1f, alpha);
 
             levelNumberScaling.Update(gameTime);
 
