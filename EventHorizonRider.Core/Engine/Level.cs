@@ -12,7 +12,14 @@ namespace EventHorizonRider.Core.Engine
 
         private readonly IEnumerable<RingInfo> internalSequence; 
 
-        public Level(TimeSpan ringInterval, float ringSeparation, float shipSpeed, float rotationVelocity, Color color, bool infiniteSequence, IEnumerable<RingInfo> sequence)
+        public Level(
+            TimeSpan ringInterval, 
+            float ringSeparation, 
+            float shipSpeed, 
+            float rotationVelocity, 
+            Color color, 
+            bool infiniteSequence, 
+            IEnumerable<RingInfo> sequence)
         {
             Color = color;
             RingInterval = ringInterval;
@@ -46,22 +53,22 @@ namespace EventHorizonRider.Core.Engine
             }
         }
 
-        public Color Color { get; private set; }
+        public Color Color { get; set; }
 
-        public TimeSpan? Duration { get; private set; }
+        public TimeSpan? Duration { get; set; }
 
         public bool IsInfiniteSequence { get; private set; }
 
-        public float RingSpeed { get; private set; }
+        public float RingSpeed { get; set; }
 
         public IEnumerable<RingInfo> Sequence { get { return internalSequence; } }
 
-        public TimeSpan RingInterval { get; private set; }
+        public TimeSpan RingInterval { get; set; }
 
-        public float RingSeparation { get; private set; }
+        public float RingSeparation { get; set; }
 
-        public float ShipSpeed { get; private set; }
+        public float ShipSpeed { get; set; }
 
-        public float RotationalVelocity { get; private set; }
+        public float RotationalVelocity { get; set; }
     }
 }

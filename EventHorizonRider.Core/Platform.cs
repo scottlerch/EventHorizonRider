@@ -21,6 +21,9 @@ namespace EventHorizonRider.Core
         Full,
     }
 
+    /// <summary>
+    /// Platform specific settings like input support (mouse/touch) or graphical detail level supported.
+    /// </summary>
     public class Platform
     {
         public bool PauseOnLoseFocus { get; set; }

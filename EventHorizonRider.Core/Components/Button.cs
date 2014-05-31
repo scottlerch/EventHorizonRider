@@ -1,8 +1,8 @@
-﻿using System;
-using EventHorizonRider.Core.Input;
+﻿using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using System;
 using System.Linq;
 
 namespace EventHorizonRider.Core.Components

@@ -76,8 +76,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 
                 Action<float, float, Action<float>> angleIterator = spiralRadius >= 0 ? (Action<float, float, Action<float>>)ClockwiseAngles : CounterClockwiseAngles;
 
-                // TODO: counter-clockwise spirals don't render correctly
-
                 angleIterator(maximumAngle, angleSpacing, angle =>
                 {
                     if (isSpiral)

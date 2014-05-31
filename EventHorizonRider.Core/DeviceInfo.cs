@@ -9,7 +9,6 @@ namespace EventHorizonRider.Core
     /// </summary>
     public class DeviceInfo
     {
-        private static readonly object initLock = new object();
         private static bool graphicsInitialized;
         private static bool platformInitialized;
 
@@ -39,17 +38,14 @@ namespace EventHorizonRider.Core
         /// </summary>
         public static void InitializePlatform(Platform platform)
         {
-            lock (initLock)
+            if (platformInitialized)
             {
-                if (platformInitialized)
-                {
-                    throw new InvalidOperationException("Platform already initialized");
-                }
-
-                Platform = platform;
-
-                platformInitialized = true;
+                throw new InvalidOperationException("Platform already initialized");
             }
+
+            Platform = platform;
+
+            platformInitialized = true;
         }
 
         /// <summary>
@@ -62,33 +58,30 @@ namespace EventHorizonRider.Core
                 throw new InvalidOperationException("Platform must first be initialized");
             }
 
-            lock (initLock)
+            if (graphicsInitialized)
             {
-                if (graphicsInitialized)
-                {
-                    throw new InvalidOperationException("Graphics already initialized");
-                }
-
-                // Original native resolution
-                const int baseHeight = 640;
-                // const int baseWidth = 1136;
-
-                NativeHeight = graphics.Viewport.Height;
-                NativeWidth = graphics.Viewport.Width;
-
-                // Only scale output on Height since the game is run in portrait mode
-                OutputScale = NativeHeight/(float) baseHeight;
-                OutputScaleMatrix = Matrix.CreateScale(OutputScale, OutputScale, 1);
-
-                InputScale = 1f/OutputScale;
-
-                LogicalHeight = baseHeight;
-                LogicalWidth = (int) Math.Round(NativeWidth*(baseHeight/(float) NativeHeight));
-
-                LogicalCenter = new Vector2(LogicalWidth/2f, LogicalHeight/2f);
-
-                graphicsInitialized = true;
+                throw new InvalidOperationException("Graphics already initialized");
             }
+
+            // Original native resolution
+            const int baseHeight = 640;
+            // const int baseWidth = 1136;
+
+            NativeHeight = graphics.Viewport.Height;
+            NativeWidth = graphics.Viewport.Width;
+
+            // Only scale output on Height since the game is run in portrait mode
+            OutputScale = NativeHeight / (float)baseHeight;
+            OutputScaleMatrix = Matrix.CreateScale(OutputScale, OutputScale, 1);
+
+            InputScale = 1f / OutputScale;
+
+            LogicalHeight = baseHeight;
+            LogicalWidth = (int)Math.Round(NativeWidth * (baseHeight / (float)NativeHeight));
+
+            LogicalCenter = new Vector2(LogicalWidth / 2f, LogicalHeight / 2f);
+
+            graphicsInitialized = true;
         }
     }
 }

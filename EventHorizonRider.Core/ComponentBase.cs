@@ -14,42 +14,8 @@ namespace EventHorizonRider.Core
     internal abstract class ComponentBase
     {
         private List<ComponentBase> children;
-
-        public float Depth { get; private set; }
-
-        protected ComponentBase Parent { get; private set; }
-
         private bool visible = true;
-
-        public bool Visible
-        {
-            get { return visible && (Parent == null || Parent.Visible); }
-            set
-            {
-                if (visible != value)
-                {
-                    visible = value;
-                    OnVisibleChanged();
-                    ForEach<ComponentBase>(child => child.OnVisibleChanged());
-                }
-            }
-        }
-
         private bool updating = true;
-
-        public bool Updating
-        {
-            get { return updating && (Parent == null || Parent.Updating); }
-            set
-            {
-                if (updating != value)
-                {
-                    updating = value;
-                    OnUpdatingChanged();
-                    ForEach<ComponentBase>(child => child.OnUpdatingChanged());
-                }
-            }
-        }
 
         protected ComponentBase(params ComponentBase[] components)
         {
@@ -72,6 +38,42 @@ namespace EventHorizonRider.Core
                 children[i].Depth = (i + 1)*depthStep;
             }
         }
+
+        public float Depth { get; private set; }
+
+        public bool Visible
+        {
+            get { return visible && (Parent == null || Parent.Visible); }
+            set
+            {
+                if (visible != value)
+                {
+                    visible = value;
+                    OnVisibleChanged();
+                    ForEach<ComponentBase>(child => child.OnVisibleChanged());
+                }
+            }
+        }
+
+        public bool Updating
+        {
+            get { return updating && (Parent == null || Parent.Updating); }
+            set
+            {
+                if (updating != value)
+                {
+                    updating = value;
+                    OnUpdatingChanged();
+                    ForEach<ComponentBase>(child => child.OnUpdatingChanged());
+                }
+            }
+        }
+
+        public bool ChildrenIsEmpty { get { return children == null || children.Count == 0; } }
+
+        public int ChildrenCount { get { return children == null ? 0 : children.Count; } }
+
+        protected ComponentBase Parent { get; private set; }
 
         protected void AddChild(ComponentBase component, float depth)
         {
@@ -108,10 +110,6 @@ namespace EventHorizonRider.Core
         {
             get { return children ?? Enumerable.Empty<ComponentBase>(); }
         }
-
-        public bool ChildrenIsEmpty { get { return children == null || children.Count == 0; } }
-
-        public int ChildrenCount { get { return children == null ? 0 : children.Count; } }
 
         public void ForEach<T>(Action<T> action) where T : ComponentBase
         {

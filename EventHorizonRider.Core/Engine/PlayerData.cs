@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Storage;
-#if !PSM
+﻿#if !PSM
 using Newtonsoft.Json;
 using PCLStorage;
 #endif

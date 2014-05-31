@@ -10,6 +10,14 @@ namespace EventHorizonRider.Core.Physics
         private readonly Random random;
         private Vector2 position;
 
+        public ParticleSystem(Vector2 position = default(Vector2))
+        {
+            Position = position;
+            LastPos = position;
+            random = new Random();
+            EmitterList = new List<Emitter>();
+        }
+
         public List<Emitter> EmitterList { get; set; }
 
         public Vector2 Position
@@ -19,14 +27,6 @@ namespace EventHorizonRider.Core.Physics
         }
 
         public Vector2 LastPos { get; set; }
-
-        public ParticleSystem(Vector2 position = default(Vector2))
-        {
-            Position = position;
-            LastPos = position;
-            random = new Random();
-            EmitterList = new List<Emitter>();
-        }
 
         public void Update(float dt)
         {

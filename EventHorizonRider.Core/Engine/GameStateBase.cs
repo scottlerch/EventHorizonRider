@@ -2,6 +2,9 @@
 
 namespace EventHorizonRider.Core.Engine
 {
+    /// <summary>
+    /// Base class for game states.  See concrete implementations in States namespace.
+    /// </summary>
     internal abstract class GameStateBase
     {
         private bool beginning = true;

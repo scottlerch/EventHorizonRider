@@ -9,7 +9,6 @@ namespace EventHorizonRider.Core.Components.MenuComponents
         private Texture2D texture;
         private Vector2 textureOrigin;
 
-
         protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
         {
             Visible = false;

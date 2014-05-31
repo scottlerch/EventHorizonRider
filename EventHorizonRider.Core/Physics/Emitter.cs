@@ -14,25 +14,6 @@ namespace EventHorizonRider.Core.Physics
         private Particle[] particles;
         private Queue<int> activeParticleIndices; 
 
-        public Vector2 RelPosition { get; set; }
-        public int Budget { get; set; }
-        public Texture2D ParticleSprite { get; set; }
-        public Range<float> SecPerSpawn { get; set; }
-        public Vector2 SpawnDirection { get; set; }
-        public Range<float> SpawnNoiseAngle { get; set; }
-        public Range<float> StartLife { get; set; }
-        public Range<float> StartScale { get; set; }
-        public Range<float> EndScale { get; set; }
-        public Range<Color> StartColor { get; set; }
-        public Range<Color> EndColor { get; set; }
-        public Range<float> StartSpeed { get; set; }
-        public Range<float> EndSpeed { get; set; }
-        public bool Spawning { get; set; }
-        public Vector2 GravityCenter { get; set; }
-        public float GravityForce { get; set; }
-
-        public ParticleSystem Parent { get; set; }
-
         public Emitter(
             Range<float> secPerSpawn, 
             Vector2 spawnDirection,
@@ -70,6 +51,40 @@ namespace EventHorizonRider.Core.Physics
             secPassed = 0.0f;
             this.random = random;
         }
+
+        public Vector2 RelPosition { get; set; }
+
+        public int Budget { get; set; }
+
+        public Texture2D ParticleSprite { get; set; }
+
+        public Range<float> SecPerSpawn { get; set; }
+
+        public Vector2 SpawnDirection { get; set; }
+
+        public Range<float> SpawnNoiseAngle { get; set; }
+
+        public Range<float> StartLife { get; set; }
+
+        public Range<float> StartScale { get; set; }
+
+        public Range<float> EndScale { get; set; }
+
+        public Range<Color> StartColor { get; set; }
+
+        public Range<Color> EndColor { get; set; }
+
+        public Range<float> StartSpeed { get; set; }
+
+        public Range<float> EndSpeed { get; set; }
+
+        public bool Spawning { get; set; }
+
+        public Vector2 GravityCenter { get; set; }
+
+        public float GravityForce { get; set; }
+
+        public ParticleSystem Parent { get; set; }
 
         public void Update(float dt)
         {

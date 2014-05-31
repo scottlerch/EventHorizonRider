@@ -303,7 +303,7 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 depth: Depth + 0.00003f);
         }
 
-                private string FormatTime(TimeSpan time)
+        private string FormatTime(TimeSpan time)
         {
             return string.Format("{0:0.00}", time.TotalSeconds);
         }

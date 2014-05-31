@@ -3,7 +3,6 @@ using EventHorizonRider.Core;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
-using SharpDX.DXGI;
 
 namespace EventHorizonRider.Windows
 {
@@ -35,7 +34,11 @@ namespace EventHorizonRider.Windows
                 if (args.Length > 0 && args[0].Equals("Development", StringComparison.OrdinalIgnoreCase))
                 {
                     var developmentToolsForm = new DevelopmentToolsForm(game);
-                    var parentForm = game.Window.GetType().GetField("_form", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(game.Window) as IWin32Window;
+
+                    var parentForm = game.Window.GetType()
+                        .GetField("_form", BindingFlags.NonPublic | BindingFlags.Instance)
+                        .GetValue(game.Window) as IWin32Window;
+
                     developmentToolsForm.Show(parentForm);
                 }
 

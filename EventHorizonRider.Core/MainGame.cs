@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
-using EventHorizonRider.Core.Engine;
+﻿using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Engine.States;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace EventHorizonRider.Core
 {
