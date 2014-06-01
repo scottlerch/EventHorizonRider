@@ -1,7 +1,9 @@
 Event Horizon Rider
 ===================
 
-Multiplatform game inspired by Hexagon using MonoGame.
+Multiplatform (mobile first) game inspired by [Super Hexagon](http://www.superhexagon.com) using MonoGame.
+
+http://www.eventhorizonrider.com
 
 Build Requirements
 ------------------
@@ -33,3 +35,7 @@ The following sites were used to obtain royalty free content:
  * http://www.soundjay.com/
  * http://teknoaxe.com/
  * https://www.freesound.org
+
+Video captures were made using the following:
+
+ * [WM Capture 7](http://wmrecorder.com/products/wm-capture/)
