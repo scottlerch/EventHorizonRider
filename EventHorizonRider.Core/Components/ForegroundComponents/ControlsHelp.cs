@@ -50,8 +50,14 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
             helpStart = content.Load<Texture2D>(@"Images\help_start");
 
             helpLeftPosition = new Vector2(0, (DeviceInfo.LogicalHeight / 2) - (helpLeft.Height / 2));
-            helpRightPosition = new Vector2(DeviceInfo.LogicalWidth - helpRight.Width, (DeviceInfo.LogicalHeight / 2) - (helpLeft.Height / 2));
-            helpStartPosition = new Vector2((DeviceInfo.LogicalWidth / 2) - (helpStart.Width / 2), (DeviceInfo.LogicalHeight / 2) + 125);
+
+            helpRightPosition = new Vector2(
+                DeviceInfo.LogicalWidth - helpRight.Width, 
+                (DeviceInfo.LogicalHeight / 2) - (helpLeft.Height / 2));
+
+            helpStartPosition = new Vector2(
+                (DeviceInfo.LogicalWidth / 2) - (helpStart.Width / 2), 
+                (DeviceInfo.LogicalHeight / 2) + 125);
 
             startMotion = new Motion(value:0, target:20, speed:80);
         }

@@ -62,7 +62,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
             const int frameInterval = 100;
-            shieldTextureIndex = (int)((((int)gameTime.TotalGameTime.TotalMilliseconds % frameInterval) / (float)frameInterval) * shieldTextures.Length);
+            shieldTextureIndex = (int)((((int)gameTime.TotalGameTime.TotalMilliseconds % frameInterval) / 
+                (float)frameInterval) * shieldTextures.Length);
 
             shieldPulseMotion.Update(gameTime);
 

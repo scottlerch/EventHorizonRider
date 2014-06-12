@@ -237,11 +237,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                     "NEW!",
                     new Vector2(TextPadding, (TextPadding + 5) + bestTextSize.Y),
                     Color.Yellow * newBestAlpha,
-                    0,
-                    Vector2.Zero,
-                    1,
-                    SpriteEffects.None,
-                    Depth);
+                    rotation: 0,
+                    origin: Vector2.Zero,
+                    scale: 1f,
+                    effects: SpriteEffects.None,
+                    depth: Depth);
             }
         }
 
@@ -254,11 +254,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                   viewSize.X - textOffset[timeNumberText.Length - 4] - TextPadding, 
                   TextPadding + bestTextSize.Y + TextVerticalSpacing),
               scoreColor,
-              0,
-              Vector2.Zero,
-              1,
-              SpriteEffects.None,
-              Depth);
+              rotation: 0,
+              origin: Vector2.Zero,
+              scale: 1f,
+              effects: SpriteEffects.None,
+              depth: Depth);
         }
 
         private void DrawLevelNumber(SpriteBatch spriteBatch)
@@ -278,11 +278,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                         viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, 
                         TextPadding),
                     Color.LightGray.AdjustLight(0.9f),
-                    0,
-                    Vector2.Zero,
-                    1,
-                    SpriteEffects.None,
-                    Depth);
+                    rotation: 0,
+                    origin: Vector2.Zero,
+                    scale: 1f,
+                    effects: SpriteEffects.None,
+                    depth: Depth);
             }
 
             var scaleFactor = 10f * levelNumberScaling.Value;

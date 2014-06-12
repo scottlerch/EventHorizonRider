@@ -8,14 +8,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace EventHorizonRider.Core.Components.ForegroundComponents
 {
-    public enum PlayButtonState
-    {
-        Start,
-        Restart,
-        Resume,
-        Pause,
-    }
-
     internal class PlayButton : ComponentBase
     {
         private class Info
@@ -79,10 +71,22 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
             textInfo = new Dictionary<PlayButtonState, Info>
             {
-                { PlayButtonState.Start, new Info("START", buttonFont.MeasureString("START"), Color.White, Color.Yellow) },
-                { PlayButtonState.Restart, new Info("RESET", buttonFont.MeasureString("RESET"), Color.White, Color.Yellow) },
-                { PlayButtonState.Resume, new Info("RESUME", buttonFont.MeasureString("RESUME"), Color.White, Color.Yellow) },
-                { PlayButtonState.Pause, new Info("PAUSE", buttonFont.MeasureString("PAUSE"), Color.DarkGray.AdjustLight(0.2f), Color.Gray.AdjustLight(0.3f)) },
+                {
+                    PlayButtonState.Start, 
+                    new Info("START", buttonFont.MeasureString("START"), Color.White, Color.Yellow)
+                },
+                { 
+                    PlayButtonState.Restart, 
+                    new Info("RESET", buttonFont.MeasureString("RESET"), Color.White, Color.Yellow) 
+                    },
+                {
+                    PlayButtonState.Resume, 
+                    new Info("RESUME", buttonFont.MeasureString("RESUME"), Color.White, Color.Yellow)
+                },
+                {
+                    PlayButtonState.Pause, 
+                    new Info("PAUSE", buttonFont.MeasureString("PAUSE"), Color.DarkGray.AdjustLight(0.2f), Color.Gray.AdjustLight(0.3f))
+                },
             };
 
             const float buttonPadding = 100f;
@@ -125,10 +129,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                     info.Text,
                     DeviceInfo.LogicalCenter,
                     (Button.Hover ? info.HoverColor : info.Color) * colorAlphaPercent,
-                    0,
-                    new Vector2(info.Size.X / 2f, info.Size.Y / 2f),
-                    Scale,
-                    SpriteEffects.None, Depth);
+                    rotation: 0f,
+                    origin: new Vector2(info.Size.X / 2f, info.Size.Y / 2f),
+                    scale: Scale,
+                    effects: SpriteEffects.None,
+                    depth: Depth);
             }
         }
     }

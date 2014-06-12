@@ -24,7 +24,14 @@ namespace EventHorizonRider.Core.Components
 
         protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, DeviceInfo.OutputScaleMatrix);
+            spriteBatch.Begin(
+                SpriteSortMode.FrontToBack,
+                BlendState.AlphaBlend,
+                samplerState: null, 
+                depthStencilState: null, 
+                rasterizerState: null,
+                effect: null,
+                transformMatrix: DeviceInfo.OutputScaleMatrix);
         }
 
         protected override void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)

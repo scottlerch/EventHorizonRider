@@ -83,11 +83,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                         BackText,
                         backTextLocation,
                         Button.Hover? Color.Yellow : Color.LightGray.AdjustLight(0.9f),
-                        0,
-                        Vector2.Zero,
-                        1f,
-                        SpriteEffects.None,
-                        Depth);
+                        rotation: 0,
+                        origin: Vector2.Zero,
+                        scale: 1f,
+                        effects: SpriteEffects.None,
+                        depth: Depth);
                 }
                 else
                 {
@@ -96,11 +96,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                         MenuText,
                         menuTextLocation,
                         Button.Hover ? Color.Yellow : Color.LightGray.AdjustLight(0.9f),
-                        0,
-                        Vector2.Zero,
-                        1f,
-                        SpriteEffects.None,
-                        Depth);
+                        rotation: 0,
+                        origin: Vector2.Zero,
+                        scale: 1f,
+                        effects: SpriteEffects.None,
+                        depth: Depth);
                 }
             }
         }

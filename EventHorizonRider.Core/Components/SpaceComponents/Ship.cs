@@ -80,7 +80,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             rotationEnabled = true;
         }
 
-        public void Stop()
+        public void Gameover()
         {
             crashSound.Play();
 

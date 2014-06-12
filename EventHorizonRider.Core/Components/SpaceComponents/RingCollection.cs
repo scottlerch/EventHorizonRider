@@ -71,7 +71,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             RemoveChild(ring);
         }
 
-        public void Stop()
+        public void Gameover()
         {
             stopped = true;
 

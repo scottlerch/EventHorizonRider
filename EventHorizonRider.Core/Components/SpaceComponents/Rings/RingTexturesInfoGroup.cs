@@ -4,12 +4,6 @@ using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
 {
-    internal enum RingTexturesInfoGroupMode
-    {
-        Interleave,
-        Sequential,
-    }
-
     internal class RingTexturesInfoGroup
     {
         public IEnumerable<RingTexturesInfo> TextureInfos { get; private set; }
@@ -22,7 +16,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
         {
             TextureInfos = texturesInfos;
             Mode = mode;
-            MaximumWidth = TextureInfos.Max(i => i.Textures.Max(t => MathHelper.Max(t.Width, t.Height)) * i.ScaleRange.High);
+            MaximumWidth = TextureInfos.Max(i => 
+                i.Textures.Max(t => MathHelper.Max(t.Width, t.Height)) * i.ScaleRange.High);
         }
     }
 }

@@ -33,6 +33,8 @@ namespace EventHorizonRider.Core.Components
         public void Pause()
         {
 #if !PSM
+            Updating = false;
+
             if (MediaPlayer.State != MediaState.Paused)
             {
                 MediaPlayer.Pause();
@@ -43,6 +45,8 @@ namespace EventHorizonRider.Core.Components
         public void Play()
         {
 #if !PSM
+            Updating = true;
+
             if (MediaPlayer.State != MediaState.Playing)
             {
                 MediaPlayer.Resume();

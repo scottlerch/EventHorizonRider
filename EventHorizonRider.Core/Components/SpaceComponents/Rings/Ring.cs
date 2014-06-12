@@ -53,87 +53,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             this.ringCollapseSpeed = ringCollapseSpeed;
             this.rotationalVelocity = rotationalVelocity;
             this.origin = origin;
-            
-            var newRingObjects = new List<RingObject>();
-            var currentDepthOffset = 0f;
-            int index = 0;
-            var spiralRotations = (spiralSpeed*(Math.Abs(spiralRadius)/ringCollapseSpeed)) / MathHelper.TwoPi;
-            var isSpiral = spiralRadius > 0 || spiralRadius < 0;
-            var maximumAngle = isSpiral ? MathHelper.TwoPi * spiralRotations : MathHelper.TwoPi;
 
             ringLayers = new List<RingLayer>();
-
-            foreach (var texturesInfo in texturesInfoGroup.TextureInfos)
-            {
-                var maximumAsteroidsPerRing = texturesInfo.DensityRange.GetRandom();
-
-                var minimumAngleSpacing = MathHelper.TwoPi/texturesInfo.DensityRange.High; 
-                var angleSpacing = MathHelper.TwoPi/maximumAsteroidsPerRing;
-                var count = 0;
-                var radiusOffset = 0f;
-
-                var spiralRadiusOffset = Math.Abs(spiralRadius) / (maximumAsteroidsPerRing * spiralRotations);
-
-                Action<float, float, Action<float>> angleIterator = spiralRadius >= 0 ? (Action<float, float, Action<float>>)ClockwiseAngles : CounterClockwiseAngles;
-
-                angleIterator(maximumAngle, angleSpacing, angle =>
-                {
-                    if (isSpiral)
-                    {
-                        radiusOffset += spiralRadiusOffset;
-                    }
-
-                    if (gaps.Any(gap => gap.IsInsideGap(angle)))
-                        return;
-
-                    var edgeModifier = CalculateEdgeModifer(gaps, angle, minimumAngleSpacing, maximumAngle, isSpiral, texturesInfo.TaperAmount, texturesInfo.TaperScale);
-                    var textureIndex = random.Next(0, texturesInfo.Textures.Length);
-
-                    var ringObject = new RingObject
-                    {
-                        LayerIndex = ringLayers.Count,
-                        Texture = texturesInfo.Textures[textureIndex],
-                        ShadowTexture = texturesInfo.ShadowTextures != null ? texturesInfo.ShadowTextures[textureIndex] : null,
-                        CollisionInfo = texturesInfo.CollisionInfos[textureIndex],
-                        Rotation = MathHelper.WrapAngle((float) random.NextDouble()*MathHelper.TwoPi),
-                        RotationRate = (float) random.NextDouble()*MathHelper.TwoPi/4f*(random.Next(2) == 0 ? -1f : 1f),
-                        Scale = Vector2.One * texturesInfo.ScaleRange.ScaleHigh(edgeModifier.EdgeScale).GetRandom(),
-                        Origin = new Vector2(texturesInfo.Textures[textureIndex].Width/2f, texturesInfo.Textures[textureIndex].Height/2f),
-                        RadiusOffset = ((float) random.NextDouble()*texturesInfo.RadiusOffsetJitter) + radiusOffset,
-                        Color = texturesInfo.TextureColors[random.Next(0, texturesInfo.TextureColors.Length)],
-                        Angle = angle + ((edgeModifier.IsEdge ? 0f : edgeModifier.EdgeScale) * ((float)random.NextDouble() * (texturesInfo.AngleJitter * angleSpacing))),
-                    };
-
-                    ringObject.UpdatePosition(origin, InnerRadius);
-
-                    newRingObjects.Add(ringObject);
-                    count++;
-                });
-
-                if (texturesInfoGroup.Mode == RingTexturesInfoGroupMode.Sequential)
-                {
-                    RandomizeDepthOrder(newRingObjects, index, count, currentDepthOffset);
-                    index = count;
-                }
-
-                currentDepthOffset = newRingObjects.Count * DepthStep;
-
-                ringLayers.Add(new RingLayer
-                {
-                    ShadowOffset = texturesInfo.ShadowOffset,
-                    ShadowDepth = texturesInfo.MergeShadows ? DepthStep * count : DepthStep / 10,
-                });
-            }
-
-            if (texturesInfoGroup.Mode == RingTexturesInfoGroupMode.Interleave)
-            {
-                RandomizeDepthOrder(newRingObjects, 0, newRingObjects.Count);
-            }
-
-            // Reverse so removal of objects is optimized
-            newRingObjects.Reverse();
-
-            ringObjects = newRingObjects;
+            ringObjects = CreateRingObjects(spiralSpeed, spiralRadius, texturesInfoGroup, gaps);
         }
 
         public float InnerRadius
@@ -175,54 +97,6 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
         public void Stop()
         {
             isStopped = true;
-        }
-
-        private void ClockwiseAngles(float maximumAngle, float angleSpacing, Action<float> action)
-        {
-            for (var angle = 0f; angle < maximumAngle; angle += angleSpacing)
-            {
-                action(angle);
-            }
-        }
-
-        private void CounterClockwiseAngles(float maximumAngle, float angleSpacing, Action<float> action)
-        {
-            for (var angle = maximumAngle; angle > 0f; angle -= angleSpacing)
-            {
-                action(angle);
-            }
-        }
-
-        private EdgeModifier CalculateEdgeModifer(IList<RingGap> gaps, float angle, float minimumAngleSpacing, float maximumAngle, bool isSpiral, int taperAmount, float taperScale)
-        {
-            // When object is closer to gap edge make sure it's scaled smaller with less random jitter
-            // so the gaps stay closer to a constant size
-            int gapScaleFadeSize = taperAmount;
-
-            var edgeModifier = new EdgeModifier { EdgeScale = 1f, IsEdge = false };
-
-            for (int i = 1; i <= gapScaleFadeSize; i++)
-            {
-                if (gaps.Any(gap => gap.IsInsideGap(angle + (minimumAngleSpacing * i))) ||
-                    gaps.Any(gap => gap.IsInsideGap(angle - (minimumAngleSpacing * i))))
-                {
-                    edgeModifier.EdgeScale = taperScale + (((i - 1) / (float)gapScaleFadeSize) * taperScale);
-                    edgeModifier.IsEdge = i == 1;
-                    break;
-                }
-
-                if (isSpiral)
-                {
-                    if (angle < (minimumAngleSpacing * i) || angle > (maximumAngle - (minimumAngleSpacing * i)))
-                    {
-                        edgeModifier.EdgeScale = taperScale + (((i - 1) / (float)gapScaleFadeSize) * taperScale);
-                        edgeModifier.IsEdge = i == 1;
-                        break;
-                    }
-                }
-            }
-
-            return edgeModifier;
         }
 
         protected override void DrawCore(SpriteBatch spriteBatch)
@@ -279,6 +153,164 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                     }
                 }
             }
+        }
+
+        private List<RingObject> CreateRingObjects(
+            float spiralSpeed,
+            float spiralRadius,
+            RingTexturesInfoGroup texturesInfoGroup,
+            IList<RingGap> gaps)
+        {
+            // TODO: the code below is a mess, needs to be cleaned up...
+
+            var newRingObjects = new List<RingObject>();
+            var currentDepthOffset = 0f;
+            int index = 0;
+            var spiralRotations = (spiralSpeed * (Math.Abs(spiralRadius) / ringCollapseSpeed)) / MathHelper.TwoPi;
+            var isSpiral = spiralRadius > 0 || spiralRadius < 0;
+            var maximumAngle = isSpiral ? MathHelper.TwoPi * spiralRotations : MathHelper.TwoPi;
+
+            foreach (var texturesInfo in texturesInfoGroup.TextureInfos)
+            {
+                var count = 0;
+
+                var maximumAsteroidsPerRing = texturesInfo.DensityRange.GetRandom();
+
+                var minimumAngleSpacing = MathHelper.TwoPi / texturesInfo.DensityRange.High;
+                var angleSpacing = MathHelper.TwoPi / maximumAsteroidsPerRing;
+
+                var radiusOffset = 0f;
+                var spiralRadiusOffset = Math.Abs(spiralRadius) / (maximumAsteroidsPerRing * spiralRotations);
+
+                Action<float, float, Action<float>> angleIterator = spiralRadius >= 0 ? 
+                    (Action<float, float, Action<float>>)ClockwiseAngles : 
+                    CounterClockwiseAngles;
+
+                angleIterator(maximumAngle, angleSpacing, angle =>
+                {
+                    if (isSpiral)
+                    {
+                        radiusOffset += spiralRadiusOffset;
+                    }
+
+                    if (gaps.Any(gap => gap.IsInsideGap(angle)))
+                        return;
+
+                    var edgeModifier = CalculateEdgeModifer(
+                        gaps, 
+                        angle,
+                        minimumAngleSpacing,
+                        maximumAngle, 
+                        isSpiral, 
+                        texturesInfo.TaperAmount, 
+                        texturesInfo.TaperScale);
+
+                    var textureIndex = random.Next(0, texturesInfo.Textures.Length);
+
+                    var ringObject = new RingObject
+                    {
+                        LayerIndex = ringLayers.Count,
+                        Texture = texturesInfo.Textures[textureIndex],
+                        ShadowTexture = texturesInfo.ShadowTextures != null ? texturesInfo.ShadowTextures[textureIndex] : null,
+                        CollisionInfo = texturesInfo.CollisionInfos[textureIndex],
+                        Rotation = MathHelper.WrapAngle((float)random.NextDouble() * MathHelper.TwoPi),
+                        RotationRate = (float)random.NextDouble() * MathHelper.TwoPi / 4f * (random.Next(2) == 0 ? -1f : 1f),
+                        Scale = Vector2.One * texturesInfo.ScaleRange.ScaleHigh(edgeModifier.EdgeScale).GetRandom(),
+                        Origin = new Vector2(texturesInfo.Textures[textureIndex].Width / 2f, texturesInfo.Textures[textureIndex].Height / 2f),
+                        RadiusOffset = ((float)random.NextDouble() * texturesInfo.RadiusOffsetJitter) + radiusOffset,
+                        Color = texturesInfo.TextureColors[random.Next(0, texturesInfo.TextureColors.Length)],
+                        Angle = angle + ((edgeModifier.IsEdge ? 0f : edgeModifier.EdgeScale) * ((float)random.NextDouble() * (texturesInfo.AngleJitter * angleSpacing))),
+                    };
+
+                    ringObject.UpdatePosition(origin, InnerRadius);
+
+                    newRingObjects.Add(ringObject);
+                    count++;
+                });
+
+                if (texturesInfoGroup.Mode == RingTexturesInfoGroupMode.Sequential)
+                {
+                    RandomizeDepthOrder(newRingObjects, index, count, currentDepthOffset);
+                    index = count;
+                }
+
+                currentDepthOffset = newRingObjects.Count * DepthStep;
+
+                ringLayers.Add(new RingLayer
+                {
+                    ShadowOffset = texturesInfo.ShadowOffset,
+                    ShadowDepth = texturesInfo.MergeShadows ? DepthStep * count : DepthStep / 10,
+                });
+            }
+
+            if (texturesInfoGroup.Mode == RingTexturesInfoGroupMode.Interleave)
+            {
+                RandomizeDepthOrder(newRingObjects, 0, newRingObjects.Count);
+            }
+
+            // Reverse so removal of objects is optimized
+            newRingObjects.Reverse();
+
+            return newRingObjects;
+        }
+
+        private void ClockwiseAngles(float maximumAngle, float angleSpacing, Action<float> action)
+        {
+            for (var angle = 0f; angle < maximumAngle; angle += angleSpacing)
+            {
+                action(angle);
+            }
+        }
+
+        private void CounterClockwiseAngles(float maximumAngle, float angleSpacing, Action<float> action)
+        {
+            for (var angle = maximumAngle; angle > 0f; angle -= angleSpacing)
+            {
+                action(angle);
+            }
+        }
+
+        /// <summary>
+        /// This will calculate if objects near the edge of gap within a ring
+        /// need to be modified, like tapering off in size by adjusting the scale.
+        /// </summary>
+        private EdgeModifier CalculateEdgeModifer(
+            IList<RingGap> gaps,
+            float angle,
+            float minimumAngleSpacing,
+            float maximumAngle,
+            bool isSpiral,
+            int taperAmount,
+            float taperScale)
+        {
+            // When object is closer to gap edge make sure it's scaled smaller with less random jitter
+            // so the gaps stay closer to a constant size
+            int gapScaleFadeSize = taperAmount;
+
+            var edgeModifier = new EdgeModifier { EdgeScale = 1f, IsEdge = false };
+
+            for (int i = 1; i <= gapScaleFadeSize; i++)
+            {
+                if (gaps.Any(gap => gap.IsInsideGap(angle + (minimumAngleSpacing * i))) ||
+                    gaps.Any(gap => gap.IsInsideGap(angle - (minimumAngleSpacing * i))))
+                {
+                    edgeModifier.EdgeScale = taperScale + (((i - 1) / (float)gapScaleFadeSize) * taperScale);
+                    edgeModifier.IsEdge = i == 1;
+                    break;
+                }
+
+                if (isSpiral)
+                {
+                    if (angle < (minimumAngleSpacing * i) || angle > (maximumAngle - (minimumAngleSpacing * i)))
+                    {
+                        edgeModifier.EdgeScale = taperScale + (((i - 1) / (float)gapScaleFadeSize) * taperScale);
+                        edgeModifier.IsEdge = i == 1;
+                        break;
+                    }
+                }
+            }
+
+            return edgeModifier;
         }
 
         private void RandomizeDepthOrder(List<RingObject> objects, int startIndex, int count, float baseDepth = 0f)

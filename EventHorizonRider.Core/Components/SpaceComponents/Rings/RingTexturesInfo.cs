@@ -48,7 +48,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
         public float TaperScale { get; set; }
 
         /// <summary>
-        /// Determine if shadows are merged into one set.  This is useful if all objects in ring are supposed to be merged like a dust cloud.
+        /// Determine if shadows are merged into one set.  This is useful if all objects in 
+        /// ring are supposed to be merged like a dust cloud.
         /// </summary>
         public bool MergeShadows { get; set; }
 

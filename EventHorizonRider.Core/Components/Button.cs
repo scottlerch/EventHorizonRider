@@ -24,11 +24,18 @@ namespace EventHorizonRider.Core.Components
 
         public TimeSpan CurrentHoldDuration { get; private set; }
 
-        public TimeSpan HoldDurationRemaining { get { return CurrentHoldDuration >= HoldDuration? TimeSpan.Zero : HoldDuration - CurrentHoldDuration; } }
+        public TimeSpan HoldDurationRemaining
+        {
+            get
+            {
+                return CurrentHoldDuration >= HoldDuration? TimeSpan.Zero : HoldDuration - CurrentHoldDuration;
+            }
+        }
 
         public bool Holding { get { return CurrentHoldDuration > TimeSpan.Zero; } }
 
-        public Button(Rectangle buttonBounds, Keys? key = null) : this(buttonBounds, key, TimeSpan.Zero)
+        public Button(Rectangle buttonBounds, Keys? key = null)
+            : this(buttonBounds, key, TimeSpan.Zero)
         {
         }
 
@@ -52,7 +59,10 @@ namespace EventHorizonRider.Core.Components
             Hover = IsHover(inputState.MouseState, inputState.TouchState, inputState.KeyState);
 
             keyPreviouslyPressed = Key.HasValue && inputState.KeyState.GetPressedKeys().Contains(Key.Value);
-            mousePreviouslyPressed = inputState.MouseState.LeftButton == ButtonState.Pressed && ButtonBounds.Contains(inputState.MouseState.Position);
+
+            mousePreviouslyPressed = 
+                inputState.MouseState.LeftButton == ButtonState.Pressed && 
+                ButtonBounds.Contains(inputState.MouseState.Position);
 
             if (HoldDuration > TimeSpan.Zero)
             {
@@ -78,17 +88,60 @@ namespace EventHorizonRider.Core.Components
         private bool IsPressed(MouseState mouseState, TouchCollection touchState, KeyboardState keyboardState)
         {
             return
-                (Key.HasValue && (keyPreviouslyPressed && !keyboardState.GetPressedKeys().Contains(Key.Value))) ||
-                touchState.Any(t => t.State == TouchLocationState.Released && ButtonBounds.Contains(t.Position)) ||
-                (mousePreviouslyPressed && mouseState.LeftButton == ButtonState.Released && ButtonBounds.Contains(mouseState.Position));
+                IsPressed(keyboardState) ||
+                IsPressed(mouseState) ||
+                IsPressed(touchState);
         }
 
         private bool IsHover(MouseState mouseState, TouchCollection touchState, KeyboardState keyboardState)
         {
             return
-                (Key.HasValue && keyboardState.GetPressedKeys().Contains(Key.Value)) ||
-                touchState.Any(t => (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) && ButtonBounds.Contains(t.Position)) ||
-                (mousePreviouslyPressed && mouseState.LeftButton == ButtonState.Pressed && ButtonBounds.Contains(mouseState.Position));
+                IsHover(keyboardState) ||
+                IsHover(mouseState) ||
+                IsHover(touchState);
+        }
+
+        private bool IsHover(MouseState mouseState)
+        {
+            return
+                mousePreviouslyPressed &&
+                mouseState.LeftButton == ButtonState.Pressed &&
+                ButtonBounds.Contains(mouseState.Position);
+        }
+
+        private bool IsHover(KeyboardState keyboardState)
+        {
+            return Key.HasValue && keyboardState.GetPressedKeys().Contains(Key.Value);
+        }
+
+        private bool IsHover(TouchCollection touchState)
+        {
+            return touchState.Any(t => 
+                (
+                    t.State == TouchLocationState.Pressed ||
+                    t.State == TouchLocationState.Moved
+                ) && ButtonBounds.Contains(t.Position));
+        }
+
+        private bool IsPressed(MouseState mouseState)
+        {
+            return mousePreviouslyPressed &&
+                   mouseState.LeftButton == ButtonState.Released &&
+                   ButtonBounds.Contains(mouseState.Position);
+        }
+
+        private bool IsPressed(KeyboardState keyboardState)
+        {
+            return Key.HasValue && 
+                keyPreviouslyPressed && 
+                !keyboardState.GetPressedKeys().Contains(Key.Value);
+        }
+
+        private bool IsPressed(TouchCollection touchState)
+        {
+            return touchState.Any(t => 
+                t.State == TouchLocationState.Released &&
+                ButtonBounds.Contains(t.Position));
         }
     }
 }

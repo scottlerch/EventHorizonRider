@@ -26,7 +26,9 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Foreground.ControlsHelp.Show(speed: 2f);
             gameContext.Root.Foreground.PlayTimer.HideLevelAndScore();
             gameContext.Root.Foreground.MenuButton.Show();
-            gameContext.Root.Foreground.PlayButton.Show(state: PlayButtonState.Start, fade: gameContext.Root.Space.Blackhole.ExtraScale > 0f);
+            gameContext.Root.Foreground.PlayButton.Show(
+                state: PlayButtonState.Start, 
+                fade: gameContext.Root.Space.Blackhole.ExtraScale > 0f);
 
             gameContext.Root.Foreground.PlayTimer.UpdateBest(gameContext.PlayerData.BestTime);
         }

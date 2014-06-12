@@ -107,7 +107,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             for (var i = 0; i < count; i++)
             {
                 texturesInfo.Textures[i] = content.Load<Texture2D>(@"Images\" + imageBaseName + "_" + (i + 1));
-                if (hasShadow) texturesInfo.ShadowTextures[i] = content.Load<Texture2D>(@"Images\" + imageBaseName + "_shadow_" + (i + 1));
+
+                if (hasShadow)
+                {
+                    texturesInfo.ShadowTextures[i] = content.Load<Texture2D>(@"Images\" + imageBaseName + "_shadow_" + (i + 1));
+                }
+
                 texturesInfo.CollisionInfos[i] = CollisionDetection.GetCollisionInfo(
                     texturesInfo.Textures[i], 
                     resolution: DeviceInfo.Platform.CollisionDetectionDetail == CollisionDetectionDetail.Full ? 1f : 0.75f);

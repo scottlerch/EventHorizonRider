@@ -44,6 +44,7 @@
     <Compile Include="ComponentBase.cs" />
     <Compile Include="Components\Button.cs" />
     <Compile Include="Components\ForegroundComponents\ControlsHelp.cs" />
+    <Compile Include="Components\ForegroundComponents\PlayButtonState.cs" />
     <Compile Include="Components\ForegroundComponents\ProgressBar.cs" />
     <Compile Include="Components\Menu.cs" />
     <Compile Include="Components\MenuComponents\Credits.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Components\SpaceComponents\Rings\Ring.cs" />
     <Compile Include="Components\SpaceComponents\Rings\RingFactory.cs" />
     <Compile Include="Components\SpaceComponents\Rings\RingGap.cs" />
+    <Compile Include="Components\SpaceComponents\Rings\RingTexturesInfoGroupMode.cs" />
     <Compile Include="Components\SpaceComponents\Rings\RingObject.cs" />
     <Compile Include="Components\SpaceComponents\Rings\RingTexturesInfo.cs" />
     <Compile Include="Components\SpaceComponents\Rings\RingTexturesInfoGroup.cs" />

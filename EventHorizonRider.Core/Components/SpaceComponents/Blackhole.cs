@@ -44,9 +44,15 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public float ExtraScale { get { return extraBlackholeScale; } }
 
-        public Vector2 Scale { get { return new Vector2(Spring.BlockX + extraBlackholeScale, Spring.BlockX + extraBlackholeScale); } }
+        public Vector2 Scale
+        {
+            get
+            {
+                return new Vector2(Spring.BlockX + extraBlackholeScale, Spring.BlockX + extraBlackholeScale);
+            }
+        }
 
-        public void Stop()
+        public void Gameover()
         {
             isStopped = true;
         }
