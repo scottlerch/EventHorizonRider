@@ -12,7 +12,6 @@ Build Requirements
  * [MonoGame Content Processors version 3.2+](http://www.monogame.net/2014/04/07/monogame-3-2/) located at $(MSBuildExtensionsPath)/MonoGame/v3.0/
  * [Xamarin iOS for Windows](http://xamarin.com/ios)
  * [Windows Phone 8.0 SDK](http://dev.windowsphone.com/en-us/downloadsdk)
- * [PlayStation Mobile SDK](https://psm.playstation.net) (still a work-in-progress)
 
 Build Instructions
 ------------------
