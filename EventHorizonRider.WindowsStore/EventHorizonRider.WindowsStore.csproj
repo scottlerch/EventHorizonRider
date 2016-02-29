@@ -160,8 +160,8 @@
       <Link>NextSteps.mht</Link>
     </None>
     <None Include="EventHorizonRider.WindowsStore_StoreKey.pfx" />
-    <None Include="TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-100.png" />
@@ -219,19 +219,16 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>..\libs\Windows8\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="PCLStorage">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\PCLStorage.0.9.6\lib\portable-win8+wpa81\PCLStorage.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PCLStorage.Abstractions">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\PCLStorage.0.9.6\lib\portable-win8+wpa81\PCLStorage.Abstractions.dll</HintPath>
+    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-win8+wpa81\PCLStorage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\portable-net40+sl5+wp80+win8+monotouch+monoandroid\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-win8+wpa81\PCLStorage.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
