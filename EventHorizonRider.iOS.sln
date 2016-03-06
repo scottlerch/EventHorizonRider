@@ -10,6 +10,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		EventHorizonRider.Shared\EventHorizonRider.Shared.projitems*{71a82f9b-4bdf-4587-a224-e414a1622ad0}*SharedItemsImports = 13
+		EventHorizonRider.Shared\EventHorizonRider.Shared.projitems*{9c49ee6a-57e2-46b7-9029-3f95df65c78e}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|iPhone = Ad-Hoc|iPhone

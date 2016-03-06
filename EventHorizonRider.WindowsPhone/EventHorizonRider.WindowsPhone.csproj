@@ -182,11 +182,11 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  <Import Project="..\packages\MonoGame.Framework.WindowsPhone8.3.4.0.459\build\wp8\MonoGame.Framework.WindowsPhone8.targets" Condition="Exists('..\packages\MonoGame.Framework.WindowsPhone8.3.4.0.459\build\wp8\MonoGame.Framework.WindowsPhone8.targets')" />
+  <Import Project="..\packages\MonoGame.Framework.WindowsPhone8.3.5.0.1586-develop\build\wp8\MonoGame.Framework.WindowsPhone8.targets" Condition="Exists('..\packages\MonoGame.Framework.WindowsPhone8.3.5.0.1586-develop\build\wp8\MonoGame.Framework.WindowsPhone8.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MonoGame.Framework.WindowsPhone8.3.4.0.459\build\wp8\MonoGame.Framework.WindowsPhone8.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.WindowsPhone8.3.4.0.459\build\wp8\MonoGame.Framework.WindowsPhone8.targets'))" />
+    <Error Condition="!Exists('..\packages\MonoGame.Framework.WindowsPhone8.3.5.0.1586-develop\build\wp8\MonoGame.Framework.WindowsPhone8.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.WindowsPhone8.3.5.0.1586-develop\build\wp8\MonoGame.Framework.WindowsPhone8.targets'))" />
   </Target>
 </Project>

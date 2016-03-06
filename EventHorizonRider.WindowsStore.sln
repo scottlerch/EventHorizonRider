@@ -15,6 +15,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		EventHorizonRider.Shared\EventHorizonRider.Shared.projitems*{71a82f9b-4bdf-4587-a224-e414a1622ad0}*SharedItemsImports = 13
+		EventHorizonRider.Shared\EventHorizonRider.Shared.projitems*{116adaf7-1bae-470b-92f3-23fad1f558ab}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
