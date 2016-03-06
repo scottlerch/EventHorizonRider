@@ -1,20 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHorizonRider.Core", "EventHorizonRider.Core\EventHorizonRider.Core.csproj", "{905E7D7C-FC4E-4AAA-AE6C-E6FCE75CBFFD}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C404A420-640A-43D7-9B98-54A912D4016A} = {C404A420-640A-43D7-9B98-54A912D4016A}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHorizonRider.WindowsPhone", "EventHorizonRider.WindowsPhone\EventHorizonRider.WindowsPhone.csproj", "{0585C019-6A7F-49DB-A6EC-C2BA902C1545}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHorizonRider.Content", "EventHorizonRider.Content\EventHorizonRider.Content.contentproj", "{975EE594-88A3-41CA-A3E5-F1CA05CA2B9F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHorizonRider.ContentXna", "EventHorizonRider.ContentXna\EventHorizonRider.ContentXna.csproj", "{C404A420-640A-43D7-9B98-54A912D4016A}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "EventHorizonRider.Shared", "EventHorizonRider.Shared\EventHorizonRider.Shared.shproj", "{71A82F9B-4BDF-4587-A224-E414A1622AD0}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		EventHorizonRider.Shared\EventHorizonRider.Shared.projitems*{0585c019-6a7f-49db-a6ec-c2ba902c1545}*SharedItemsImports = 4
+		EventHorizonRider.Shared\EventHorizonRider.Shared.projitems*{71a82f9b-4bdf-4587-a224-e414a1622ad0}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
 		Debug|x86 = Debug|x86
@@ -22,14 +19,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{905E7D7C-FC4E-4AAA-AE6C-E6FCE75CBFFD}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{905E7D7C-FC4E-4AAA-AE6C-E6FCE75CBFFD}.Debug|ARM.Build.0 = Debug|Any CPU
-		{905E7D7C-FC4E-4AAA-AE6C-E6FCE75CBFFD}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{905E7D7C-FC4E-4AAA-AE6C-E6FCE75CBFFD}.Debug|x86.Build.0 = Debug|Any CPU
-		{905E7D7C-FC4E-4AAA-AE6C-E6FCE75CBFFD}.Release|ARM.ActiveCfg = Release|Any CPU
-		{905E7D7C-FC4E-4AAA-AE6C-E6FCE75CBFFD}.Release|ARM.Build.0 = Release|Any CPU
-		{905E7D7C-FC4E-4AAA-AE6C-E6FCE75CBFFD}.Release|x86.ActiveCfg = Release|Any CPU
-		{905E7D7C-FC4E-4AAA-AE6C-E6FCE75CBFFD}.Release|x86.Build.0 = Release|Any CPU
 		{0585C019-6A7F-49DB-A6EC-C2BA902C1545}.Debug|ARM.ActiveCfg = Debug|ARM
 		{0585C019-6A7F-49DB-A6EC-C2BA902C1545}.Debug|ARM.Build.0 = Debug|ARM
 		{0585C019-6A7F-49DB-A6EC-C2BA902C1545}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -42,18 +31,6 @@ Global
 		{0585C019-6A7F-49DB-A6EC-C2BA902C1545}.Release|x86.ActiveCfg = Release|x86
 		{0585C019-6A7F-49DB-A6EC-C2BA902C1545}.Release|x86.Build.0 = Release|x86
 		{0585C019-6A7F-49DB-A6EC-C2BA902C1545}.Release|x86.Deploy.0 = Release|x86
-		{975EE594-88A3-41CA-A3E5-F1CA05CA2B9F}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{975EE594-88A3-41CA-A3E5-F1CA05CA2B9F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{975EE594-88A3-41CA-A3E5-F1CA05CA2B9F}.Release|ARM.ActiveCfg = Debug|Any CPU
-		{975EE594-88A3-41CA-A3E5-F1CA05CA2B9F}.Release|x86.ActiveCfg = Debug|Any CPU
-		{C404A420-640A-43D7-9B98-54A912D4016A}.Debug|ARM.ActiveCfg = Debug|x86
-		{C404A420-640A-43D7-9B98-54A912D4016A}.Debug|ARM.Build.0 = Debug|x86
-		{C404A420-640A-43D7-9B98-54A912D4016A}.Debug|x86.ActiveCfg = Debug|x86
-		{C404A420-640A-43D7-9B98-54A912D4016A}.Debug|x86.Build.0 = Debug|x86
-		{C404A420-640A-43D7-9B98-54A912D4016A}.Release|ARM.ActiveCfg = Release|x86
-		{C404A420-640A-43D7-9B98-54A912D4016A}.Release|ARM.Build.0 = Release|x86
-		{C404A420-640A-43D7-9B98-54A912D4016A}.Release|x86.ActiveCfg = Release|x86
-		{C404A420-640A-43D7-9B98-54A912D4016A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

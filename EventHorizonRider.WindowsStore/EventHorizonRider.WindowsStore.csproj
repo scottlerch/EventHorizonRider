@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.ContentPipeline.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -16,7 +15,9 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>EventHorizonRider.WindowsStore_StoreKey.pfx</PackageCertificateKeyFile>
-    <MonoGamePlatform>Windows8</MonoGamePlatform>
+    <MonoGamePlatform>WindowsStoreApp</MonoGamePlatform>
+    <MonoGameContentBuilderExe>
+    </MonoGameContentBuilderExe>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <PackageCertificateThumbprint>B1A943D84EDF63EC3814E9B3AF5B5188B2D58369</PackageCertificateThumbprint>
@@ -112,13 +113,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\EventHorizonRider.Core\EventHorizonRider.Core.csproj">
-      <Project>{905e7d7c-fc4e-4aaa-ae6c-e6fce75cbffd}</Project>
-      <Name>EventHorizonRider.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -149,16 +143,7 @@
     <Content Include="Assets\LogoWide310x150.scale-140.png" />
     <Content Include="Assets\LogoWide310x150.scale-180.png" />
     <Content Include="Assets\LogoWide310x150.scale-80.png" />
-    <Content Include="Content\Images\radial_gradient.xnb" />
-    <Content Include="Content\Sounds\shockwave.xnb" />
-    <Content Include="Content\Music\techno_song.xnb" />
-    <Content Include="Content\Images\help_key_left.xnb" />
-    <Content Include="Content\Images\help_key_right.xnb" />
-    <Content Include="Content\Images\dust_shadow_1.xnb" />
     <Content Include="default.rd.xml" />
-    <None Include="..\..\..\..\..\..\Program Files %28x86%29\MSBuild\Microsoft\.NetNative\NextSteps.mht">
-      <Link>NextSteps.mht</Link>
-    </None>
     <None Include="EventHorizonRider.WindowsStore_StoreKey.pfx" />
     <None Include="packages.config" />
     <None Include="TemporaryKey.pfx" />
@@ -168,56 +153,11 @@
     <Content Include="Assets\SplashScreen.scale-140.png" />
     <Content Include="Assets\SplashScreen.scale-180.png" />
     <None Include="Package.StoreAssociation.xml" />
-    <Content Include="Content\Effects\blur_effect.xnb" />
-    <Content Include="Content\Effects\gaussianblur_effect.xnb" />
-    <Content Include="Content\Effects\grayscale_effect.xnb" />
-    <Content Include="Content\Fonts\button_font.xnb" />
-    <Content Include="Content\Fonts\fps_font.xnb" />
-    <Content Include="Content\Fonts\highscore_font.xnb" />
-    <Content Include="Content\Fonts\time_font.xnb" />
-    <Content Include="Content\Images\background.xnb" />
-    <Content Include="Content\Images\blackhole.xnb" />
-    <Content Include="Content\Images\halo.xnb" />
-    <Content Include="Content\Images\ship.xnb" />
-    <Content Include="Content\Sounds\crash_sound.xnb" />
-    <Content Include="Content\Sounds\newlevel_sound.xnb" />
-    <Content Include="Content\Images\title.xnb" />
-    <Content Include="Content\Images\particle_base.xnb" />
-    <Content Include="Content\Images\shield.xnb" />
-    <Content Include="Content\Images\shockwave.xnb" />
-    <Content Include="Content\Images\stars.xnb" />
-    <Content Include="Content\Images\asteroid_1.xnb" />
-    <Content Include="Content\Images\asteroid_2.xnb" />
-    <Content Include="Content\Images\asteroid_3.xnb" />
-    <Content Include="Content\Images\asteroid_4.xnb" />
-    <Content Include="Content\Images\dust_1.xnb" />
-    <Content Include="Content\Images\credits.xnb" />
-    <Content Include="Content\Images\help_left.xnb" />
-    <Content Include="Content\Images\help_right.xnb" />
-    <Content Include="Content\Images\help_start.xnb" />
-    <Content Include="Content\Images\asteroid_shadow_1.xnb" />
-    <Content Include="Content\Images\asteroid_shadow_2.xnb" />
-    <Content Include="Content\Images\asteroid_shadow_3.xnb" />
-    <Content Include="Content\Images\asteroid_shadow_4.xnb" />
-    <Content Include="Content\Images\star_1.xnb" />
-    <Content Include="Content\Images\star_2.xnb" />
-    <Content Include="Content\Images\star_3.xnb" />
-    <Content Include="Content\Images\star_4.xnb" />
-    <Content Include="Content\Sounds\button_click.xnb" />
-    <Content Include="Content\Sounds\open_menu.xnb" />
-    <Content Include="Content\Sounds\thrust.xnb" />
-    <Content Include="Content\Sounds\new_best.xnb" />
-    <Content Include="Content\Images\shield_1.xnb" />
-    <Content Include="Content\Images\shield_2.xnb" />
-    <Content Include="Content\Images\shield_3.xnb" />
-    <Content Include="Content\Images\shield_pulse.xnb" />
-    <Content Include="Content\Images\crystals_1.xnb" />
-    <Content Include="Content\Images\crystals_2.xnb" />
-    <Content Include="Content\Music\techno_song.wma" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>..\libs\Windows8\MonoGame.Framework.dll</HintPath>
+    <Reference Include="MonoGame.Framework, Version=3.4.0.459, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.Windows8.3.4.0.459\lib\netcore\MonoGame.Framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
@@ -231,28 +171,8 @@
       <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-win8+wpa81\PCLStorage.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SharpDX">
-      <HintPath>..\libs\Windows8\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct2D1">
-      <HintPath>..\libs\Windows8\SharpDX.Direct2D1.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D11">
-      <HintPath>..\libs\Windows8\SharpDX.Direct3D11.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI">
-      <HintPath>..\libs\Windows8\SharpDX.DXGI.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.MediaFoundation">
-      <HintPath>..\libs\Windows8\SharpDX.MediaFoundation.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.XAudio2">
-      <HintPath>..\libs\Windows8\SharpDX.XAudio2.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.XInput">
-      <HintPath>..\libs\Windows8\SharpDX.XInput.dll</HintPath>
-    </Reference>
   </ItemGroup>
+  <Import Project="..\EventHorizonRider.Shared\EventHorizonRider.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
@@ -264,16 +184,9 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <Target Name="BeforeBuild">
-    <ItemGroup>
-      <AllContent Include="$(SolutionDir)EventHorizonRider.ContentXna\bin\$(Configuration)\**\Content\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(AllContent)" DestinationFolder="$(ProjectDir)%(RecursiveDir)" />
   </Target>
   <Target Name="AfterBuild">
-    <ItemGroup>
-      <AllContent Include="$(SolutionDir)EventHorizonRider.ContentXna\bin\$(Configuration)\**\Content\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(AllContent)" DestinationFolder="$(TargetDir)%(RecursiveDir)" />
   </Target>
 </Project>

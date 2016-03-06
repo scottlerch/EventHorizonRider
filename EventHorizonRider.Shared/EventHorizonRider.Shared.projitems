@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>71a82f9b-4bdf-4587-a224-e414a1622ad0</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>EventHorizonRider.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Audio\SoundComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Button.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Foreground.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\ForegroundComponents\ControlsHelp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\ForegroundComponents\FpsCounter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\ForegroundComponents\MenuButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\ForegroundComponents\PlayButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\ForegroundComponents\PlayButtonState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\ForegroundComponents\PlayTimer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\ForegroundComponents\ProgressBar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\ForegroundComponents\Title.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Menu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\MenuComponents\Credits.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\MenuComponents\CreditsButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\MenuComponents\LevelSelect.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\MenuComponents\ResetBestButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Music.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Root.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Space.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Background.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Blackhole.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\BlackholeHalo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\RingCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Rings\Ring.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Rings\RingFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Rings\RingGap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Rings\RingObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Rings\RingTexturesInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Rings\RingTexturesInfoGroup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Rings\RingTexturesInfoGroupMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Ship.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\ShipShield.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Shockwave.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\Star.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpaceComponents\StarFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DeviceInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\GameContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\GameStateBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\Level.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\LevelCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\PlayerData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\RingInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\RingInfoFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\RingType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\RingTypeSelection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\States\InitializeState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\States\MenuState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\States\OverState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\States\RunningState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\States\StartState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\NumericExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\ColorExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\GaussianBlur.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\PixelData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\TextureProcessor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Input\InputState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MainGame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\CollisionDetection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\CollisionInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\Emitter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\ISpriteInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\MathUtilities.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\Motion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\Particle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\ParticleSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\Spring.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Platform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Range.cs" />
+    <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+  </ItemGroup>
+</Project>

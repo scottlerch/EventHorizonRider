@@ -3,16 +3,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9C49EE6A-57E2-46B7-9029-3F95DF65C78E}</ProjectGuid>
-    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>EventHorizonRider.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>EventHorizonRideriOS</AssemblyName>
+    <MonoGamePlatform>iOS</MonoGamePlatform>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <MtouchArch>i386</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
   </PropertyGroup>
@@ -32,8 +31,9 @@
     <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
     <MtouchLink>None</MtouchLink>
+    <MtouchArch>i386</MtouchArch>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,21 +44,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <MtouchDebug>True</MtouchDebug>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchSdkVersion>Default</MtouchSdkVersion>
-    <MtouchLink>SdkOnly</MtouchLink>
-    <MtouchProfiling>False</MtouchProfiling>
-    <MtouchExtraArgs />
-    <MtouchFastDev>False</MtouchFastDev>
-    <MtouchEnableGenericValueTypeSharing>False</MtouchEnableGenericValueTypeSharing>
-    <MtouchArch>Default, ARMv7</MtouchArch>
-    <MtouchUseLlvm>False</MtouchUseLlvm>
-    <MtouchUseThumb>False</MtouchUseThumb>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
-    <MtouchOptimizePNGs>True</MtouchOptimizePNGs>
-    <MtouchI18n />
+    <MtouchDebug>true</MtouchDebug>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -66,26 +55,10 @@
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchSdkVersion>7.1</MtouchSdkVersion>
-    <MtouchLink>SdkOnly</MtouchLink>
-    <MtouchDebug>False</MtouchDebug>
-    <MtouchProfiling>False</MtouchProfiling>
-    <MtouchExtraArgs />
-    <MtouchFastDev>False</MtouchFastDev>
-    <MtouchEnableGenericValueTypeSharing>True</MtouchEnableGenericValueTypeSharing>
-    <MtouchArch>Default, ARMv7</MtouchArch>
-    <MtouchUseLlvm>False</MtouchUseLlvm>
-    <MtouchUseThumb>False</MtouchUseThumb>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
-    <MtouchOptimizePNGs>True</MtouchOptimizePNGs>
-    <MtouchI18n />
-    <CodesignProvision />
-    <CodesignEntitlements />
-    <CodesignResourceRules />
-    <CodesignExtraArgs />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -94,8 +67,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
-    <CodesignKey>iPhone Distribution</CodesignKey>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <BuildIpa>True</BuildIpa>
+    <CodesignProvision>Automatic:AdHoc</CodesignProvision>
+    <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
@@ -104,11 +80,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignProvision>Automatic:AppStore</CodesignProvision>
     <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision />
-    <CodesignEntitlements />
-    <CodesignResourceRules />
-    <CodesignExtraArgs />
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>EventHorizonRider.iOS.Application</StartupObject>
@@ -122,58 +97,8 @@
     <Compile Include="HardwareType.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Content Include="Content\Effects\blur_effect.xnb" />
-    <Content Include="Content\Effects\gaussianblur_effect.xnb" />
-    <Content Include="Content\Effects\grayscale_effect.xnb" />
-    <Content Include="Content\Fonts\button_font.xnb" />
-    <Content Include="Content\Fonts\fps_font.xnb" />
-    <Content Include="Content\Fonts\highscore_font.xnb" />
-    <Content Include="Content\Fonts\time_font.xnb" />
-    <Content Include="Content\Images\background.xnb" />
-    <Content Include="Content\Images\blackhole.xnb" />
-    <Content Include="Content\Images\halo.xnb" />
-    <Content Include="Content\Images\ship.xnb" />
-    <Content Include="Content\Sounds\crash_sound.xnb" />
-    <Content Include="Content\Sounds\newlevel_sound.xnb" />
     <BundleResource Include="Resources\Icon%402x.png" />
     <BundleResource Include="Resources\Icon-60%402x.png" />
-    <Content Include="Content\Images\title.xnb" />
-    <Content Include="Content\Images\particle_base.xnb" />
-    <Content Include="Content\Images\shield.xnb" />
-    <Content Include="Content\Images\shockwave.xnb" />
-    <Content Include="Content\Images\stars.xnb" />
-    <Content Include="Content\Images\asteroid_1.xnb" />
-    <Content Include="Content\Images\asteroid_2.xnb" />
-    <Content Include="Content\Images\asteroid_3.xnb" />
-    <Content Include="Content\Images\asteroid_4.xnb" />
-    <Content Include="Content\Images\dust_1.xnb" />
-    <Content Include="Content\Images\credits.xnb" />
-    <Content Include="Content\Images\help_left.xnb" />
-    <Content Include="Content\Images\help_right.xnb" />
-    <Content Include="Content\Images\help_start.xnb" />
-    <Content Include="Content\Images\asteroid_shadow_1.xnb" />
-    <Content Include="Content\Images\asteroid_shadow_2.xnb" />
-    <Content Include="Content\Images\asteroid_shadow_3.xnb" />
-    <Content Include="Content\Images\asteroid_shadow_4.xnb" />
-    <Content Include="Content\Images\star_1.xnb" />
-    <Content Include="Content\Images\star_2.xnb" />
-    <Content Include="Content\Images\star_3.xnb" />
-    <Content Include="Content\Images\star_4.xnb" />
-    <Content Include="Content\Sounds\button_click.xnb" />
-    <Content Include="Content\Sounds\open_menu.xnb" />
-    <Content Include="Content\Sounds\thrust.xnb" />
-    <Content Include="Content\Sounds\new_best.xnb" />
-    <Content Include="Content\Images\shield_1.xnb" />
-    <Content Include="Content\Images\shield_2.xnb" />
-    <Content Include="Content\Images\shield_3.xnb" />
-    <Content Include="Content\Images\shield_pulse.xnb" />
-    <Content Include="Content\Images\crystals_1.xnb" />
-    <Content Include="Content\Images\crystals_2.xnb" />
-    <Content Include="Content\Images\radial_gradient.xnb" />
-    <Content Include="Content\Sounds\shockwave.xnb" />
-    <Content Include="Content\Images\help_key_left.xnb" />
-    <Content Include="Content\Images\help_key_right.xnb" />
-    <Content Include="Content\Images\dust_shadow_1.xnb" />
     <BundleResource Include="Resources\Icon-76%402x.png" />
     <BundleResource Include="Resources\Icon-72%402x.png" />
     <BundleResource Include="Resources\Icon-76.png" />
@@ -188,8 +113,7 @@
     <BundleResource Include="Resources\Default-Portrait.png" />
     <BundleResource Include="Resources\Default-Portrait%402x.png" />
     <BundleResource Include="Resources\Default-Landscape%402x.png" />
-    <Content Include="Content\Images\asteroid_5.xnb" />
-    <Content Include="Content\Images\asteroid_shadow_5.xnb" />
+    <None Include="Entitlements.plist" />
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
@@ -199,17 +123,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EventHorizonRider.Core\EventHorizonRider.Core.csproj">
-      <Project>{905e7d7c-fc4e-4aaa-ae6c-e6fce75cbffd}</Project>
-      <Name>EventHorizonRider.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Lidgren.Network">
-      <HintPath>..\libs\iOS\Lidgren.Network.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>..\libs\iOS\MonoGame.Framework.dll</HintPath>
+    <Reference Include="MonoGame.Framework, Version=3.4.0.459, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.iOS.3.4.0.459\lib\XamariniOS\MonoGame.Framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
@@ -226,23 +142,14 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="monotouch" />
+    <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="Content\Music\techno_song.mp3" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="..\EventHorizonRider.Shared\EventHorizonRider.Shared.projitems" Label="Shared" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <Target Name="BeforeBuild">
-    <ItemGroup>
-      <AllContent Include="$(SolutionDir)EventHorizonRider.ContentXna\bin\$(Configuration)\**\Content\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(AllContent)" DestinationFolder="$(ProjectDir)%(RecursiveDir)" />
   </Target>
   <Target Name="AfterBuild">
-    <ItemGroup>
-      <AllContent Include="$(SolutionDir)EventHorizonRider.ContentXna\bin\$(Configuration)\**\Content\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(AllContent)" DestinationFolder="$(TargetDir)%(RecursiveDir)" />
   </Target>
 </Project>

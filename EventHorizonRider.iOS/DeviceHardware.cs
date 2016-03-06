@@ -1,6 +1,7 @@
+using ObjCRuntime;
 using System;
 using System.Runtime.InteropServices;
-using MonoTouch.UIKit;
+using UIKit;
 
 namespace EventHorizonRider.iOS
 {
@@ -8,7 +9,7 @@ namespace EventHorizonRider.iOS
     {
         private const string HardwareProperty = "hw.machine";
 
-        [DllImport(MonoTouch.Constants.SystemLibrary)]
+        [DllImport(Constants.SystemLibrary)]
         private static extern int sysctlbyname([MarshalAs(UnmanagedType.LPStr)] string property, IntPtr output, IntPtr oldLen, IntPtr newp, uint newlen);
 
         public static HardwareType Version

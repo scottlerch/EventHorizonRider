@@ -1,8 +1,5 @@
 ﻿using System;
 using EventHorizonRider.Core;
-using SharpDX.DXGI;
-using SharpDX.MediaFoundation;
-using SharpDX.XInput;
 
 namespace EventHorizonRider.WindowsStore
 {
