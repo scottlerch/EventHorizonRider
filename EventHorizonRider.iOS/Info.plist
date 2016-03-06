@@ -19,9 +19,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.eventhorizonrider</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
-	<key>NSMainNibFile</key>
-	<string></string>
+	<string>1.1</string>
 	<key>UIStatusBarHidden</key>
 	<true/>
 	<key>UIStatusBarStyle</key>
@@ -30,16 +28,16 @@
 	<false/>
 	<key>CFBundleIconFiles</key>
 	<array>
+		<string>Icon-72@2x.png</string>
+		<string>Icon-72.png</string>
 		<string>Icon@2x.png</string>
 		<string>Icon.png</string>
 		<string>Icon-60@2x.png</string>
+		<string>Icon-76.png</string>
+		<string>Icon-76@2x.png</string>
 		<string>Default.png</string>
 		<string>Default@2x.png</string>
 		<string>Default-568h@2x.png</string>
-		<string>Icon-72@2x.png</string>
-		<string>Icon-72.png</string>
-		<string>Icon-76.png</string>
-		<string>Icon-76@2x.png</string>
 		<string>Default-Landscape.png</string>
 		<string>Default-Landscape@2x.png</string>
 		<string>Default-Portrait.png</string>
@@ -50,9 +48,16 @@
 		<string>Icon-Small-40@2x.png</string>
 		<string>Icon-Small.png</string>
 	</array>
-	<key>NSMainNibFile~ipad</key>
-	<string></string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array/>
+	<array>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>CFBundleShortVersionString</key>
+	<string>1.1</string>
+	<key>UIRequiresFullScreen</key>
+	<string>YES</string>
+	<key>UIStatusBarHidden~ipad</key>
+	<true/>
 </dict>
 </plist>
