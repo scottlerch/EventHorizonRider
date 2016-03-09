@@ -17,8 +17,8 @@ Build Instructions
 Add the following NuGet feed to get the MonoGame develop branch builds:
 http://teamcity.monogame.net/guestAuth/app/nuget/v1/FeedService.svc/
 
-Each platform has it's own solution file but all solutions include the same shared source project
-There is very little platform specific code in each solution.   Just load up a solution and build.
+Open the EventHorizonRider solution, select desired platform project to *Set as StartUp Project*, select appropriate
+build configuration and platform, then hit F5.
 
 Development Notes
 -----------------
