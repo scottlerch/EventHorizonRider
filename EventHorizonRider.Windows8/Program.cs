@@ -1,7 +1,7 @@
 ﻿using System;
 using EventHorizonRider.Core;
 
-namespace EventHorizonRider.WindowsStore
+namespace EventHorizonRider.Windows8
 {
     public static class Program
     {

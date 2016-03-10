@@ -5,9 +5,9 @@ using System.Windows.Markup;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using EventHorizonRider.WindowsPhone.Resources;
+using EventHorizonRider.WindowsPhone8.Resources;
 
-namespace EventHorizonRider.WindowsPhone
+namespace EventHorizonRider.WindowsPhone8
 {
     public partial class App
     {

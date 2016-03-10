@@ -9,8 +9,8 @@
     <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EventHorizonRider.WindowsPhone</RootNamespace>
-    <AssemblyName>EventHorizonRider.WindowsPhone</AssemblyName>
+    <RootNamespace>EventHorizonRider.WindowsPhone8</RootNamespace>
+    <AssemblyName>EventHorizonRider.WindowsPhone8</AssemblyName>
     <TargetFrameworkIdentifier>WindowsPhone</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -120,7 +120,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="EventHorizonRider.WindowsPhone_2014_05_20_21_49_07.sap" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">

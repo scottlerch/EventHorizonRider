@@ -1,6 +1,6 @@
-﻿using EventHorizonRider.WindowsPhone.Resources;
+﻿using EventHorizonRider.WindowsPhone8.Resources;
 
-namespace EventHorizonRider.WindowsPhone
+namespace EventHorizonRider.WindowsPhone8
 {
     /// <summary>
     /// Provides access to string resources.

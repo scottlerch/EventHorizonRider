@@ -2,7 +2,7 @@
 using EventHorizonRider.Core;
 using MonoGame.Framework.WindowsPhone;
 
-namespace EventHorizonRider.WindowsPhone
+namespace EventHorizonRider.WindowsPhone8
 {
     public partial class GamePage
     {

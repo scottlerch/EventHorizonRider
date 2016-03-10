@@ -7,8 +7,8 @@
     <ProjectGuid>{116ADAF7-1BAE-470B-92F3-23FAD1F558AB}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EventHorizonRider.WindowsStore</RootNamespace>
-    <AssemblyName>EventHorizonRider.WindowsStore</AssemblyName>
+    <RootNamespace>EventHorizonRider.Windows8</RootNamespace>
+    <AssemblyName>EventHorizonRider.Windows8</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
