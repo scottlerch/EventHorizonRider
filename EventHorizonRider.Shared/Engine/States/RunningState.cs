@@ -75,11 +75,11 @@ namespace EventHorizonRider.Core.Engine.States
                 gameContext.Levels.NextLevel.Color,
                 progress);
 
-            UpdateLevel(gameContext, gameTime);
+            CheckForLevelChange(gameContext, gameTime);
             UpdateBestTime(gameContext);
         }
 
-        private void UpdateLevel(GameContext gameContext, GameTime gameTime)
+        private void CheckForLevelChange(GameContext gameContext, GameTime gameTime)
         {
             if (!HasLevelEnded)
             {
