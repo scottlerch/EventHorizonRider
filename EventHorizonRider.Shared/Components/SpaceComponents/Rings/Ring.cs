@@ -58,6 +58,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
             ringObjects = CreateRingObjects(spiralSpeed, spiralRadius, texturesInfoGroup, gaps);
         }
 
+        public Color Color { get; set; }
+
         public float InnerRadius
         {
             get { return innerRadius; }
@@ -109,7 +111,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                         ringObject.ShadowTexture,
                         ringObject.Position + ringLayers[ringObject.LayerIndex].ShadowOffset * ringObject.Scale,
                         origin: ringObject.Origin,
-                        color: Color.White * 0.8f,
+                        color: Color.Lerp(Color.White, Color, 0.3f) * 0.8f,
                         rotation: ringObject.Rotation,
                         layerDepth: ringObject.RelativeDepth + (Depth - 0.00001f) - ringLayers[ringObject.LayerIndex].ShadowDepth,
                         scale: ringObject.Scale);
@@ -119,7 +121,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                     ringObject.Texture,
                     ringObject.Position,
                     origin: ringObject.Origin,
-                    color: ringObject.Color.AdjustLight(ringObject.ColorLightness),
+                    color: Color.Lerp(ringObject.Color, Color, 0.3f).AdjustLight(ringObject.ColorLightness),
                     rotation: ringObject.Rotation,
                     layerDepth: ringObject.RelativeDepth + Depth,
                     scale: ringObject.Scale);

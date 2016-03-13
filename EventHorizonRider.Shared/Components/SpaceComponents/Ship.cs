@@ -57,6 +57,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         public CollisionInfo CollisionInfo { get; private set; }
 
+        public Color Color { get; set; }
+
         public void Initialize()
         {
             Rotation = 0;
@@ -128,8 +130,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 startLife: Range.Create(0.1f, 0.5f),
                 startScale: Range.Create(22f, 22f),
                 endScale: Range.Create(8f, 8f),
-                startColor: Range.Create(Color.SkyBlue, Color.Blue),
-                endColor: Range.Create(Color.SkyBlue.AdjustAlpha(0), Color.SkyBlue.AdjustAlpha(0)),
+                startColor: mainThrustStartColorRange,
+                endColor: mainThrustEndcolorRange,
                 startSpeed: Range.Create(400f, 500f),
                 endSpeed: Range.Create(100f, 120f),
                 budget: 50,
@@ -142,6 +144,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
             Origin = new Vector2(Texture.Width/2f, Texture.Height/2f);
         }
+
+        private readonly Range<Color> mainThrustStartColorRange = Range.Create(Color.SkyBlue, Color.Blue);
+        private readonly Range<Color> mainThrustEndcolorRange = Range.Create(Color.SkyBlue.AdjustAlpha(0), Color.SkyBlue.AdjustAlpha(0));
+
+        private readonly Range<Color> sideThrustStartColor = Range.Create(Color.Orange, Color.Crimson);
+        private readonly Range<Color> sideThrustEndColor = Range.Create(Color.Orange.AdjustAlpha(0), Color.Orange.AdjustAlpha(0));
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
@@ -157,7 +165,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 Position,
                 origin: Origin,
                 rotation: Rotation,
-                layerDepth: Depth);
+                layerDepth: Depth,
+                color: Color.Lerp(Color.White, Color, 0.3f));
         }
 
         protected override void OnUpdatingChanged()
@@ -171,6 +180,12 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void UpdateCore(GameTime gameTime, InputState inputState)
         {
+            mainThrustEmitter.StartColor = Range.Create(Color.Lerp(mainThrustStartColorRange.Low, Color, 0.3f), Color.Lerp(mainThrustStartColorRange.High, Color, 0.3f));
+            mainThrustEmitter.EndColor = Range.Create(Color.Lerp(mainThrustEndcolorRange.Low, Color, 0.3f), Color.Lerp(mainThrustEndcolorRange.High, Color, 0.3f));
+
+            sideThrustEmitter.StartColor = Range.Create(Color.Lerp(sideThrustStartColor.Low, Color, 0.3f), Color.Lerp(sideThrustStartColor.High, Color, 0.3f));
+            sideThrustEmitter.EndColor = Range.Create(Color.Lerp(sideThrustEndColor.Low, Color, 0.3f), Color.Lerp(sideThrustEndColor.High, Color, 0.3f));
+
             if (stopped)
             {
                 thrustSoundInstanceLeft.PlayMin(immediate:true);

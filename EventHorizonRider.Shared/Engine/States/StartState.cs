@@ -10,6 +10,9 @@ namespace EventHorizonRider.Core.Engine.States
             gameContext.Root.Menu.Visible = false;
 
             var defaultLevel = gameContext.Levels.GetLevel(gameContext.PlayerData.DefaultLevelNumber);
+            gameContext.Root.Space.Color = defaultLevel.Color;
+            gameContext.Root.Space.Ship.Color = defaultLevel.Color;
+            gameContext.Root.Space.Ship.Shield.Color = defaultLevel.Color;
             gameContext.Root.Space.Background.StarBackgroundColor = defaultLevel.Color;
             gameContext.Root.Space.Background.RotationalVelocity = defaultLevel.RotationalVelocity;
             gameContext.Root.Space.Blackhole.RotationalVelocity = defaultLevel.RotationalVelocity;

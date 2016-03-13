@@ -36,6 +36,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             RingFactory = ringFactory;
         }
 
+        public Color Color { get; set; }
+
         public RingFactory RingFactory { get; private set; }
 
         public bool HasMoreRings { get; private set; }
@@ -115,6 +117,11 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     lastRingAddTime = totalElapsedGameTime;
                     lastRingDuration = TimeSpan.FromSeconds(Math.Abs(ringInfo.SpiralRadius) / level.RingSpeed);
                 }
+            }
+
+            foreach (var ring in Children)
+            {
+                (ring as Ring).Color = Color;
             }
         }
 

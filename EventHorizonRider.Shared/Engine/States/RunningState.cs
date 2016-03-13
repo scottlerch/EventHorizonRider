@@ -70,7 +70,7 @@ namespace EventHorizonRider.Core.Engine.States
 
             gameContext.Root.Space.SetBlur(blurAmount: 0f);
             gameContext.Root.Space.Updating = true;
-            gameContext.Root.Space.Background.StarBackgroundColor = Color.Lerp(
+            gameContext.Root.Space.Color = Color.Lerp(
                 gameContext.Levels.CurrentLevel.Color,
                 gameContext.Levels.NextLevel.Color,
                 progress);

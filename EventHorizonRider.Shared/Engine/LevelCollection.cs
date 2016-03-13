@@ -23,7 +23,7 @@ namespace EventHorizonRider.Core.Engine
                     rotationVelocity: MathHelper.TwoPi / 32f,
                     ringSeparation: maxRingRadius/1.5f,
                     ringInterval: TimeSpan.FromSeconds(2),
-                    color: Color.White,
+                    color: Color.Lerp(Color.Purple, Color.White, 0.5f),
                     infiniteSequence: false,
                     sequence: Enumerable.Empty<RingInfo>().Concat(
                         ringInfoFactory.GetZigZagSequence(
@@ -245,7 +245,7 @@ namespace EventHorizonRider.Core.Engine
 
         public void SetCurrentLevel(int currentLevelNumber)
         {
-            if (currentLevelNumber < 1 || currentLevelNumber >= levels.Count)
+            if (currentLevelNumber < 1 || currentLevelNumber > levels.Count)
             {
                 throw new ArgumentException("Invalid level number");
             }

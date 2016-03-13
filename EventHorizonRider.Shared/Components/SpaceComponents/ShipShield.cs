@@ -29,6 +29,8 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             shieldPulseMotion = new Motion();
         }
 
+        public Color Color { get; set; }
+
         public void Pulse()
         {
             shieldPulseLocation = ship.Position;
@@ -79,7 +81,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     shieldPusleTexture,
                     shieldPulseLocation,
                     origin: shieldPulseOrigin,
-                    color: Color.White * shieldPulseAlpha,
+                    color: Color.Lerp(Color, Color.White, 0.3f) * shieldPulseAlpha,
                     scale: Vector2.One * shieldPulseScale,
                     rotation: ship.Rotation,
                     layerDepth: Depth - 0.0003f);
@@ -89,7 +91,7 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 shieldTextures[shieldTextureIndex],
                 ship.Position,
                 origin: shieldTexturesOrigins[shieldTextureIndex],
-                color: Color.White * BaseShieldAlpha,
+                color: Color.Lerp(Color, Color.White, 0.3f) * BaseShieldAlpha,
                 scale: Vector2.One,
                 rotation: ship.Rotation,
                 layerDepth: Depth - 0.0002f);

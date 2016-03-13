@@ -14,8 +14,22 @@ namespace EventHorizonRider.Core.Components
         private RenderTarget2D renderTarget1;
         private RenderTarget2D renderTarget2;
         private readonly GaussianBlur blur = new GaussianBlur();
+        private Color color;
 
         private readonly Motion blurAmountMotion;
+
+        public Color Color
+        {
+            get { return color; }
+            set
+            {
+                color = value;
+                Ship.Color = value;
+                Ship.Shield.Color = value;
+                Background.StarBackgroundColor = value;
+                Rings.Color = value;
+            }
+        }
 
         public Blackhole Blackhole { get; private set; }
 

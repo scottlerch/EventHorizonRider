@@ -19,5 +19,7 @@ namespace EventHorizonRider.Core.Physics
         Texture2D Texture { get; }
 
         CollisionInfo CollisionInfo { get; }
+
+        Color Color { get; }
     }
 }

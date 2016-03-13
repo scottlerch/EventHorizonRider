@@ -19,7 +19,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.eventhorizonrider</string>
 	<key>CFBundleVersion</key>
-	<string>1.1</string>
+	<string>1.2</string>
 	<key>UIStatusBarHidden</key>
 	<true/>
 	<key>UIStatusBarStyle</key>
@@ -54,7 +54,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>1.2</string>
 	<key>UIRequiresFullScreen</key>
 	<string>YES</string>
 	<key>UIStatusBarHidden~ipad</key>
