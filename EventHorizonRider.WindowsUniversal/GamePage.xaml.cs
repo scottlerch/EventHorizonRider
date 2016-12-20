@@ -29,8 +29,23 @@ namespace EventHorizonRider.WindowsUniversal
         {
             this.InitializeComponent();
 
-			// Create the game.
-			var launchArguments = string.Empty;
+            var platform = new Platform
+            {
+                IsMouseVisible = true,
+                UseDynamicStars = false,
+                PixelShaderDetail = PixelShaderDetail.Full,
+                CollisionDetectionDetail = CollisionDetectionDetail.Full,
+                TouchEnabled = new Windows.Devices.Input.TouchCapabilities().TouchPresent > 0,
+                PauseOnLoseFocus = true,
+                TargetElapsedTime = TimeSpan.FromSeconds(1 / 60D),
+                IsFixedTimeStep = true,
+                ParticleEffectsDetails = ParticleEffectsDetails.Full,
+            };
+
+            DeviceInfo.InitializePlatform(platform);
+
+            // Create the game.
+            var launchArguments = string.Empty;
             _game = MonoGame.Framework.XamlGame<MainGame>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
         }
     }
