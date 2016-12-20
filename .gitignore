@@ -261,3 +261,4 @@ pip-log.txt
 /EventHorizonRider.WindowsPhone/SubmissionInfo/ManualTestResults.xml
 /EventHorizonRider.WindowsPhone/SubmissionInfo
 /.vs/config
+*.json

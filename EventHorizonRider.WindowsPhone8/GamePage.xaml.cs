@@ -1,28 +1,34 @@
 ﻿using System;
-using EventHorizonRider.Core;
-using MonoGame.Framework.WindowsPhone;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
+using MonoGame.Framework;
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
-namespace EventHorizonRider.WindowsPhone8
+namespace EventHorizonRider.WindowsPhone
 {
-    public partial class GamePage
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class GamePage : SwapChainBackgroundPanel
     {
-        public GamePage()
+        readonly MainGame _game;
+
+        public GamePage(string launchArguments)
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
-            var platform = new Platform
-            {
-                IsMouseVisible = false,
-                UseDynamicStars = false,
-                PixelShaderDetail = PixelShaderDetail.Full,
-                CollisionDetectionDetail = CollisionDetectionDetail.Full,
-                PauseOnLoseFocus = true,
-                TouchEnabled = true,
-            };
-
-            DeviceInfo.InitializePlatform(platform);
-
-            var game = XamlGame<MainGame>.Create("", this);
+            _game = XamlGame<MainGame>.Create(launchArguments, Window.Current.CoreWindow, this);
         }
     }
 }
