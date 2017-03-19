@@ -20,6 +20,8 @@ namespace EventHorizonRider.Android
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class MainActivity : Microsoft.Xna.Framework.AndroidGameActivity
     {
+        private View view;
+
         public MainActivity()
         {
 
@@ -28,23 +30,9 @@ namespace EventHorizonRider.Android
         {
             base.OnCreate(bundle);
 
-            View decorView = Window.DecorView;
-            var uiOptions = (int)decorView.SystemUiVisibility;
-            var newUiOptions = (int)uiOptions;
-
-            newUiOptions |= (int)SystemUiFlags.LowProfile;
-            newUiOptions |= (int)SystemUiFlags.Fullscreen;
-            newUiOptions |= (int)SystemUiFlags.HideNavigation;
-            newUiOptions |= (int)SystemUiFlags.Immersive;
-            newUiOptions &= ~(int)SystemUiFlags.Visible;
-
-            decorView.SystemUiVisibility = (StatusBarVisibility)newUiOptions;
-
-            Window.AddFlags(WindowManagerFlags.Fullscreen);
-            Window.ClearFlags(WindowManagerFlags.ForceNotFullscreen);
-
             var platform = new Platform
             {
+                IsFullScreen = true,
                 IsMouseVisible = false,
                 UseDynamicStars = false,
                 PixelShaderDetail = PixelShaderDetail.Full,
@@ -59,9 +47,34 @@ namespace EventHorizonRider.Android
             DeviceInfo.InitializePlatform(platform);
 
             var mainGame = new MainGame();
-            var view = (View)mainGame.Services.GetService(typeof(View));
+
+            view = (View)mainGame.Services.GetService(typeof(View));
+
+            SetImmersive();
             SetContentView(view);
+
             mainGame.Run();
+        }
+
+        public override void OnWindowFocusChanged(bool hasFocus)
+        {
+            base.OnWindowFocusChanged(hasFocus);
+
+            if (hasFocus)
+            {
+                SetImmersive();
+            }
+        }
+
+        private void SetImmersive()
+        {
+            view.SystemUiVisibility = (StatusBarVisibility)(
+                SystemUiFlags.LayoutStable | 
+                SystemUiFlags.LayoutHideNavigation | 
+                SystemUiFlags.LayoutFullscreen | 
+                SystemUiFlags.HideNavigation |
+                SystemUiFlags.Fullscreen | 
+                SystemUiFlags.ImmersiveSticky);
         }
     }
 }

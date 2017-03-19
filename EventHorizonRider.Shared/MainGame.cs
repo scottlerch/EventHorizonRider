@@ -18,6 +18,8 @@ namespace EventHorizonRider.Core
         public MainGame()
         {
             graphicsDeviceManager = new GraphicsDeviceManager(this);
+            graphicsDeviceManager.IsFullScreen = DeviceInfo.Platform.IsFullScreen;
+
             Content.RootDirectory = "Content";
 
             graphicsDeviceManager.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;

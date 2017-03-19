@@ -46,8 +46,11 @@ namespace EventHorizonRider.Core
 
         public ParticleEffectsDetails ParticleEffectsDetails { get; set; }
 
+        public bool IsFullScreen { get; set; }
+
         public Platform()
         {
+            IsFullScreen = false;
             IsMouseVisible = false;
             UseDynamicStars = false;
             PixelShaderDetail = PixelShaderDetail.Full;
