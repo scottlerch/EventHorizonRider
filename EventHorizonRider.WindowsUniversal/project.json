@@ -1,7 +1,7 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
-    "MonoGame.Framework.WindowsUniversal": "3.6.0.1216-develop",
+    "MonoGame.Framework.WindowsUniversal": "3.7.0.113-develop",
     "Newtonsoft.Json": "9.0.1",
     "PCLStorage": "1.0.2"
   },
