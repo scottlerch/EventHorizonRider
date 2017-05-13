@@ -3,7 +3,7 @@ Event Horizon Rider
 
 Multiplatform (mobile first) game inspired by [Super Hexagon](http://www.superhexagon.com) using MonoGame.
 
-[![Event Horizon Rider](https://j.gifs.com/y8NABV.gif)](http://www.eventhorizonrider.com)
+[![Event Horizon Rider](https://cloud.githubusercontent.com/assets/1789883/26028224/03049e54-37d1-11e7-8d54-569d0d378b68.gif)](http://www.eventhorizonrider.com)
 
 http://www.eventhorizonrider.com
 
