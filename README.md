@@ -9,8 +9,7 @@ http://www.eventhorizonrider.com
 
 Build Requirements
 ------------------
- * Visual Studio 2019 with Xamarin iOS/Android and Windows Universal 10 components installed
- * [MonoGame Content Processors version 3.7.1](http://teamcity.monogame.net/repository/download/MonoGame_PackagingWindows/latest.lastSuccessful/MonoGameSetup.exe?guest=1) located at $(MSBuildExtensionsPath)/MonoGame/v3.0/
+ * Visual Studio 2022 17.14+ with .NET 9 for iOS, Android, and Windows installed
 
 Build Instructions
 ------------------

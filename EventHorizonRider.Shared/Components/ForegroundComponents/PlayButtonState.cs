@@ -1,10 +1,9 @@
-﻿namespace EventHorizonRider.Core.Components.ForegroundComponents
+﻿namespace EventHorizonRider.Core.Components.ForegroundComponents;
+
+public enum PlayButtonState
 {
-    public enum PlayButtonState
-    {
-        Start,
-        Restart,
-        Resume,
-        Pause,
-    }
+    Start,
+    Restart,
+    Resume,
+    Pause,
 }

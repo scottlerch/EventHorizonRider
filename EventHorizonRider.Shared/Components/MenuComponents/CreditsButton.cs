@@ -5,64 +5,63 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace EventHorizonRider.Core.Components.MenuComponents
+namespace EventHorizonRider.Core.Components.MenuComponents;
+
+internal class CreditsButton : ComponentBase
 {
-    internal class CreditsButton : ComponentBase
+    private const string ButtonText = "CREDITS";
+
+    private SpriteFont buttonFont;
+    private SoundEffect buttonSound;
+
+    private Vector2 textLocation;
+    private Vector2 textSize;
+
+    public Button Button { get; set; }
+
+    protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
-        private const string ButtonText = "CREDITS";
+        buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
+        buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
 
-        private SpriteFont buttonFont;
-        private SoundEffect buttonSound;
+        textSize = buttonFont.MeasureString(ButtonText);
 
-        private Vector2 textLocation;
-        private Vector2 textSize;
+        const float buttonPadding = 25f;
 
-        public Button Button { get; set; }
+        textLocation = new Vector2(
+            (DeviceInfo.LogicalWidth / 2f) - (textSize.X / 2f),
+            (DeviceInfo.LogicalHeight / 2f) + 150f);
 
-        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
+        Button = new Button(
+            buttonBounds: new Rectangle(
+                (int)(textLocation.X - buttonPadding),
+                (int)(textLocation.Y - buttonPadding),
+                (int)(textSize.X + (buttonPadding * 2)),
+                (int)(textSize.Y + (buttonPadding * 2))),
+            key: Keys.C);
+    }
+
+    protected override void UpdateCore(GameTime gameTime, InputState inputState)
+    {
+        Button.Update(gameTime, inputState, Visible);
+
+        if (Button.Pressed)
         {
-            buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
-            buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
-
-            textSize = buttonFont.MeasureString(ButtonText);
-
-            const float buttonPadding = 25f;
-
-            textLocation = new Vector2(
-                (DeviceInfo.LogicalWidth / 2f) - (textSize.X / 2f),
-                (DeviceInfo.LogicalHeight / 2f) + 150f);
-
-            Button = new Button(
-                buttonBounds: new Rectangle(
-                    (int)(textLocation.X - buttonPadding),
-                    (int)(textLocation.Y - buttonPadding),
-                    (int)(textSize.X + (buttonPadding * 2)),
-                    (int)(textSize.Y + (buttonPadding * 2))),
-                key: Keys.C);
+            buttonSound.Play();
         }
+    }
 
-        protected override void UpdateCore(GameTime gameTime, InputState inputState)
-        {
-            Button.Update(gameTime, inputState, Visible);
-
-            if (Button.Pressed)
-            {
-                buttonSound.Play();
-            }
-        }
-
-        protected override void DrawCore(SpriteBatch spriteBatch)
-        {
-            spriteBatch.DrawString(
-                buttonFont,
-                ButtonText,
-                textLocation,
-                Button.Hover? Color.Yellow : Color.White,
-                0,
-                Vector2.Zero,
-                1f,
-                SpriteEffects.None,
-                Depth);
-        }
+    protected override void DrawCore(SpriteBatch spriteBatch)
+    {
+        spriteBatch.DrawString(
+            buttonFont,
+            ButtonText,
+            textLocation,
+            Button.Hover? Color.Yellow : Color.White,
+            0,
+            Vector2.Zero,
+            1f,
+            SpriteEffects.None,
+            Depth);
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
+﻿namespace EventHorizonRider.Core.Components.SpaceComponents.Rings;
+
+internal enum RingTexturesInfoGroupMode
 {
-    internal enum RingTexturesInfoGroupMode
-    {
-        Interleave,
-        Sequential,
-    }
+    Interleave,
+    Sequential,
 }
