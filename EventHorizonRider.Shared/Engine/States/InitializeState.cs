@@ -1,28 +1,27 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace EventHorizonRider.Core.Engine.States
+namespace EventHorizonRider.Core.Engine.States;
+
+internal class InitializeState : GameStateBase
 {
-    internal class InitializeState : GameStateBase
+    private readonly TimeSpan initInterval = TimeSpan.FromSeconds(2);
+
+    public override void OnBegin(GameContext gameContext, GameTime gameTime)
     {
-        private readonly TimeSpan initInterval = TimeSpan.FromSeconds(2);
+        gameContext.Root.Foreground.Title.Show();
+    }
 
-        public override void OnBegin(GameContext gameContext, GameTime gameTime)
+    public override void OnProcess(GameContext gameContext, GameTime gameTime)
+    {
+        if (gameTime.TotalGameTime > initInterval)
         {
-            gameContext.Root.Foreground.Title.Show();
+            gameContext.GameState = new StartState();
         }
+    }
 
-        public override void OnProcess(GameContext gameContext, GameTime gameTime)
-        {
-            if (gameTime.TotalGameTime > initInterval)
-            {
-                gameContext.GameState = new StartState();
-            }
-        }
-
-        public override void OnEnd(GameContext gameContext, GameTime gameTime)
-        {
-            gameContext.Root.Foreground.Title.Hide();
-        }
+    public override void OnEnd(GameContext gameContext, GameTime gameTime)
+    {
+        gameContext.Root.Foreground.Title.Hide();
     }
 }

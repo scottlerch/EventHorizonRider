@@ -6,190 +6,189 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace EventHorizonRider.Core
+namespace EventHorizonRider.Core;
+
+/// <summary>
+/// Composite pattern of game components.
+/// </summary>
+internal abstract class ComponentBase
 {
-    /// <summary>
-    /// Composite pattern of game components.
-    /// </summary>
-    internal abstract class ComponentBase
+    private List<ComponentBase> children;
+    private bool visible = true;
+    private bool updating = true;
+
+    protected ComponentBase(params ComponentBase[] components)
     {
-        private List<ComponentBase> children;
-        private bool visible = true;
-        private bool updating = true;
+        Visible = true;
 
-        protected ComponentBase(params ComponentBase[] components)
+        if (components.Length > 0)
         {
-            Visible = true;
+            children = new List<ComponentBase>(components);
 
-            if (components.Length > 0)
+            foreach (var child in children)
             {
-                children = new List<ComponentBase>(components);
-
-                foreach (var child in children)
-                {
-                    child.Parent = this;
-                }
-            }
-
-            var depthStep = 1f/(components.Length + 2);
-
-            for (int i = 0; i < components.Length; i++)
-            {
-                children[i].Depth = (i + 1)*depthStep;
+                child.Parent = this;
             }
         }
 
-        public float Depth { get; private set; }
+        var depthStep = 1f/(components.Length + 2);
 
-        public bool Visible
+        for (int i = 0; i < components.Length; i++)
         {
-            get { return visible && (Parent == null || Parent.Visible); }
-            set
+            children[i].Depth = (i + 1)*depthStep;
+        }
+    }
+
+    public float Depth { get; private set; }
+
+    public bool Visible
+    {
+        get { return visible && (Parent == null || Parent.Visible); }
+        set
+        {
+            if (visible != value)
             {
-                if (visible != value)
-                {
-                    visible = value;
-                    OnVisibleChanged();
-                    ForEach<ComponentBase>(child => child.OnVisibleChanged());
-                }
+                visible = value;
+                OnVisibleChanged();
+                ForEach<ComponentBase>(child => child.OnVisibleChanged());
             }
         }
+    }
 
-        public bool Updating
+    public bool Updating
+    {
+        get { return updating && (Parent == null || Parent.Updating); }
+        set
         {
-            get { return updating && (Parent == null || Parent.Updating); }
-            set
+            if (updating != value)
             {
-                if (updating != value)
-                {
-                    updating = value;
-                    OnUpdatingChanged();
-                    ForEach<ComponentBase>(child => child.OnUpdatingChanged());
-                }
+                updating = value;
+                OnUpdatingChanged();
+                ForEach<ComponentBase>(child => child.OnUpdatingChanged());
             }
         }
+    }
 
-        public bool ChildrenIsEmpty { get { return children == null || children.Count == 0; } }
+    public bool ChildrenIsEmpty { get { return children == null || children.Count == 0; } }
 
-        public int ChildrenCount { get { return children == null ? 0 : children.Count; } }
+    public int ChildrenCount { get { return children == null ? 0 : children.Count; } }
 
-        protected ComponentBase Parent { get; private set; }
+    protected ComponentBase Parent { get; private set; }
 
-        protected void AddChild(ComponentBase component, float depth)
+    protected void AddChild(ComponentBase component, float depth)
+    {
+        component.Depth = depth;
+        component.Parent = this;
+
+        if (children == null)
         {
-            component.Depth = depth;
-            component.Parent = this;
-
-            if (children == null)
-            {
-                children = new List<ComponentBase>();    
-            }
-
-            children.Add(component);
+            children = new List<ComponentBase>();    
         }
 
-        protected void RemoveChild(ComponentBase component)
+        children.Add(component);
+    }
+
+    protected void RemoveChild(ComponentBase component)
+    {
+        if (children != null)
         {
-            if (children != null)
-            {
-                component.Parent = null;
-                children.Remove(component);
-            }
+            component.Parent = null;
+            children.Remove(component);
         }
+    }
 
-        protected void ClearChildren()
+    protected void ClearChildren()
+    {
+        if (children != null)
         {
-            if (children != null)
-            {
-                ForEach<ComponentBase>(child => child.Parent = null);
-                children.Clear();
-            }
+            ForEach<ComponentBase>(child => child.Parent = null);
+            children.Clear();
         }
+    }
 
-        public IEnumerable<ComponentBase> Children
+    public IEnumerable<ComponentBase> Children
+    {
+        get { return children ?? Enumerable.Empty<ComponentBase>(); }
+    }
+
+    public void ForEach<T>(Action<T> action) where T : ComponentBase
+    {
+        if (children == null) return;
+
+        var count = children.Count;
+
+        for (int i = 0; i < count; i++)
         {
-            get { return children ?? Enumerable.Empty<ComponentBase>(); }
+            action(children[i] as T);
         }
+    }
 
-        public void ForEach<T>(Action<T> action) where T : ComponentBase
+    public void ForEachReverse<T>(Action<T> action) where T : ComponentBase
+    {
+        if (children == null) return;
+
+        var lastIndex = children.Count - 1;
+
+        for (int i = lastIndex; i >= 0; i--)
         {
-            if (children == null) return;
-
-            var count = children.Count;
-
-            for (int i = 0; i < count; i++)
-            {
-                action(children[i] as T);
-            }
+            action(children[i] as T);
         }
+    }
 
-        public void ForEachReverse<T>(Action<T> action) where T : ComponentBase
-        {
-            if (children == null) return;
+    public void LoadContent(ContentManager content, GraphicsDevice graphics)
+    {
+        ForEach<ComponentBase>(child => child.LoadContent(content, graphics));
 
-            var lastIndex = children.Count - 1;
+        LoadContentCore(content, graphics);
+    }
 
-            for (int i = lastIndex; i >= 0; i--)
-            {
-                action(children[i] as T);
-            }
-        }
+    protected virtual void LoadContentCore(ContentManager content, GraphicsDevice graphics)
+    {
+    }
 
-        public void LoadContent(ContentManager content, GraphicsDevice graphics)
-        {
-            ForEach<ComponentBase>(child => child.LoadContent(content, graphics));
+    public void Update(GameTime gameTime, InputState inputState)
+    {
+        if (!Updating) return;
 
-            LoadContentCore(content, graphics);
-        }
+        ForEach<ComponentBase>(child => child.Update(gameTime, inputState));
 
-        protected virtual void LoadContentCore(ContentManager content, GraphicsDevice graphics)
-        {
-        }
+        UpdateCore(gameTime, inputState);
+    }
 
-        public void Update(GameTime gameTime, InputState inputState)
-        {
-            if (!Updating) return;
+    protected virtual void UpdateCore(GameTime gameTime, InputState inputState)
+    {
+    }
 
-            ForEach<ComponentBase>(child => child.Update(gameTime, inputState));
+    protected virtual void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
+    {
+    }
 
-            UpdateCore(gameTime, inputState);
-        }
+    public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
+    {
+        if (!Visible) return;
 
-        protected virtual void UpdateCore(GameTime gameTime, InputState inputState)
-        {
-        }
+        OnBeforeDraw(spriteBatch, graphics);
 
-        protected virtual void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
-        {
-        }
+        ForEach<ComponentBase>(child => child.Draw(spriteBatch, graphics));
 
-        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
-        {
-            if (!Visible) return;
+        DrawCore(spriteBatch);
 
-            OnBeforeDraw(spriteBatch, graphics);
+        OnAfterDraw(spriteBatch, graphics);
+    }
 
-            ForEach<ComponentBase>(child => child.Draw(spriteBatch, graphics));
+    protected virtual void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
+    {
+    }
 
-            DrawCore(spriteBatch);
+    protected virtual void DrawCore(SpriteBatch spriteBatch)
+    {
+    }
 
-            OnAfterDraw(spriteBatch, graphics);
-        }
+    protected virtual void OnUpdatingChanged()
+    {
+    }
 
-        protected virtual void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
-        {
-        }
-
-        protected virtual void DrawCore(SpriteBatch spriteBatch)
-        {
-        }
-
-        protected virtual void OnUpdatingChanged()
-        {
-        }
-
-        protected virtual void OnVisibleChanged()
-        {
-        }
+    protected virtual void OnVisibleChanged()
+    {
     }
 }

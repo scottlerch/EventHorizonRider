@@ -3,99 +3,98 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace EventHorizonRider.Core.Physics
+namespace EventHorizonRider.Core.Physics;
+
+internal class ParticleSystem
 {
-    internal class ParticleSystem
+    private readonly Random random;
+    private Vector2 position;
+
+    public ParticleSystem(Vector2 position = default(Vector2))
     {
-        private readonly Random random;
-        private Vector2 position;
+        Position = position;
+        LastPos = position;
+        random = new Random();
+        EmitterList = new List<Emitter>();
+    }
 
-        public ParticleSystem(Vector2 position = default(Vector2))
+    public List<Emitter> EmitterList { get; set; }
+
+    public Vector2 Position
+    {
+        get { return position; }
+        set { LastPos = position; position = value; }
+    }
+
+    public Vector2 LastPos { get; set; }
+
+    public void Update(float dt)
+    {
+        foreach (var emitter in EmitterList)
         {
-            Position = position;
-            LastPos = position;
-            random = new Random();
-            EmitterList = new List<Emitter>();
-        }
-
-        public List<Emitter> EmitterList { get; set; }
-
-        public Vector2 Position
-        {
-            get { return position; }
-            set { LastPos = position; position = value; }
-        }
-
-        public Vector2 LastPos { get; set; }
-
-        public void Update(float dt)
-        {
-            foreach (var emitter in EmitterList)
+            if (emitter.Budget > 0)
             {
-                if (emitter.Budget > 0)
-                {
-                    emitter.Update(dt);
-                }
+                emitter.Update(dt);
             }
         }
+    }
 
-        public void Draw(SpriteBatch spriteBatch, float depth)
+    public void Draw(SpriteBatch spriteBatch, float depth)
+    {
+        foreach (var emitter in EmitterList)
         {
-            foreach (var emitter in EmitterList)
+            if (emitter.Budget > 0)
             {
-                if (emitter.Budget > 0)
-                {
-                    emitter.Draw(spriteBatch, depth);
-                }
+                emitter.Draw(spriteBatch, depth);
             }
         }
+    }
 
-        public void Clear()
+    public void Clear()
+    {
+        foreach (var emitter in EmitterList)
         {
-            foreach (var emitter in EmitterList)
+            if (emitter.Budget > 0)
             {
-                if (emitter.Budget > 0)
-                {
-                    emitter.Clear();
-                }
+                emitter.Clear();
             }
         }
+    }
 
-        public Emitter AddEmitter(
-            Range<float> secPerSpawn, 
-            Vector2 spawnDirection,
-            Range<float> spawnNoiseAngle,
-            Range<float> startLife,
-            Range<float> startScale,
-            Range<float> endScale, 
-            Range<Color> startColor,
-            Range<Color> endColor,
-            Range<float> startSpeed,
-            Range<float> endSpeed, 
-            int budget, 
-            Vector2 relPosition,
-            Texture2D particleSprite)
-        {
-            var emitter = new Emitter(
-                secPerSpawn,
-                spawnDirection,
-                spawnNoiseAngle,
-                startLife, 
-                startScale, 
-                endScale, 
-                startColor,
-                endColor,
-                startSpeed,
-                endSpeed, 
-                budget, 
-                relPosition, 
-                particleSprite,
-                random,
-                this);
+    public Emitter AddEmitter(
+        Range<float> secPerSpawn, 
+        Vector2 spawnDirection,
+        Range<float> spawnNoiseAngle,
+        Range<float> startLife,
+        Range<float> startScale,
+        Range<float> endScale, 
+        Range<Color> startColor,
+        Range<Color> endColor,
+        Range<float> startSpeed,
+        Range<float> endSpeed, 
+        int budget, 
+        Vector2 relPosition,
+        Texture2D particleSprite)
+    {
+        var emitter = new Emitter(
+            secPerSpawn,
+            spawnDirection,
+            spawnNoiseAngle,
+            startLife, 
+            startScale, 
+            endScale, 
+            startColor,
+            endColor,
+            startSpeed,
+            endSpeed, 
+            budget, 
+            relPosition, 
+            particleSprite,
+            random,
+            this);
 
-            EmitterList.Add(emitter);
+        EmitterList.Add(emitter);
 
-            return emitter;
-        }
+        return emitter;
     }
 }

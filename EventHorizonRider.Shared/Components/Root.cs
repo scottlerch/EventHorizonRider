@@ -2,54 +2,53 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Components;
+
+internal class Root : ComponentBase
 {
-    internal class Root : ComponentBase
+    private bool previousPausedPressed;
+
+    public bool PausePressed { get; set; }
+
+    public int? OverrideLevel { get; set; }
+
+    public Space Space { get; private set; }
+
+    public Menu Menu { get; private set; }
+
+    public Foreground Foreground { get; private set; }
+
+    public Music Music { get; private set; }
+
+    public Root(Music music, Space space, Menu menu, Foreground foreground)
+        : base(music, space, menu, foreground)
     {
-        private bool previousPausedPressed;
+        Music = music;
+        Space = space;
+        Menu = menu;
+        Foreground = foreground;
+    }
 
-        public bool PausePressed { get; set; }
+    protected override void UpdateCore(GameTime gameTime, InputState inputState)
+    {
+        PausePressed = false;
 
-        public int? OverrideLevel { get; set; }
+        var keys = inputState.KeyState.GetPressedKeys();
+        var pausedPressed = false;
 
-        public Space Space { get; private set; }
-
-        public Menu Menu { get; private set; }
-
-        public Foreground Foreground { get; private set; }
-
-        public Music Music { get; private set; }
-
-        public Root(Music music, Space space, Menu menu, Foreground foreground)
-            : base(music, space, menu, foreground)
+        foreach (var key in keys)
         {
-            Music = music;
-            Space = space;
-            Menu = menu;
-            Foreground = foreground;
+            if (key == Keys.P)
+            {
+                pausedPressed = true;
+            }
         }
 
-        protected override void UpdateCore(GameTime gameTime, InputState inputState)
+        if (previousPausedPressed && !pausedPressed)
         {
-            PausePressed = false;
-
-            var keys = inputState.KeyState.GetPressedKeys();
-            var pausedPressed = false;
-
-            foreach (var key in keys)
-            {
-                if (key == Keys.P)
-                {
-                    pausedPressed = true;
-                }
-            }
-
-            if (previousPausedPressed && !pausedPressed)
-            {
-                PausePressed = true;
-            }
-
-            previousPausedPressed = pausedPressed;
+            PausePressed = true;
         }
+
+        previousPausedPressed = pausedPressed;
     }
 }

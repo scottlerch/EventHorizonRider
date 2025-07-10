@@ -1,8 +1,7 @@
-﻿namespace EventHorizonRider.Core.Engine
+﻿namespace EventHorizonRider.Core.Engine;
+
+internal enum RingTypeSelection
 {
-    internal enum RingTypeSelection
-    {
-        RoundRobin,
-        UniformRandom,
-    }
+    RoundRobin,
+    UniformRandom,
 }

@@ -4,101 +4,100 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EventHorizonRider.Core.Components.SpaceComponents
+namespace EventHorizonRider.Core.Components.SpaceComponents;
+
+internal class ShipShield : ComponentBase
 {
-    internal class ShipShield : ComponentBase
+    private const float BaseShieldAlpha = 0.8f;
+
+    private readonly Motion shieldPulseMotion;
+
+    private Texture2D shieldPusleTexture;
+    private Vector2 shieldPulseLocation;
+    private Vector2 shieldPulseOrigin;
+    private float shieldPulseAlpha;
+    private float shieldPulseScale;
+
+    private int shieldTextureIndex;
+    private Texture2D[] shieldTextures;
+    private Vector2[] shieldTexturesOrigins;
+
+    private Ship ship;
+
+    public ShipShield()
     {
-        private const float BaseShieldAlpha = 0.8f;
+        shieldPulseMotion = new Motion();
+    }
 
-        private readonly Motion shieldPulseMotion;
+    public Color Color { get; set; }
 
-        private Texture2D shieldPusleTexture;
-        private Vector2 shieldPulseLocation;
-        private Vector2 shieldPulseOrigin;
-        private float shieldPulseAlpha;
-        private float shieldPulseScale;
+    public void Pulse()
+    {
+        shieldPulseLocation = ship.Position;
+        shieldPulseMotion.Initialize(0, 1, 1f);
+    }
 
-        private int shieldTextureIndex;
-        private Texture2D[] shieldTextures;
-        private Vector2[] shieldTexturesOrigins;
+    protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
+    {
+        const int NumberOfShieldPulseTextures = 3;
 
-        private Ship ship;
+        ship = Parent as Ship;
 
-        public ShipShield()
+        shieldPusleTexture = content.Load<Texture2D>(@"Images\shield_pulse");
+
+        shieldTextures = new Texture2D[NumberOfShieldPulseTextures];
+        shieldTexturesOrigins = new Vector2[NumberOfShieldPulseTextures];
+
+        for (int i = 0; i < shieldTextures.Length; i++)
         {
-            shieldPulseMotion = new Motion();
+            shieldTextures[i] = content.Load<Texture2D>(@"Images\shield_" + (i + 1));
+            shieldTexturesOrigins[i] = new Vector2(shieldTextures[i].Width / 2f, shieldTextures[i].Height / 2f);
         }
 
-        public Color Color { get; set; }
+        shieldPulseMotion.Initialize(0, 0, 0);
 
-        public void Pulse()
+        shieldTextureIndex = 0;
+
+        shieldPulseOrigin = new Vector2(shieldPusleTexture.Width/2f, shieldPusleTexture.Height/2f);
+    }
+
+    protected override void UpdateCore(GameTime gameTime, InputState inputState)
+    {
+        const int frameInterval = 100;
+        shieldTextureIndex = (int)((((int)gameTime.TotalGameTime.TotalMilliseconds % frameInterval) / 
+            (float)frameInterval) * shieldTextures.Length);
+
+        shieldPulseMotion.Update(gameTime);
+
+        shieldPulseAlpha = MathHelper.Lerp(BaseShieldAlpha, 0, shieldPulseMotion.Value);
+        shieldPulseScale = (10f * shieldPulseMotion.Value) + 1f;
+    }
+
+    protected override void DrawCore(SpriteBatch spriteBatch)
+    {
+        if (shieldPulseMotion.Value > 0f)
         {
-            shieldPulseLocation = ship.Position;
-            shieldPulseMotion.Initialize(0, 1, 1f);
-        }
-
-        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
-        {
-            const int NumberOfShieldPulseTextures = 3;
-
-            ship = Parent as Ship;
-
-            shieldPusleTexture = content.Load<Texture2D>(@"Images\shield_pulse");
-
-            shieldTextures = new Texture2D[NumberOfShieldPulseTextures];
-            shieldTexturesOrigins = new Vector2[NumberOfShieldPulseTextures];
-
-            for (int i = 0; i < shieldTextures.Length; i++)
-            {
-                shieldTextures[i] = content.Load<Texture2D>(@"Images\shield_" + (i + 1));
-                shieldTexturesOrigins[i] = new Vector2(shieldTextures[i].Width / 2f, shieldTextures[i].Height / 2f);
-            }
-
-            shieldPulseMotion.Initialize(0, 0, 0);
-
-            shieldTextureIndex = 0;
-
-            shieldPulseOrigin = new Vector2(shieldPusleTexture.Width/2f, shieldPusleTexture.Height/2f);
-        }
-
-        protected override void UpdateCore(GameTime gameTime, InputState inputState)
-        {
-            const int frameInterval = 100;
-            shieldTextureIndex = (int)((((int)gameTime.TotalGameTime.TotalMilliseconds % frameInterval) / 
-                (float)frameInterval) * shieldTextures.Length);
-
-            shieldPulseMotion.Update(gameTime);
-
-            shieldPulseAlpha = MathHelper.Lerp(BaseShieldAlpha, 0, shieldPulseMotion.Value);
-            shieldPulseScale = (10f * shieldPulseMotion.Value) + 1f;
-        }
-
-        protected override void DrawCore(SpriteBatch spriteBatch)
-        {
-            if (shieldPulseMotion.Value > 0f)
-            {
-                spriteBatch.Draw(
-                    shieldPusleTexture,
-                    shieldPulseLocation,
-                    sourceRectangle: null,
-                    origin: shieldPulseOrigin,
-                    color: Color.Lerp(Color, Color.White, 0.3f) * shieldPulseAlpha,
-                    scale: Vector2.One * shieldPulseScale,
-                    rotation: ship.Rotation,
-                    layerDepth: Depth - 0.0003f,
-                    effects: SpriteEffects.None);
-            }
-
             spriteBatch.Draw(
-                shieldTextures[shieldTextureIndex],
-                ship.Position,
+                shieldPusleTexture,
+                shieldPulseLocation,
                 sourceRectangle: null,
-                origin: shieldTexturesOrigins[shieldTextureIndex],
-                color: Color.Lerp(Color, Color.White, 0.3f) * BaseShieldAlpha,
-                scale: Vector2.One,
+                origin: shieldPulseOrigin,
+                color: Color.Lerp(Color, Color.White, 0.3f) * shieldPulseAlpha,
+                scale: Vector2.One * shieldPulseScale,
                 rotation: ship.Rotation,
-                layerDepth: Depth - 0.0002f,
+                layerDepth: Depth - 0.0003f,
                 effects: SpriteEffects.None);
         }
+
+        spriteBatch.Draw(
+            shieldTextures[shieldTextureIndex],
+            ship.Position,
+            sourceRectangle: null,
+            origin: shieldTexturesOrigins[shieldTextureIndex],
+            color: Color.Lerp(Color, Color.White, 0.3f) * BaseShieldAlpha,
+            scale: Vector2.One,
+            rotation: ship.Rotation,
+            layerDepth: Depth - 0.0002f,
+            effects: SpriteEffects.None);
     }
 }

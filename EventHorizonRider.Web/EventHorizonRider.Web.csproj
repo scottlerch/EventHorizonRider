@@ -1,12 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <Configurations>Ad-Hoc;AppStore;Debug;Release</Configurations>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
 </Project>

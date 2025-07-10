@@ -2,56 +2,55 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
-namespace EventHorizonRider.Core.Components
+namespace EventHorizonRider.Core.Components;
+
+internal class Music : ComponentBase
 {
-    internal class Music : ComponentBase
+    private Song musicSong;
+
+    protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
-        private Song musicSong;
-
-        protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
-        {
 #if !PSM
-            musicSong = content.Load<Song>(@"Music\techno_song");
+        musicSong = content.Load<Song>(@"Music\techno_song");
 #endif
-        }
+    }
 
-        public void Start()
-        {
+    public void Start()
+    {
 #if !PSM
-            Microsoft.Xna.Framework.Media.MediaPlayer.IsRepeating = true;
-            Microsoft.Xna.Framework.Media.MediaPlayer.Play(musicSong);
+        Microsoft.Xna.Framework.Media.MediaPlayer.IsRepeating = true;
+        Microsoft.Xna.Framework.Media.MediaPlayer.Play(musicSong);
 #endif
-        }
+    }
 
-        public void Stop()
-        {
+    public void Stop()
+    {
 #if !PSM
-            Microsoft.Xna.Framework.Media.MediaPlayer.Stop();
+        Microsoft.Xna.Framework.Media.MediaPlayer.Stop();
 #endif
-        }
+    }
 
-        public void Pause()
-        {
+    public void Pause()
+    {
 #if !PSM
-            Updating = false;
+        Updating = false;
 
-            if (Microsoft.Xna.Framework.Media.MediaPlayer.State != MediaState.Paused)
-            {
-                Microsoft.Xna.Framework.Media.MediaPlayer.Pause();
-            }
-#endif
-        }
-
-        public void Play()
+        if (Microsoft.Xna.Framework.Media.MediaPlayer.State != MediaState.Paused)
         {
-#if !PSM
-            Updating = true;
-
-            if (Microsoft.Xna.Framework.Media.MediaPlayer.State != MediaState.Playing)
-            {
-                Microsoft.Xna.Framework.Media.MediaPlayer.Resume();
-            }
-#endif
+            Microsoft.Xna.Framework.Media.MediaPlayer.Pause();
         }
+#endif
+    }
+
+    public void Play()
+    {
+#if !PSM
+        Updating = true;
+
+        if (Microsoft.Xna.Framework.Media.MediaPlayer.State != MediaState.Playing)
+        {
+            Microsoft.Xna.Framework.Media.MediaPlayer.Resume();
+        }
+#endif
     }
 }

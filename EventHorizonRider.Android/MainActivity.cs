@@ -5,88 +5,86 @@ using Android.Views;
 using EventHorizonRider.Core;
 using System;
 
-namespace EventHorizonRider.Android
+namespace EventHorizonRider.Android;
+
+[Activity(
+    Label = "Event Horizon Rider", 
+    MainLauncher = true,
+    Icon = "@drawable/icon",
+    //Theme = "@style/Theme.Splash",
+    Theme = "@android:style/Theme.Black.NoTitleBar.Fullscreen",
+    AlwaysRetainTaskState = true,
+    LaunchMode = LaunchMode.SingleInstance,
+    ScreenOrientation = ScreenOrientation.SensorLandscape,
+    ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+public class MainActivity : Microsoft.Xna.Framework.AndroidGameActivity
 {
-    [Activity(
-        Label = "Event Horizon Rider", 
-        MainLauncher = true,
-        Icon = "@drawable/icon",
-        //Theme = "@style/Theme.Splash",
-        Theme = "@android:style/Theme.Black.NoTitleBar.Fullscreen",
-        AlwaysRetainTaskState = true,
-        LaunchMode = LaunchMode.SingleInstance,
-        ScreenOrientation = ScreenOrientation.SensorLandscape,
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class MainActivity : Microsoft.Xna.Framework.AndroidGameActivity
+    private View view;
+
+    public MainActivity()
     {
-        private View view;
+    }
 
-        public MainActivity()
+    protected override void OnCreate(Bundle bundle)
+    {
+        base.OnCreate(bundle);
+
+        var platform = new Platform
         {
+            IsFullScreen = true,
+            IsMouseVisible = false,
+            UseDynamicStars = false,
+            PixelShaderDetail = PixelShaderDetail.Full,
+            CollisionDetectionDetail = CollisionDetectionDetail.Full,
+            TouchEnabled = true,
+            PauseOnLoseFocus = true,
+            TargetElapsedTime = TimeSpan.FromSeconds(1 / 60D),
+            IsFixedTimeStep = true,
+            ParticleEffectsDetails = ParticleEffectsDetails.Full,
+        };
 
-        }
-        protected override void OnCreate(Bundle bundle)
+        DeviceInfo.InitializePlatform(platform);
+
+        var mainGame = new MainGame();
+
+        view = (View)mainGame.Services.GetService(typeof(View));
+
+        SetImmersive();
+        SetContentView(view);
+
+        mainGame.Run();
+    }
+
+    public override void OnWindowFocusChanged(bool hasFocus)
+    {
+        base.OnWindowFocusChanged(hasFocus);
+
+        if (hasFocus)
         {
-            base.OnCreate(bundle);
-
-            var platform = new Platform
-            {
-                IsFullScreen = true,
-                IsMouseVisible = false,
-                UseDynamicStars = false,
-                PixelShaderDetail = PixelShaderDetail.Full,
-                CollisionDetectionDetail = CollisionDetectionDetail.Full,
-                TouchEnabled = true,
-                PauseOnLoseFocus = true,
-                TargetElapsedTime = TimeSpan.FromSeconds(1 / 60D),
-                IsFixedTimeStep = true,
-                ParticleEffectsDetails = ParticleEffectsDetails.Full,
-            };
-
-            DeviceInfo.InitializePlatform(platform);
-
-            var mainGame = new MainGame();
-
-            view = (View)mainGame.Services.GetService(typeof(View));
-
             SetImmersive();
-            SetContentView(view);
-
-            mainGame.Run();
         }
+    }
 
-        public override void OnWindowFocusChanged(bool hasFocus)
+    private void SetImmersive()
+    {
+        if (OperatingSystem.IsAndroidVersionAtLeast(30))
         {
-            base.OnWindowFocusChanged(hasFocus);
-
-            if (hasFocus)
+            var controller = view.WindowInsetsController;
+            if (controller != null)
             {
-                SetImmersive();
+                controller.Hide(WindowInsets.Type.SystemBars());
+                controller.SystemBarsBehavior = (int)WindowInsetsControllerBehavior.ShowTransientBarsBySwipe;
             }
         }
-
-        // Replace the SetImmersive method with the following code
-        private void SetImmersive()
+        else if (OperatingSystem.IsAndroidVersionAtLeast(21))
         {
-            if (OperatingSystem.IsAndroidVersionAtLeast(30))
-            {
-                var controller = view.WindowInsetsController;
-                if (controller != null)
-                {
-                    controller.Hide(WindowInsets.Type.SystemBars());
-                    controller.SystemBarsBehavior = (int)WindowInsetsControllerBehavior.ShowTransientBarsBySwipe;
-                }
-            }
-            else if (OperatingSystem.IsAndroidVersionAtLeast(21))
-            {
-                view.SystemUiFlags = (
-                    SystemUiFlags.LayoutStable |
-                    SystemUiFlags.LayoutHideNavigation |
-                    SystemUiFlags.LayoutFullscreen |
-                    SystemUiFlags.HideNavigation |
-                    SystemUiFlags.Fullscreen |
-                    SystemUiFlags.ImmersiveSticky);
-            }
+            view.SystemUiFlags = (
+                SystemUiFlags.LayoutStable |
+                SystemUiFlags.LayoutHideNavigation |
+                SystemUiFlags.LayoutFullscreen |
+                SystemUiFlags.HideNavigation |
+                SystemUiFlags.Fullscreen |
+                SystemUiFlags.ImmersiveSticky);
         }
     }
 }
