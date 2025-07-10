@@ -113,14 +113,38 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(helpLeft, color: Color.White*directionAlpha, position: helpLeftPosition, layerDepth: Depth);
-            spriteBatch.Draw(helpRight, color: Color.White*directionAlpha, position: helpRightPosition, layerDepth: Depth);
+            spriteBatch.Draw(
+                helpLeft,
+                color: Color.White*directionAlpha,
+                position: helpLeftPosition,
+                layerDepth: Depth,
+                origin: Vector2.Zero,
+                scale: Vector2.One,
+                sourceRectangle: null,
+                rotation: 0f,
+                effects: SpriteEffects.None);
+
+            spriteBatch.Draw(
+                helpRight,
+                color: Color.White*directionAlpha,
+                position: helpRightPosition,
+                layerDepth: Depth,
+                origin: Vector2.Zero,
+                scale: Vector2.One,
+                sourceRectangle: null,
+                rotation: 0f,
+                effects: SpriteEffects.None);
 
             spriteBatch.Draw(
                 helpStart, 
                 color: Color.White * startAlpha, 
                 position: new Vector2(helpStartPosition.X, helpStartPosition.Y - startMotion.Value), 
-                layerDepth: Depth);
+                layerDepth: Depth,
+                origin: Vector2.Zero,
+                scale: Vector2.One,
+                sourceRectangle: null,
+                rotation: 0f,
+                effects: SpriteEffects.None);
         }
     }
 }

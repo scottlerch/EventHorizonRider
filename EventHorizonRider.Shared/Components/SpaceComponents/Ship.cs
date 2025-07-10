@@ -163,10 +163,13 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
             spriteBatch.Draw(
                 Texture, 
                 Position,
+                sourceRectangle: null,
                 origin: Origin,
                 rotation: Rotation,
                 layerDepth: Depth,
-                color: Color.Lerp(Color.White, Color, 0.3f));
+                color: Color.Lerp(Color.White, Color, 0.3f),
+                effects: SpriteEffects.None,
+                scale: Vector2.One);
         }
 
         protected override void OnUpdatingChanged()

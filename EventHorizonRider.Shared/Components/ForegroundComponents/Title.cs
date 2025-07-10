@@ -60,7 +60,10 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                     origin: origin, 
                     color: Color.White * alpha, 
                     layerDepth: Depth, 
-                    scale:new Vector2(1.01f));
+                    scale:new Vector2(1.01f),
+                    sourceRectangle: null,
+                    rotation: 0f,
+                    effects: SpriteEffects.None);
             }
         }
     }

@@ -21,11 +21,14 @@ namespace EventHorizonRider.Core.Components.MenuComponents
         {
             spriteBatch.Draw(
                 texture,
+                sourceRectangle: null,
                 origin: textureOrigin,
                 position: DeviceInfo.LogicalCenter,
+                rotation: 0f,
                 scale: Vector2.One,
                 color: Color.White,
-                layerDepth: Depth);
+                layerDepth: Depth,
+                effects: SpriteEffects.None);
         }
     }
 }

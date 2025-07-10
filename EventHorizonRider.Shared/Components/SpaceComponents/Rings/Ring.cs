@@ -110,21 +110,25 @@ namespace EventHorizonRider.Core.Components.SpaceComponents.Rings
                     spriteBatch.Draw(
                         ringObject.ShadowTexture,
                         ringObject.Position + ringLayers[ringObject.LayerIndex].ShadowOffset * ringObject.Scale,
+                        sourceRectangle: null,
                         origin: ringObject.Origin,
                         color: Color.Lerp(Color.White, Color, 0.3f) * 0.8f,
                         rotation: ringObject.Rotation,
                         layerDepth: ringObject.RelativeDepth + (Depth - 0.00001f) - ringLayers[ringObject.LayerIndex].ShadowDepth,
-                        scale: ringObject.Scale);
+                        scale: ringObject.Scale,
+                        effects: SpriteEffects.None);
                 }
 
                 spriteBatch.Draw(
                     ringObject.Texture,
                     ringObject.Position,
+                    sourceRectangle: null,
                     origin: ringObject.Origin,
                     color: Color.Lerp(ringObject.Color, Color, 0.3f).AdjustLight(ringObject.ColorLightness),
                     rotation: ringObject.Rotation,
                     layerDepth: ringObject.RelativeDepth + Depth,
-                    scale: ringObject.Scale);
+                    scale: ringObject.Scale,
+                    effects: SpriteEffects.None);
             }
         }
 

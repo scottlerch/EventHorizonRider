@@ -36,21 +36,33 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents
                 position: new Vector2(position.X + 2, position.Y + 2),
                 color: Color.Black,
                 scale: scale,
-                layerDepth: Depth);
+                layerDepth: Depth,
+                sourceRectangle: null,
+                rotation: 0f,
+                effects: SpriteEffects.None,
+                origin: Vector2.Zero);
 
             spriteBatch.Draw(
                 progressBar,
                 position: position,
                 color: Color.DarkGray.AdjustLight(0.5f),
                 scale: scale,
-                layerDepth: Depth + 0.00001f);
+                layerDepth: Depth + 0.00001f,
+                sourceRectangle: null,
+                rotation: 0f,
+                effects: SpriteEffects.None,
+                origin: Vector2.Zero);
 
             spriteBatch.Draw(
                 progressBar,
                 position: position,
                 color: Color.Green,
                 scale: new Vector2(MathHelper.Lerp(0f, scale.X, progress), scale.Y),
-                layerDepth: Depth + 0.00002f);
+                layerDepth: Depth + 0.00002f,
+                sourceRectangle: null,
+                rotation: 0f,
+                effects: SpriteEffects.None,
+                origin: Vector2.Zero);
         }
     }
 }

@@ -4,7 +4,6 @@ using Android.OS;
 using Android.Views;
 using EventHorizonRider.Core;
 using System;
-using Android.Content.Res;
 
 namespace EventHorizonRider.Android
 {
@@ -66,15 +65,28 @@ namespace EventHorizonRider.Android
             }
         }
 
+        // Replace the SetImmersive method with the following code
         private void SetImmersive()
         {
-            view.SystemUiVisibility = (StatusBarVisibility)(
-                SystemUiFlags.LayoutStable | 
-                SystemUiFlags.LayoutHideNavigation | 
-                SystemUiFlags.LayoutFullscreen | 
-                SystemUiFlags.HideNavigation |
-                SystemUiFlags.Fullscreen | 
-                SystemUiFlags.ImmersiveSticky);
+            if (OperatingSystem.IsAndroidVersionAtLeast(30))
+            {
+                var controller = view.WindowInsetsController;
+                if (controller != null)
+                {
+                    controller.Hide(WindowInsets.Type.SystemBars());
+                    controller.SystemBarsBehavior = (int)WindowInsetsControllerBehavior.ShowTransientBarsBySwipe;
+                }
+            }
+            else if (OperatingSystem.IsAndroidVersionAtLeast(21))
+            {
+                view.SystemUiFlags = (
+                    SystemUiFlags.LayoutStable |
+                    SystemUiFlags.LayoutHideNavigation |
+                    SystemUiFlags.LayoutFullscreen |
+                    SystemUiFlags.HideNavigation |
+                    SystemUiFlags.Fullscreen |
+                    SystemUiFlags.ImmersiveSticky);
+            }
         }
     }
 }

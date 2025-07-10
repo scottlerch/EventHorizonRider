@@ -28,12 +28,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
         {
             if (Visible)
             {
-                spriteBatch.Draw(texture, blackhole.Position,
+                spriteBatch.Draw(
+                    texture,
+                    blackhole.Position,
+                    sourceRectangle: null,
                     origin: textureOrigin,
                     rotation: currentRotation,
                     scale: blackhole.Scale,
                     color: Color.White * 0.4f,
-                    layerDepth: Depth);
+                    layerDepth: Depth,
+                    effects: SpriteEffects.None);
             }
         }
 

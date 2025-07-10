@@ -17,6 +17,8 @@ namespace EventHorizonRider.Windows
         [STAThread]
         internal static void Main(string[] args)
         {
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+
             DeviceInfo.InitializePlatform(new Platform
             {
                 IsMouseVisible = true,
@@ -27,23 +29,21 @@ namespace EventHorizonRider.Windows
                 PauseOnLoseFocus = false,
             });
 
-            using (var game = new MainGame())
+            using var game = new MainGame();
+            game.SetResolution(1366, 768);
+
+            if (args.Length > 0 && args[0].Equals("Development", StringComparison.OrdinalIgnoreCase))
             {
-                game.SetResolution(1366, 768);
+                var developmentToolsForm = new DevelopmentToolsForm(game);
 
-                if (args.Length > 0 && args[0].Equals("Development", StringComparison.OrdinalIgnoreCase))
-                {
-                    var developmentToolsForm = new DevelopmentToolsForm(game);
+                var parentForm = game.Window.GetType()
+                    .GetField("_form", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .GetValue(game.Window) as IWin32Window;
 
-                    var parentForm = game.Window.GetType()
-                        .GetField("_form", BindingFlags.NonPublic | BindingFlags.Instance)
-                        .GetValue(game.Window) as IWin32Window;
-
-                    developmentToolsForm.Show(parentForm);
-                }
-
-                game.Run();
+                developmentToolsForm.Show(parentForm);
             }
+
+            game.Run();
         }
 
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]

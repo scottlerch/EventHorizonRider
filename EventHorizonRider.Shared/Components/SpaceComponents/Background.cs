@@ -106,21 +106,26 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 spriteBatch.Draw(
                     background,
                     position: DeviceInfo.LogicalCenter,
+                    sourceRectangle: null,
                     origin: backgroundOrigin,
                     rotation: currentBackgroundRotation,
                     layerDepth: Depth,
                     color: StarBackgroundColor*backgroundAlpha,
-                    scale: backgroundScale*Scale);
+                    scale: backgroundScale*Scale,
+                    effects: SpriteEffects.None);
             }
             else
             {
                 spriteBatch.Draw(
                     radialGradient,
                     position: DeviceInfo.LogicalCenter,
+                    sourceRectangle: null,
                     origin: radialGradientOrigin,
+                    rotation: 0f,
                     layerDepth: Depth,
                     color: Color.White * 0.9f,
-                    scale: radialGradientScale * Scale);
+                    scale: radialGradientScale * Scale,
+                    effects: SpriteEffects.None);
             }
 
             if (UseStaticStars)
@@ -132,7 +137,9 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                     rotation: currentRotation,
                     color: Color.White * backgroundAlpha,
                     scale: starsBackgroundScale * Scale,
-                    layerDepth: Depth + 0.001f);
+                    layerDepth: Depth + 0.001f,
+                    sourceRectangle: null,
+                    effects: SpriteEffects.None);
             }
             else
             {
@@ -141,13 +148,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 for (var i = 0; i < stars.Length; i++)
                 {
                     var star = stars[i];
-                    spriteBatch.Draw(star.Texture,
+                    spriteBatch.Draw(
+                        star.Texture,
                         position: star.Position,
+                        sourceRectangle: null,
                         origin: star.Origin,
                         layerDepth: Depth + (depthOffset * i),
                         color: star.Color * star.Transparency,
                         scale: new Vector2(star.Scale * Scale),
-                        rotation: star.Angle * 20f);
+                        rotation: star.Angle * 20f,
+                        effects: SpriteEffects.None);
                 }
             }
         }

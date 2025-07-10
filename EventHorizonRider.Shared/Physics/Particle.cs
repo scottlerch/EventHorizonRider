@@ -91,7 +91,11 @@ namespace EventHorizonRider.Core.Physics
                     texture,
                     destinationRectangle: drawRectangle,
                     color: currColor,
-                    layerDepth: depth);
+                    layerDepth: depth,
+                    sourceRectangle: null,
+                    rotation: 0f,
+                    effects: SpriteEffects.None,
+                    origin: Vector2.Zero);
             }
         }
     }

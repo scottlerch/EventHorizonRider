@@ -80,21 +80,25 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
                 spriteBatch.Draw(
                     shieldPusleTexture,
                     shieldPulseLocation,
+                    sourceRectangle: null,
                     origin: shieldPulseOrigin,
                     color: Color.Lerp(Color, Color.White, 0.3f) * shieldPulseAlpha,
                     scale: Vector2.One * shieldPulseScale,
                     rotation: ship.Rotation,
-                    layerDepth: Depth - 0.0003f);
+                    layerDepth: Depth - 0.0003f,
+                    effects: SpriteEffects.None);
             }
 
             spriteBatch.Draw(
                 shieldTextures[shieldTextureIndex],
                 ship.Position,
+                sourceRectangle: null,
                 origin: shieldTexturesOrigins[shieldTextureIndex],
                 color: Color.Lerp(Color, Color.White, 0.3f) * BaseShieldAlpha,
                 scale: Vector2.One,
                 rotation: ship.Rotation,
-                layerDepth: Depth - 0.0002f);
+                layerDepth: Depth - 0.0002f,
+                effects: SpriteEffects.None);
         }
     }
 }

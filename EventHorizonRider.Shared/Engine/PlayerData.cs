@@ -1,8 +1,8 @@
 ﻿#if !PSM
 using Newtonsoft.Json;
-using PCLStorage;
 #endif
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace EventHorizonRider.Core.Engine
@@ -26,10 +26,13 @@ namespace EventHorizonRider.Core.Engine
         {
             try
             {
-                var rootFolder = FileSystem.Current.LocalStorage;
-                var folder = await rootFolder.CreateFolderAsync("EventHorizon", CreationCollisionOption.OpenIfExists);
-                var file = await folder.CreateFileAsync("player1.json", CreationCollisionOption.ReplaceExisting);
-                await file.WriteAllTextAsync(JsonConvert.SerializeObject(this));
+                var rootFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                var folderPath = Path.Combine(rootFolder, "EventHorizon");
+
+                Directory.CreateDirectory(folderPath);
+                var filePath = Path.Combine(folderPath, "player1.json");
+
+                await File.WriteAllTextAsync(filePath, JsonConvert.SerializeObject(this));
             }
             catch (Exception)
             {
@@ -41,15 +44,13 @@ namespace EventHorizonRider.Core.Engine
         {
             try
             {
-                var rootFolder = FileSystem.Current.LocalStorage;
+                var rootFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                var folderPath = Path.Combine(rootFolder, "EventHorizon");
+                var filePath = Path.Combine(folderPath, "player1.json");
 
-                var folder = await rootFolder.CreateFolderAsync("EventHorizon", CreationCollisionOption.OpenIfExists);
-                var fileExists = await folder.CheckExistsAsync("player1.json");
-
-                if (fileExists == ExistenceCheckResult.FileExists)
+                if (File.Exists(filePath))
                 {
-                    var file = await folder.GetFileAsync("player1.json");
-                    var text = await file.ReadAllTextAsync();
+                    var text = await File.ReadAllTextAsync(filePath);
 
                     if (!string.IsNullOrEmpty(text))
                     {

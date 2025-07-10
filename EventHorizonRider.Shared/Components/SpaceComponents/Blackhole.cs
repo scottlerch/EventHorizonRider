@@ -121,11 +121,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents
 
         protected override void DrawCore(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, Position,
+            spriteBatch.Draw(
+                texture, 
+                Position,
+                sourceRectangle: null,
                 origin: new Vector2(texture.Width/2f, texture.Height/2f),
                 rotation: currentRotation,
                 scale: new Vector2(Scale.X, Scale.Y),
-                layerDepth: Depth);
+                color: Color.Black,
+                layerDepth: Depth,
+                effects: SpriteEffects.None);
         }
     }
 }
