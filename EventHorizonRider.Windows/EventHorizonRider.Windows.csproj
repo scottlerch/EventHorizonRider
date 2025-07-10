@@ -3,17 +3,10 @@
     <TargetFramework>net9.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <MonoGamePlatform>Windows</MonoGamePlatform>
-    <MonoGameContentBuilderExe></MonoGameContentBuilderExe>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <Configurations>Ad-Hoc;AppStore;Debug;Release</Configurations>
-  </PropertyGroup>
-  <PropertyGroup>
     <StartupObject>EventHorizonRider.Windows.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>

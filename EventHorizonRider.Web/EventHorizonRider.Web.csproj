@@ -2,8 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <Configurations>Ad-Hoc;AppStore;Debug;Release</Configurations>
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>

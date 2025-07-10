@@ -1,18 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net9.0-ios</TargetFramework>
     <OutputType>Exe</OutputType>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <MonoGamePlatform>iOS</MonoGamePlatform>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <ProvisioningType>manual</ProvisioningType>
     <Configurations>Ad-Hoc;AppStore;Debug;Release</Configurations>
     <StartupObject>EventHorizonRider.iOS.Application</StartupObject>
-    <TargetFramework>net9.0-ios</TargetFramework>
-    <AssemblyTitle>EventHorizonRider.iOS</AssemblyTitle>
     <Product>EventHorizonRider.iOS</Product>
-    <Copyright>Copyright © 2025</Copyright>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <ConsolePause>false</ConsolePause>

@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net9.0-android</TargetFramework>
     <OutputType>Exe</OutputType>
+    <Product>EventHorizonRider.Android</Product>
     <AndroidApplication>true</AndroidApplication>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoGamePlatform>Android</MonoGamePlatform>
@@ -28,14 +30,6 @@
     <EnableLLVM>False</EnableLLVM>
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <EnableProguard>False</EnableProguard>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetFramework>net9.0-android</TargetFramework>
-    <AssemblyTitle>EventHorizonRider.Android</AssemblyTitle>
-    <Product>EventHorizonRider.Android</Product>
-    <Copyright>Copyright © 2025</Copyright>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.Android" Version="3.8.4" />
