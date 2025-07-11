@@ -8,6 +8,7 @@
     <Configurations>Ad-Hoc;AppStore;Debug;Release</Configurations>
     <StartupObject>EventHorizonRider.iOS.Application</StartupObject>
     <Product>EventHorizonRider.iOS</Product>
+    <RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <ConsolePause>false</ConsolePause>
