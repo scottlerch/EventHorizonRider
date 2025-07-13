@@ -5,7 +5,7 @@ namespace EventHorizonRider.Core.Physics;
 
 internal static class MathUtilities
 {
-    private static readonly Random Random = new Random();
+    private static readonly Random Random = new();
 
     /// <summary>
     /// Get random value between two numbers inclusive.

@@ -10,20 +10,12 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents;
 
 internal class PlayButton : ComponentBase
 {
-    private class Info
+    private class Info(string text, Vector2 size, Color color, Color hoverColor)
     {
-        public readonly string Text;
-        public readonly Vector2 Size;
-        public readonly Color Color;
-        public readonly Color HoverColor;
-
-        public Info(string text, Vector2 size, Color color, Color hoverColor)
-        {
-            Text = text;
-            Size = size;
-            Color = color;
-            HoverColor = hoverColor;
-        }
+        public readonly string Text = text;
+        public readonly Vector2 Size = size;
+        public readonly Color Color = color;
+        public readonly Color HoverColor = hoverColor;
     }
 
     private float fadeSpeed = 1.5f;

@@ -138,14 +138,14 @@ internal class PlayTimer : ComponentBase
         bestTextSize = labelFont.MeasureString(BestText);
         labelFont.MeasureString(LevelText);
 
-        textOffset = new List<float>
-        {
+        textOffset =
+        [
             timeFont.MeasureString("0.00").X,
             timeFont.MeasureString("00.00").X,
             timeFont.MeasureString("000.00").X,
             timeFont.MeasureString("0000.00").X,
             timeFont.MeasureString("00000.00").X
-        };
+        ];
 
         levelTextSize = labelFont.MeasureString(LevelText).X;
 
@@ -302,7 +302,7 @@ internal class PlayTimer : ComponentBase
             layerDepth: Depth + 0.00003f);
     }
 
-    private string FormatTime(TimeSpan time)
+    private static string FormatTime(TimeSpan time)
     {
         return string.Format("{0:0.00}", time.TotalSeconds);
     }

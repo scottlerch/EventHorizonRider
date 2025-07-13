@@ -3,24 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components;
 
-internal class Menu : ComponentBase
+internal class Menu(LevelSelect levelSelect, ResetButton resetButton, CreditsButton creditsButton, Credits credits) : ComponentBase(levelSelect, resetButton, creditsButton, credits)
 {
-    public LevelSelect LevelSelect { get; private set; }
+    public LevelSelect LevelSelect { get; private set; } = levelSelect;
 
-    public ResetButton ResetButton { get; private set; }
+    public ResetButton ResetButton { get; private set; } = resetButton;
 
-    public CreditsButton CreditsButton { get; private set; }
+    public CreditsButton CreditsButton { get; private set; } = creditsButton;
 
-    public Credits Credits { get; private set; }
-
-    public Menu(LevelSelect levelSelect, ResetButton resetButton, CreditsButton creditsButton, Credits credits) 
-        : base(levelSelect, resetButton, creditsButton, credits)
-    {
-        LevelSelect = levelSelect;
-        ResetButton = resetButton;
-        CreditsButton = creditsButton;
-        Credits = credits;
-    }
+    public Credits Credits { get; private set; } = credits;
 
     protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
     {

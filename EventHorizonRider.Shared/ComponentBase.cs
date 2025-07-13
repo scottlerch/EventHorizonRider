@@ -23,7 +23,7 @@ internal abstract class ComponentBase
 
         if (components.Length > 0)
         {
-            children = new List<ComponentBase>(components);
+            children = [.. components];
 
             foreach (var child in children)
             {
@@ -80,10 +80,7 @@ internal abstract class ComponentBase
         component.Depth = depth;
         component.Parent = this;
 
-        if (children == null)
-        {
-            children = new List<ComponentBase>();    
-        }
+        children ??= [];
 
         children.Add(component);
     }

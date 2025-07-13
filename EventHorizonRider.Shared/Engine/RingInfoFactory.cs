@@ -7,17 +7,11 @@ namespace EventHorizonRider.Core.Engine;
 
 internal class RingInfoFactory
 {
-    private class RingTypeSelectionHelper
+    private class RingTypeSelectionHelper(RingType type, RingTypeSelection typeSelection)
     {
         private int index;
-        private readonly RingType[] ringTypes;
-        private readonly RingTypeSelection ringTypeSelection;
-
-        public RingTypeSelectionHelper(RingType type, RingTypeSelection typeSelection)
-        {
-            ringTypes = AllRingTypes.Where(t => type.HasFlag(t)).ToArray();
-            ringTypeSelection = typeSelection;
-        }
+        private readonly RingType[] ringTypes = [.. AllRingTypes.Where(t => type.HasFlag(t))];
+        private readonly RingTypeSelection ringTypeSelection = typeSelection;
 
         public RingType GetNext()
         {
@@ -26,20 +20,19 @@ internal class RingInfoFactory
                 : ringTypes[index];
 
             index++;
-            index = index % ringTypes.Length;
+            index %= ringTypes.Length;
 
             return nextType;
         }
     }
 
-    private static readonly Random Rand = new Random();
+    private static readonly Random Rand = new();
     private static readonly RingType[] AllRingTypes =
-        Enum.GetValues(typeof (RingType))
+        [.. Enum.GetValues<RingType>()
             .Cast<RingType>()
-            .Where(x => ((int) x != 0) && (((int) x & ((int) x - 1)) == 0))
-            .ToArray();
+            .Where(x => ((int) x != 0) && (((int) x & ((int) x - 1)) == 0))];
 
-    public IEnumerable<RingInfo> GetSpirals(
+    public static IEnumerable<RingInfo> GetSpirals(
         int? iterations = null,
         float spiralRadius = 700f,
         RingType type = RingType.All,
@@ -61,7 +54,7 @@ internal class RingInfoFactory
         }
     }
 
-    public IEnumerable<RingInfo> GetRandomSequence(
+    public static IEnumerable<RingInfo> GetRandomSequence(
         int? iterations = null, 
         Range<int> numberOfGaps = null, 
         Range<float> gapSize = null,
@@ -71,9 +64,9 @@ internal class RingInfoFactory
     {
         var ringTypeSelector = new RingTypeSelectionHelper(type, typeSelection);
 
-        gapSize = gapSize ?? Range.Create(MathHelper.TwoPi/8, MathHelper.TwoPi/4);
-        numberOfGaps = numberOfGaps ?? Range.Create(1, 4);
-        rotation = rotation ?? Range.Create(0f);
+        gapSize ??= Range.Create(MathHelper.TwoPi/8, MathHelper.TwoPi/4);
+        numberOfGaps ??= Range.Create(1, 4);
+        rotation ??= Range.Create(0f);
 
         for (var i = 0; i < iterations || iterations == null; i++)
         {
@@ -95,7 +88,7 @@ internal class RingInfoFactory
         }
     }
 
-    public IEnumerable<RingInfo> GetStepSequence(
+    public static IEnumerable<RingInfo> GetStepSequence(
         int numberOfSteps, 
         float gapSize,
         Range<float> rotation = null,
@@ -105,7 +98,7 @@ internal class RingInfoFactory
         var ringTypeSelector = new RingTypeSelectionHelper(type, typeSelection);
         var angleStep = MathHelper.TwoPi/numberOfSteps;
 
-        rotation = rotation ?? Range.Create(0f);
+        rotation ??= Range.Create(0f);
 
         for (var i = 0; i < numberOfSteps; i++)
         {
@@ -120,7 +113,7 @@ internal class RingInfoFactory
         }
     }
 
-    public IEnumerable<RingInfo> GetZigZagSequence(
+    public static IEnumerable<RingInfo> GetZigZagSequence(
         int iterations, 
         float gapSize,
         float? angleStep = null,
@@ -131,8 +124,8 @@ internal class RingInfoFactory
         var ringTypeSelector = new RingTypeSelectionHelper(type, typeSelection);
         var baseAngle = (float) Rand.NextDouble()*MathHelper.TwoPi;
         
-        angleStep = angleStep ?? MathHelper.TwoPi/4;
-        rotation = rotation ?? Range.Create(0f);
+        angleStep ??= MathHelper.TwoPi/4;
+        rotation ??= Range.Create(0f);
 
         for (var i = 0; i < iterations; i++)
         {

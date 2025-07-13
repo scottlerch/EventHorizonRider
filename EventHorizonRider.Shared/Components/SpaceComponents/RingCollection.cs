@@ -11,10 +11,10 @@ using System.Linq;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents;
 
-internal class RingCollection : ComponentBase
+internal class RingCollection(Blackhole blackhole, Shockwave shockwave, RingFactory ringFactory) : ComponentBase
 {
-    private readonly Blackhole blackhole;
-    private readonly Shockwave shockwave;
+    private readonly Blackhole blackhole = blackhole;
+    private readonly Shockwave shockwave = shockwave;
 
     private IEnumerator<RingInfo> currentSequence;
 
@@ -24,21 +24,11 @@ internal class RingCollection : ComponentBase
 
     private Level level;
 
-    private bool stopped;
-
-    public RingCollection(Blackhole blackhole, Shockwave shockwave, RingFactory ringFactory)
-    {
-        stopped = true;
-
-        this.blackhole = blackhole;
-        this.shockwave = shockwave;
-
-        RingFactory = ringFactory;
-    }
+    private bool stopped = true;
 
     public Color Color { get; set; }
 
-    public RingFactory RingFactory { get; private set; }
+    public RingFactory RingFactory { get; private set; } = ringFactory;
 
     public bool HasMoreRings { get; private set; }
 
@@ -87,7 +77,7 @@ internal class RingCollection : ComponentBase
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
-        RingFactory.LoadContent(content, graphics);
+        RingFactory.LoadContent(content);
     }
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
@@ -98,7 +88,7 @@ internal class RingCollection : ComponentBase
 
         // Track relative total elapsed game time since if we use gameTime.TotalGameTime it won't work when paused
         totalElapsedGameTime += gameTime.ElapsedGameTime;
-        lastRingAddTime = lastRingAddTime ?? totalElapsedGameTime;
+        lastRingAddTime ??= totalElapsedGameTime;
 
         if ((totalElapsedGameTime - lastRingAddTime) >= (level.RingInterval + lastRingDuration))
         {

@@ -3,30 +3,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components;
 
-internal class Foreground : ComponentBase
+internal class Foreground(PlayButton playButton, MenuButton menuButton, PlayTimer playTime, ControlsHelp controlsHelp, Title title, FpsCounter fpsCounter) : ComponentBase(playButton, menuButton, playTime, controlsHelp, title, fpsCounter)
 {
-    public FpsCounter FpsCounter { get; private set; }
+    public FpsCounter FpsCounter { get; private set; } = fpsCounter;
 
-    public PlayButton PlayButton { get; private set; }
+    public PlayButton PlayButton { get; private set; } = playButton;
 
-    public MenuButton MenuButton { get; private set; }
+    public MenuButton MenuButton { get; private set; } = menuButton;
 
-    public PlayTimer PlayTimer { get; private set; }
+    public PlayTimer PlayTimer { get; private set; } = playTime;
 
-    public Title Title { get; private set; }
+    public Title Title { get; private set; } = title;
 
-    public ControlsHelp ControlsHelp { get; private set; }
-
-    public Foreground(PlayButton playButton, MenuButton menuButton, PlayTimer playTime, ControlsHelp controlsHelp, Title title, FpsCounter fpsCounter) 
-        : base(playButton, menuButton, playTime, controlsHelp, title, fpsCounter)
-    {
-        PlayButton = playButton;
-        MenuButton = menuButton;
-        PlayTimer = playTime;
-        Title = title;
-        ControlsHelp = controlsHelp;
-        FpsCounter = fpsCounter;
-    }
+    public ControlsHelp ControlsHelp { get; private set; } = controlsHelp;
 
     protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
     {

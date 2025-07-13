@@ -9,7 +9,7 @@ namespace EventHorizonRider.Windows;
 /// <summary>
 /// The main class.
 /// </summary>
-internal static class Program
+internal static partial class Program
 {
     /// <summary>
     /// The main entry point for the application.
@@ -46,6 +46,6 @@ internal static class Program
         game.Run();
     }
 
-    [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
-    private static extern int GetSystemMetrics(int nIndex);
+    [LibraryImport("user32.dll")]
+    private static partial int GetSystemMetrics(int nIndex);
 }

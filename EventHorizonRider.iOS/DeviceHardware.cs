@@ -5,12 +5,12 @@ using UIKit;
 
 namespace EventHorizonRider.iOS;
 
-public class DeviceHardware
+public partial class DeviceHardware
 {
     private const string HardwareProperty = "hw.machine";
 
-    [DllImport(Constants.SystemLibrary)]
-    private static extern int sysctlbyname([MarshalAs(UnmanagedType.LPStr)] string property, IntPtr output, IntPtr oldLen, IntPtr newp, uint newlen);
+    [LibraryImport(Constants.SystemLibrary)]
+    private static partial int sysctlbyname([MarshalAs(UnmanagedType.LPStr)] string property, IntPtr output, IntPtr oldLen, IntPtr newp, uint newlen);
 
     public static HardwareType Version
     {

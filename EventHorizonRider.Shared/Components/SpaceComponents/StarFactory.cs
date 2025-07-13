@@ -11,7 +11,7 @@ internal class StarFactory
     private Texture2D[] starTextures;
     private Color[] colors;
 
-    public void LoadContent(ContentManager content, GraphicsDevice graphics)
+    public void LoadContent(ContentManager content)
     {
         const int maxStars = 4;
 
@@ -23,8 +23,8 @@ internal class StarFactory
             starTextures[i] = content.Load<Texture2D>(@"Images\star_" + (i + 1));
         }
 
-        colors = new[]
-        {
+        colors =
+        [
             Color.White,
             Color.Lavender,
             Color.LavenderBlush,
@@ -33,7 +33,7 @@ internal class StarFactory
             Color.Thistle,
             Color.Pink,
             Color.MistyRose
-        };
+        ];
     }
 
     public Star[] GetStars(int numberOfStars)

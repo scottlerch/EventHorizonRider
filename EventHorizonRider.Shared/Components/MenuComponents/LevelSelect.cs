@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace EventHorizonRider.Core.Components.MenuComponents;
 
-internal class LevelSelect : ComponentBase
+internal class LevelSelect(LevelCollection levelsCollection) : ComponentBase
 {
     private class LevelButton
     {
@@ -20,7 +20,7 @@ internal class LevelSelect : ComponentBase
         public Button Button;
     }
 
-    private readonly LevelCollection levelsCollection;
+    private readonly LevelCollection levelsCollection = levelsCollection;
 
     private SpriteFont buttonFont;
     private SoundEffect buttonSound;
@@ -34,11 +34,6 @@ internal class LevelSelect : ComponentBase
     private Vector2 unlockLevelTextSize;
 
     private LevelButton[] levelButtons;
-
-    public LevelSelect(LevelCollection levelsCollection)
-    {
-        this.levelsCollection = levelsCollection;
-    }
 
     public int StartLevel { get; set; }
 
@@ -110,7 +105,7 @@ internal class LevelSelect : ComponentBase
             (DeviceInfo.LogicalWidth / 2f) + (levelsButtonTotalWidth / 2) - infiniteButtonSize.X,
             levelButtonY);
 
-        levelButtons[levelButtons.Length - 1] = new LevelButton
+        levelButtons[^1] = new LevelButton
         {
             LevelNumber = levelButtons.Length,
             Text = infiniteLevelText,

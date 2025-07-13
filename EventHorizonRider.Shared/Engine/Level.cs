@@ -36,18 +36,19 @@ internal class Level
         }
         else
         {
-            internalSequence = sequence.ToList();
-            var list = internalSequence as List<RingInfo>;
+            internalSequence = [.. sequence];
             Duration = TimeSpan.Zero;
 
-            // ReSharper disable once PossibleNullReferenceException
-            for (int i = 0; i < list.Count; i++)
-            {
-                Duration += ringInterval + TimeSpan.FromSeconds(Math.Abs(list[i].SpiralRadius) / RingSpeed);
+            bool isFirst = true;
 
-                if (i == 0)
+            foreach (var ring in internalSequence)
+            {
+                Duration += ringInterval + TimeSpan.FromSeconds(Math.Abs(ring.SpiralRadius) / RingSpeed);
+
+                if (isFirst)
                 {
-                    Duration += TimeSpan.FromSeconds(RingFactory.StartRadius/RingSpeed);
+                    Duration += TimeSpan.FromSeconds(RingFactory.StartRadius / RingSpeed);
+                    isFirst = false;
                 }
             }
         }

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace EventHorizonRider.Core.Components;
 
-internal class Root : ComponentBase
+internal class Root(Music music, Space space, Menu menu, Foreground foreground) : ComponentBase(music, space, menu, foreground)
 {
     private bool previousPausedPressed;
 
@@ -12,22 +12,13 @@ internal class Root : ComponentBase
 
     public int? OverrideLevel { get; set; }
 
-    public Space Space { get; private set; }
+    public Space Space { get; private set; } = space;
 
-    public Menu Menu { get; private set; }
+    public Menu Menu { get; private set; } = menu;
 
-    public Foreground Foreground { get; private set; }
+    public Foreground Foreground { get; private set; } = foreground;
 
-    public Music Music { get; private set; }
-
-    public Root(Music music, Space space, Menu menu, Foreground foreground)
-        : base(music, space, menu, foreground)
-    {
-        Music = music;
-        Space = space;
-        Menu = menu;
-        Foreground = foreground;
-    }
+    public Music Music { get; private set; } = music;
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {

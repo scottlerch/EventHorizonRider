@@ -69,7 +69,7 @@ internal class GameContext
 
     private void InitializeEngine()
     {
-        Levels = new LevelCollection(new RingInfoFactory());
+        Levels = new LevelCollection();
         PlayerData = new PlayerData();
         IoTask = PlayerData.Load();
     }

@@ -26,7 +26,7 @@ internal class ProgressBar : ComponentBase
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
         progressBar = new Texture2D(graphics, 1, 1);
-        progressBar.SetData(new[] { Color.White });
+        progressBar.SetData([Color.White]);
     }
 
     protected override void DrawCore(SpriteBatch spriteBatch)

@@ -26,7 +26,7 @@ internal class Ring : ComponentBase
 
     private const float DepthStep = 0.0001f;
 
-    private readonly Random random = new Random();
+    private readonly Random random = new();
     private readonly Vector2 origin;
     private readonly List<RingObject> ringObjects;
     private readonly List<RingLayer> ringLayers; 
@@ -54,7 +54,7 @@ internal class Ring : ComponentBase
         this.rotationalVelocity = rotationalVelocity;
         this.origin = origin;
 
-        ringLayers = new List<RingLayer>();
+        ringLayers = [];
         ringObjects = CreateRingObjects(spiralSpeed, spiralRadius, texturesInfoGroup, gaps);
     }
 
@@ -217,7 +217,7 @@ internal class Ring : ComponentBase
                 {
                     LayerIndex = ringLayers.Count,
                     Texture = texturesInfo.Textures[textureIndex],
-                    ShadowTexture = texturesInfo.ShadowTextures != null ? texturesInfo.ShadowTextures[textureIndex] : null,
+                    ShadowTexture = texturesInfo.ShadowTextures?[textureIndex],
                     CollisionInfo = texturesInfo.CollisionInfos[textureIndex],
                     Rotation = MathHelper.WrapAngle((float)random.NextDouble() * MathHelper.TwoPi),
                     RotationRate = (float)random.NextDouble() * MathHelper.TwoPi / 4f * (random.Next(2) == 0 ? -1f : 1f),
@@ -280,7 +280,7 @@ internal class Ring : ComponentBase
     /// This will calculate if objects near the edge of gap within a ring
     /// need to be modified, like tapering off in size by adjusting the scale.
     /// </summary>
-    private EdgeModifier CalculateEdgeModifer(
+    private static EdgeModifier CalculateEdgeModifer(
         IList<RingGap> gaps,
         float angle,
         float minimumAngleSpacing,

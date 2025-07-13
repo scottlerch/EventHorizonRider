@@ -7,11 +7,11 @@ using System.Linq;
 
 namespace EventHorizonRider.Core.Components;
 
-internal class Button
+internal class Button(Rectangle buttonBounds, Keys? key, TimeSpan holdDuration)
 {
-    public Rectangle ButtonBounds { get; private set; }
+    public Rectangle ButtonBounds { get; private set; } = buttonBounds;
 
-    public Keys? Key { get; private set; }
+    public Keys? Key { get; private set; } = key;
 
     private bool keyPreviouslyPressed;
     private bool mousePreviouslyPressed;
@@ -20,7 +20,7 @@ internal class Button
 
     public bool Hover { get; private set; }
 
-    public TimeSpan HoldDuration { get; set; }
+    public TimeSpan HoldDuration { get; set; } = holdDuration;
 
     public TimeSpan CurrentHoldDuration { get; private set; }
 
@@ -37,13 +37,6 @@ internal class Button
     public Button(Rectangle buttonBounds, Keys? key = null)
         : this(buttonBounds, key, TimeSpan.Zero)
     {
-    }
-
-    public Button(Rectangle buttonBounds, Keys? key, TimeSpan holdDuration)
-    {
-        HoldDuration = holdDuration;
-        ButtonBounds = buttonBounds;
-        Key = key;
     }
 
     public void Update(GameTime gameTime, InputState inputState, bool visible)

@@ -3,55 +3,35 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Physics;
 
-internal struct Particle
+internal struct Particle(
+    Vector2 position,
+    Vector2 startDirection,
+    Vector2 endDirection,
+    float startingLife,
+    float scaleBegin,
+    float scaleEnd,
+    Color startColor,
+    Color endColor,
+    Emitter emitter)
 {
-    public bool IsAlive;
+    public bool IsAlive = true;
     
-    private readonly Vector2 startDirection;
-    private readonly Vector2 endDirection;
-    private readonly float startingLife;
-    private readonly float scaleBegin;
-    private readonly float scaleEnd;
-    private readonly Color startColor;
-    private readonly Color endColor;
-    private readonly Vector2 gravityCenter;
-    private readonly float gravityForce;
-    private readonly Texture2D texture;
+    private readonly Vector2 startDirection = startDirection;
+    private readonly Vector2 endDirection = endDirection;
+    private readonly float startingLife = 1f / startingLife;
+    private readonly float scaleBegin = scaleBegin;
+    private readonly float scaleEnd = scaleEnd;
+    private readonly Color startColor = startColor;
+    private readonly Color endColor = endColor;
+    private readonly Vector2 gravityCenter = emitter.GravityCenter;
+    private readonly float gravityForce = emitter.GravityForce;
+    private readonly Texture2D texture = emitter.ParticleSprite;
 
-    private Vector2 position;
-    private float lifePhase;
-    private float lifeLeft;
-    private Color currColor;
-    private Rectangle drawRectangle;
-
-    public Particle(
-        Vector2 position, 
-        Vector2 startDirection,
-        Vector2 endDirection, 
-        float startingLife, 
-        float scaleBegin, 
-        float scaleEnd,
-        Color startColor, 
-        Color endColor, 
-        Emitter emitter)
-    {
-        this.position = position;
-        this.startDirection = startDirection;
-        this.endDirection = endDirection;
-        this.startingLife = 1f / startingLife;
-        this.scaleBegin = scaleBegin;
-        this.scaleEnd = scaleEnd;
-        this.startColor = startColor;
-        this.endColor = endColor;
-        gravityCenter = emitter.GravityCenter;
-        gravityForce = emitter.GravityForce;
-        texture = emitter.ParticleSprite;
-        IsAlive = true;
-        lifePhase = 1f;
-        lifeLeft = startingLife;
-        currColor = Color.White;
-        drawRectangle = new Rectangle();
-    }
+    private Vector2 position = position;
+    private float lifePhase = 1f;
+    private float lifeLeft = startingLife;
+    private Color currColor = Color.White;
+    private Rectangle drawRectangle = new();
 
     public bool Update(float dt)
     {
@@ -83,7 +63,7 @@ internal struct Particle
         return true;
     }
 
-    public void Draw(SpriteBatch spriteBatch, float depth)
+    public readonly void Draw(SpriteBatch spriteBatch, float depth)
     {
         if (IsAlive)
         {

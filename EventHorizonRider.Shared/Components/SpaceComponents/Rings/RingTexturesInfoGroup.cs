@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents.Rings;
 
@@ -12,11 +13,13 @@ internal class RingTexturesInfoGroup
 
     public float MaximumWidth { get; private set; }
 
+#pragma warning disable IDE0350 // For compiler performance reasons, we want to use explicitly types static anonymous methods here.
+
     public RingTexturesInfoGroup(IEnumerable<RingTexturesInfo> texturesInfos, RingTexturesInfoGroupMode mode)
     {
         TextureInfos = texturesInfos;
         Mode = mode;
-        MaximumWidth = TextureInfos.Max(i => 
-            i.Textures.Max(t => MathHelper.Max(t.Width, t.Height)) * i.ScaleRange.High);
+        MaximumWidth = TextureInfos.Max(static (RingTexturesInfo i) => 
+            i.Textures.Max(static (Texture2D t) => MathHelper.Max(t.Width, t.Height)) * i.ScaleRange.High);
     }
 }

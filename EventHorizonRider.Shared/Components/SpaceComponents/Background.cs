@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents;
 
-internal class Background : ComponentBase
+internal class Background(StarFactory newStarFactory) : ComponentBase
 {
     // Number of stars if using dynamically generated stars.
     private const int NumberOfStars = 500;
@@ -33,17 +33,12 @@ internal class Background : ComponentBase
     private float currentRotation;
     private float currentBackgroundRotation;
 
-    private readonly StarFactory starFactory;
+    private readonly StarFactory starFactory = newStarFactory;
     private Star[] stars;
 
     private Vector2 starsBackgroundScale;
     private Vector2 backgroundScale;
     private Vector2 radialGradientScale;
-
-    public Background(StarFactory newStarFactory)
-    {
-        starFactory = newStarFactory;
-    }
 
     private bool UseStaticStars { get; set; }
 
@@ -79,7 +74,7 @@ internal class Background : ComponentBase
         starsBackground = content.Load<Texture2D>(@"Images\stars");
         radialGradient = content.Load<Texture2D>(@"Images\radial_gradient");
 
-        starFactory.LoadContent(content, graphics);
+        starFactory.LoadContent(content);
         stars = starFactory.GetStars(NumberOfStars);
 
         UseStaticStars = !DeviceInfo.Platform.UseDynamicStars;

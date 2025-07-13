@@ -10,12 +10,12 @@ internal class ParticleSystem
     private readonly Random random;
     private Vector2 position;
 
-    public ParticleSystem(Vector2 position = default(Vector2))
+    public ParticleSystem(Vector2 position = default)
     {
         Position = position;
         LastPos = position;
         random = new Random();
-        EmitterList = new List<Emitter>();
+        EmitterList = [];
     }
 
     public List<Emitter> EmitterList { get; set; }

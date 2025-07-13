@@ -49,7 +49,7 @@ internal class TextureProcessor
     {
         var data = new Color[texture.Width * texture.Height];
         texture.GetData(data);
-        return new PixelData<byte>(data.Select(c => c.A).ToArray(), texture.Width, texture.Height);
+        return new PixelData<byte>([.. data.Select(c => c.A)], texture.Width, texture.Height);
     }
 
     public static Color[] SoftenAlpha(Color[] data, int width, int height)

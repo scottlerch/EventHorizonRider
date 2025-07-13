@@ -17,8 +17,10 @@ public class MainGame : Game
 
     public MainGame()
     {
-        graphicsDeviceManager = new GraphicsDeviceManager(this);
-        graphicsDeviceManager.IsFullScreen = DeviceInfo.Platform.IsFullScreen;
+        graphicsDeviceManager = new GraphicsDeviceManager(this)
+        {
+            IsFullScreen = DeviceInfo.Platform.IsFullScreen
+        };
 
         Content.RootDirectory = "Content";
 

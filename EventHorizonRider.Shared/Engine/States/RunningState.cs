@@ -26,7 +26,7 @@ internal class RunningState : GameStateBase
 
         gameContext.Levels.SetCurrentLevel(gameContext.PlayerData.DefaultLevelNumber);
 
-        UpdateLevel(gameContext, gameTime, animate: false);
+        UpdateLevel(gameContext, animate: false);
 
         gameContext.Root.Foreground.PlayButton.Show(state: PlayButtonState.Pause);
         gameContext.Root.Foreground.PlayTimer.SetLevel(gameContext.Levels.CurrentLevelNumber);
@@ -91,7 +91,7 @@ internal class RunningState : GameStateBase
             gameContext.Levels.SetCurrentLevel(gameContext.Root.OverrideLevel.Value);
             gameContext.Root.Space.Rings.Clear();
 
-            UpdateLevel(gameContext, gameTime);
+            UpdateLevel(gameContext);
 
             gameContext.Root.OverrideLevel = null;
         }
@@ -114,7 +114,7 @@ internal class RunningState : GameStateBase
                     HasLevelEnded = false;
                     gameContext.Levels.IncrementCurrentLevel();
 
-                    UpdateLevel(gameContext, gameTime);
+                    UpdateLevel(gameContext);
                 }
             }
         }
@@ -139,7 +139,7 @@ internal class RunningState : GameStateBase
             gameContext.Levels.CurrentLevelNumber);
     }
 
-    private void UpdatePauseState(GameContext gameContext)
+    private static void UpdatePauseState(GameContext gameContext)
     {
         // Check if use toggled pause manually with keyboard
         if (gameContext.Root.PausePressed)
@@ -162,7 +162,7 @@ internal class RunningState : GameStateBase
         }
     }
 
-    private void UpdateLevel(GameContext gameContext, GameTime gameTime, bool animate = true)
+    private void UpdateLevel(GameContext gameContext, bool animate = true)
     {
         LevelCurrentTime = TimeSpan.Zero;
 
@@ -196,7 +196,7 @@ internal class RunningState : GameStateBase
         return progress;
     }
 
-    private void Pause(GameContext gameContext)
+    private static void Pause(GameContext gameContext)
     {
         gameContext.Root.Music.Pause();
 

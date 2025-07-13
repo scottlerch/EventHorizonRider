@@ -6,77 +6,54 @@ using System.Collections.Generic;
 
 namespace EventHorizonRider.Core.Physics;
 
-internal class Emitter
+internal class Emitter(
+    Range<float> secPerSpawn,
+    Vector2 spawnDirection,
+    Range<float> spawnNoiseAngle,
+    Range<float> startLife,
+    Range<float> startScale,
+    Range<float> endScale,
+    Range<Color> startColor,
+    Range<Color> endColor,
+    Range<float> startSpeed,
+    Range<float> endSpeed,
+    int budget,
+    Vector2 relPosition,
+    Texture2D particleSprite,
+    Random random,
+    ParticleSystem parent)
 {
-    private readonly Random random; 
-    private float nextSpawnIn;
-    private float secPassed;
-    private Particle[] particles;
-    private Queue<int> activeParticleIndices; 
+    private readonly Random random = random; 
+    private float nextSpawnIn = MathUtilities.Lerp(secPerSpawn, (float)random.NextDouble());
+    private float secPassed = 0.0f;
+    private Particle[] particles = new Particle[budget];
+    private Queue<int> activeParticleIndices = new(Enumerable.Range(0, budget));
 
-    public Emitter(
-        Range<float> secPerSpawn, 
-        Vector2 spawnDirection,
-        Range<float> spawnNoiseAngle,
-        Range<float> startLife,
-        Range<float> startScale,
-        Range<float> endScale, 
-        Range<Color> startColor,
-        Range<Color> endColor,
-        Range<float> startSpeed,
-        Range<float> endSpeed,
-        int budget, 
-        Vector2 relPosition, 
-        Texture2D particleSprite, 
-        Random random, 
-        ParticleSystem parent)
-    {
-        SecPerSpawn = secPerSpawn;
-        SpawnDirection = spawnDirection;
-        SpawnNoiseAngle = spawnNoiseAngle;
-        StartLife = startLife;
-        StartScale = startScale;
-        EndScale = endScale;
-        StartColor = startColor;
-        EndColor = endColor;
-        StartSpeed = startSpeed;
-        EndSpeed = endSpeed;
-        Budget = budget;
-        RelPosition = relPosition;
-        ParticleSprite = particleSprite;
-        Parent = parent;
-        particles = new Particle[budget];
-        activeParticleIndices = new Queue<int>(Enumerable.Range(0, budget));
-        nextSpawnIn = MathUtilities.Lerp(secPerSpawn, (float)random.NextDouble());
-        secPassed = 0.0f;
-        this.random = random;
-    }
+    public Vector2 RelPosition { get; set; } = relPosition;
 
-    public Vector2 RelPosition { get; set; }
+    public int Budget { get; set; } = budget;
 
-    public int Budget { get; set; }
+    public Texture2D ParticleSprite { get; set; } = particleSprite;
 
-    public Texture2D ParticleSprite { get; set; }
+    public Range<float> SecPerSpawn { get; set; } = secPerSpawn;
 
-    public Range<float> SecPerSpawn { get; set; }
+    public Vector2 SpawnDirection { get; set; } = spawnDirection;
 
-    public Vector2 SpawnDirection { get; set; }
+    public Range<float> SpawnNoiseAngle { get; set; } = spawnNoiseAngle;
 
-    public Range<float> SpawnNoiseAngle { get; set; }
+    public Range<float> StartLife { get; set; } = startLife;
 
-    public Range<float> StartLife { get; set; }
+    public Range<float> StartScale { get; set; } = startScale;
 
-    public Range<float> StartScale { get; set; }
+    public Range<float> EndScale { get; set; } = endScale;
 
-    public Range<float> EndScale { get; set; }
+    public Range<Color> StartColor { get; set; } = startColor;
 
-    public Range<Color> StartColor { get; set; }
+    public Range<Color> EndColor { get; set; } = endColor;
 
-    public Range<Color> EndColor { get; set; }
+    public Range<float> StartSpeed { get; set; } = startSpeed;
 
-    public Range<float> StartSpeed { get; set; }
-
-    public Range<float> EndSpeed { get; set; }
+    public Range<float> EndSpeed { get; set; } = endSpeed;
 
     public bool Spawning { get; set; }
 
@@ -84,7 +61,7 @@ internal class Emitter
 
     public float GravityForce { get; set; }
 
-    public ParticleSystem Parent { get; set; }
+    public ParticleSystem Parent { get; set; } = parent;
 
     public void Update(float dt)
     {

@@ -5,18 +5,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents;
 
-internal class BlackholeHalo : ComponentBase
+internal class BlackholeHalo(Blackhole newBlackhole) : ComponentBase
 {
-    private readonly Blackhole blackhole;
+    private readonly Blackhole blackhole = newBlackhole;
 
     private Texture2D texture;
     private Vector2 textureOrigin;
     private float currentRotation;
-
-    public BlackholeHalo(Blackhole newBlackhole)
-    {
-        blackhole = newBlackhole;
-    }
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {

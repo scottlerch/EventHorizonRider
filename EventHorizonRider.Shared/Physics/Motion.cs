@@ -25,7 +25,7 @@ internal class Motion
     public void Initialize(float value, float target, float speed, float acceleration = 0f)
     {
         Value = value;
-        Acceleration = 0f;
+        Acceleration = acceleration;
 
         UpdateTarget(target, speed);
     }
