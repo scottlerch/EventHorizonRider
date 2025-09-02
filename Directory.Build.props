@@ -1,8 +1,14 @@
 <Project>
-	<PropertyGroup>
+  <PropertyGroup>
     <Copyright>Copyright © 2025</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Configurations>Debug;Release;Ad-Hoc;AppStore</Configurations>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <Import Project="$(MSBuildThisFileDirectory)EventHorizonRider.Shared\EventHorizonRider.Shared.projitems" Label="Shared" Condition="Exists('$(MSBuildThisFileDirectory)EventHorizonRider.Shared\EventHorizonRider.Shared.projitems')" />
 </Project>

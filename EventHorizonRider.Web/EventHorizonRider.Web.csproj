@@ -1,8 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <Configurations>Ad-Hoc;AppStore;Debug;Release</Configurations>
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
 </Project>

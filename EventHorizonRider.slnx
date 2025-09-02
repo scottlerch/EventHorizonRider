@@ -1,0 +1,42 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Ad-Hoc" />
+    <BuildType Name="AppStore" />
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="iPhone" />
+    <Platform Name="iPhoneSimulator" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/.config/">
+    <File Path=".config/dotnet-tools.json" />
+  </Folder>
+  <Folder Name="/Documentation/">
+    <File Path="README.md" />
+    <Project Path="EventHorizonRider.Web/EventHorizonRider.Web.csproj">
+      <BuildType Solution="Ad-Hoc|*" Project="Release" />
+      <BuildType Solution="AppStore|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Platforms/">
+    <Project Path="EventHorizonRider.Android/EventHorizonRider.Android.csproj">
+      <Deploy />
+    </Project>
+    <Project Path="EventHorizonRider.iOS/EventHorizonRider.iOS.csproj">
+      <Deploy />
+    </Project>
+    <Project Path="EventHorizonRider.Windows/EventHorizonRider.Windows.csproj">
+      <BuildType Solution="Ad-Hoc|*" Project="Release" />
+      <BuildType Solution="AppStore|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+  </Folder>
+  <Project Path="EventHorizonRider.Shared/EventHorizonRider.Shared.shproj" />
+</Solution>
