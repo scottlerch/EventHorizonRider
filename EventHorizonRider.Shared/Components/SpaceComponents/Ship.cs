@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Audio;
+using EventHorizonRider.Core.Audio;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
@@ -15,27 +15,27 @@ namespace EventHorizonRider.Core.Components.SpaceComponents;
 
 internal class Ship : ComponentBase, ISpriteInfo
 {
-    private const float yTouchThreshold = 90f;
+    private const float YTouchThreshold = 90f;
 
-    private readonly Blackhole blackhole;
+    private readonly Blackhole _blackhole;
 
-    private SoundEffect thrustSound;
-    private SoundComponent thrustSoundInstanceLeft;
-    private SoundComponent thrustSoundInstanceRight;
+    private SoundEffect _thrustSound;
+    private SoundComponent _thrustSoundInstanceLeft;
+    private SoundComponent _thrustSoundInstanceRight;
 
-    private SoundEffect crashSound;
-    private bool stopped = true;
-    private bool visible = true;
-    private bool rotationEnabled = false;
+    private SoundEffect _crashSound;
+    private bool _stopped = true;
+    private bool _visible = true;
+    private bool _rotationEnabled = false;
 
-    private Texture2D particleBase;
-    private ParticleSystem particleSystem;
-    private Emitter sideThrustEmitter;
-    private Emitter mainThrustEmitter;
+    private Texture2D _particleBase;
+    private ParticleSystem _particleSystem;
+    private Emitter _sideThrustEmitter;
+    private Emitter _mainThrustEmitter;
 
     public Ship(Blackhole blackhole) : base(new ShipShield())
     {
-        this.blackhole = blackhole;
+        _blackhole = blackhole;
         Shield = Children.First() as ShipShield;
     }
 
@@ -51,9 +51,9 @@ internal class Ship : ComponentBase, ISpriteInfo
 
     public float Speed { get; set; }
 
-    public Vector2 Origin{ get; set; }
+    public Vector2 Origin { get; set; }
 
-    public Vector2 Scale{ get { return Vector2.One; } }
+    public Vector2 Scale => Vector2.One;
 
     public CollisionInfo CollisionInfo { get; private set; }
 
@@ -64,104 +64,104 @@ internal class Ship : ComponentBase, ISpriteInfo
         Rotation = 0;
 
         Position = new Vector2(
-            blackhole.Position.X,
-            blackhole.Position.Y - (blackhole.Height / 2f) - (Texture.Height / 2f));
+            _blackhole.Position.X,
+            _blackhole.Position.Y - (_blackhole.Height / 2f) - (Texture.Height / 2f));
 
-        mainThrustEmitter.Clear();
-        sideThrustEmitter.Clear();
+        _mainThrustEmitter.Clear();
+        _sideThrustEmitter.Clear();
 
-        stopped = false;
-        visible = true;
-        rotationEnabled = false;
+        _stopped = false;
+        _visible = true;
+        _rotationEnabled = false;
     }
 
     public void Start()
     {
-        stopped = false;
-        visible = true;
-        rotationEnabled = true;
+        _stopped = false;
+        _visible = true;
+        _rotationEnabled = true;
     }
 
     public void Gameover()
     {
-        crashSound.Play();
+        _crashSound.Play();
 
-        stopped = true;
-        rotationEnabled = false;
+        _stopped = true;
+        _rotationEnabled = false;
     }
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
-        thrustSound = content.Load<SoundEffect>(@"Sounds\thrust");
-        thrustSoundInstanceLeft = new SoundComponent(thrustSound) { FadeSpeed = 3f };
-        thrustSoundInstanceRight = new SoundComponent(thrustSound) { FadeSpeed = 3f };
+        _thrustSound = content.Load<SoundEffect>(@"Sounds\thrust");
+        _thrustSoundInstanceLeft = new SoundComponent(_thrustSound) { FadeSpeed = 3f };
+        _thrustSoundInstanceRight = new SoundComponent(_thrustSound) { FadeSpeed = 3f };
 
         Texture = content.Load<Texture2D>(@"Images\ship");
         CollisionInfo = CollisionDetection.GetCollisionInfo(
-            Texture, 
+            Texture,
             resolution: DeviceInfo.Platform.CollisionDetectionDetail == CollisionDetectionDetail.Full ? 1f : 0.75f);
 
-        crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
+        _crashSound = content.Load<SoundEffect>(@"Sounds\crash_sound");
 
-        particleBase = content.Load<Texture2D>(@"Images\particle_base");
-        particleSystem = new ParticleSystem(new Vector2(10000, 10000));
-        sideThrustEmitter = particleSystem.AddEmitter(
-            secPerSpawn:Range.Create(0.001f, 0.0015f),
-            spawnDirection:new Vector2(0f, -1f),
+        _particleBase = content.Load<Texture2D>(@"Images\particle_base");
+        _particleSystem = new ParticleSystem(new Vector2(10000, 10000));
+        _sideThrustEmitter = _particleSystem.AddEmitter(
+            secPerSpawn: Range.Create(0.001f, 0.0015f),
+            spawnDirection: new Vector2(0f, -1f),
             spawnNoiseAngle: Range.Create(0.1f * MathHelper.Pi, 0.1f * -MathHelper.Pi),
             startLife: Range.Create(0.5f, 0.75f),
             startScale: Range.Create(22f, 22f),
             endScale: Range.Create(8f, 8f),
-            startColor:Range.Create(Color.Orange, Color.Crimson),
+            startColor: Range.Create(Color.Orange, Color.Crimson),
             endColor: Range.Create(Color.Orange.AdjustAlpha(0), Color.Orange.AdjustAlpha(0)),
             startSpeed: Range.Create(400f, 500f),
-            endSpeed: Range.Create(100f, 120f), 
-            budget: DeviceInfo.Platform.ParticleEffectsDetails == ParticleEffectsDetails.Full? 500 : 0, 
-            relPosition:Vector2.Zero, 
-            particleSprite:particleBase);
+            endSpeed: Range.Create(100f, 120f),
+            budget: DeviceInfo.Platform.ParticleEffectsDetails == ParticleEffectsDetails.Full ? 500 : 0,
+            relPosition: Vector2.Zero,
+            particleSprite: _particleBase);
 
-        sideThrustEmitter.GravityCenter = DeviceInfo.LogicalCenter;
-        sideThrustEmitter.GravityForce = 1.3f;
+        _sideThrustEmitter.GravityCenter = DeviceInfo.LogicalCenter;
+        _sideThrustEmitter.GravityForce = 1.3f;
 
-        mainThrustEmitter = particleSystem.AddEmitter(
+        _mainThrustEmitter = _particleSystem.AddEmitter(
             secPerSpawn: Range.Create(0.001f, 0.0015f),
             spawnDirection: new Vector2(0f, -1f),
             spawnNoiseAngle: Range.Create(0.3f * MathHelper.Pi, 0.3f * -MathHelper.Pi),
             startLife: Range.Create(0.1f, 0.5f),
             startScale: Range.Create(22f, 22f),
             endScale: Range.Create(8f, 8f),
-            startColor: mainThrustStartColorRange,
-            endColor: mainThrustEndcolorRange,
+            startColor: _mainThrustStartColorRange,
+            endColor: _mainThrustEndcolorRange,
             startSpeed: Range.Create(400f, 500f),
             endSpeed: Range.Create(100f, 120f),
             budget: 50,
             relPosition: Vector2.Zero,
-            particleSprite: particleBase);
+            particleSprite: _particleBase);
 
-        mainThrustEmitter.GravityCenter = DeviceInfo.LogicalCenter;
-        mainThrustEmitter.GravityForce = 1.3f;
-        mainThrustEmitter.Spawning = true;
+        _mainThrustEmitter.GravityCenter = DeviceInfo.LogicalCenter;
+        _mainThrustEmitter.GravityForce = 1.3f;
+        _mainThrustEmitter.Spawning = true;
 
-        Origin = new Vector2(Texture.Width/2f, Texture.Height/2f);
+        Origin = new Vector2(Texture.Width / 2f, Texture.Height / 2f);
     }
 
-    private readonly Range<Color> mainThrustStartColorRange = Range.Create(Color.SkyBlue, Color.Blue);
-    private readonly Range<Color> mainThrustEndcolorRange = Range.Create(Color.SkyBlue.AdjustAlpha(0), Color.SkyBlue.AdjustAlpha(0));
+    private readonly Range<Color> _mainThrustStartColorRange = Range.Create(Color.SkyBlue, Color.Blue);
+    private readonly Range<Color> _mainThrustEndcolorRange = Range.Create(Color.SkyBlue.AdjustAlpha(0), Color.SkyBlue.AdjustAlpha(0));
 
-    private readonly Range<Color> sideThrustStartColor = Range.Create(Color.Orange, Color.Crimson);
-    private readonly Range<Color> sideThrustEndColor = Range.Create(Color.Orange.AdjustAlpha(0), Color.Orange.AdjustAlpha(0));
+    private readonly Range<Color> _sideThrustStartColor = Range.Create(Color.Orange, Color.Crimson);
+    private readonly Range<Color> _sideThrustEndColor = Range.Create(Color.Orange.AdjustAlpha(0), Color.Orange.AdjustAlpha(0));
 
     protected override void DrawCore(SpriteBatch spriteBatch)
     {
-        if (!visible)
+        if (!_visible)
         {
             return;
         }
 
-        particleSystem.Draw(spriteBatch, Depth - 0.0001f);
+        _particleSystem.Draw(spriteBatch, Depth - 0.0001f);
 
         spriteBatch.Draw(
-            Texture, 
+            Texture,
             Position,
             sourceRectangle: null,
             origin: Origin,
@@ -176,114 +176,114 @@ internal class Ship : ComponentBase, ISpriteInfo
     {
         if (!Updating)
         {
-            thrustSoundInstanceLeft.Pause();
-            thrustSoundInstanceRight.Pause();
+            _thrustSoundInstanceLeft.Pause();
+            _thrustSoundInstanceRight.Pause();
         }
     }
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
-        mainThrustEmitter.StartColor = Range.Create(Color.Lerp(mainThrustStartColorRange.Low, Color, 0.3f), Color.Lerp(mainThrustStartColorRange.High, Color, 0.3f));
-        mainThrustEmitter.EndColor = Range.Create(Color.Lerp(mainThrustEndcolorRange.Low, Color, 0.3f), Color.Lerp(mainThrustEndcolorRange.High, Color, 0.3f));
+        _mainThrustEmitter.StartColor = Range.Create(Color.Lerp(_mainThrustStartColorRange.Low, Color, 0.3f), Color.Lerp(_mainThrustStartColorRange.High, Color, 0.3f));
+        _mainThrustEmitter.EndColor = Range.Create(Color.Lerp(_mainThrustEndcolorRange.Low, Color, 0.3f), Color.Lerp(_mainThrustEndcolorRange.High, Color, 0.3f));
 
-        sideThrustEmitter.StartColor = Range.Create(Color.Lerp(sideThrustStartColor.Low, Color, 0.3f), Color.Lerp(sideThrustStartColor.High, Color, 0.3f));
-        sideThrustEmitter.EndColor = Range.Create(Color.Lerp(sideThrustEndColor.Low, Color, 0.3f), Color.Lerp(sideThrustEndColor.High, Color, 0.3f));
+        _sideThrustEmitter.StartColor = Range.Create(Color.Lerp(_sideThrustStartColor.Low, Color, 0.3f), Color.Lerp(_sideThrustStartColor.High, Color, 0.3f));
+        _sideThrustEmitter.EndColor = Range.Create(Color.Lerp(_sideThrustEndColor.Low, Color, 0.3f), Color.Lerp(_sideThrustEndColor.High, Color, 0.3f));
 
-        if (stopped)
+        if (_stopped)
         {
-            thrustSoundInstanceLeft.PlayMin(immediate:true);
-            thrustSoundInstanceRight.PlayMin(immediate: true);
+            _thrustSoundInstanceLeft.PlayMin(immediate: true);
+            _thrustSoundInstanceRight.PlayMin(immediate: true);
             return;
         }
 
-        if (rotationEnabled)
+        if (_rotationEnabled)
         {
-            Rotation += blackhole.RotationalVelocity*(float) gameTime.ElapsedGameTime.TotalSeconds;
+            Rotation += _blackhole.RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        sideThrustEmitter.Spawning = false;
+        _sideThrustEmitter.Spawning = false;
 
         var left = false;
 
         if (Left(inputState.KeyState, inputState.TouchState, inputState.MouseState))
         {
             Rotation -= (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
-            sideThrustEmitter.Spawning = true;
+            _sideThrustEmitter.Spawning = true;
             left = true;
 
-            thrustSoundInstanceLeft.PlayMax();
+            _thrustSoundInstanceLeft.PlayMax();
         }
         else
         {
-            thrustSoundInstanceLeft.PlayMin();
+            _thrustSoundInstanceLeft.PlayMin();
         }
 
         if (Right(inputState.KeyState, inputState.TouchState, inputState.MouseState))
         {
             Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
-            sideThrustEmitter.Spawning = true;
+            _sideThrustEmitter.Spawning = true;
 
-            thrustSoundInstanceRight.PlayMax();
+            _thrustSoundInstanceRight.PlayMax();
         }
         else
         {
-            thrustSoundInstanceRight.PlayMin();
+            _thrustSoundInstanceRight.PlayMin();
         }
 
         Rotation = MathHelper.WrapAngle(Rotation);
 
         const float radiusPadding = 20;
 
-        Radius = (blackhole.Height / 2f) + (Texture.Height / 2f) + radiusPadding;
+        Radius = (_blackhole.Height / 2f) + (Texture.Height / 2f) + radiusPadding;
 
         Position = new Vector2(
-            blackhole.Position.X + ((float)Math.Sin(Rotation) * Radius),
-            blackhole.Position.Y - ((float)Math.Cos(Rotation) * Radius));
+            _blackhole.Position.X + ((float)Math.Sin(Rotation) * Radius),
+            _blackhole.Position.Y - ((float)Math.Cos(Rotation) * Radius));
 
-        particleSystem.Position = Position;
+        _particleSystem.Position = Position;
 
-        sideThrustEmitter.SpawnDirection = (DeviceInfo.LogicalCenter - Position);
-        sideThrustEmitter.SpawnDirection = new Vector2(-sideThrustEmitter.SpawnDirection.Y, sideThrustEmitter.SpawnDirection.X);
+        _sideThrustEmitter.SpawnDirection = (DeviceInfo.LogicalCenter - Position);
+        _sideThrustEmitter.SpawnDirection = new Vector2(-_sideThrustEmitter.SpawnDirection.Y, _sideThrustEmitter.SpawnDirection.X);
 
         if (left)
         {
-            sideThrustEmitter.SpawnDirection = new Vector2(-sideThrustEmitter.SpawnDirection.X, -sideThrustEmitter.SpawnDirection.Y);
+            _sideThrustEmitter.SpawnDirection = new Vector2(-_sideThrustEmitter.SpawnDirection.X, -_sideThrustEmitter.SpawnDirection.Y);
         }
-        
-        sideThrustEmitter.SpawnDirection.Normalize();
 
-        mainThrustEmitter.SpawnDirection = (DeviceInfo.LogicalCenter - Position);
-        mainThrustEmitter.SpawnDirection.Normalize();
+        _sideThrustEmitter.SpawnDirection.Normalize();
 
-        particleSystem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+        _mainThrustEmitter.SpawnDirection = (DeviceInfo.LogicalCenter - Position);
+        _mainThrustEmitter.SpawnDirection.Normalize();
 
-        thrustSoundInstanceLeft.Update(gameTime);
-        thrustSoundInstanceRight.Update(gameTime);
+        _particleSystem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+        _thrustSoundInstanceLeft.Update(gameTime);
+        _thrustSoundInstanceRight.Update(gameTime);
     }
 
     private bool Left(KeyboardState keyState, TouchCollection touchState, MouseState mouseState)
     {
-        var threshold = (DeviceInfo.LogicalCenter.X - (blackhole.Height/2f));
+        var threshold = (DeviceInfo.LogicalCenter.X - (_blackhole.Height / 2f));
         return
             (keyState.IsKeyDown(Keys.Left) && !keyState.IsKeyDown(Keys.Right)) ||
-            (mouseState.LeftButton == ButtonState.Pressed && mouseState.Position.X < threshold && mouseState.Y > yTouchThreshold) ||
+            (mouseState.LeftButton == ButtonState.Pressed && mouseState.Position.X < threshold && mouseState.Y > YTouchThreshold) ||
             (touchState.Count > 0 &&
              touchState.All(
                  t =>
                      (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                     t.Position.X < threshold && t.Position.Y > yTouchThreshold));
+                     t.Position.X < threshold && t.Position.Y > YTouchThreshold));
     }
 
     private bool Right(KeyboardState keyState, TouchCollection touchState, MouseState mouseState)
     {
-        var threshold = (DeviceInfo.LogicalCenter.X + (blackhole.Height/2f));
+        var threshold = (DeviceInfo.LogicalCenter.X + (_blackhole.Height / 2f));
         return
             (keyState.IsKeyDown(Keys.Right) && !keyState.IsKeyDown(Keys.Left)) ||
-            (mouseState.LeftButton == ButtonState.Pressed && mouseState.Position.X > threshold && mouseState.Y > yTouchThreshold) ||
+            (mouseState.LeftButton == ButtonState.Pressed && mouseState.Position.X > threshold && mouseState.Y > YTouchThreshold) ||
             (touchState.Count > 0 &&
              touchState.All(
                  t =>
                      (t.State == TouchLocationState.Pressed || t.State == TouchLocationState.Moved) &&
-                     t.Position.X > threshold && t.Position.Y > yTouchThreshold));
+                     t.Position.X > threshold && t.Position.Y > YTouchThreshold));
     }
 }

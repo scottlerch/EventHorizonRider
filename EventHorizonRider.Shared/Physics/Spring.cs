@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace EventHorizonRider.Core.Physics;
 
@@ -12,8 +12,8 @@ internal class Spring
      *      |====================|--------------[    ]
      */
 
-    private float x;
-    private float pullVelocity;
+    private float _x;
+    private float _pullVelocity;
 
     public Spring()
     {
@@ -46,40 +46,40 @@ internal class Spring
 
     public void PullBlock(float newX, float newPullVelocity)
     {
-        x = newX;
-        pullVelocity = newPullVelocity;
+        _x = newX;
+        _pullVelocity = newPullVelocity;
 
-        if ((x < BlockX && newPullVelocity > 0) ||
-            (x > BlockX && newPullVelocity < 0))
+        if ((_x < BlockX && newPullVelocity > 0) ||
+            (_x > BlockX && newPullVelocity < 0))
         {
-            pullVelocity *= -1f;
+            _pullVelocity *= -1f;
         }
     }
 
     public void Update(TimeSpan timeElapsed)
     {
         // ReSharper disable once CompareOfFloatsByEqualityOperator
-        if (pullVelocity != 0)
+        if (_pullVelocity != 0)
         {
-            BlockX += pullVelocity*(float) timeElapsed.TotalSeconds;
+            BlockX += _pullVelocity * (float)timeElapsed.TotalSeconds;
 
-            if ((pullVelocity < 0 && BlockX <= x) ||
-                (pullVelocity > 0 && BlockX >= x))
+            if ((_pullVelocity < 0 && BlockX <= _x) ||
+                (_pullVelocity > 0 && BlockX >= _x))
             {
                 // pull is over
-                pullVelocity = 0;
-                BlockX = x;
+                _pullVelocity = 0;
+                BlockX = _x;
             }
         }
         else
         {
-            var springForce = Stiffness*((BlockX - WallX) - SpringLength);
-            var damperForce = Friction*(BlockVelocity - WallVelocity);
+            var springForce = Stiffness * ((BlockX - WallX) - SpringLength);
+            var damperForce = Friction * (BlockVelocity - WallVelocity);
 
-            var acceleration = (springForce + damperForce)/BlockMass;
+            var acceleration = (springForce + damperForce) / BlockMass;
 
-            BlockVelocity += acceleration*(float) timeElapsed.TotalSeconds;
-            BlockX += BlockVelocity*(float) timeElapsed.TotalSeconds;
+            BlockVelocity += acceleration * (float)timeElapsed.TotalSeconds;
+            BlockX += BlockVelocity * (float)timeElapsed.TotalSeconds;
         }
     }
 }

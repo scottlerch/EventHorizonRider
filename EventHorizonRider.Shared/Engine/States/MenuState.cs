@@ -1,5 +1,5 @@
-﻿using System;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace EventHorizonRider.Core.Engine.States;
 

@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Components.MenuComponents;
+using EventHorizonRider.Core.Components.MenuComponents;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components;
@@ -18,15 +18,12 @@ internal class Menu(LevelSelect levelSelect, ResetButton resetButton, CreditsBut
         spriteBatch.Begin(
             SpriteSortMode.FrontToBack,
             BlendState.AlphaBlend,
-            samplerState: null, 
-            depthStencilState: null, 
+            samplerState: null,
+            depthStencilState: null,
             rasterizerState: null,
             effect: null,
             transformMatrix: DeviceInfo.OutputScaleMatrix);
     }
 
-    protected override void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
-    {
-        spriteBatch.End();
-    }
+    protected override void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics) => spriteBatch.End();
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine;
 
@@ -7,14 +7,14 @@ namespace EventHorizonRider.Core.Engine;
 /// </summary>
 internal abstract class GameStateBase
 {
-    private bool beginning = true;
+    private bool _beginning = true;
 
     public void Handle(GameContext gameContext, GameTime gameTime)
     {
-        if (beginning)
+        if (_beginning)
         {
             OnBegin(gameContext, gameTime);
-            beginning = false;
+            _beginning = false;
         }
         else
         {

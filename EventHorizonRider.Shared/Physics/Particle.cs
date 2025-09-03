@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Physics;
@@ -15,50 +15,50 @@ internal struct Particle(
     Emitter emitter)
 {
     public bool IsAlive = true;
-    
-    private readonly Vector2 startDirection = startDirection;
-    private readonly Vector2 endDirection = endDirection;
-    private readonly float startingLife = 1f / startingLife;
-    private readonly float scaleBegin = scaleBegin;
-    private readonly float scaleEnd = scaleEnd;
-    private readonly Color startColor = startColor;
-    private readonly Color endColor = endColor;
-    private readonly Vector2 gravityCenter = emitter.GravityCenter;
-    private readonly float gravityForce = emitter.GravityForce;
-    private readonly Texture2D texture = emitter.ParticleSprite;
 
-    private Vector2 position = position;
-    private float lifePhase = 1f;
-    private float lifeLeft = startingLife;
-    private Color currColor = Color.White;
-    private Rectangle drawRectangle = new();
+    private readonly Vector2 _startDirection = startDirection;
+    private readonly Vector2 _endDirection = endDirection;
+    private readonly float _startingLife = 1f / startingLife;
+    private readonly float _scaleBegin = scaleBegin;
+    private readonly float _scaleEnd = scaleEnd;
+    private readonly Color _startColor = startColor;
+    private readonly Color _endColor = endColor;
+    private readonly Vector2 _gravityCenter = emitter.GravityCenter;
+    private readonly float _gravityForce = emitter.GravityForce;
+    private readonly Texture2D _texture = emitter.ParticleSprite;
+
+    private Vector2 _position = position;
+    private float _lifePhase = 1f;
+    private float _lifeLeft = startingLife;
+    private Color _currColor = Color.White;
+    private Rectangle _drawRectangle = new();
 
     public bool Update(float dt)
     {
-        lifeLeft -= dt;
+        _lifeLeft -= dt;
 
-        if (lifeLeft <= 0)
+        if (_lifeLeft <= 0)
         {
             IsAlive = false;
             return false;
         }
 
-        lifePhase = lifeLeft * startingLife;      // 1 means newly created 0 means dead.
+        _lifePhase = _lifeLeft * _startingLife;      // 1 means newly created 0 means dead.
 
-        position += 
+        _position +=
             (
-                Vector2.Lerp(endDirection, startDirection, lifePhase) + 
-                ((gravityCenter - position) * gravityForce)
+                Vector2.Lerp(_endDirection, _startDirection, _lifePhase) +
+                ((_gravityCenter - _position) * _gravityForce)
             ) * dt;
 
-        currColor = Color.Lerp(endColor, startColor, lifePhase);
-        var currScale = MathHelper.Lerp(scaleEnd, scaleBegin, lifePhase);
+        _currColor = Color.Lerp(_endColor, _startColor, _lifePhase);
+        var currScale = MathHelper.Lerp(_scaleEnd, _scaleBegin, _lifePhase);
 
-        drawRectangle = new Rectangle(
-            (int) ((position.X - 0.5f*currScale)),
-            (int) ((position.Y - 0.5f*currScale)),
-            (int) (currScale),
-            (int) (currScale));
+        _drawRectangle = new Rectangle(
+            (int)((_position.X - 0.5f * currScale)),
+            (int)((_position.Y - 0.5f * currScale)),
+            (int)(currScale),
+            (int)(currScale));
 
         return true;
     }
@@ -68,9 +68,9 @@ internal struct Particle(
         if (IsAlive)
         {
             spriteBatch.Draw(
-                texture,
-                destinationRectangle: drawRectangle,
-                color: currColor,
+                _texture,
+                destinationRectangle: _drawRectangle,
+                color: _currColor,
                 layerDepth: depth,
                 sourceRectangle: null,
                 rotation: 0f,

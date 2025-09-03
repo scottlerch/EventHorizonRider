@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents.Rings;
 
@@ -19,7 +19,7 @@ internal class RingTexturesInfoGroup
     {
         TextureInfos = texturesInfos;
         Mode = mode;
-        MaximumWidth = TextureInfos.Max(static (RingTexturesInfo i) => 
+        MaximumWidth = TextureInfos.Max(static (RingTexturesInfo i) =>
             i.Textures.Max(static (Texture2D t) => MathHelper.Max(t.Width, t.Height)) * i.ScaleRange.High);
     }
 }

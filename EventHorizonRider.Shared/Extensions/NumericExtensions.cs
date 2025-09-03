@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Extensions;
 
@@ -10,21 +10,10 @@ internal static class NumericExtensions
         startAngle = MathHelper.WrapAngle(startAngle);
         endAngle = MathHelper.WrapAngle(endAngle);
 
-        if (startAngle < endAngle)
-        {
-            return angle > startAngle && angle < endAngle;
-        }
-
-        return angle > startAngle || angle < endAngle;
+        return startAngle < endAngle ? angle > startAngle && angle < endAngle : angle > startAngle || angle < endAngle;
     }
 
-    public static bool IsBetween(this int edge, int startEdge, int endEdge)
-    {
-        return edge > startEdge && edge < endEdge;
-    }
+    public static bool IsBetween(this int edge, int startEdge, int endEdge) => edge > startEdge && edge < endEdge;
 
-    public static bool IsBetween(this float edge, float startEdge, float endEdge)
-    {
-        return edge > startEdge && edge < endEdge;
-    }
+    public static bool IsBetween(this float edge, float startEdge, float endEdge) => edge > startEdge && edge < endEdge;
 }

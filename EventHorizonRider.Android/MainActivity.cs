@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
@@ -8,7 +8,7 @@ using System;
 namespace EventHorizonRider.Android;
 
 [Activity(
-    Label = "Event Horizon Rider", 
+    Label = "Event Horizon Rider",
     MainLauncher = true,
     Icon = "@drawable/icon",
     //Theme = "@style/Theme.Splash",
@@ -19,7 +19,7 @@ namespace EventHorizonRider.Android;
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
 public class MainActivity : Microsoft.Xna.Framework.AndroidGameActivity
 {
-    private View view;
+    private View _view;
 
     public MainActivity()
     {
@@ -47,10 +47,10 @@ public class MainActivity : Microsoft.Xna.Framework.AndroidGameActivity
 
         var mainGame = new MainGame();
 
-        view = (View)mainGame.Services.GetService(typeof(View));
+        _view = (View)mainGame.Services.GetService(typeof(View));
 
         SetImmersive();
-        SetContentView(view);
+        SetContentView(_view);
 
         mainGame.Run();
     }
@@ -69,7 +69,7 @@ public class MainActivity : Microsoft.Xna.Framework.AndroidGameActivity
     {
         if (OperatingSystem.IsAndroidVersionAtLeast(30))
         {
-            var controller = view.WindowInsetsController;
+            var controller = _view.WindowInsetsController;
             if (controller != null)
             {
                 controller.Hide(WindowInsets.Type.SystemBars());
@@ -78,7 +78,7 @@ public class MainActivity : Microsoft.Xna.Framework.AndroidGameActivity
         }
         else if (OperatingSystem.IsAndroidVersionAtLeast(21))
         {
-            view.SystemUiFlags = (
+            _view.SystemUiFlags = (
                 SystemUiFlags.LayoutStable |
                 SystemUiFlags.LayoutHideNavigation |
                 SystemUiFlags.LayoutFullscreen |

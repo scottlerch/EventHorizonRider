@@ -1,7 +1,7 @@
-﻿using System;
 using EventHorizonRider.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace EventHorizonRider.Core.Physics;
 
@@ -29,9 +29,9 @@ internal class CollisionDetection
         // Calculate crop border
         var bounds = new Rectangle(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
 
-        for (int x = 0; x < texture.Width; x++)
+        for (var x = 0; x < texture.Width; x++)
         {
-            for (int y = 0; y < texture.Height; y++)
+            for (var y = 0; y < texture.Height; y++)
             {
                 if (data[x, y] >= alphaThreshold)
                 {
@@ -109,14 +109,14 @@ internal class CollisionDetection
     /// <param name="tolerance">Tolerance of alpha channel before considering it a collision</param>
     /// <returns>True if non-transparent pixels overlap; false otherwise</returns>
     private static bool IntersectPixels(
-        Matrix transformA, 
-        int widthA, 
-        int heightA, 
+        Matrix transformA,
+        int widthA,
+        int heightA,
         byte[] dataA,
-        Matrix transformB, 
-        int widthB, 
-        int heightB, 
-        byte[] dataB, 
+        Matrix transformB,
+        int widthB,
+        int heightB,
+        byte[] dataB,
         byte tolerance)
     {
         // Calculate a matrix which transforms from A's local space into

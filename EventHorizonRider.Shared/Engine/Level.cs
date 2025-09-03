@@ -1,24 +1,21 @@
-﻿using EventHorizonRider.Core.Components.SpaceComponents.Rings;
+using EventHorizonRider.Core.Components.SpaceComponents.Rings;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EventHorizonRider.Core.Engine;
 
 internal class Level
 {
-    public const float DefaultRotationalVelocity = MathHelper.TwoPi/32f;
-
-    private readonly IEnumerable<RingInfo> internalSequence; 
+    public const float DefaultRotationalVelocity = MathHelper.TwoPi / 32f;
 
     public Level(
-        TimeSpan ringInterval, 
-        float ringSeparation, 
-        float shipSpeed, 
-        float rotationVelocity, 
-        Color color, 
-        bool infiniteSequence, 
+        TimeSpan ringInterval,
+        float ringSeparation,
+        float shipSpeed,
+        float rotationVelocity,
+        Color color,
+        bool infiniteSequence,
         IEnumerable<RingInfo> sequence)
     {
         Color = color;
@@ -26,22 +23,22 @@ internal class Level
         ShipSpeed = shipSpeed;
         RotationalVelocity = rotationVelocity;
         RingSeparation = ringSeparation;
-        RingSpeed = ringSeparation/(float)ringInterval.TotalSeconds;
+        RingSpeed = ringSeparation / (float)ringInterval.TotalSeconds;
         IsInfiniteSequence = infiniteSequence;
 
         if (infiniteSequence)
         {
-            internalSequence = sequence;
+            Sequence = sequence;
             Duration = null;
         }
         else
         {
-            internalSequence = [.. sequence];
+            Sequence = [.. sequence];
             Duration = TimeSpan.Zero;
 
-            bool isFirst = true;
+            var isFirst = true;
 
-            foreach (var ring in internalSequence)
+            foreach (var ring in Sequence)
             {
                 Duration += ringInterval + TimeSpan.FromSeconds(Math.Abs(ring.SpiralRadius) / RingSpeed);
 
@@ -62,7 +59,7 @@ internal class Level
 
     public float RingSpeed { get; set; }
 
-    public IEnumerable<RingInfo> Sequence { get { return internalSequence; } }
+    public IEnumerable<RingInfo> Sequence { get; }
 
     public TimeSpan RingInterval { get; set; }
 

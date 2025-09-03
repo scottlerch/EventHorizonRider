@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Physics;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

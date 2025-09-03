@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 
@@ -20,7 +20,7 @@ internal class InputState
         var currentTouchState = TouchPanel.GetState();
         var scaledTouchLocations = new TouchLocation[currentTouchState.Count];
 
-        for (int i = 0; i < currentTouchState.Count; i++)
+        for (var i = 0; i < currentTouchState.Count; i++)
         {
             var touch = currentTouchState[i];
             scaledTouchLocations[i] = new TouchLocation(

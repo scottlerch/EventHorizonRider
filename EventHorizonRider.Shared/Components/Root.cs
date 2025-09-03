@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -6,7 +6,7 @@ namespace EventHorizonRider.Core.Components;
 
 internal class Root(Music music, Space space, Menu menu, Foreground foreground) : ComponentBase(music, space, menu, foreground)
 {
-    private bool previousPausedPressed;
+    private bool _previousPausedPressed;
 
     public bool PausePressed { get; set; }
 
@@ -35,11 +35,11 @@ internal class Root(Music music, Space space, Menu menu, Foreground foreground) 
             }
         }
 
-        if (previousPausedPressed && !pausedPressed)
+        if (_previousPausedPressed && !pausedPressed)
         {
             PausePressed = true;
         }
 
-        previousPausedPressed = pausedPressed;
+        _previousPausedPressed = pausedPressed;
     }
 }

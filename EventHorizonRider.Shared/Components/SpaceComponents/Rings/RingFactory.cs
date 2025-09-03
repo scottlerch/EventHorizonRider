@@ -1,10 +1,10 @@
-﻿using System;
 using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Linq;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents.Rings;
@@ -24,7 +24,7 @@ internal class RingFactory
 
     internal void LoadContent(ContentManager content)
     {
-        Asteroids = LoadData(content, "asteroid", 3, hasShadow:true);
+        Asteroids = LoadData(content, "asteroid", 3, hasShadow: true);
         Asteroids.ShadowOffset = new Vector2(30, 30);
         Asteroids.DensityRange = Range.Create(15, 35);
         Asteroids.ScaleRange = Range.Create(0.2f, 0.8f);
@@ -62,7 +62,7 @@ internal class RingFactory
             ]
         };
 
-        Dust = LoadData(content, "dust", 1, hasShadow:true);
+        Dust = LoadData(content, "dust", 1, hasShadow: true);
         Dust.MergeShadows = true;
         Dust.ShadowOffset = new Vector2(4, 4);
         Dust.DensityRange = Range.Create(85, 95);
@@ -73,7 +73,7 @@ internal class RingFactory
         Dust.TaperScale = 0.3f;
         Dust.TextureColors =
         [
-            Color.Tan, 
+            Color.Tan,
             Color.Tan.AdjustLight(0.8f),
             Color.Lerp(Color.Tan, Color.Beige, 0.5f),
             Color.Beige,
@@ -102,7 +102,7 @@ internal class RingFactory
         var texturesInfo = new RingTexturesInfo
         {
             Textures = new Texture2D[count],
-            ShadowTextures = hasShadow? new Texture2D[count] : null,
+            ShadowTextures = hasShadow ? new Texture2D[count] : null,
             CollisionInfos = new CollisionInfo[count],
         };
 
@@ -116,7 +116,7 @@ internal class RingFactory
             }
 
             texturesInfo.CollisionInfos[i] = CollisionDetection.GetCollisionInfo(
-                texturesInfo.Textures[i], 
+                texturesInfo.Textures[i],
                 resolution: DeviceInfo.Platform.CollisionDetectionDetail == CollisionDetectionDetail.Full ? 1f : 0.75f);
         }
 

@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,11 +7,11 @@ namespace EventHorizonRider.Core.Components.ForegroundComponents;
 
 internal class Title : ComponentBase
 {
-    private Texture2D texture;
-    private Vector2 position;
-    private Vector2 origin;
+    private Texture2D _texture;
+    private Vector2 _position;
+    private Vector2 _origin;
 
-    private float alpha = 1f;
+    private float _alpha = 1f;
 
     public Title()
     {
@@ -22,31 +22,25 @@ internal class Title : ComponentBase
 
     public bool FadingOut { get; private set; }
 
-    public new bool Visible { get { return alpha > 0f; } }
+    public new bool Visible => _alpha > 0f;
 
-    public void Show()
-    {
-        alpha = 1f;
-    }
+    public void Show() => _alpha = 1f;
 
-    public void Hide()
-    {
-        FadingOut = true;
-    }
+    public void Hide() => FadingOut = true;
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
-        texture = content.Load<Texture2D>(@"Images\title");
+        _texture = content.Load<Texture2D>(@"Images\title");
 
-        position = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
-        origin = new Vector2(texture.Width / 2f, texture.Height / 2f);
+        _position = new Vector2(DeviceInfo.LogicalWidth / 2f, DeviceInfo.LogicalHeight / 2f);
+        _origin = new Vector2(_texture.Width / 2f, _texture.Height / 2f);
     }
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
         if (Visible && FadingOut)
         {
-            alpha -= (float)gameTime.ElapsedGameTime.TotalSeconds*1f;
+            _alpha -= (float)gameTime.ElapsedGameTime.TotalSeconds * 1f;
         }
     }
 
@@ -55,12 +49,12 @@ internal class Title : ComponentBase
         if (Visible)
         {
             spriteBatch.Draw(
-                texture, 
-                position,
-                origin: origin, 
-                color: Color.White * alpha, 
-                layerDepth: Depth, 
-                scale:new Vector2(1.01f),
+                _texture,
+                _position,
+                origin: _origin,
+                color: Color.White * _alpha,
+                layerDepth: Depth,
+                scale: new Vector2(1.01f),
                 sourceRectangle: null,
                 rotation: 0f,
                 effects: SpriteEffects.None);

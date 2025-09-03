@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Graphics;
+using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
@@ -26,16 +26,16 @@ internal class Ring : ComponentBase
 
     private const float DepthStep = 0.0001f;
 
-    private readonly Random random = new();
-    private readonly Vector2 origin;
-    private readonly List<RingObject> ringObjects;
-    private readonly List<RingLayer> ringLayers; 
-    private readonly float rotationalVelocity;
+    private readonly Random _random = new();
+    private readonly Vector2 _origin;
+    private readonly List<RingObject> _ringObjects;
+    private readonly List<RingLayer> _ringLayers;
+    private readonly float _rotationalVelocity;
 
-    private float innerRadius;
-    private float maxRadius;
-    private bool isStopped;
-    private readonly float ringCollapseSpeed;
+    private float _innerRadius;
+    private float _maxRadius;
+    private bool _isStopped;
+    private readonly float _ringCollapseSpeed;
 
     public Ring(
         float ringCollapseSpeed,
@@ -50,32 +50,32 @@ internal class Ring : ComponentBase
         InnerRadius = innerRadius;
         Width = Math.Abs(spiralRadius);
 
-        this.ringCollapseSpeed = ringCollapseSpeed;
-        this.rotationalVelocity = rotationalVelocity;
-        this.origin = origin;
+        _ringCollapseSpeed = ringCollapseSpeed;
+        _rotationalVelocity = rotationalVelocity;
+        _origin = origin;
 
-        ringLayers = [];
-        ringObjects = CreateRingObjects(spiralSpeed, spiralRadius, texturesInfoGroup, gaps);
+        _ringLayers = [];
+        _ringObjects = CreateRingObjects(spiralSpeed, spiralRadius, texturesInfoGroup, gaps);
     }
 
     public Color Color { get; set; }
 
     public float InnerRadius
     {
-        get { return innerRadius; }
+        get => _innerRadius;
         set
         {
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (innerRadius == 0)
+            if (_innerRadius == 0)
             {
-                maxRadius = value;
+                _maxRadius = value;
             }
 
-            innerRadius = value;
+            _innerRadius = value;
         }
     }
 
-    public float OutterRadius { get { return InnerRadius + Width; } }
+    public float OutterRadius => InnerRadius + Width;
 
     public float Width { get; private set; }
 
@@ -85,9 +85,9 @@ internal class Ring : ComponentBase
     {
         // TODO: add heuristics to optimize collision detection
 
-        for (var i = 0; i < ringObjects.Count; i++)
+        for (var i = 0; i < _ringObjects.Count; i++)
         {
-            if (CollisionDetection.Collides(ship, ringObjects[i]))
+            if (CollisionDetection.Collides(ship, _ringObjects[i]))
             {
                 return true;
             }
@@ -96,25 +96,22 @@ internal class Ring : ComponentBase
         return false;
     }
 
-    public void Stop()
-    {
-        isStopped = true;
-    }
+    public void Stop() => _isStopped = true;
 
     protected override void DrawCore(SpriteBatch spriteBatch)
     {
-        foreach (var ringObject in ringObjects)
+        foreach (var ringObject in _ringObjects)
         {
             if (ringObject.ShadowTexture != null)
             {
                 spriteBatch.Draw(
                     ringObject.ShadowTexture,
-                    ringObject.Position + ringLayers[ringObject.LayerIndex].ShadowOffset * ringObject.Scale,
+                    ringObject.Position + _ringLayers[ringObject.LayerIndex].ShadowOffset * ringObject.Scale,
                     sourceRectangle: null,
                     origin: ringObject.Origin,
                     color: Color.Lerp(Color.White, Color, 0.3f) * 0.8f,
                     rotation: ringObject.Rotation,
-                    layerDepth: ringObject.RelativeDepth + (Depth - 0.00001f) - ringLayers[ringObject.LayerIndex].ShadowDepth,
+                    layerDepth: ringObject.RelativeDepth + (Depth - 0.00001f) - _ringLayers[ringObject.LayerIndex].ShadowDepth,
                     scale: ringObject.Scale,
                     effects: SpriteEffects.None);
             }
@@ -134,28 +131,28 @@ internal class Ring : ComponentBase
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
-        if (!isStopped)
+        if (!_isStopped)
         {
-            InnerRadius -= (float)gameTime.ElapsedGameTime.TotalSeconds * ringCollapseSpeed;
+            InnerRadius -= (float)gameTime.ElapsedGameTime.TotalSeconds * _ringCollapseSpeed;
 
             const float low = 0.1f;
             const float high = 0.6f;
             const float diff = high - low;
 
-            var rotationalOffset = rotationalVelocity*(float) gameTime.ElapsedGameTime.TotalSeconds;
+            var rotationalOffset = _rotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            for (int i = ringObjects.Count - 1; i >= 0; i--)
+            for (var i = _ringObjects.Count - 1; i >= 0; i--)
             {
-                var scale = 1f - ((InnerRadius + ringObjects[i].RadiusOffset) / maxRadius);
+                var scale = 1f - ((InnerRadius + _ringObjects[i].RadiusOffset) / _maxRadius);
 
-                ringObjects[i].ColorLightness = (scale*diff) + low;
-                ringObjects[i].Angle += rotationalOffset;
-                ringObjects[i].Rotation += ringObjects[i].RotationRate*(float)gameTime.ElapsedGameTime.TotalSeconds;
-                ringObjects[i].UpdatePosition(origin, InnerRadius);
+                _ringObjects[i].ColorLightness = (scale * diff) + low;
+                _ringObjects[i].Angle += rotationalOffset;
+                _ringObjects[i].Rotation += _ringObjects[i].RotationRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _ringObjects[i].UpdatePosition(_origin, InnerRadius);
 
-                if ((ringObjects[i].Position - origin).LengthSquared() <= 50f) // TODO: where to get this fudge factor?
+                if ((_ringObjects[i].Position - _origin).LengthSquared() <= 50f) // TODO: where to get this fudge factor?
                 {
-                    ringObjects.RemoveAt(i);
+                    _ringObjects.RemoveAt(i);
                 }
             }
         }
@@ -171,8 +168,8 @@ internal class Ring : ComponentBase
 
         var newRingObjects = new List<RingObject>();
         var currentDepthOffset = 0f;
-        int index = 0;
-        var spiralRotations = (spiralSpeed * (Math.Abs(spiralRadius) / ringCollapseSpeed)) / MathHelper.TwoPi;
+        var index = 0;
+        var spiralRotations = (spiralSpeed * (Math.Abs(spiralRadius) / _ringCollapseSpeed)) / MathHelper.TwoPi;
         var isSpiral = spiralRadius > 0 || spiralRadius < 0;
         var maximumAngle = isSpiral ? MathHelper.TwoPi * spiralRotations : MathHelper.TwoPi;
 
@@ -188,8 +185,8 @@ internal class Ring : ComponentBase
             var radiusOffset = 0f;
             var spiralRadiusOffset = Math.Abs(spiralRadius) / (maximumAsteroidsPerRing * spiralRotations);
 
-            Action<float, float, Action<float>> angleIterator = spiralRadius >= 0 ? 
-                (Action<float, float, Action<float>>)ClockwiseAngles : 
+            var angleIterator = spiralRadius >= 0 ?
+                (Action<float, float, Action<float>>)ClockwiseAngles :
                 CounterClockwiseAngles;
 
             angleIterator(maximumAngle, angleSpacing, angle =>
@@ -200,35 +197,37 @@ internal class Ring : ComponentBase
                 }
 
                 if (gaps.Any(gap => gap.IsInsideGap(angle)))
+                {
                     return;
+                }
 
                 var edgeModifier = CalculateEdgeModifer(
-                    gaps, 
+                    gaps,
                     angle,
                     minimumAngleSpacing,
-                    maximumAngle, 
-                    isSpiral, 
-                    texturesInfo.TaperAmount, 
+                    maximumAngle,
+                    isSpiral,
+                    texturesInfo.TaperAmount,
                     texturesInfo.TaperScale);
 
-                var textureIndex = random.Next(0, texturesInfo.Textures.Length);
+                var textureIndex = _random.Next(0, texturesInfo.Textures.Length);
 
                 var ringObject = new RingObject
                 {
-                    LayerIndex = ringLayers.Count,
+                    LayerIndex = _ringLayers.Count,
                     Texture = texturesInfo.Textures[textureIndex],
                     ShadowTexture = texturesInfo.ShadowTextures?[textureIndex],
                     CollisionInfo = texturesInfo.CollisionInfos[textureIndex],
-                    Rotation = MathHelper.WrapAngle((float)random.NextDouble() * MathHelper.TwoPi),
-                    RotationRate = (float)random.NextDouble() * MathHelper.TwoPi / 4f * (random.Next(2) == 0 ? -1f : 1f),
+                    Rotation = MathHelper.WrapAngle((float)_random.NextDouble() * MathHelper.TwoPi),
+                    RotationRate = (float)_random.NextDouble() * MathHelper.TwoPi / 4f * (_random.Next(2) == 0 ? -1f : 1f),
                     Scale = Vector2.One * texturesInfo.ScaleRange.ScaleHigh(edgeModifier.EdgeScale).GetRandom(),
                     Origin = new Vector2(texturesInfo.Textures[textureIndex].Width / 2f, texturesInfo.Textures[textureIndex].Height / 2f),
-                    RadiusOffset = ((float)random.NextDouble() * texturesInfo.RadiusOffsetJitter) + radiusOffset,
-                    Color = texturesInfo.TextureColors[random.Next(0, texturesInfo.TextureColors.Length)],
-                    Angle = angle + ((edgeModifier.IsEdge ? 0f : edgeModifier.EdgeScale) * ((float)random.NextDouble() * (texturesInfo.AngleJitter * angleSpacing))),
+                    RadiusOffset = ((float)_random.NextDouble() * texturesInfo.RadiusOffsetJitter) + radiusOffset,
+                    Color = texturesInfo.TextureColors[_random.Next(0, texturesInfo.TextureColors.Length)],
+                    Angle = angle + ((edgeModifier.IsEdge ? 0f : edgeModifier.EdgeScale) * ((float)_random.NextDouble() * (texturesInfo.AngleJitter * angleSpacing))),
                 };
 
-                ringObject.UpdatePosition(origin, InnerRadius);
+                ringObject.UpdatePosition(_origin, InnerRadius);
 
                 newRingObjects.Add(ringObject);
                 count++;
@@ -242,7 +241,7 @@ internal class Ring : ComponentBase
 
             currentDepthOffset = newRingObjects.Count * DepthStep;
 
-            ringLayers.Add(new RingLayer
+            _ringLayers.Add(new RingLayer
             {
                 ShadowOffset = texturesInfo.ShadowOffset,
                 ShadowDepth = texturesInfo.MergeShadows ? DepthStep * count : DepthStep / 10,
@@ -291,11 +290,11 @@ internal class Ring : ComponentBase
     {
         // When object is closer to gap edge make sure it's scaled smaller with less random jitter
         // so the gaps stay closer to a constant size
-        int gapScaleFadeSize = taperAmount;
+        var gapScaleFadeSize = taperAmount;
 
         var edgeModifier = new EdgeModifier { EdgeScale = 1f, IsEdge = false };
 
-        for (int i = 1; i <= gapScaleFadeSize; i++)
+        for (var i = 1; i <= gapScaleFadeSize; i++)
         {
             if (gaps.Any(gap => gap.IsInsideGap(angle + (minimumAngleSpacing * i))) ||
                 gaps.Any(gap => gap.IsInsideGap(angle - (minimumAngleSpacing * i))))
@@ -325,7 +324,7 @@ internal class Ring : ComponentBase
         foreach (var depthOffset in Enumerable
             .Range(0, count)
             .Select(i => i * DepthStep)
-            .OrderBy(x => random.Next()))
+            .OrderBy(x => _random.Next()))
         {
             objects[index++].RelativeDepth = baseDepth + depthOffset;
         }

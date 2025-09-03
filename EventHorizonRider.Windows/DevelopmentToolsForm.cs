@@ -1,114 +1,101 @@
-﻿using EventHorizonRider.Core;
+using EventHorizonRider.Core;
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using EventHorizonRider.Core.Engine;
 
-namespace EventHorizonRider.Windows
+namespace EventHorizonRider.Windows;
+
+public partial class DevelopmentToolsForm : Form
 {
-    public partial class DevelopmentToolsForm : Form
+    private readonly MainGame _mainGame;
+
+    public DevelopmentToolsForm(MainGame game)
     {
-        private readonly MainGame mainGame;
+        _mainGame = game;
+        _mainGame.Initialized += OnGameInitialized;
+        InitializeComponent();
+    }
 
-        public DevelopmentToolsForm(MainGame game)
+    private void OnGameInitialized(object sender, System.EventArgs e)
+    {
+        propertyGrid.SelectedObject = _mainGame.GameContext;
+        UpdateTreeView();
+
+        for (var i = 1; i <= _mainGame.GameContext.Levels.NumberOfLevels; i++)
         {
-            mainGame = game;
-            mainGame.Initialized += OnGameInitialized;
-            InitializeComponent();
+            var levelNumber = i;
+            var menuItem = new ToolStripMenuItem("Level " + i);
+            menuItem.Click += (s, a) =>
+            {
+                _mainGame.GameContext.Root.OverrideLevel = levelNumber;
+            };
+            menuItem.ShortcutKeys = (Keys.D0 + i) | Keys.Control;
+            levelsMenu.DropDownItems.Add(menuItem);
+        }
+    }
+
+    private void UpdateTreeView()
+    {
+        treeView.BeginUpdate();
+        treeView.Nodes.Clear();
+
+        var root = CreateNode("MainGame", _mainGame);
+        var gameContextNode = CreateNode("GameContext", _mainGame.GameContext);
+
+        var levels = new TreeNode("Levels");
+        root.Nodes.Add(levels);
+
+        var levelNumber = 1;
+        foreach (var level in _mainGame.GameContext.Levels.Levels)
+        {
+            levels.Nodes.Add(CreateNode("Level " + levelNumber, level));
+            levelNumber++;
         }
 
-        private void OnGameInitialized(object sender, System.EventArgs e)
-        {
-            propertyGrid.SelectedObject = mainGame.GameContext;
-            UpdateTreeView();
+        root.Nodes.Add(gameContextNode);
 
-            for (var i = 1; i <= mainGame.GameContext.Levels.NumberOfLevels; i++)
+        treeView.Nodes.Add(root);
+
+        treeView.EndUpdate();
+
+        treeView.ExpandAll();
+    }
+
+    private static TreeNode CreateNode(string name, object obj)
+    {
+        var node = new TreeNode(name) { Tag = obj };
+
+        var properties = obj.GetType().GetProperties();
+
+        foreach (var property in properties)
+        {
+            if (property.PropertyType.IsClass &&
+                property.PropertyType.FullName.StartsWith("EventHorizon") &&
+                property.GetValue(obj) != null)
             {
-                var levelNumber = i;
-                var menuItem = new ToolStripMenuItem("Level " + i);
-                menuItem.Click += (s, a) =>
-                {
-                    mainGame.GameContext.Root.OverrideLevel = levelNumber;
-                };
-                menuItem.ShortcutKeys = (Keys.D0 + i) | Keys.Control;
-                levelsMenu.DropDownItems.Add(menuItem);
+                node.Nodes.Add(CreateNode(property.Name, property.GetValue(obj)));
             }
         }
 
-        private void UpdateTreeView()
+        return node;
+    }
+
+    private void OnNodeClick(object sender, TreeNodeMouseClickEventArgs e)
+    {
+        // ReSharper disable once RedundantCheckBeforeAssignment
+        if (propertyGrid.SelectedObject != e.Node.Tag)
         {
-            treeView.BeginUpdate();
-            treeView.Nodes.Clear();
-
-            var root = CreateNode("MainGame", mainGame);
-            var gameContextNode = CreateNode("GameContext", mainGame.GameContext);
-
-            var levels = new TreeNode("Levels");
-            root.Nodes.Add(levels);
-
-            var levelNumber = 1;
-            foreach (var level in mainGame.GameContext.Levels.Levels)
-            {
-                levels.Nodes.Add(CreateNode("Level " + levelNumber, level));
-                levelNumber++;
-            }
-
-            root.Nodes.Add(gameContextNode);
-
-            treeView.Nodes.Add(root);
-
-            treeView.EndUpdate();
-
-            treeView.ExpandAll();
+            propertyGrid.SelectedObject = e.Node.Tag;
         }
+    }
 
-        private TreeNode CreateNode(string name, object obj)
-        {
-            var node = new TreeNode(name) {Tag = obj };
+    private void OnTimer(object sender, EventArgs e)
+    {
+    }
 
-            var properties = obj.GetType().GetProperties();
-
-            foreach (var property in properties)
-            {
-                if (property.PropertyType.IsClass && 
-                    property.PropertyType.FullName.StartsWith("EventHorizon") && 
-                    property.GetValue(obj) != null)
-                {
-                    node.Nodes.Add(CreateNode(property.Name, property.GetValue(obj)));
-                }
-            }
-
-            return node;
-        }
-
-        private void OnNodeClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            // ReSharper disable once RedundantCheckBeforeAssignment
-            if (propertyGrid.SelectedObject != e.Node.Tag)
-            {
-                propertyGrid.SelectedObject = e.Node.Tag;
-            }
-        }
-
-        private void OnTimer(object sender, EventArgs e)
-        {
-        }
-
-        private void SelectNode(TreeNodeCollection nodes, object tag)
-        {
-            foreach (var node in nodes.Cast<TreeNode>())
-            {
-                if (node.Tag == tag)
-                {
-                    treeView.SelectedNode = node;
-                    return;
-                }
-
-                SelectNodeRecursive(node, tag);
-            }
-        }
-
-        private void SelectNodeRecursive(TreeNode node, object tag)
+    private void SelectNode(TreeNodeCollection nodes, object tag)
+    {
+        foreach (var node in nodes.Cast<TreeNode>())
         {
             if (node.Tag == tag)
             {
@@ -116,42 +103,50 @@ namespace EventHorizonRider.Windows
                 return;
             }
 
-            foreach (var child in node.Nodes.Cast<TreeNode>())
-            {
-                SelectNodeRecursive(child, tag);
-            }
+            SelectNodeRecursive(node, tag);
         }
+    }
 
-        private void OnAfterNodeSelected(object sender, TreeViewEventArgs e)
+    private void SelectNodeRecursive(TreeNode node, object tag)
+    {
+        if (node.Tag == tag)
         {
-            e.Node.BackColor = System.Drawing.Color.Yellow;
+            treeView.SelectedNode = node;
+            return;
         }
 
-        private void OnBeforeNodeSelected(object sender, TreeViewCancelEventArgs e)
+        foreach (var child in node.Nodes.Cast<TreeNode>())
         {
-            if (treeView.SelectedNode != null)
-            {
-                treeView.SelectedNode.BackColor = System.Drawing.Color.White;
-            }
+            SelectNodeRecursive(child, tag);
         }
+    }
 
-        private void OnRefresh(object sender, EventArgs e)
+    private void OnAfterNodeSelected(object sender, TreeViewEventArgs e) => e.Node.BackColor = System.Drawing.Color.Yellow;
+
+    private void OnBeforeNodeSelected(object sender, TreeViewCancelEventArgs e)
+    {
+        if (treeView.SelectedNode != null)
         {
-            object currentObj = null;
-
-            if (treeView.SelectedNode != null)
-            {
-                currentObj = treeView.SelectedNode.Tag;
-            }
-
-            UpdateTreeView();
-
-            SelectNode(treeView.Nodes, currentObj);
+            treeView.SelectedNode.BackColor = System.Drawing.Color.White;
         }
+    }
 
-        private void OnLoad(object sender, EventArgs e)
+    private void OnRefresh(object sender, EventArgs e)
+    {
+        object currentObj = null;
+
+        if (treeView.SelectedNode != null)
         {
-
+            currentObj = treeView.SelectedNode.Tag;
         }
+
+        UpdateTreeView();
+
+        SelectNode(treeView.Nodes, currentObj);
+    }
+
+    private void OnLoad(object sender, EventArgs e)
+    {
+
     }
 }

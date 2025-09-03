@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Physics;
+using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -23,52 +23,55 @@ internal class Star
 
     public Color Color { get; set; }
 
-    private float baseTransparency;
-    private float transparency;
+    private float _baseTransparency;
+    private float _transparency;
 
     public float Transparency
     {
-        get { return transparency; }
+        get => _transparency;
         set
         {
-            baseTransparency = value;
-            transparency = value;
+            _baseTransparency = value;
+            _transparency = value;
         }
     }
 
     public float RotationSpeed { get; set; }
 
-    private bool twinkling;
-    private float twinkleSpeed;
-    private float twinkleMax;
+    private bool _twinkling;
+    private float _twinkleSpeed;
+    private float _twinkleMax;
 
     public void Twinkle()
     {
-        if (twinkling) return;
+        if (_twinkling)
+        {
+            return;
+        }
 
         var maxRadius = RotationOrigin.Length();
         var twinkleStrenth = MathHelper.Lerp(0.5f, 1f, Radius / maxRadius);
 
-        twinkling = true;
-        twinkleSpeed = MathUtilities.GetRandomBetween(0.4f, 1.5f);
-        twinkleMax = MathUtilities.GetRandomBetween(twinkleStrenth - 0.1f, twinkleStrenth);
+        _twinkling = true;
+        _twinkleSpeed = MathUtilities.GetRandomBetween(0.4f, 1.5f);
+        _twinkleMax = MathUtilities.GetRandomBetween(twinkleStrenth - 0.1f, twinkleStrenth);
     }
 
     public void Update(GameTime gameTime, float scale)
     {
-        if (twinkling)
+        if (_twinkling)
         {
-            transparency += (float)gameTime.ElapsedGameTime.TotalSeconds * twinkleSpeed;
+            _transparency += (float)gameTime.ElapsedGameTime.TotalSeconds * _twinkleSpeed;
 
-            if (transparency >= twinkleMax)
+            if (_transparency >= _twinkleMax)
             {
-                twinkleSpeed *= -1f;
+                _twinkleSpeed *= -1f;
             }
 
-            if (transparency <= baseTransparency)
+            if (_transparency <= _baseTransparency)
             {
-                transparency = baseTransparency;
-                twinkling = false;
+                _transparency = _baseTransparency;
+                _twinkling = false;
             }
         }
 

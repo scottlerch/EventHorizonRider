@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Components.ForegroundComponents;
+using EventHorizonRider.Core.Components.ForegroundComponents;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace EventHorizonRider.Core.Components;
@@ -17,13 +17,7 @@ internal class Foreground(PlayButton playButton, MenuButton menuButton, PlayTime
 
     public ControlsHelp ControlsHelp { get; private set; } = controlsHelp;
 
-    protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
-    {
-        spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, DeviceInfo.OutputScaleMatrix);
-    }
+    protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics) => spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, DeviceInfo.OutputScaleMatrix);
 
-    protected override void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
-    {
-        spriteBatch.End();
-    }
+    protected override void OnAfterDraw(SpriteBatch spriteBatch, GraphicsDevice graphics) => spriteBatch.End();
 }

@@ -1,8 +1,8 @@
-﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EventHorizonRider.Core.Physics;
 
@@ -23,11 +23,11 @@ internal class Emitter(
     Random random,
     ParticleSystem parent)
 {
-    private readonly Random random = random; 
-    private float nextSpawnIn = MathUtilities.Lerp(secPerSpawn, (float)random.NextDouble());
-    private float secPassed = 0.0f;
-    private Particle[] particles = new Particle[budget];
-    private Queue<int> activeParticleIndices = new(Enumerable.Range(0, budget));
+    private readonly Random _random = random;
+    private float _nextSpawnIn = MathUtilities.Lerp(secPerSpawn, (float)random.NextDouble());
+    private float _secPassed = 0.0f;
+    private Particle[] _particles = new Particle[budget];
+    private Queue<int> _activeParticleIndices = new(Enumerable.Range(0, budget));
 
     public Vector2 RelPosition { get; set; } = relPosition;
 
@@ -65,67 +65,70 @@ internal class Emitter(
 
     public void Update(float dt)
     {
-        secPassed += dt;
+        _secPassed += dt;
 
-        while (secPassed > nextSpawnIn)
+        while (_secPassed > _nextSpawnIn)
         {
-            if (activeParticleIndices.Count > 0 && Spawning)
+            if (_activeParticleIndices.Count > 0 && Spawning)
             {
                 // Spawn a particle
                 var startDirection = Vector2.Transform(
                     SpawnDirection,
-                    Matrix.CreateRotationZ(MathUtilities.Lerp(SpawnNoiseAngle, (float)random.NextDouble())));
+                    Matrix.CreateRotationZ(MathUtilities.Lerp(SpawnNoiseAngle, (float)_random.NextDouble())));
 
                 startDirection.Normalize();
 
-                var endDirection = startDirection * MathUtilities.Lerp(EndSpeed, (float)random.NextDouble());
+                var endDirection = startDirection * MathUtilities.Lerp(EndSpeed, (float)_random.NextDouble());
 
-                startDirection *= MathUtilities.Lerp(StartSpeed, (float)random.NextDouble());
+                startDirection *= MathUtilities.Lerp(StartSpeed, (float)_random.NextDouble());
 
-                int nextParticleIndex = activeParticleIndices.Dequeue();
+                var nextParticleIndex = _activeParticleIndices.Dequeue();
 
-                particles[nextParticleIndex] = 
+                _particles[nextParticleIndex] =
                     new Particle(
-                        RelPosition + Vector2.Lerp(Parent.LastPos, Parent.Position, secPassed / dt),
+                        RelPosition + Vector2.Lerp(Parent.LastPos, Parent.Position, _secPassed / dt),
                         startDirection,
                         endDirection,
-                        MathUtilities.Lerp(StartLife, (float)random.NextDouble()),
-                        MathUtilities.Lerp(StartScale, (float)random.NextDouble()),
-                        MathUtilities.Lerp(EndScale, (float)random.NextDouble()),
-                        MathUtilities.Lerp(StartColor, (float)random.NextDouble()),
-                        MathUtilities.Lerp(EndColor, (float)random.NextDouble()),
+                        MathUtilities.Lerp(StartLife, (float)_random.NextDouble()),
+                        MathUtilities.Lerp(StartScale, (float)_random.NextDouble()),
+                        MathUtilities.Lerp(EndScale, (float)_random.NextDouble()),
+                        MathUtilities.Lerp(StartColor, (float)_random.NextDouble()),
+                        MathUtilities.Lerp(EndColor, (float)_random.NextDouble()),
                         this);
 
-                particles[nextParticleIndex].Update(secPassed);
+                _particles[nextParticleIndex].Update(_secPassed);
             }
 
-            secPassed -= nextSpawnIn;
-            nextSpawnIn = MathUtilities.Lerp(SecPerSpawn, (float)random.NextDouble());
+            _secPassed -= _nextSpawnIn;
+            _nextSpawnIn = MathUtilities.Lerp(SecPerSpawn, (float)_random.NextDouble());
         }
 
-        int count = particles.Length;
-        for (int i = 0; i < count; i++)
+        var count = _particles.Length;
+        for (var i = 0; i < count; i++)
         {
-            if (particles[i].IsAlive)
+            if (_particles[i].IsAlive)
             {
-                var isAlive = particles[i].Update(dt);
-                if (!isAlive) activeParticleIndices.Enqueue(i);
+                var isAlive = _particles[i].Update(dt);
+                if (!isAlive)
+                {
+                    _activeParticleIndices.Enqueue(i);
+                }
             }
         }
     }
 
     public void Draw(SpriteBatch spriteBatch, float depth)
     {
-        int count = particles.Length;
-        for (int i = 0; i < count; i++)
+        var count = _particles.Length;
+        for (var i = 0; i < count; i++)
         {
-            particles[i].Draw(spriteBatch, depth);
+            _particles[i].Draw(spriteBatch, depth);
         }
     }
 
     public void Clear()
     {
-        particles = new Particle[particles.Length];
-        activeParticleIndices = new Queue<int>(Enumerable.Range(0, particles.Length));
+        _particles = new Particle[_particles.Length];
+        _activeParticleIndices = new Queue<int>(Enumerable.Range(0, _particles.Length));
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EventHorizonRider.Core;
 
@@ -13,9 +13,9 @@ namespace EventHorizonRider.Core;
 /// </summary>
 internal abstract class ComponentBase
 {
-    private List<ComponentBase> children;
-    private bool visible = true;
-    private bool updating = true;
+    private List<ComponentBase> _children;
+    private bool _visible = true;
+    private bool _updating = true;
 
     protected ComponentBase(params ComponentBase[] components)
     {
@@ -23,19 +23,19 @@ internal abstract class ComponentBase
 
         if (components.Length > 0)
         {
-            children = [.. components];
+            _children = [.. components];
 
-            foreach (var child in children)
+            foreach (var child in _children)
             {
                 child.Parent = this;
             }
         }
 
-        var depthStep = 1f/(components.Length + 2);
+        var depthStep = 1f / (components.Length + 2);
 
-        for (int i = 0; i < components.Length; i++)
+        for (var i = 0; i < components.Length; i++)
         {
-            children[i].Depth = (i + 1)*depthStep;
+            _children[i].Depth = (i + 1) * depthStep;
         }
     }
 
@@ -43,12 +43,12 @@ internal abstract class ComponentBase
 
     public bool Visible
     {
-        get { return visible && (Parent == null || Parent.Visible); }
+        get => _visible && (Parent == null || Parent.Visible);
         set
         {
-            if (visible != value)
+            if (_visible != value)
             {
-                visible = value;
+                _visible = value;
                 OnVisibleChanged();
                 ForEach<ComponentBase>(child => child.OnVisibleChanged());
             }
@@ -57,21 +57,21 @@ internal abstract class ComponentBase
 
     public bool Updating
     {
-        get { return updating && (Parent == null || Parent.Updating); }
+        get => _updating && (Parent == null || Parent.Updating);
         set
         {
-            if (updating != value)
+            if (_updating != value)
             {
-                updating = value;
+                _updating = value;
                 OnUpdatingChanged();
                 ForEach<ComponentBase>(child => child.OnUpdatingChanged());
             }
         }
     }
 
-    public bool ChildrenIsEmpty { get { return children == null || children.Count == 0; } }
+    public bool ChildrenIsEmpty => _children == null || _children.Count == 0;
 
-    public int ChildrenCount { get { return children == null ? 0 : children.Count; } }
+    public int ChildrenCount => _children == null ? 0 : _children.Count;
 
     protected ComponentBase Parent { get; private set; }
 
@@ -80,55 +80,58 @@ internal abstract class ComponentBase
         component.Depth = depth;
         component.Parent = this;
 
-        children ??= [];
+        _children ??= [];
 
-        children.Add(component);
+        _children.Add(component);
     }
 
     protected void RemoveChild(ComponentBase component)
     {
-        if (children != null)
+        if (_children != null)
         {
             component.Parent = null;
-            children.Remove(component);
+            _children.Remove(component);
         }
     }
 
     protected void ClearChildren()
     {
-        if (children != null)
+        if (_children != null)
         {
             ForEach<ComponentBase>(child => child.Parent = null);
-            children.Clear();
+            _children.Clear();
         }
     }
 
-    public IEnumerable<ComponentBase> Children
-    {
-        get { return children ?? Enumerable.Empty<ComponentBase>(); }
-    }
+    public IEnumerable<ComponentBase> Children => _children ?? Enumerable.Empty<ComponentBase>();
 
     public void ForEach<T>(Action<T> action) where T : ComponentBase
     {
-        if (children == null) return;
-
-        var count = children.Count;
-
-        for (int i = 0; i < count; i++)
+        if (_children == null)
         {
-            action(children[i] as T);
+            return;
+        }
+
+        var count = _children.Count;
+
+        for (var i = 0; i < count; i++)
+        {
+            action(_children[i] as T);
         }
     }
 
     public void ForEachReverse<T>(Action<T> action) where T : ComponentBase
     {
-        if (children == null) return;
-
-        var lastIndex = children.Count - 1;
-
-        for (int i = lastIndex; i >= 0; i--)
+        if (_children == null)
         {
-            action(children[i] as T);
+            return;
+        }
+
+        var lastIndex = _children.Count - 1;
+
+        for (var i = lastIndex; i >= 0; i--)
+        {
+            action(_children[i] as T);
         }
     }
 
@@ -145,7 +148,10 @@ internal abstract class ComponentBase
 
     public void Update(GameTime gameTime, InputState inputState)
     {
-        if (!Updating) return;
+        if (!Updating)
+        {
+            return;
+        }
 
         ForEach<ComponentBase>(child => child.Update(gameTime, inputState));
 
@@ -162,7 +168,10 @@ internal abstract class ComponentBase
 
     public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
     {
-        if (!Visible) return;
+        if (!Visible)
+        {
+            return;
+        }
 
         OnBeforeDraw(spriteBatch, graphics);
 

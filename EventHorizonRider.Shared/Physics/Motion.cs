@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Physics;
 
@@ -33,7 +33,7 @@ internal class Motion
     public void UpdateTarget(float target, float speed)
     {
         Speed = speed;
-        
+
         UpdateTarget(target);
     }
 
@@ -51,7 +51,7 @@ internal class Motion
     {
         if (Acceleration > 0)
         {
-            Speed *= Acceleration*(float) gameTime.ElapsedGameTime.TotalSeconds;
+            Speed *= Acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         Value += (float)gameTime.ElapsedGameTime.TotalSeconds * Speed;

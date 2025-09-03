@@ -36,55 +36,153 @@ public partial class DeviceHardware
             Marshal.FreeHGlobal(pLen);
             Marshal.FreeHGlobal(pStr);
 
-            if (hardwareStr == "iPhone1,1") return HardwareType.iPhone;
-            if (hardwareStr == "iPhone1,2") return HardwareType.iPhone3G;
-            if (hardwareStr == "iPhone2,1") return HardwareType.iPhone3GS;
-            if (hardwareStr == "iPhone3,1") return HardwareType.iPhone4;
-            if (hardwareStr == "iPhone3,2") return HardwareType.iPhone4RevA;
-            if (hardwareStr == "iPhone3,3") return HardwareType.iPhone4CDMA;
-            if (hardwareStr == "iPhone4,1") return HardwareType.iPhone4S;
-            if (hardwareStr == "iPhone5,1") return HardwareType.iPhone5GSM;
-            if (hardwareStr == "iPhone5,2") return HardwareType.iPhone5CDMAGSM;
-
-            if (hardwareStr == "iPad1,1") return HardwareType.iPad;
-            if (hardwareStr == "iPad1,2") return HardwareType.iPad3G;
-            if (hardwareStr == "iPad2,1") return HardwareType.iPad2;
-            if (hardwareStr == "iPad2,2") return HardwareType.iPad2GSM;
-            if (hardwareStr == "iPad2,3") return HardwareType.iPad2CDMA;
-            if (hardwareStr == "iPad2,4") return HardwareType.iPad2RevA;
-            if (hardwareStr == "iPad2,5") return HardwareType.iPadMini;
-            if (hardwareStr == "iPad2,6") return HardwareType.iPadMiniGSM;
-            if (hardwareStr == "iPad2,7") return HardwareType.iPadMiniCDMAGSM;
-            if (hardwareStr == "iPad3,1") return HardwareType.iPad3;
-            if (hardwareStr == "iPad3,2") return HardwareType.iPad3CDMA;
-            if (hardwareStr == "iPad3,3") return HardwareType.iPad3GSM;
-            if (hardwareStr == "iPad3,4") return HardwareType.iPad4;
-            if (hardwareStr == "iPad3,5") return HardwareType.iPad4GSM;
-            if (hardwareStr == "iPad3,6") return HardwareType.iPad4CDMAGSM;
-
-            if (hardwareStr == "iPod1,1") return HardwareType.iPodTouch1G;
-            if (hardwareStr == "iPod2,1") return HardwareType.iPodTouch2G;
-            if (hardwareStr == "iPod3,1") return HardwareType.iPodTouch3G;
-            if (hardwareStr == "iPod4,1") return HardwareType.iPodTouch4G;
-            if (hardwareStr == "iPod5,1") return HardwareType.iPodTouch5G;
-
-            if (hardwareStr == "i386" || hardwareStr == "x86_64")
+            if (hardwareStr == "iPhone1,1")
             {
-                if (UIDevice.CurrentDevice.Model.Contains("iPhone"))
-                {
-                    if (UIScreen.MainScreen.Scale > 1.5f)
-                        return HardwareType.iPhoneRetinaSimulator;
-
-                    return HardwareType.iPhoneSimulator;
-                }
-
-                if (UIScreen.MainScreen.Scale > 1.5f)
-                    return HardwareType.iPadRetinaSimulator;
-
-                return HardwareType.iPadSimulator;
+                return HardwareType.iPhone;
             }
 
-            return HardwareType.Unknown;
+            if (hardwareStr == "iPhone1,2")
+            {
+                return HardwareType.iPhone3G;
+            }
+
+            if (hardwareStr == "iPhone2,1")
+            {
+                return HardwareType.iPhone3GS;
+            }
+
+            if (hardwareStr == "iPhone3,1")
+            {
+                return HardwareType.iPhone4;
+            }
+
+            if (hardwareStr == "iPhone3,2")
+            {
+                return HardwareType.iPhone4RevA;
+            }
+
+            if (hardwareStr == "iPhone3,3")
+            {
+                return HardwareType.iPhone4CDMA;
+            }
+
+            if (hardwareStr == "iPhone4,1")
+            {
+                return HardwareType.iPhone4S;
+            }
+
+            if (hardwareStr == "iPhone5,1")
+            {
+                return HardwareType.iPhone5GSM;
+            }
+
+            if (hardwareStr == "iPhone5,2")
+            {
+                return HardwareType.iPhone5CDMAGSM;
+            }
+
+            if (hardwareStr == "iPad1,1")
+            {
+                return HardwareType.iPad;
+            }
+
+            if (hardwareStr == "iPad1,2")
+            {
+                return HardwareType.iPad3G;
+            }
+
+            if (hardwareStr == "iPad2,1")
+            {
+                return HardwareType.iPad2;
+            }
+
+            if (hardwareStr == "iPad2,2")
+            {
+                return HardwareType.iPad2GSM;
+            }
+
+            if (hardwareStr == "iPad2,3")
+            {
+                return HardwareType.iPad2CDMA;
+            }
+
+            if (hardwareStr == "iPad2,4")
+            {
+                return HardwareType.iPad2RevA;
+            }
+
+            if (hardwareStr == "iPad2,5")
+            {
+                return HardwareType.iPadMini;
+            }
+
+            if (hardwareStr == "iPad2,6")
+            {
+                return HardwareType.iPadMiniGSM;
+            }
+
+            if (hardwareStr == "iPad2,7")
+            {
+                return HardwareType.iPadMiniCDMAGSM;
+            }
+
+            if (hardwareStr == "iPad3,1")
+            {
+                return HardwareType.iPad3;
+            }
+
+            if (hardwareStr == "iPad3,2")
+            {
+                return HardwareType.iPad3CDMA;
+            }
+
+            if (hardwareStr == "iPad3,3")
+            {
+                return HardwareType.iPad3GSM;
+            }
+
+            if (hardwareStr == "iPad3,4")
+            {
+                return HardwareType.iPad4;
+            }
+
+            if (hardwareStr == "iPad3,5")
+            {
+                return HardwareType.iPad4GSM;
+            }
+
+            if (hardwareStr == "iPad3,6")
+            {
+                return HardwareType.iPad4CDMAGSM;
+            }
+
+            if (hardwareStr == "iPod1,1")
+            {
+                return HardwareType.iPodTouch1G;
+            }
+
+            if (hardwareStr == "iPod2,1")
+            {
+                return HardwareType.iPodTouch2G;
+            }
+
+            if (hardwareStr == "iPod3,1")
+            {
+                return HardwareType.iPodTouch3G;
+            }
+
+            if (hardwareStr == "iPod4,1")
+            {
+                return HardwareType.iPodTouch4G;
+            }
+
+            return hardwareStr == "iPod5,1"
+                ? HardwareType.iPodTouch5G
+                : hardwareStr == "i386" || hardwareStr == "x86_64"
+                ? UIDevice.CurrentDevice.Model.Contains("iPhone")
+                    ? UIScreen.MainScreen.Scale > 1.5f ? HardwareType.iPhoneRetinaSimulator : HardwareType.iPhoneSimulator
+                    : UIScreen.MainScreen.Scale > 1.5f ? HardwareType.iPadRetinaSimulator : HardwareType.iPadSimulator
+                : HardwareType.Unknown;
         }
     }
 }

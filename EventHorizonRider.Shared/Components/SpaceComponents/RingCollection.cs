@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Components.SpaceComponents.Rings;
+using EventHorizonRider.Core.Components.SpaceComponents.Rings;
 using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Extensions;
 using EventHorizonRider.Core.Input;
@@ -13,18 +13,18 @@ namespace EventHorizonRider.Core.Components.SpaceComponents;
 
 internal class RingCollection(Blackhole blackhole, Shockwave shockwave, RingFactory ringFactory) : ComponentBase
 {
-    private readonly Blackhole blackhole = blackhole;
-    private readonly Shockwave shockwave = shockwave;
+    private readonly Blackhole _blackhole = blackhole;
+    private readonly Shockwave _shockwave = shockwave;
 
-    private IEnumerator<RingInfo> currentSequence;
+    private IEnumerator<RingInfo> _currentSequence;
 
-    private TimeSpan? lastRingAddTime;
-    private TimeSpan lastRingDuration;
-    private TimeSpan totalElapsedGameTime;
+    private TimeSpan? _lastRingAddTime;
+    private TimeSpan _lastRingDuration;
+    private TimeSpan _totalElapsedGameTime;
 
-    private Level level;
+    private Level _level;
 
-    private bool stopped = true;
+    private bool _stopped = true;
 
     public Color Color { get; set; }
 
@@ -38,15 +38,18 @@ internal class RingCollection(Blackhole blackhole, Shockwave shockwave, RingFact
 
     public void SetLevel(Level newLevel)
     {
-        level = newLevel;
+        _level = newLevel;
 
-        currentSequence = level.Sequence.GetEnumerator();
+        _currentSequence = _level.Sequence.GetEnumerator();
         HasMoreRings = true;
     }
 
     public bool Intersects(Ship ship)
     {
-        if (CollisionDetectionDisabled) return false;
+        if (CollisionDetectionDisabled)
+        {
+            return false;
+        }
 
         // TODO: optimize collision detection, this is the biggest bottleneck right now
         return Children.Cast<Ring>().Any(ring => ring.Intersects(ship));
@@ -55,44 +58,38 @@ internal class RingCollection(Blackhole blackhole, Shockwave shockwave, RingFact
     public void Start()
     {
         ClearChildren();
-        stopped = false;
+        _stopped = false;
     }
 
-    public void Remove(Ring ring)
-    {
-        RemoveChild(ring);
-    }
+    public void Remove(Ring ring) => RemoveChild(ring);
 
     public void Gameover()
     {
-        stopped = true;
+        _stopped = true;
 
         ForEach<Ring>(ring => ring.Stop());
     }
 
-    public void Clear()
-    {
-        ClearChildren();
-    }
+    public void Clear() => ClearChildren();
 
-    protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
-    {
-        RingFactory.LoadContent(content);
-    }
+    protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics) => RingFactory.LoadContent(content);
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
-        if (stopped) return;
+        if (_stopped)
+        {
+            return;
+        }
 
         RemoveConsumedRings();
 
         // Track relative total elapsed game time since if we use gameTime.TotalGameTime it won't work when paused
-        totalElapsedGameTime += gameTime.ElapsedGameTime;
-        lastRingAddTime ??= totalElapsedGameTime;
+        _totalElapsedGameTime += gameTime.ElapsedGameTime;
+        _lastRingAddTime ??= _totalElapsedGameTime;
 
-        if ((totalElapsedGameTime - lastRingAddTime) >= (level.RingInterval + lastRingDuration))
+        if ((_totalElapsedGameTime - _lastRingAddTime) >= (_level.RingInterval + _lastRingDuration))
         {
-            var ringInfo = currentSequence.Next();
+            var ringInfo = _currentSequence.Next();
 
             if (ringInfo == null)
             {
@@ -100,12 +97,12 @@ internal class RingCollection(Blackhole blackhole, Shockwave shockwave, RingFact
             }
             else
             {
-                var ring = RingFactory.Create(ringInfo, level);
+                var ring = RingFactory.Create(ringInfo, _level);
 
                 AddChild(ring, Depth);
 
-                lastRingAddTime = totalElapsedGameTime;
-                lastRingDuration = TimeSpan.FromSeconds(Math.Abs(ringInfo.SpiralRadius) / level.RingSpeed);
+                _lastRingAddTime = _totalElapsedGameTime;
+                _lastRingDuration = TimeSpan.FromSeconds(Math.Abs(ringInfo.SpiralRadius) / _level.RingSpeed);
             }
         }
 
@@ -119,22 +116,22 @@ internal class RingCollection(Blackhole blackhole, Shockwave shockwave, RingFact
     {
         ForEachReverse<Ring>(ring =>
         {
-            if (ring.OutterRadius <= (blackhole.Height * 0.3f))
+            if (ring.OutterRadius <= (_blackhole.Height * 0.3f))
             {
                 if (!ring.ConsumedByBlackhole)
                 {
                     // TODO: pulse needs to handle spirals better, maybe slowly grow as spiral consumed?
-                    blackhole.Pulse(1.2f, level.RingSpeed / 200f);
+                    _blackhole.Pulse(1.2f, _level.RingSpeed / 200f);
                     ring.ConsumedByBlackhole = true;
 
                     if (ChildrenCount == 1)
                     {
-                        shockwave.Execute();
+                        _shockwave.Execute();
                     }
                 }
             }
-            
-            if (ring.OutterRadius <= (blackhole.Height * 0.01f))
+
+            if (ring.OutterRadius <= (_blackhole.Height * 0.01f))
             {
                 RemoveChild(ring);
             }

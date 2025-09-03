@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Engine.States;
+using EventHorizonRider.Core.Engine.States;
 using EventHorizonRider.Core.Extensions;
 using Microsoft.Xna.Framework;
 using System;
@@ -9,19 +9,19 @@ namespace EventHorizonRider.Core.Engine;
 
 internal class LevelCollection
 {
-    private readonly float maxRingRadius = DeviceInfo.LogicalWidthOriginal / 2f;
-    private readonly List<Level> levels;
+    private readonly float _maxRingRadius = DeviceInfo.LogicalWidthOriginal / 2f;
+    private readonly List<Level> _levels;
 
     public LevelCollection()
     {
         CurrentLevelNumber = 1;
 
-        levels =
+        _levels =
         [
             new Level(
                 shipSpeed: MathHelper.TwoPi*0.8f,
                 rotationVelocity: MathHelper.TwoPi / 32f,
-                ringSeparation: maxRingRadius/1.5f,
+                ringSeparation: _maxRingRadius/1.5f,
                 ringInterval: TimeSpan.FromSeconds(2),
                 color: Color.Lerp(Color.Purple, Color.White, 0.5f),
                 infiniteSequence: false,
@@ -70,7 +70,7 @@ internal class LevelCollection
             new Level(
                 shipSpeed: MathHelper.TwoPi*0.9f,
                 rotationVelocity: MathHelper.TwoPi / 28f,
-                ringSeparation: maxRingRadius/2f,
+                ringSeparation: _maxRingRadius/2f,
                 ringInterval: TimeSpan.FromSeconds(1.5),
                 color: Color.DarkSalmon,
                 infiniteSequence: false,
@@ -126,7 +126,7 @@ internal class LevelCollection
             new Level(
                 shipSpeed: MathHelper.TwoPi*1.1f,
                 rotationVelocity: MathHelper.TwoPi / 24f,
-                ringSeparation: maxRingRadius/3,
+                ringSeparation: _maxRingRadius/3,
                 ringInterval: TimeSpan.FromSeconds(1),
                 infiniteSequence: false,
                 color: Color.Green,
@@ -188,7 +188,7 @@ internal class LevelCollection
             new Level(
                 shipSpeed: MathHelper.TwoPi*1.12f,
                 rotationVelocity: MathHelper.TwoPi / 20f,
-                ringSeparation: maxRingRadius/3,
+                ringSeparation: _maxRingRadius/3,
                 ringInterval: TimeSpan.FromSeconds(0.75),
                 color: Color.Blue,
                 infiniteSequence: false,
@@ -224,7 +224,7 @@ internal class LevelCollection
             new Level(
                 shipSpeed: MathHelper.TwoPi*1.14f,
                 rotationVelocity: MathHelper.TwoPi / 16f,
-                ringSeparation: maxRingRadius/3,
+                ringSeparation: _maxRingRadius/3,
                 ringInterval: TimeSpan.FromSeconds(0.5),
                 color: Color.Red,
                 infiniteSequence: true,
@@ -235,17 +235,17 @@ internal class LevelCollection
 
     public int CurrentLevelNumber { get; private set; }
 
-    public Level CurrentLevel { get { return GetLevel(CurrentLevelNumber); } }
+    public Level CurrentLevel => GetLevel(CurrentLevelNumber);
 
-    public Level NextLevel { get { return GetLevel(CurrentLevelNumber + 1); } }
+    public Level NextLevel => GetLevel(CurrentLevelNumber + 1);
 
-    public IEnumerable<Level> Levels { get { return levels; } }
+    public IEnumerable<Level> Levels => _levels;
 
-    public int NumberOfLevels { get { return levels.Count; } }
+    public int NumberOfLevels => _levels.Count;
 
     public void SetCurrentLevel(int currentLevelNumber)
     {
-        if (currentLevelNumber < 1 || currentLevelNumber > levels.Count)
+        if (currentLevelNumber < 1 || currentLevelNumber > _levels.Count)
         {
             throw new ArgumentException("Invalid level number");
         }
@@ -253,24 +253,15 @@ internal class LevelCollection
         CurrentLevelNumber = currentLevelNumber;
     }
 
-    public void IncrementCurrentLevel()
-    {
-        SetCurrentLevel(CurrentLevelNumber + 1);
-    }
+    public void IncrementCurrentLevel() => SetCurrentLevel(CurrentLevelNumber + 1);
 
-    public Level GetLevel(int level)
-    {
-        return level < levels.Count ? levels[level - 1] : levels[^1];
-    }
+    public Level GetLevel(int level) => level < _levels.Count ? _levels[level - 1] : _levels[^1];
 
-    public TimeSpan GetCurrentLevelStartTime()
-    {
-        return GetLevelStartTime(CurrentLevelNumber);
-    }
+    public TimeSpan GetCurrentLevelStartTime() => GetLevelStartTime(CurrentLevelNumber);
 
     public TimeSpan GetLevelStartTime(int levelNumber)
     {
-        return levels.Take(levelNumber - 1)
+        return _levels.Take(levelNumber - 1)
             .Aggregate(
                 TimeSpan.Zero,
                 (duration, level) =>

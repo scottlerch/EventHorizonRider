@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -13,8 +13,8 @@ internal class Button(Rectangle buttonBounds, Keys? key, TimeSpan holdDuration)
 
     public Keys? Key { get; private set; } = key;
 
-    private bool keyPreviouslyPressed;
-    private bool mousePreviouslyPressed;
+    private bool _keyPreviouslyPressed;
+    private bool _mousePreviouslyPressed;
 
     public bool Pressed { get; private set; }
 
@@ -24,15 +24,9 @@ internal class Button(Rectangle buttonBounds, Keys? key, TimeSpan holdDuration)
 
     public TimeSpan CurrentHoldDuration { get; private set; }
 
-    public TimeSpan HoldDurationRemaining
-    {
-        get
-        {
-            return CurrentHoldDuration >= HoldDuration? TimeSpan.Zero : HoldDuration - CurrentHoldDuration;
-        }
-    }
+    public TimeSpan HoldDurationRemaining => CurrentHoldDuration >= HoldDuration ? TimeSpan.Zero : HoldDuration - CurrentHoldDuration;
 
-    public bool Holding { get { return CurrentHoldDuration > TimeSpan.Zero; } }
+    public bool Holding => CurrentHoldDuration > TimeSpan.Zero;
 
     public Button(Rectangle buttonBounds, Keys? key = null)
         : this(buttonBounds, key, TimeSpan.Zero)
@@ -51,10 +45,10 @@ internal class Button(Rectangle buttonBounds, Keys? key, TimeSpan holdDuration)
         Pressed = !Pressed && IsPressed(inputState.MouseState, inputState.TouchState, inputState.KeyState);
         Hover = IsHover(inputState.MouseState, inputState.TouchState, inputState.KeyState);
 
-        keyPreviouslyPressed = Key.HasValue && inputState.KeyState.GetPressedKeys().Contains(Key.Value);
+        _keyPreviouslyPressed = Key.HasValue && inputState.KeyState.GetPressedKeys().Contains(Key.Value);
 
-        mousePreviouslyPressed = 
-            inputState.MouseState.LeftButton == ButtonState.Pressed && 
+        _mousePreviouslyPressed =
+            inputState.MouseState.LeftButton == ButtonState.Pressed &&
             ButtonBounds.Contains(inputState.MouseState.Position);
 
         if (HoldDuration > TimeSpan.Zero)
@@ -97,19 +91,16 @@ internal class Button(Rectangle buttonBounds, Keys? key, TimeSpan holdDuration)
     private bool IsHover(MouseState mouseState)
     {
         return
-            mousePreviouslyPressed &&
+            _mousePreviouslyPressed &&
             mouseState.LeftButton == ButtonState.Pressed &&
             ButtonBounds.Contains(mouseState.Position);
     }
 
-    private bool IsHover(KeyboardState keyboardState)
-    {
-        return Key.HasValue && keyboardState.GetPressedKeys().Contains(Key.Value);
-    }
+    private bool IsHover(KeyboardState keyboardState) => Key.HasValue && keyboardState.GetPressedKeys().Contains(Key.Value);
 
     private bool IsHover(TouchCollection touchState)
     {
-        return touchState.Any(t => 
+        return touchState.Any(t =>
             (
                 t.State == TouchLocationState.Pressed ||
                 t.State == TouchLocationState.Moved
@@ -118,21 +109,21 @@ internal class Button(Rectangle buttonBounds, Keys? key, TimeSpan holdDuration)
 
     private bool IsPressed(MouseState mouseState)
     {
-        return mousePreviouslyPressed &&
+        return _mousePreviouslyPressed &&
                mouseState.LeftButton == ButtonState.Released &&
                ButtonBounds.Contains(mouseState.Position);
     }
 
     private bool IsPressed(KeyboardState keyboardState)
     {
-        return Key.HasValue && 
-            keyPreviouslyPressed && 
+        return Key.HasValue &&
+            _keyPreviouslyPressed &&
             !keyboardState.GetPressedKeys().Contains(Key.Value);
     }
 
     private bool IsPressed(TouchCollection touchState)
     {
-        return touchState.Any(t => 
+        return touchState.Any(t =>
             t.State == TouchLocationState.Released &&
             ButtonBounds.Contains(t.Position));
     }

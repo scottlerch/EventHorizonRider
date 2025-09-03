@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Components;
+using EventHorizonRider.Core.Components;
 using EventHorizonRider.Core.Components.ForegroundComponents;
 using EventHorizonRider.Core.Components.MenuComponents;
 using EventHorizonRider.Core.Components.SpaceComponents;
@@ -38,25 +38,15 @@ internal class GameContext
     /// </summary>
     public bool Paused { get; set; }
 
-    private Task ioTask;
+    private Task _ioTask;
 
     /// <summary>
     /// This is the task where all IO operations are performed in a non-blocking way.
     /// </summary>
     public Task IoTask
     {
-        get { return ioTask; }
-        set
-        {
-            if (ioTask != null && !ioTask.IsCompleted)
-            {
-                ioTask = ioTask.ContinueWith(t => value.Wait() );
-            }
-            else
-            {
-                ioTask = value;
-            }
-        }
+        get => _ioTask;
+        set => _ioTask = _ioTask != null && !_ioTask.IsCompleted ? _ioTask.ContinueWith(t => value.Wait()) : value;
     }
 
     public GameContext(GameStateBase gameState)
@@ -89,7 +79,7 @@ internal class GameContext
                 ship: new Ship(blackhole),
                 blackhole: blackhole),
             menu: new Menu(
-                levelSelect: new LevelSelect(Levels), 
+                levelSelect: new LevelSelect(Levels),
                 resetButton: new ResetButton(),
                 creditsButton: new CreditsButton(),
                 credits: new Credits()),
@@ -98,7 +88,7 @@ internal class GameContext
                 menuButton: new MenuButton(),
                 playTime: new PlayTimer(Levels),
                 title: new Title(),
-                controlsHelp: new ControlsHelp(), 
+                controlsHelp: new ControlsHelp(),
                 fpsCounter: new FpsCounter()));
     }
 

@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Engine;
+using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Engine.States;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
@@ -9,41 +9,40 @@ namespace EventHorizonRider.Core;
 
 public class MainGame : Game
 {
-    private readonly GraphicsDeviceManager graphicsDeviceManager;
+    private readonly GraphicsDeviceManager _graphicsDeviceManager;
 
-    private InputState inputState;
-    private SpriteBatch spriteBatch;
-    private GameContext gameContext;
+    private InputState _inputState;
+    private SpriteBatch _spriteBatch;
 
     public MainGame()
     {
-        graphicsDeviceManager = new GraphicsDeviceManager(this)
+        _graphicsDeviceManager = new GraphicsDeviceManager(this)
         {
             IsFullScreen = DeviceInfo.Platform.IsFullScreen
         };
 
         Content.RootDirectory = "Content";
 
-        graphicsDeviceManager.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+        _graphicsDeviceManager.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
     }
 
     /// <summary>
     /// Event for when game is initialized.  This is useful for development tools to know when to attach to GameContext.
     /// </summary>
-    public event EventHandler Initialized = delegate { }; 
+    public event EventHandler Initialized = delegate { };
 
     /// <summary>
     /// This exposes the entire game state for use by development tools.
     /// </summary>
-    internal GameContext GameContext { get { return gameContext; } }
+    internal GameContext GameContext { get; private set; }
 
     /// <remarks>
     /// Only here for testing.  MonoGame should automatically select correct resolution.
     /// </remarks>
     public void SetResolution(int width, int height)
     {
-        graphicsDeviceManager.PreferredBackBufferWidth = width;
-        graphicsDeviceManager.PreferredBackBufferHeight = height;
+        _graphicsDeviceManager.PreferredBackBufferWidth = width;
+        _graphicsDeviceManager.PreferredBackBufferHeight = height;
     }
 
     /// <summary>
@@ -60,8 +59,8 @@ public class MainGame : Game
         IsFixedTimeStep = DeviceInfo.Platform.IsFixedTimeStep;
         TargetElapsedTime = DeviceInfo.Platform.TargetElapsedTime;
 
-        gameContext = new GameContext(new InitializeState());
-        inputState = new InputState();
+        GameContext = new GameContext(new InitializeState());
+        _inputState = new InputState();
 
         base.Initialize();
 
@@ -74,9 +73,9 @@ public class MainGame : Game
     /// </summary>
     protected override void LoadContent()
     {
-        spriteBatch = new SpriteBatch(GraphicsDevice);
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        gameContext.Root.LoadContent(Content, GraphicsDevice);
+        GameContext.Root.LoadContent(Content, GraphicsDevice);
     }
 
     /// <summary>
@@ -95,8 +94,8 @@ public class MainGame : Game
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     protected override void Update(GameTime gameTime)
     {
-        inputState.Update();
-        gameContext.Update(gameTime, inputState);
+        _inputState.Update();
+        GameContext.Update(gameTime, _inputState);
 
         base.Update(gameTime);
     }
@@ -107,7 +106,7 @@ public class MainGame : Game
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
     protected override void Draw(GameTime gameTime)
     {
-        gameContext.Root.Draw(spriteBatch, GraphicsDevice);
+        GameContext.Root.Draw(_spriteBatch, GraphicsDevice);
 
         base.Draw(gameTime);
     }
@@ -119,9 +118,9 @@ public class MainGame : Game
     {
         if (DeviceInfo.Platform.PauseOnLoseFocus)
         {
-            if (gameContext != null)
+            if (GameContext != null)
             {
-                gameContext.Paused = true;
+                GameContext.Paused = true;
             }
         }
 
@@ -135,9 +134,9 @@ public class MainGame : Game
     {
         if (DeviceInfo.Platform.PauseOnLoseFocus)
         {
-            if (gameContext != null)
+            if (GameContext != null)
             {
-                gameContext.Paused = true;
+                GameContext.Paused = true;
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -6,23 +6,23 @@ namespace EventHorizonRider.Core.Components.MenuComponents;
 
 internal class Credits : ComponentBase
 {
-    private Texture2D texture;
-    private Vector2 textureOrigin;
+    private Texture2D _texture;
+    private Vector2 _textureOrigin;
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
         Visible = false;
 
-        texture = content.Load<Texture2D>(@"Images\credits");
-        textureOrigin = new Vector2(texture.Width/2f, texture.Height/2f);
+        _texture = content.Load<Texture2D>(@"Images\credits");
+        _textureOrigin = new Vector2(_texture.Width / 2f, _texture.Height / 2f);
     }
 
     protected override void DrawCore(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(
-            texture,
+            _texture,
             sourceRectangle: null,
-            origin: textureOrigin,
+            origin: _textureOrigin,
             position: DeviceInfo.LogicalCenter,
             rotation: 0f,
             scale: Vector2.One,

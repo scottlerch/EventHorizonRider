@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace EventHorizonRider.Core.Components.ForegroundComponents;
 
@@ -18,16 +18,16 @@ internal class PlayButton : ComponentBase
         public readonly Color HoverColor = hoverColor;
     }
 
-    private float fadeSpeed = 1.5f;
+    private float _fadeSpeed = 1.5f;
 
-    private SpriteFont buttonFont;
+    private SpriteFont _buttonFont;
 
-    private float colorAlphaPercent = 1f;
+    private float _colorAlphaPercent = 1f;
 
-    private PlayButtonState playButtonState;
-    private bool isVisible = true;
+    private PlayButtonState _playButtonState;
+    private bool _isVisible = true;
 
-    private Dictionary<PlayButtonState, Info> textInfo;
+    private Dictionary<PlayButtonState, Info> _textInfo;
 
     public float Scale { get; set; }
 
@@ -35,55 +35,55 @@ internal class PlayButton : ComponentBase
 
     public void Show(PlayButtonState state, bool fade = false, float newFadeSpeed = 1.5f)
     {
-        isVisible = true;
-        playButtonState = state;
+        _isVisible = true;
+        _playButtonState = state;
 
         if (!fade)
         {
-            colorAlphaPercent = 1f;
+            _colorAlphaPercent = 1f;
         }
 
-        fadeSpeed = newFadeSpeed;
+        _fadeSpeed = newFadeSpeed;
     }
 
     public void Hide(bool fade = true, float newFadeSpeed = 1.5f)
     {
         if (!fade)
         {
-            colorAlphaPercent = 0f;    
+            _colorAlphaPercent = 0f;
         }
 
-        isVisible = false;
-        fadeSpeed = newFadeSpeed;
+        _isVisible = false;
+        _fadeSpeed = newFadeSpeed;
     }
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
-        buttonFont = content.Load<SpriteFont>(@"Fonts\button_font");
+        _buttonFont = content.Load<SpriteFont>(@"Fonts\button_font");
 
-        textInfo = new Dictionary<PlayButtonState, Info>
+        _textInfo = new Dictionary<PlayButtonState, Info>
         {
             {
-                PlayButtonState.Start, 
-                new Info("START", buttonFont.MeasureString("START"), Color.White, Color.Yellow)
+                PlayButtonState.Start,
+                new Info("START", _buttonFont.MeasureString("START"), Color.White, Color.Yellow)
             },
-            { 
-                PlayButtonState.Restart, 
-                new Info("RESET", buttonFont.MeasureString("RESET"), Color.White, Color.Yellow) 
+            {
+                PlayButtonState.Restart,
+                new Info("RESET", _buttonFont.MeasureString("RESET"), Color.White, Color.Yellow)
                 },
             {
-                PlayButtonState.Resume, 
-                new Info("RESUME", buttonFont.MeasureString("RESUME"), Color.White, Color.Yellow)
+                PlayButtonState.Resume,
+                new Info("RESUME", _buttonFont.MeasureString("RESUME"), Color.White, Color.Yellow)
             },
             {
-                PlayButtonState.Pause, 
-                new Info("PAUSE", buttonFont.MeasureString("PAUSE"), Color.DarkGray.AdjustLight(0.2f), Color.Gray.AdjustLight(0.3f))
+                PlayButtonState.Pause,
+                new Info("PAUSE", _buttonFont.MeasureString("PAUSE"), Color.DarkGray.AdjustLight(0.2f), Color.Gray.AdjustLight(0.3f))
             },
         };
 
         const float buttonPadding = 100f;
 
-        var textSize = textInfo[PlayButtonState.Restart].Size;
+        var textSize = _textInfo[PlayButtonState.Restart].Size;
 
         Button = new Button(
             buttonBounds: new Rectangle(
@@ -96,31 +96,31 @@ internal class PlayButton : ComponentBase
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
-        Button.Update(gameTime, inputState, isVisible);
+        Button.Update(gameTime, inputState, _isVisible);
 
-        if (isVisible && colorAlphaPercent < 1f)
+        if (_isVisible && _colorAlphaPercent < 1f)
         {
-            colorAlphaPercent += fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _colorAlphaPercent += _fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
-        else if (!isVisible && colorAlphaPercent > 0f)
+        else if (!_isVisible && _colorAlphaPercent > 0f)
         {
-            colorAlphaPercent -= fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _colorAlphaPercent -= _fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        colorAlphaPercent = MathHelper.Clamp(colorAlphaPercent, 0, 1);
+        _colorAlphaPercent = MathHelper.Clamp(_colorAlphaPercent, 0, 1);
     }
 
     protected override void DrawCore(SpriteBatch spriteBatch)
     {
-        if (colorAlphaPercent >= 0f)
+        if (_colorAlphaPercent >= 0f)
         {
-            var info = textInfo[playButtonState];
+            var info = _textInfo[_playButtonState];
 
             spriteBatch.DrawString(
-                buttonFont,
+                _buttonFont,
                 info.Text,
                 DeviceInfo.LogicalCenter,
-                (Button.Hover ? info.HoverColor : info.Color) * colorAlphaPercent,
+                (Button.Hover ? info.HoverColor : info.Color) * _colorAlphaPercent,
                 rotation: 0f,
                 origin: new Vector2(info.Size.X / 2f, info.Size.Y / 2f),
                 scale: Scale,

@@ -1,7 +1,7 @@
-using System.Runtime.InteropServices;
 using EventHorizonRider.Core;
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace EventHorizonRider.Windows;

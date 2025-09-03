@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -10,103 +10,109 @@ internal class ControlsHelp : ComponentBase
 {
     private const float MaxAlpha = 0.3f;
 
-    private Vector2 helpLeftPosition;
-    private Texture2D helpLeft;
+    private Vector2 _helpLeftPosition;
+    private Texture2D _helpLeft;
 
-    private Vector2 helpRightPosition;
-    private Texture2D helpRight;
+    private Vector2 _helpRightPosition;
+    private Texture2D _helpRight;
 
-    private Vector2 helpStartPosition;
-    private Texture2D helpStart;
+    private Vector2 _helpStartPosition;
+    private Texture2D _helpStart;
 
-    private Motion startMotion;
+    private Motion _startMotion;
 
-    private bool fading;
-    private float directionAlpha = MaxAlpha;
-    private float directionFadeSpeed;
+    private bool _fading;
+    private float _directionAlpha = MaxAlpha;
+    private float _directionFadeSpeed;
 
-    private float startAlpha = MaxAlpha;
-    private float startFadeSpeed;
+    private float _startAlpha = MaxAlpha;
+    private float _startFadeSpeed;
 
-    private bool touchEnabled;
+    private bool _touchEnabled;
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
         Visible = true;
 
-        touchEnabled = DeviceInfo.Platform.TouchEnabled;
+        _touchEnabled = DeviceInfo.Platform.TouchEnabled;
 
-        if (touchEnabled)
+        if (_touchEnabled)
         {
-            helpLeft = content.Load<Texture2D>(@"Images\help_left");
-            helpRight = content.Load<Texture2D>(@"Images\help_right");
+            _helpLeft = content.Load<Texture2D>(@"Images\help_left");
+            _helpRight = content.Load<Texture2D>(@"Images\help_right");
         }
         else
         {
-            helpLeft = content.Load<Texture2D>(@"Images\help_key_left");
-            helpRight = content.Load<Texture2D>(@"Images\help_key_right");
+            _helpLeft = content.Load<Texture2D>(@"Images\help_key_left");
+            _helpRight = content.Load<Texture2D>(@"Images\help_key_right");
         }
 
-        helpStart = content.Load<Texture2D>(@"Images\help_start");
+        _helpStart = content.Load<Texture2D>(@"Images\help_start");
 
-        helpLeftPosition = new Vector2(0, (DeviceInfo.LogicalHeight / 2) - (helpLeft.Height / 2));
+        _helpLeftPosition = new Vector2(0, (DeviceInfo.LogicalHeight / 2) - (_helpLeft.Height / 2));
 
-        helpRightPosition = new Vector2(
-            DeviceInfo.LogicalWidth - helpRight.Width, 
-            (DeviceInfo.LogicalHeight / 2) - (helpLeft.Height / 2));
+        _helpRightPosition = new Vector2(
+            DeviceInfo.LogicalWidth - _helpRight.Width,
+            (DeviceInfo.LogicalHeight / 2) - (_helpLeft.Height / 2));
 
-        helpStartPosition = new Vector2(
-            (DeviceInfo.LogicalWidth / 2) - (helpStart.Width / 2), 
+        _helpStartPosition = new Vector2(
+            (DeviceInfo.LogicalWidth / 2) - (_helpStart.Width / 2),
             (DeviceInfo.LogicalHeight / 2) + 125);
 
-        startMotion = new Motion(value:0, target:20, speed:80);
+        _startMotion = new Motion(value: 0, target: 20, speed: 80);
     }
 
     public void Hide(float speed)
     {
-        if (fading && directionFadeSpeed < 0f) return;
+        if (_fading && _directionFadeSpeed < 0f)
+        {
+            return;
+        }
 
-        fading = true;
-        directionFadeSpeed = speed > 0f ? speed * -1f : speed;
-        startFadeSpeed = directionFadeSpeed*8f;
+        _fading = true;
+        _directionFadeSpeed = speed > 0f ? speed * -1f : speed;
+        _startFadeSpeed = _directionFadeSpeed * 8f;
     }
 
     public void Show(float speed)
     {
-        if (fading && directionFadeSpeed > 0f) return;
-
-        Visible = true;
-        fading = true;
-        directionFadeSpeed = speed < 0f ? speed * -1f : speed;
-        startFadeSpeed = directionFadeSpeed;
-    }
-        
-    protected override void UpdateCore(GameTime gameTime, InputState inputState)
-    {
-        startMotion.Update(gameTime);
-
-        if (startMotion.IsDone)
+        if (_fading && _directionFadeSpeed > 0f)
         {
-            startMotion.UpdateTarget(startMotion.Value > 0? 0 : 20);
+            return;
         }
 
-        if (fading)
+        Visible = true;
+        _fading = true;
+        _directionFadeSpeed = speed < 0f ? speed * -1f : speed;
+        _startFadeSpeed = _directionFadeSpeed;
+    }
+
+    protected override void UpdateCore(GameTime gameTime, InputState inputState)
+    {
+        _startMotion.Update(gameTime);
+
+        if (_startMotion.IsDone)
         {
-            directionAlpha += (float) gameTime.ElapsedGameTime.TotalSeconds*directionFadeSpeed;
-            startAlpha += (float)gameTime.ElapsedGameTime.TotalSeconds * startFadeSpeed;
+            _startMotion.UpdateTarget(_startMotion.Value > 0 ? 0 : 20);
+        }
 
-            startAlpha = MathHelper.Clamp(startAlpha, 0f, MaxAlpha);
+        if (_fading)
+        {
+            _directionAlpha += (float)gameTime.ElapsedGameTime.TotalSeconds * _directionFadeSpeed;
+            _startAlpha += (float)gameTime.ElapsedGameTime.TotalSeconds * _startFadeSpeed;
 
-            if (directionAlpha < 0f)
+            _startAlpha = MathHelper.Clamp(_startAlpha, 0f, MaxAlpha);
+
+            if (_directionAlpha < 0f)
             {
-                directionAlpha = 0f;
-                fading = false;
+                _directionAlpha = 0f;
+                _fading = false;
                 Visible = false;
             }
-            else if (directionAlpha > MaxAlpha)
+            else if (_directionAlpha > MaxAlpha)
             {
-                directionAlpha = MaxAlpha;
-                fading = false;
+                _directionAlpha = MaxAlpha;
+                _fading = false;
             }
         }
     }
@@ -114,9 +120,9 @@ internal class ControlsHelp : ComponentBase
     protected override void DrawCore(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(
-            helpLeft,
-            color: Color.White*directionAlpha,
-            position: helpLeftPosition,
+            _helpLeft,
+            color: Color.White * _directionAlpha,
+            position: _helpLeftPosition,
             layerDepth: Depth,
             origin: Vector2.Zero,
             scale: Vector2.One,
@@ -125,9 +131,9 @@ internal class ControlsHelp : ComponentBase
             effects: SpriteEffects.None);
 
         spriteBatch.Draw(
-            helpRight,
-            color: Color.White*directionAlpha,
-            position: helpRightPosition,
+            _helpRight,
+            color: Color.White * _directionAlpha,
+            position: _helpRightPosition,
             layerDepth: Depth,
             origin: Vector2.Zero,
             scale: Vector2.One,
@@ -136,9 +142,9 @@ internal class ControlsHelp : ComponentBase
             effects: SpriteEffects.None);
 
         spriteBatch.Draw(
-            helpStart, 
-            color: Color.White * startAlpha, 
-            position: new Vector2(helpStartPosition.X, helpStartPosition.Y - startMotion.Value), 
+            _helpStart,
+            color: Color.White * _startAlpha,
+            position: new Vector2(_helpStartPosition.X, _helpStartPosition.Y - _startMotion.Value),
             layerDepth: Depth,
             origin: Vector2.Zero,
             scale: Vector2.One,

@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
@@ -6,23 +6,17 @@ namespace EventHorizonRider.Core.Components;
 
 internal class Music : ComponentBase
 {
-    private Song musicSong;
+    private Song _musicSong;
 
-    protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
-    {
-        musicSong = content.Load<Song>(@"Music\techno_song");
-    }
+    protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics) => _musicSong = content.Load<Song>(@"Music\techno_song");
 
     public void Start()
     {
         Microsoft.Xna.Framework.Media.MediaPlayer.IsRepeating = true;
-        Microsoft.Xna.Framework.Media.MediaPlayer.Play(musicSong);
+        Microsoft.Xna.Framework.Media.MediaPlayer.Play(_musicSong);
     }
 
-    public void Stop()
-    {
-        Microsoft.Xna.Framework.Media.MediaPlayer.Stop();
-    }
+    public static void Stop() => Microsoft.Xna.Framework.Media.MediaPlayer.Stop();
 
     public void Pause()
     {

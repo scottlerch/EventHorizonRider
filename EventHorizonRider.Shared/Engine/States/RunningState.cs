@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Components.ForegroundComponents;
+using EventHorizonRider.Core.Components.ForegroundComponents;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -122,7 +122,7 @@ internal class RunningState : GameStateBase
 
     public override void OnEnd(GameContext gameContext, GameTime gameTime)
     {
-        gameContext.Root.Music.Stop();
+        Components.Music.Stop();
 
         gameContext.Root.Space.SetBlur(blurAmount: 5f);
         gameContext.Root.Space.BlackholeHalo.Visible = false;
@@ -135,7 +135,7 @@ internal class RunningState : GameStateBase
         gameContext.Root.Foreground.PlayButton.Show(state: PlayButtonState.Restart);
 
         gameContext.IoTask = gameContext.PlayerData.UpdateBestTime(
-            gameContext.Root.Foreground.PlayTimer.Elapsed, 
+            gameContext.Root.Foreground.PlayTimer.Elapsed,
             gameContext.Levels.CurrentLevelNumber);
     }
 

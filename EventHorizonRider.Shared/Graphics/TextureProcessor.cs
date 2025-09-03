@@ -1,6 +1,6 @@
-﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Linq;
 
 namespace EventHorizonRider.Core.Graphics;
@@ -14,14 +14,14 @@ internal class TextureProcessor
     {
         var scaledData = new PixelData<byte>((int)Math.Round(data.Width * scale), (int)Math.Round(data.Height * scale));
 
-        var xRatio = data.Width/(float)scaledData.Width;
-        var yRatio = data.Height/(float)scaledData.Height;
+        var xRatio = data.Width / (float)scaledData.Width;
+        var yRatio = data.Height / (float)scaledData.Height;
 
-        for (int y = 0; y < scaledData.Height; y++)
+        for (var y = 0; y < scaledData.Height; y++)
         {
-            for (int x = 0; x < scaledData.Width; x++)
+            for (var x = 0; x < scaledData.Width; x++)
             {
-                scaledData[x, y] = data[(int) (x*xRatio), (int) (y*yRatio)];
+                scaledData[x, y] = data[(int)(x * xRatio), (int)(y * yRatio)];
             }
         }
 
@@ -34,9 +34,9 @@ internal class TextureProcessor
         var croppedHeight = bounds.Height;
         var croppedData = new PixelData<byte>(croppedWidth, croppedHeight);
 
-        for (int x = 0; x < croppedWidth; x++)
+        for (var x = 0; x < croppedWidth; x++)
         {
-            for (int y = 0; y < croppedHeight; y++)
+            for (var y = 0; y < croppedHeight; y++)
             {
                 croppedData[x, y] = data[x + bounds.X, y + bounds.Y];
             }
@@ -54,23 +54,23 @@ internal class TextureProcessor
 
     public static Color[] SoftenAlpha(Color[] data, int width, int height)
     {
-        var antiAliasedData = new Color[width*height];
+        var antiAliasedData = new Color[width * height];
 
         for (var x = 1; x < width - 1; x++)
         {
             for (var y = 1; y < height - 1; y++)
             {
-                var color = data[x + (y*width)];
-                antiAliasedData[x + (y*width)] = new Color(color.R, color.G, color.B,
-                    data[x + (y*width)].A/2 +
-                    data[(x + 1) + (y*width)].A/8 +
-                    data[(x - 1) + (y*width)].A/8 +
-                    data[x + ((y - 1)*width)].A/8 +
-                    data[x + ((y + 1)*width)].A/8 +
-                    data[(x + 1) + ((y + 1)*width)].A/16 +
-                    data[(x - 1) + ((y - 1)*width)].A/16 +
-                    data[(x - 1) + ((y + 1)*width)].A/16 +
-                    data[(x + 1) + ((y - 1)*width)].A/16);
+                var color = data[x + (y * width)];
+                antiAliasedData[x + (y * width)] = new Color(color.R, color.G, color.B,
+                    data[x + (y * width)].A / 2 +
+                    data[(x + 1) + (y * width)].A / 8 +
+                    data[(x - 1) + (y * width)].A / 8 +
+                    data[x + ((y - 1) * width)].A / 8 +
+                    data[x + ((y + 1) * width)].A / 8 +
+                    data[(x + 1) + ((y + 1) * width)].A / 16 +
+                    data[(x - 1) + ((y - 1) * width)].A / 16 +
+                    data[(x - 1) + ((y + 1) * width)].A / 16 +
+                    data[(x + 1) + ((y - 1) * width)].A / 16);
             }
         }
 

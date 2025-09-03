@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -9,17 +9,16 @@ namespace EventHorizonRider.Core.Components.SpaceComponents;
 
 internal class Blackhole : ComponentBase
 {
-    private float extraBlackholeScale;
-    private float newExtraBlackholeScale;
-    private float extraBlackholeScaleSpeed;
+    private float _newExtraBlackholeScale;
+    private float _extraBlackholeScaleSpeed;
 
-    private Texture2D texture;
+    private Texture2D _texture;
 
-    private bool isStopped = true;
+    private bool _isStopped = true;
 
-    private float currentRotation;
+    private float _currentRotation;
 
-    private SoundEffect scaleSound;
+    private SoundEffect _scaleSound;
 
     public Blackhole()
     {
@@ -35,98 +34,80 @@ internal class Blackhole : ComponentBase
 
     public Vector2 Position { get; private set; }
 
-    public float Height
-    {
-        get { return texture.Height*Spring.BlockX; }
-    }
+    public float Height => _texture.Height * Spring.BlockX;
 
     public float RotationalVelocity { get; set; }
 
-    public float ExtraScale { get { return extraBlackholeScale; } }
+    public float ExtraScale { get; private set; }
 
-    public Vector2 Scale
-    {
-        get
-        {
-            return new Vector2(Spring.BlockX + extraBlackholeScale, Spring.BlockX + extraBlackholeScale);
-        }
-    }
+    public Vector2 Scale => new(Spring.BlockX + ExtraScale, Spring.BlockX + ExtraScale);
 
-    public void Gameover()
-    {
-        isStopped = true;
-    }
+    public void Gameover() => _isStopped = true;
 
-    public void Start()
-    {
-        isStopped = false;
-    }
+    public void Start() => _isStopped = false;
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
-        texture = content.Load<Texture2D>(@"Images\blackhole");
-        scaleSound = content.Load<SoundEffect>(@"Sounds\open_menu");
+        _texture = content.Load<Texture2D>(@"Images\blackhole");
+        _scaleSound = content.Load<SoundEffect>(@"Sounds\open_menu");
 
         Position = new Vector2(
-            DeviceInfo.LogicalWidth/2f,
-            DeviceInfo.LogicalHeight/2f);
+            DeviceInfo.LogicalWidth / 2f,
+            DeviceInfo.LogicalHeight / 2f);
     }
 
-    public void Pulse(float pullX = 1.15f, float pullVelocity = 1.5f)
-    {
-        Spring.PullBlock(pullX, pullVelocity);
-    }
+    public void Pulse(float pullX = 1.15f, float pullVelocity = 1.5f) => Spring.PullBlock(pullX, pullVelocity);
 
     public void SetExtraScale(float scaleSize, bool animate = false, float speed = 1f)
     {
-        newExtraBlackholeScale = scaleSize;
+        _newExtraBlackholeScale = scaleSize;
 
         if (!animate)
         {
-            extraBlackholeScale = scaleSize;
+            ExtraScale = scaleSize;
         }
         else
         {
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (scaleSize != extraBlackholeScale)
+            if (scaleSize != ExtraScale)
             {
-                scaleSound.Play();
+                _scaleSound.Play();
             }
 
-            extraBlackholeScaleSpeed = speed;
-            extraBlackholeScaleSpeed *= extraBlackholeScale < newExtraBlackholeScale ? 1f : -1f;
+            _extraBlackholeScaleSpeed = speed;
+            _extraBlackholeScaleSpeed *= ExtraScale < _newExtraBlackholeScale ? 1f : -1f;
         }
     }
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
         // ReSharper disable once CompareOfFloatsByEqualityOperator
-        if (extraBlackholeScale != newExtraBlackholeScale)
+        if (ExtraScale != _newExtraBlackholeScale)
         {
-            extraBlackholeScale += (float)gameTime.ElapsedGameTime.TotalSeconds * extraBlackholeScaleSpeed;
+            ExtraScale += (float)gameTime.ElapsedGameTime.TotalSeconds * _extraBlackholeScaleSpeed;
 
-            if ((extraBlackholeScaleSpeed > 0 && extraBlackholeScale > newExtraBlackholeScale) ||
-                (extraBlackholeScaleSpeed < 0 && extraBlackholeScale < newExtraBlackholeScale))
+            if ((_extraBlackholeScaleSpeed > 0 && ExtraScale > _newExtraBlackholeScale) ||
+                (_extraBlackholeScaleSpeed < 0 && ExtraScale < _newExtraBlackholeScale))
             {
-                extraBlackholeScale = newExtraBlackholeScale;
+                ExtraScale = _newExtraBlackholeScale;
             }
         }
 
-        if (!isStopped)
+        if (!_isStopped)
         {
             Spring.Update(gameTime.ElapsedGameTime);
-            currentRotation += RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _currentRotation += RotationalVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
     }
 
     protected override void DrawCore(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(
-            texture, 
+            _texture,
             Position,
             sourceRectangle: null,
-            origin: new Vector2(texture.Width/2f, texture.Height/2f),
-            rotation: currentRotation,
+            origin: new Vector2(_texture.Width / 2f, _texture.Height / 2f),
+            rotation: _currentRotation,
             scale: new Vector2(Scale.X, Scale.Y),
             color: Color.Black,
             layerDepth: Depth,

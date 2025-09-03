@@ -1,6 +1,6 @@
-﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace EventHorizonRider.Core;
 
@@ -9,8 +9,8 @@ namespace EventHorizonRider.Core;
 /// </summary>
 public class DeviceInfo
 {
-    private static bool graphicsInitialized;
-    private static bool platformInitialized;
+    private static bool _graphicsInitialized;
+    private static bool _platformInitialized;
 
     public static Matrix OutputScaleMatrix { get; private set; }
 
@@ -40,14 +40,14 @@ public class DeviceInfo
     /// </summary>
     public static void InitializePlatform(Platform platform)
     {
-        if (platformInitialized)
+        if (_platformInitialized)
         {
             throw new InvalidOperationException("Platform already initialized");
         }
 
         Platform = platform;
 
-        platformInitialized = true;
+        _platformInitialized = true;
     }
 
     /// <summary>
@@ -55,12 +55,12 @@ public class DeviceInfo
     /// </summary>
     public static void InitializeGraphics(GraphicsDevice graphics)
     {
-        if (!platformInitialized)
+        if (!_platformInitialized)
         {
             throw new InvalidOperationException("Platform must first be initialized");
         }
 
-        if (graphicsInitialized)
+        if (_graphicsInitialized)
         {
             throw new InvalidOperationException("Graphics already initialized");
         }
@@ -84,6 +84,6 @@ public class DeviceInfo
 
         LogicalCenter = new Vector2(LogicalWidth / 2f, LogicalHeight / 2f);
 
-        graphicsInitialized = true;
+        _graphicsInitialized = true;
     }
 }

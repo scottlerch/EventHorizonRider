@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace EventHorizonRider.Core;
 
@@ -34,7 +34,7 @@ public class Platform
 
     public bool UseDynamicStars { get; set; }
 
-    public bool IsPixelShaderEnabled { get { return PixelShaderDetail != PixelShaderDetail.None; } }
+    public bool IsPixelShaderEnabled => PixelShaderDetail != PixelShaderDetail.None;
 
     public PixelShaderDetail PixelShaderDetail { get; set; }
 
@@ -57,7 +57,7 @@ public class Platform
         CollisionDetectionDetail = CollisionDetectionDetail.Full;
         TouchEnabled = true;
         PauseOnLoseFocus = true;
-        TargetElapsedTime = TimeSpan.FromSeconds(1/60D);
+        TargetElapsedTime = TimeSpan.FromSeconds(1 / 60D);
         IsFixedTimeStep = true;
         ParticleEffectsDetails = ParticleEffectsDetails.Full;
     }

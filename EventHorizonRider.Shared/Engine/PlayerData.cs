@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -18,7 +18,7 @@ internal class PlayerData : ComponentBase
         HighestLevelNumber = 1;
         DefaultLevelNumber = 1;
     }
-		
+
     public async Task Save()
     {
         try
@@ -65,8 +65,15 @@ internal class PlayerData : ComponentBase
         }
         finally
         {
-            if (HighestLevelNumber < 1) HighestLevelNumber = 1;
-            if (DefaultLevelNumber < 1) DefaultLevelNumber = 1;
+            if (HighestLevelNumber < 1)
+            {
+                HighestLevelNumber = 1;
+            }
+
+            if (DefaultLevelNumber < 1)
+            {
+                DefaultLevelNumber = 1;
+            }
         }
     }
 

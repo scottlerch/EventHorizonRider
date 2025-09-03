@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -9,10 +9,7 @@ internal class GaussianBlur
 {
     public Effect Effect { get; private set; }
 
-    public void LoadContent(ContentManager content)
-    {
-        Effect = content.Load<Effect>(@"Effects\gaussianblur_effect");
-    }
+    public void LoadContent(ContentManager content) => Effect = content.Load<Effect>(@"Effects\gaussianblur_effect");
 
     /// <summary>
     /// Computes sample weightings and texture coordinate offsets

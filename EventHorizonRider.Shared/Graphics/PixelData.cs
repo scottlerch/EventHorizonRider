@@ -1,4 +1,4 @@
-﻿namespace EventHorizonRider.Core.Graphics;
+namespace EventHorizonRider.Core.Graphics;
 
 /// <summary>
 /// Helper class to hold raw pixel data of a texture along with it's height and width.
@@ -14,8 +14,7 @@ internal class PixelData<T>
 
     public T this[int x, int y]
     {
-        get { return Data[x + (y*Width)]; }
-        set { Data[x + (y * Width)] = value; }
+        get => Data[x + (y * Width)]; set => Data[x + (y * Width)] = value;
     }
 
     public PixelData(int width, int height)

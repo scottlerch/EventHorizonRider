@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -11,33 +11,33 @@ internal class CreditsButton : ComponentBase
 {
     private const string ButtonText = "CREDITS";
 
-    private SpriteFont buttonFont;
-    private SoundEffect buttonSound;
+    private SpriteFont _buttonFont;
+    private SoundEffect _buttonSound;
 
-    private Vector2 textLocation;
-    private Vector2 textSize;
+    private Vector2 _textLocation;
+    private Vector2 _textSize;
 
     public Button Button { get; set; }
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
-        buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
-        buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
+        _buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
+        _buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
 
-        textSize = buttonFont.MeasureString(ButtonText);
+        _textSize = _buttonFont.MeasureString(ButtonText);
 
         const float buttonPadding = 25f;
 
-        textLocation = new Vector2(
-            (DeviceInfo.LogicalWidth / 2f) - (textSize.X / 2f),
+        _textLocation = new Vector2(
+            (DeviceInfo.LogicalWidth / 2f) - (_textSize.X / 2f),
             (DeviceInfo.LogicalHeight / 2f) + 150f);
 
         Button = new Button(
             buttonBounds: new Rectangle(
-                (int)(textLocation.X - buttonPadding),
-                (int)(textLocation.Y - buttonPadding),
-                (int)(textSize.X + (buttonPadding * 2)),
-                (int)(textSize.Y + (buttonPadding * 2))),
+                (int)(_textLocation.X - buttonPadding),
+                (int)(_textLocation.Y - buttonPadding),
+                (int)(_textSize.X + (buttonPadding * 2)),
+                (int)(_textSize.Y + (buttonPadding * 2))),
             key: Keys.C);
     }
 
@@ -47,17 +47,17 @@ internal class CreditsButton : ComponentBase
 
         if (Button.Pressed)
         {
-            buttonSound.Play();
+            _buttonSound.Play();
         }
     }
 
     protected override void DrawCore(SpriteBatch spriteBatch)
     {
         spriteBatch.DrawString(
-            buttonFont,
+            _buttonFont,
             ButtonText,
-            textLocation,
-            Button.Hover? Color.Yellow : Color.White,
+            _textLocation,
+            Button.Hover ? Color.Yellow : Color.White,
             0,
             Vector2.Zero,
             1f,

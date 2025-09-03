@@ -1,4 +1,4 @@
-﻿namespace EventHorizonRider.Core.Engine;
+namespace EventHorizonRider.Core.Engine;
 
 internal class RingInfo
 {

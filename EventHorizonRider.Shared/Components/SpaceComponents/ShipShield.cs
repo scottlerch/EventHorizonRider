@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Input;
+using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -10,93 +10,93 @@ internal class ShipShield : ComponentBase
 {
     private const float BaseShieldAlpha = 0.8f;
 
-    private readonly Motion shieldPulseMotion;
+    private readonly Motion _shieldPulseMotion;
 
-    private Texture2D shieldPusleTexture;
-    private Vector2 shieldPulseLocation;
-    private Vector2 shieldPulseOrigin;
-    private float shieldPulseAlpha;
-    private float shieldPulseScale;
+    private Texture2D _shieldPusleTexture;
+    private Vector2 _shieldPulseLocation;
+    private Vector2 _shieldPulseOrigin;
+    private float _shieldPulseAlpha;
+    private float _shieldPulseScale;
 
-    private int shieldTextureIndex;
-    private Texture2D[] shieldTextures;
-    private Vector2[] shieldTexturesOrigins;
+    private int _shieldTextureIndex;
+    private Texture2D[] _shieldTextures;
+    private Vector2[] _shieldTexturesOrigins;
 
-    private Ship ship;
+    private Ship _ship;
 
     public ShipShield()
     {
-        shieldPulseMotion = new Motion();
+        _shieldPulseMotion = new Motion();
     }
 
     public Color Color { get; set; }
 
     public void Pulse()
     {
-        shieldPulseLocation = ship.Position;
-        shieldPulseMotion.Initialize(0, 1, 1f);
+        _shieldPulseLocation = _ship.Position;
+        _shieldPulseMotion.Initialize(0, 1, 1f);
     }
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
         const int NumberOfShieldPulseTextures = 3;
 
-        ship = Parent as Ship;
+        _ship = Parent as Ship;
 
-        shieldPusleTexture = content.Load<Texture2D>(@"Images\shield_pulse");
+        _shieldPusleTexture = content.Load<Texture2D>(@"Images\shield_pulse");
 
-        shieldTextures = new Texture2D[NumberOfShieldPulseTextures];
-        shieldTexturesOrigins = new Vector2[NumberOfShieldPulseTextures];
+        _shieldTextures = new Texture2D[NumberOfShieldPulseTextures];
+        _shieldTexturesOrigins = new Vector2[NumberOfShieldPulseTextures];
 
-        for (int i = 0; i < shieldTextures.Length; i++)
+        for (var i = 0; i < _shieldTextures.Length; i++)
         {
-            shieldTextures[i] = content.Load<Texture2D>(@"Images\shield_" + (i + 1));
-            shieldTexturesOrigins[i] = new Vector2(shieldTextures[i].Width / 2f, shieldTextures[i].Height / 2f);
+            _shieldTextures[i] = content.Load<Texture2D>(@"Images\shield_" + (i + 1));
+            _shieldTexturesOrigins[i] = new Vector2(_shieldTextures[i].Width / 2f, _shieldTextures[i].Height / 2f);
         }
 
-        shieldPulseMotion.Initialize(0, 0, 0);
+        _shieldPulseMotion.Initialize(0, 0, 0);
 
-        shieldTextureIndex = 0;
+        _shieldTextureIndex = 0;
 
-        shieldPulseOrigin = new Vector2(shieldPusleTexture.Width/2f, shieldPusleTexture.Height/2f);
+        _shieldPulseOrigin = new Vector2(_shieldPusleTexture.Width / 2f, _shieldPusleTexture.Height / 2f);
     }
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
         const int frameInterval = 100;
-        shieldTextureIndex = (int)((((int)gameTime.TotalGameTime.TotalMilliseconds % frameInterval) / 
-            (float)frameInterval) * shieldTextures.Length);
+        _shieldTextureIndex = (int)((((int)gameTime.TotalGameTime.TotalMilliseconds % frameInterval) /
+            (float)frameInterval) * _shieldTextures.Length);
 
-        shieldPulseMotion.Update(gameTime);
+        _shieldPulseMotion.Update(gameTime);
 
-        shieldPulseAlpha = MathHelper.Lerp(BaseShieldAlpha, 0, shieldPulseMotion.Value);
-        shieldPulseScale = (10f * shieldPulseMotion.Value) + 1f;
+        _shieldPulseAlpha = MathHelper.Lerp(BaseShieldAlpha, 0, _shieldPulseMotion.Value);
+        _shieldPulseScale = (10f * _shieldPulseMotion.Value) + 1f;
     }
 
     protected override void DrawCore(SpriteBatch spriteBatch)
     {
-        if (shieldPulseMotion.Value > 0f)
+        if (_shieldPulseMotion.Value > 0f)
         {
             spriteBatch.Draw(
-                shieldPusleTexture,
-                shieldPulseLocation,
+                _shieldPusleTexture,
+                _shieldPulseLocation,
                 sourceRectangle: null,
-                origin: shieldPulseOrigin,
-                color: Color.Lerp(Color, Color.White, 0.3f) * shieldPulseAlpha,
-                scale: Vector2.One * shieldPulseScale,
-                rotation: ship.Rotation,
+                origin: _shieldPulseOrigin,
+                color: Color.Lerp(Color, Color.White, 0.3f) * _shieldPulseAlpha,
+                scale: Vector2.One * _shieldPulseScale,
+                rotation: _ship.Rotation,
                 layerDepth: Depth - 0.0003f,
                 effects: SpriteEffects.None);
         }
 
         spriteBatch.Draw(
-            shieldTextures[shieldTextureIndex],
-            ship.Position,
+            _shieldTextures[_shieldTextureIndex],
+            _ship.Position,
             sourceRectangle: null,
-            origin: shieldTexturesOrigins[shieldTextureIndex],
+            origin: _shieldTexturesOrigins[_shieldTextureIndex],
             color: Color.Lerp(Color, Color.White, 0.3f) * BaseShieldAlpha,
             scale: Vector2.One,
-            rotation: ship.Rotation,
+            rotation: _ship.Rotation,
             layerDepth: Depth - 0.0002f,
             effects: SpriteEffects.None);
     }

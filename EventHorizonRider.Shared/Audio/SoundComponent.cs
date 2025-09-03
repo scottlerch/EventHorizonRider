@@ -1,25 +1,25 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 
 namespace EventHorizonRider.Core.Audio;
 
 internal class SoundComponent
 {
-    private readonly SoundEffectInstance soundEffectInstance;
+    private readonly SoundEffectInstance _soundEffectInstance;
 
-    private float currentFadeSpeed;
+    private float _currentFadeSpeed;
 
     public SoundComponent(SoundEffect soundEffect)
     {
-        soundEffectInstance = soundEffect.CreateInstance();
-        soundEffectInstance.IsLooped = true;
-        soundEffectInstance.Volume = 0f;
+        _soundEffectInstance = soundEffect.CreateInstance();
+        _soundEffectInstance.IsLooped = true;
+        _soundEffectInstance.Volume = 0f;
 
         MaxVolume = 1f;
         MinVolume = 0f;
 
         FadeSpeed = 1f;
-        currentFadeSpeed = 0f;
+        _currentFadeSpeed = 0f;
     }
 
     public bool Paused { get; set; }
@@ -34,11 +34,11 @@ internal class SoundComponent
     {
         Paused = false;
 
-        currentFadeSpeed = FadeSpeed;
+        _currentFadeSpeed = FadeSpeed;
 
         if (immediate)
         {
-            soundEffectInstance.Volume = MaxVolume;
+            _soundEffectInstance.Volume = MaxVolume;
             UpdateState();
         }
     }
@@ -47,11 +47,11 @@ internal class SoundComponent
     {
         Paused = false;
 
-        currentFadeSpeed = -FadeSpeed;
+        _currentFadeSpeed = -FadeSpeed;
 
         if (immediate)
         {
-            soundEffectInstance.Volume = MinVolume;
+            _soundEffectInstance.Volume = MinVolume;
             UpdateState();
         }
     }
@@ -60,22 +60,25 @@ internal class SoundComponent
     {
         Paused = true;
 
-        if (soundEffectInstance.State == SoundState.Playing)
+        if (_soundEffectInstance.State == SoundState.Playing)
         {
-            soundEffectInstance.Pause();
+            _soundEffectInstance.Pause();
         }
     }
 
     public void Update(GameTime gameTime)
     {
-        if (Paused) return;
-
-        if (soundEffectInstance.State == SoundState.Paused)
+        if (Paused)
         {
-            soundEffectInstance.Resume();
+            return;
         }
 
-        var volume =  soundEffectInstance.Volume + (float)gameTime.ElapsedGameTime.TotalSeconds * currentFadeSpeed;
+        if (_soundEffectInstance.State == SoundState.Paused)
+        {
+            _soundEffectInstance.Resume();
+        }
+
+        var volume = _soundEffectInstance.Volume + (float)gameTime.ElapsedGameTime.TotalSeconds * _currentFadeSpeed;
 
         if (volume >= MaxVolume)
         {
@@ -86,20 +89,20 @@ internal class SoundComponent
             volume = MinVolume;
         }
 
-        soundEffectInstance.Volume = volume;
+        _soundEffectInstance.Volume = volume;
 
         UpdateState();
     }
 
     private void UpdateState()
     {
-        if (soundEffectInstance.Volume > 0 && soundEffectInstance.State != SoundState.Playing)
+        if (_soundEffectInstance.Volume > 0 && _soundEffectInstance.State != SoundState.Playing)
         {
-            soundEffectInstance.Play();
+            _soundEffectInstance.Play();
         }
-        else if (soundEffectInstance.Volume <= 0 && soundEffectInstance.State != SoundState.Stopped)
+        else if (_soundEffectInstance.Volume <= 0 && _soundEffectInstance.State != SoundState.Stopped)
         {
-            soundEffectInstance.Stop();
+            _soundEffectInstance.Stop();
         }
     }
 }

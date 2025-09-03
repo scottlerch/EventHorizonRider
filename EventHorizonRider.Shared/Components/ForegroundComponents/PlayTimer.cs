@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Engine;
+using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using EventHorizonRider.Core.Physics;
@@ -16,62 +16,56 @@ internal class PlayTimer : ComponentBase
     const float TextPadding = 10;
     const float TextVerticalSpacing = 15;
 
-    private readonly LevelCollection levelsCollection;
+    private readonly LevelCollection _levelsCollection;
+    private bool _updatingTime;
 
-    private TimeSpan gameTimeElapsed;
-    private bool updatingTime;
+    private Vector2 _bestTextSize;
 
-    private Vector2 bestTextSize;
+    private int _currentLevelNumber;
 
-    private int currentLevelNumber;
+    private string _levelNumberText;
+    private string _bestNumberText;
+    private string _timeNumberText;
 
-    private string levelNumberText;
-    private string bestNumberText;
-    private string timeNumberText;
+    private float _levelTextSize;
 
-    private float levelTextSize;
+    private readonly Color _scoreColor = Color.Yellow;
 
-    private readonly Color scoreColor = Color.Yellow;
+    private SpriteFont _labelFont;
+    private SpriteFont _timeFont;
 
-    private SpriteFont labelFont;
-    private SpriteFont timeFont;
+    private SoundEffect _newBestSound;
+    private SoundEffect _newLevelSound;
 
-    private SoundEffect newBestSound;
-    private SoundEffect newLevelSound;
+    private Vector2 _viewSize;
 
-    private Vector2 viewSize;
-
-    private List<float> textOffset;
+    private List<float> _textOffset;
 
     private const string BestText = "Best: ";
     private const string LevelText = "Level: ";
 
-    private bool isLevelAndScoreVisible;
+    private bool _isLevelAndScoreVisible;
 
-    private readonly Motion levelNumberScaling;
+    private readonly Motion _levelNumberScaling;
 
-    private bool newBest;
+    private bool _newBest;
 
-    private bool animatingNewLevel;
+    private bool _animatingNewLevel;
 
-    private TimeSpan newBestDuration;
-    private readonly TimeSpan newBestDurationMax = TimeSpan.FromSeconds(2);
-    private float newBestAlpha;
+    private TimeSpan _newBestDuration;
+    private readonly TimeSpan _newBestDurationMax = TimeSpan.FromSeconds(2);
+    private float _newBestAlpha;
 
     public PlayTimer(LevelCollection levelsCollection)
     {
-        this.levelsCollection = levelsCollection;
-        levelNumberScaling = new Motion();
+        _levelsCollection = levelsCollection;
+        _levelNumberScaling = new Motion();
 
         ProgressBar = new ProgressBar();
         AddChild(ProgressBar, Depth);
     }
 
-    public TimeSpan Elapsed
-    {
-        get { return gameTimeElapsed; }
-        set { gameTimeElapsed = value; }
-    }
+    public TimeSpan Elapsed { get; set; }
 
     public TimeSpan Best { get; private set; }
 
@@ -79,37 +73,37 @@ internal class PlayTimer : ComponentBase
 
     public void ShowLevelAndScore()
     {
-        isLevelAndScoreVisible = true;
+        _isLevelAndScoreVisible = true;
         ProgressBar.Visible = true;
     }
 
     public void HideLevelAndScore()
     {
-        isLevelAndScoreVisible = false;
-        newBest = false;
+        _isLevelAndScoreVisible = false;
+        _newBest = false;
         ProgressBar.Visible = false;
     }
 
     public void Restart(TimeSpan initialElapsedTime)
     {
-        updatingTime = true;
-        gameTimeElapsed = initialElapsedTime;
+        _updatingTime = true;
+        Elapsed = initialElapsedTime;
     }
 
     public void Stop(bool newNewBest = false)
     {
-        newBest = newNewBest;
-        updatingTime = false;
+        _newBest = newNewBest;
+        _updatingTime = false;
     }
 
     public void SetLevel(int newCurrentLevelNumber, bool animate = false)
     {
-        currentLevelNumber = newCurrentLevelNumber;
+        _currentLevelNumber = newCurrentLevelNumber;
 
         if (animate)
         {
-            levelNumberScaling.Initialize(1f, 0f, 0.5f);
-            animatingNewLevel = true;
+            _levelNumberScaling.Initialize(1f, 0f, 0.5f);
+            _animatingNewLevel = true;
         }
     }
 
@@ -117,9 +111,9 @@ internal class PlayTimer : ComponentBase
     {
         if (isNew && Best > TimeSpan.Zero)
         {
-            newBestSound.Play();
-            newBestAlpha = 0f;
-            newBestDuration = newBestDurationMax;
+            _newBestSound.Play();
+            _newBestAlpha = 0f;
+            _newBestDuration = _newBestDurationMax;
         }
 
         Best = best;
@@ -127,45 +121,45 @@ internal class PlayTimer : ComponentBase
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
     {
-        viewSize = new Vector2(DeviceInfo.LogicalWidth, DeviceInfo.LogicalHeight);
+        _viewSize = new Vector2(DeviceInfo.LogicalWidth, DeviceInfo.LogicalHeight);
 
-        labelFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
-        timeFont = content.Load<SpriteFont>(@"Fonts\time_font");
+        _labelFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
+        _timeFont = content.Load<SpriteFont>(@"Fonts\time_font");
 
-        newLevelSound = content.Load<SoundEffect>(@"Sounds\newlevel_sound");
-        newBestSound = content.Load<SoundEffect>(@"Sounds\new_best");
+        _newLevelSound = content.Load<SoundEffect>(@"Sounds\newlevel_sound");
+        _newBestSound = content.Load<SoundEffect>(@"Sounds\new_best");
 
-        bestTextSize = labelFont.MeasureString(BestText);
-        labelFont.MeasureString(LevelText);
+        _bestTextSize = _labelFont.MeasureString(BestText);
+        _labelFont.MeasureString(LevelText);
 
-        textOffset =
+        _textOffset =
         [
-            timeFont.MeasureString("0.00").X,
-            timeFont.MeasureString("00.00").X,
-            timeFont.MeasureString("000.00").X,
-            timeFont.MeasureString("0000.00").X,
-            timeFont.MeasureString("00000.00").X
+            _timeFont.MeasureString("0.00").X,
+            _timeFont.MeasureString("00.00").X,
+            _timeFont.MeasureString("000.00").X,
+            _timeFont.MeasureString("0000.00").X,
+            _timeFont.MeasureString("00000.00").X
         ];
 
-        levelTextSize = labelFont.MeasureString(LevelText).X;
+        _levelTextSize = _labelFont.MeasureString(LevelText).X;
 
-        var levelNumberTextSize = labelFont.MeasureString("5").X;
+        var levelNumberTextSize = _labelFont.MeasureString("5").X;
 
         ProgressBar.Initialize(
-            new Vector2(viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, bestTextSize.Y + 8),
-            new Vector2(levelNumberTextSize + levelTextSize - 2, 6));
+            new Vector2(_viewSize.X - (levelNumberTextSize + _levelTextSize) - TextPadding, _bestTextSize.Y + 8),
+            new Vector2(levelNumberTextSize + _levelTextSize - 2, 6));
     }
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
-        if (newBest)
+        if (_newBest)
         {
-            newBestDuration = TimeSpan.Zero;
+            _newBestDuration = TimeSpan.Zero;
         }
 
-        if (newBestDuration > TimeSpan.Zero)
+        if (_newBestDuration > TimeSpan.Zero)
         {
-            newBestDuration -= gameTime.ElapsedGameTime;
+            _newBestDuration -= gameTime.ElapsedGameTime;
         }
 
         var alpha = (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds * 15);
@@ -174,32 +168,32 @@ internal class PlayTimer : ComponentBase
             alpha *= -1f;
         }
 
-        newBestAlpha = MathHelper.Lerp(0.5f, 1f, alpha);
+        _newBestAlpha = MathHelper.Lerp(0.5f, 1f, alpha);
 
-        levelNumberScaling.Update(gameTime);
+        _levelNumberScaling.Update(gameTime);
 
         // ReSharper disable once CompareOfFloatsByEqualityOperator
-        if (animatingNewLevel && levelNumberScaling.Value == 0f)
+        if (_animatingNewLevel && _levelNumberScaling.Value == 0f)
         {
-            animatingNewLevel = false;
-            newLevelSound.Play(0.5f, 0f, 0f);
+            _animatingNewLevel = false;
+            _newLevelSound.Play(0.5f, 0f, 0f);
         }
 
-        if (updatingTime)
+        if (_updatingTime)
         {
-            gameTimeElapsed += gameTime.ElapsedGameTime;
+            Elapsed += gameTime.ElapsedGameTime;
         }
 
-        bestNumberText = FormatTime(Best);
-        levelNumberText = currentLevelNumber.ToString();
-        timeNumberText = FormatTime(gameTimeElapsed);
+        _bestNumberText = FormatTime(Best);
+        _levelNumberText = _currentLevelNumber.ToString();
+        _timeNumberText = FormatTime(Elapsed);
     }
 
     protected override void DrawCore(SpriteBatch spriteBatch)
     {
         DrawBestTime(spriteBatch);
 
-        if (isLevelAndScoreVisible)
+        if (_isLevelAndScoreVisible)
         {
             DrawCurrentTime(spriteBatch);
             DrawLevelNumber(spriteBatch);
@@ -209,7 +203,7 @@ internal class PlayTimer : ComponentBase
     private void DrawBestTime(SpriteBatch spriteBatch)
     {
         spriteBatch.DrawString(
-            labelFont,
+            _labelFont,
             BestText,
             new Vector2(TextPadding, TextPadding),
             Color.LightGray.AdjustLight(0.9f),
@@ -220,9 +214,9 @@ internal class PlayTimer : ComponentBase
             Depth);
 
         spriteBatch.DrawString(
-            labelFont,
-            bestNumberText,
-            new Vector2(TextPadding + bestTextSize.X, TextPadding),
+            _labelFont,
+            _bestNumberText,
+            new Vector2(TextPadding + _bestTextSize.X, TextPadding),
             Color.White,
             0,
             Vector2.Zero,
@@ -230,13 +224,13 @@ internal class PlayTimer : ComponentBase
             SpriteEffects.None,
             Depth);
 
-        if (newBest || newBestDuration > TimeSpan.Zero)
+        if (_newBest || _newBestDuration > TimeSpan.Zero)
         {
             spriteBatch.DrawString(
-                labelFont,
+                _labelFont,
                 "NEW!",
-                new Vector2(TextPadding, (TextPadding + 5) + bestTextSize.Y),
-                Color.Yellow * newBestAlpha,
+                new Vector2(TextPadding, (TextPadding + 5) + _bestTextSize.Y),
+                Color.Yellow * _newBestAlpha,
                 rotation: 0,
                 origin: Vector2.Zero,
                 scale: 1f,
@@ -248,12 +242,12 @@ internal class PlayTimer : ComponentBase
     private void DrawCurrentTime(SpriteBatch spriteBatch)
     {
         spriteBatch.DrawString(
-          timeFont,
-          timeNumberText,
+          _timeFont,
+          _timeNumberText,
           new Vector2(
-              viewSize.X - textOffset[timeNumberText.Length - 4] - TextPadding, 
-              TextPadding + bestTextSize.Y + TextVerticalSpacing),
-          scoreColor,
+              _viewSize.X - _textOffset[_timeNumberText.Length - 4] - TextPadding,
+              TextPadding + _bestTextSize.Y + TextVerticalSpacing),
+          _scoreColor,
           rotation: 0,
           origin: Vector2.Zero,
           scale: 1f,
@@ -265,17 +259,17 @@ internal class PlayTimer : ComponentBase
     {
         const string infiniteText = "Infinite";
 
-        var isInifiniteLevel = levelsCollection.GetLevel(currentLevelNumber).IsInfiniteSequence;
-        var text = isInifiniteLevel ? infiniteText : levelNumberText;
-        var levelNumberTextSize = labelFont.MeasureString(text).X;
+        var isInifiniteLevel = _levelsCollection.GetLevel(_currentLevelNumber).IsInfiniteSequence;
+        var text = isInifiniteLevel ? infiniteText : _levelNumberText;
+        var levelNumberTextSize = _labelFont.MeasureString(text).X;
 
         if (!isInifiniteLevel)
         {
             spriteBatch.DrawString(
-                labelFont,
+                _labelFont,
                 LevelText,
                 new Vector2(
-                    viewSize.X - (levelNumberTextSize + levelTextSize) - TextPadding, 
+                    _viewSize.X - (levelNumberTextSize + _levelTextSize) - TextPadding,
                     TextPadding),
                 Color.LightGray.AdjustLight(0.9f),
                 rotation: 0,
@@ -285,16 +279,16 @@ internal class PlayTimer : ComponentBase
                 layerDepth: Depth);
         }
 
-        var scaleFactor = 10f * levelNumberScaling.Value;
+        var scaleFactor = 10f * _levelNumberScaling.Value;
         var textScale = Vector2.One + (Vector2.One * scaleFactor);
 
         spriteBatch.DrawString(
-            labelFont,
+            _labelFont,
             text,
             new Vector2(
-                (viewSize.X - (levelNumberTextSize * textScale.X) - TextPadding), 
+                (_viewSize.X - (levelNumberTextSize * textScale.X) - TextPadding),
                 TextPadding),
-            Color.White * (1f - levelNumberScaling.Value),
+            Color.White * (1f - _levelNumberScaling.Value),
             rotation: 0,
             origin: Vector2.Zero,
             scale: textScale,
@@ -302,8 +296,5 @@ internal class PlayTimer : ComponentBase
             layerDepth: Depth + 0.00003f);
     }
 
-    private static string FormatTime(TimeSpan time)
-    {
-        return string.Format("{0:0.00}", time.TotalSeconds);
-    }
+    private static string FormatTime(TimeSpan time) => string.Format("{0:0.00}", time.TotalSeconds);
 }

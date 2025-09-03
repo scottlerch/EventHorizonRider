@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -7,14 +7,14 @@ namespace EventHorizonRider.Core.Physics;
 
 internal class ParticleSystem
 {
-    private readonly Random random;
-    private Vector2 position;
+    private readonly Random _random;
+    private Vector2 _position;
 
     public ParticleSystem(Vector2 position = default)
     {
         Position = position;
         LastPos = position;
-        random = new Random();
+        _random = new Random();
         EmitterList = [];
     }
 
@@ -22,8 +22,8 @@ internal class ParticleSystem
 
     public Vector2 Position
     {
-        get { return position; }
-        set { LastPos = position; position = value; }
+        get => _position;
+        set { LastPos = _position; _position = value; }
     }
 
     public Vector2 LastPos { get; set; }
@@ -62,17 +62,17 @@ internal class ParticleSystem
     }
 
     public Emitter AddEmitter(
-        Range<float> secPerSpawn, 
+        Range<float> secPerSpawn,
         Vector2 spawnDirection,
         Range<float> spawnNoiseAngle,
         Range<float> startLife,
         Range<float> startScale,
-        Range<float> endScale, 
+        Range<float> endScale,
         Range<Color> startColor,
         Range<Color> endColor,
         Range<float> startSpeed,
-        Range<float> endSpeed, 
-        int budget, 
+        Range<float> endSpeed,
+        int budget,
         Vector2 relPosition,
         Texture2D particleSprite)
     {
@@ -80,17 +80,17 @@ internal class ParticleSystem
             secPerSpawn,
             spawnDirection,
             spawnNoiseAngle,
-            startLife, 
-            startScale, 
-            endScale, 
+            startLife,
+            startScale,
+            endScale,
             startColor,
             endColor,
             startSpeed,
-            endSpeed, 
-            budget, 
-            relPosition, 
+            endSpeed,
+            budget,
+            relPosition,
             particleSprite,
-            random,
+            _random,
             this);
 
         EmitterList.Add(emitter);

@@ -1,4 +1,4 @@
-﻿namespace EventHorizonRider.Core.Components.SpaceComponents.Rings;
+namespace EventHorizonRider.Core.Components.SpaceComponents.Rings;
 
 internal enum RingTexturesInfoGroupMode
 {

@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Components.ForegroundComponents;
+using EventHorizonRider.Core.Components.ForegroundComponents;
 using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core.Engine.States;
@@ -30,7 +30,7 @@ internal class StartState : GameStateBase
         gameContext.Root.Foreground.PlayTimer.HideLevelAndScore();
         gameContext.Root.Foreground.MenuButton.Show();
         gameContext.Root.Foreground.PlayButton.Show(
-            state: PlayButtonState.Start, 
+            state: PlayButtonState.Start,
             fade: gameContext.Root.Space.Blackhole.ExtraScale > 0f);
 
         gameContext.Root.Foreground.PlayTimer.UpdateBest(gameContext.PlayerData.BestTime);

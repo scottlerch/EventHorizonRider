@@ -1,4 +1,3 @@
-﻿using System;
 using EventHorizonRider.Core.Components.SpaceComponents;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
@@ -6,24 +5,25 @@ using EventHorizonRider.Core.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace EventHorizonRider.Core.Components;
 
 internal class Space : ComponentBase
 {
-    private RenderTarget2D renderTarget1;
-    private RenderTarget2D renderTarget2;
-    private readonly GaussianBlur blur = new();
-    private Color color;
+    private RenderTarget2D _renderTarget1;
+    private RenderTarget2D _renderTarget2;
+    private readonly GaussianBlur _blur = new();
+    private Color _color;
 
-    private readonly Motion blurAmountMotion;
+    private readonly Motion _blurAmountMotion;
 
     public Color Color
     {
-        get { return color; }
+        get => _color;
         set
         {
-            color = value;
+            _color = value;
             Ship.Color = value;
             Ship.Shield.Color = value;
             Background.StarBackgroundColor = value;
@@ -49,8 +49,8 @@ internal class Space : ComponentBase
     {
         if (BlurEnabled)
         {
-            blurAmountMotion.Set(blurAmount);
-            blur.BlueAmount = blurAmountMotion.Value * DeviceInfo.OutputScale;
+            _blurAmountMotion.Set(blurAmount);
+            _blur.BlueAmount = _blurAmountMotion.Value * DeviceInfo.OutputScale;
         }
     }
 
@@ -58,7 +58,7 @@ internal class Space : ComponentBase
     {
         if (BlurEnabled)
         {
-            blurAmountMotion.UpdateTarget(blurAmount, speed);
+            _blurAmountMotion.UpdateTarget(blurAmount, speed);
         }
     }
 
@@ -66,17 +66,17 @@ internal class Space : ComponentBase
     {
         if (BlurEnabled)
         {
-            blurAmountMotion.UpdateTarget(0);
+            _blurAmountMotion.UpdateTarget(0);
         }
     }
 
-    public Space(Background background, BlackholeHalo blackholeHalo, Shockwave shockwave, RingCollection ringCollection, Ship ship, Blackhole blackhole) 
-        : base(background, blackholeHalo, shockwave, ship,ringCollection, blackhole)
+    public Space(Background background, BlackholeHalo blackholeHalo, Shockwave shockwave, RingCollection ringCollection, Ship ship, Blackhole blackhole)
+        : base(background, blackholeHalo, shockwave, ship, ringCollection, blackhole)
     {
         BlurEnabled = DeviceInfo.Platform.IsPixelShaderEnabled;
 
-        blurAmountMotion = new Motion();
-        blurAmountMotion.Initialize(0, 0, 30);
+        _blurAmountMotion = new Motion();
+        _blurAmountMotion.Initialize(0, 0, 30);
 
         Background = background;
         BlackholeHalo = blackholeHalo;
@@ -90,7 +90,7 @@ internal class Space : ComponentBase
     {
         if (BlurEnabled)
         {
-            renderTarget1 = new RenderTarget2D(
+            _renderTarget1 = new RenderTarget2D(
                 graphics,
                 graphics.PresentationParameters.BackBufferWidth,
                 graphics.PresentationParameters.BackBufferHeight);
@@ -102,28 +102,28 @@ internal class Space : ComponentBase
                 scaleBackBuffer = 4f;
             }
 
-            renderTarget2 = new RenderTarget2D(
+            _renderTarget2 = new RenderTarget2D(
                 graphics,
-                (int)Math.Round((graphics.PresentationParameters.BackBufferWidth/scaleBackBuffer)*DeviceInfo.InputScale),
-                (int)Math.Round((graphics.PresentationParameters.BackBufferHeight/scaleBackBuffer)*DeviceInfo.InputScale));
+                (int)Math.Round((graphics.PresentationParameters.BackBufferWidth / scaleBackBuffer) * DeviceInfo.InputScale),
+                (int)Math.Round((graphics.PresentationParameters.BackBufferHeight / scaleBackBuffer) * DeviceInfo.InputScale));
 
-            blur.LoadContent(content);
+            _blur.LoadContent(content);
         }
     }
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
-        blurAmountMotion.Update(gameTime);
-        blur.BlueAmount = blurAmountMotion.Value*DeviceInfo.OutputScale;
+        _blurAmountMotion.Update(gameTime);
+        _blur.BlueAmount = _blurAmountMotion.Value * DeviceInfo.OutputScale;
     }
 
     protected override void OnBeforeDraw(SpriteBatch spriteBatch, GraphicsDevice graphics)
     {
         if (BlurEnabled)
         {
-            if (blurAmountMotion.Value > 0)
+            if (_blurAmountMotion.Value > 0)
             {
-                graphics.SetRenderTarget(renderTarget1);
+                graphics.SetRenderTarget(_renderTarget1);
             }
         }
 
@@ -138,20 +138,20 @@ internal class Space : ComponentBase
 
         if (BlurEnabled)
         {
-            if (blurAmountMotion.Value > 0)
+            if (_blurAmountMotion.Value > 0)
             {
-                graphics.SetRenderTarget(renderTarget2);
+                graphics.SetRenderTarget(_renderTarget2);
 
-                blur.SetBlurEffectParameters(1f/renderTarget2.Width, 0f);
-                spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
-                spriteBatch.Draw(renderTarget1, renderTarget2.Bounds, Color.White);
+                _blur.SetBlurEffectParameters(1f / _renderTarget2.Width, 0f);
+                spriteBatch.Begin(0, BlendState.Opaque, null, null, null, _blur.Effect);
+                spriteBatch.Draw(_renderTarget1, _renderTarget2.Bounds, Color.White);
                 spriteBatch.End();
 
                 graphics.SetRenderTarget(null);
 
-                blur.SetBlurEffectParameters(0f, 1f/renderTarget1.Height);
-                spriteBatch.Begin(0, BlendState.Opaque, null, null, null, blur.Effect);
-                spriteBatch.Draw(renderTarget2, renderTarget1.Bounds, Color.White);
+                _blur.SetBlurEffectParameters(0f, 1f / _renderTarget1.Height);
+                spriteBatch.Begin(0, BlendState.Opaque, null, null, null, _blur.Effect);
+                spriteBatch.Draw(_renderTarget2, _renderTarget1.Bounds, Color.White);
                 spriteBatch.End();
             }
         }

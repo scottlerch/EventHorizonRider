@@ -1,13 +1,13 @@
+using EventHorizonRider.Core;
 using Foundation;
 using UIKit;
-using EventHorizonRider.Core;
 
 namespace EventHorizonRider.iOS;
 
 [Register("AppDelegate")]
 public class AppDelegate : UIApplicationDelegate
 {
-    private MainGame game;
+    private MainGame _game;
 
     public override bool FinishedLaunching(UIApplication app, NSDictionary options)
     {
@@ -25,8 +25,8 @@ public class AppDelegate : UIApplicationDelegate
 
         DeviceInfo.InitializePlatform(platform);
 
-        game = new MainGame();
-        game.Run();
+        _game = new MainGame();
+        _game.Run();
 
         return true;
     }

@@ -1,8 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Builder;
 
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        var app = builder.Build();
 
-app.UseStaticFiles();
+        app.UseStaticFiles();
 
-app.Run();
+        app.Run();
+    }
+}

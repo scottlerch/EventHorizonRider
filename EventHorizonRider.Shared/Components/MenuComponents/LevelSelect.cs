@@ -1,4 +1,4 @@
-﻿using EventHorizonRider.Core.Engine;
+using EventHorizonRider.Core.Engine;
 using EventHorizonRider.Core.Graphics;
 using EventHorizonRider.Core.Input;
 using Microsoft.Xna.Framework;
@@ -20,20 +20,20 @@ internal class LevelSelect(LevelCollection levelsCollection) : ComponentBase
         public Button Button;
     }
 
-    private readonly LevelCollection levelsCollection = levelsCollection;
+    private readonly LevelCollection _levelsCollection = levelsCollection;
 
-    private SpriteFont buttonFont;
-    private SoundEffect buttonSound;
+    private SpriteFont _buttonFont;
+    private SoundEffect _buttonSound;
 
-    private const string startLevelText = "START LEVEL";
-    private Vector2 startLevelTextLocation;
-    private Vector2 startLevelTextSize;
+    private const string StartLevelText = "START LEVEL";
+    private Vector2 _startLevelTextLocation;
+    private Vector2 _startLevelTextSize;
 
-    private const string unlockLevelText = "PLAY TO UNLOCK!";
-    private Vector2 unlockLevelTextLocation;
-    private Vector2 unlockLevelTextSize;
+    private const string UnlockLevelText = "PLAY TO UNLOCK!";
+    private Vector2 _unlockLevelTextLocation;
+    private Vector2 _unlockLevelTextSize;
 
-    private LevelButton[] levelButtons;
+    private LevelButton[] _levelButtons;
 
     public int StartLevel { get; set; }
 
@@ -46,46 +46,46 @@ internal class LevelSelect(LevelCollection levelsCollection) : ComponentBase
         StartLevel = 1;
         MaximumStartLevel = 1;
 
-        buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
-        buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
+        _buttonFont = content.Load<SpriteFont>(@"Fonts\highscore_font");
+        _buttonSound = content.Load<SoundEffect>(@"Sounds\button_click");
 
-        startLevelTextSize = buttonFont.MeasureString(startLevelText);
-        unlockLevelTextSize = buttonFont.MeasureString(unlockLevelText);
+        _startLevelTextSize = _buttonFont.MeasureString(StartLevelText);
+        _unlockLevelTextSize = _buttonFont.MeasureString(UnlockLevelText);
 
         const float buttonPadding = 50f;
         const float startTextOffset = 200f;
 
-        startLevelTextLocation = new Vector2(
-            (DeviceInfo.LogicalWidth / 2f) - (startLevelTextSize.X / 2f),
+        _startLevelTextLocation = new Vector2(
+            (DeviceInfo.LogicalWidth / 2f) - (_startLevelTextSize.X / 2f),
             (DeviceInfo.LogicalHeight / 2f) - startTextOffset);
 
-        unlockLevelTextLocation = new Vector2(
-            (DeviceInfo.LogicalWidth / 2f) - (unlockLevelTextSize.X / 2f),
+        _unlockLevelTextLocation = new Vector2(
+            (DeviceInfo.LogicalWidth / 2f) - (_unlockLevelTextSize.X / 2f),
             (DeviceInfo.LogicalHeight / 2f) - startTextOffset);
 
-        levelButtons = new LevelButton[levelsCollection.NumberOfLevels];
+        _levelButtons = new LevelButton[_levelsCollection.NumberOfLevels];
 
         // We know last level is infinite, so will treat differently
-        var numberOfFiniteLevels = levelButtons.Length - 1;
+        var numberOfFiniteLevels = _levelButtons.Length - 1;
 
         const string infiniteLevelText = "INFINITE";
-        var infiniteButtonSize = buttonFont.MeasureString(infiniteLevelText);
+        var infiniteButtonSize = _buttonFont.MeasureString(infiniteLevelText);
 
         const float levelsButtonTotalWidth = 500f;
-        var levelButtonY = startLevelTextLocation.Y + 75f;
+        var levelButtonY = _startLevelTextLocation.Y + 75f;
         var levelButtonsWidth = levelsButtonTotalWidth - infiniteButtonSize.X;
         var levelButtonSpacing = levelButtonsWidth / (numberOfFiniteLevels);
         var levelButtonXBase = (DeviceInfo.LogicalWidth / 2f) - (levelsButtonTotalWidth / 2f);
 
-        for (int i = 0; i < numberOfFiniteLevels; i++)
+        for (var i = 0; i < numberOfFiniteLevels; i++)
         {
             var position = new Vector2(
-                levelButtonXBase + (i * levelButtonSpacing), 
+                levelButtonXBase + (i * levelButtonSpacing),
                 levelButtonY);
 
-            var size = buttonFont.MeasureString(i.ToString());
+            var size = _buttonFont.MeasureString(i.ToString());
 
-            levelButtons[i] = new LevelButton
+            _levelButtons[i] = new LevelButton
             {
                 LevelNumber = i + 1,
                 Text = (i + 1).ToString(),
@@ -105,9 +105,9 @@ internal class LevelSelect(LevelCollection levelsCollection) : ComponentBase
             (DeviceInfo.LogicalWidth / 2f) + (levelsButtonTotalWidth / 2) - infiniteButtonSize.X,
             levelButtonY);
 
-        levelButtons[^1] = new LevelButton
+        _levelButtons[^1] = new LevelButton
         {
-            LevelNumber = levelButtons.Length,
+            LevelNumber = _levelButtons.Length,
             Text = infiniteLevelText,
             Position = inifiniteButtonPosition,
             Button = new Button(
@@ -130,7 +130,7 @@ internal class LevelSelect(LevelCollection levelsCollection) : ComponentBase
 
             if (Pressed.HasValue)
             {
-                buttonSound.Play();
+                _buttonSound.Play();
             }
         }
     }
@@ -140,9 +140,9 @@ internal class LevelSelect(LevelCollection levelsCollection) : ComponentBase
         if (MaximumStartLevel > 1)
         {
             spriteBatch.DrawString(
-                buttonFont,
-                startLevelText,
-                startLevelTextLocation,
+                _buttonFont,
+                StartLevelText,
+                _startLevelTextLocation,
                 Color.LightGray.AdjustLight(0.7f),
                 0,
                 Vector2.Zero,
@@ -153,9 +153,9 @@ internal class LevelSelect(LevelCollection levelsCollection) : ComponentBase
         else
         {
             spriteBatch.DrawString(
-                buttonFont,
-                unlockLevelText,
-                unlockLevelTextLocation,
+                _buttonFont,
+                UnlockLevelText,
+                _unlockLevelTextLocation,
                 Color.LightGray.AdjustLight(0.7f),
                 0,
                 Vector2.Zero,
@@ -164,7 +164,7 @@ internal class LevelSelect(LevelCollection levelsCollection) : ComponentBase
                 Depth);
         }
 
-        foreach (var levelButton in levelButtons)
+        foreach (var levelButton in _levelButtons)
         {
             var color = Color.LightGray.AdjustLight(0.4f);
 
@@ -182,7 +182,7 @@ internal class LevelSelect(LevelCollection levelsCollection) : ComponentBase
             }
 
             spriteBatch.DrawString(
-                buttonFont,
+                _buttonFont,
                 levelButton.Text,
                 levelButton.Position,
                 color,
@@ -196,18 +196,13 @@ internal class LevelSelect(LevelCollection levelsCollection) : ComponentBase
 
     private int? IsPressed(GameTime gameTime, InputState inputState)
     {
-        foreach (var levelButton in levelButtons)
+        foreach (var levelButton in _levelButtons)
         {
             levelButton.Button.Update(gameTime, inputState, Visible);
         }
 
-        var pressedLevelButton = levelButtons.FirstOrDefault(levelButton => levelButton.Button.Pressed);
+        var pressedLevelButton = _levelButtons.FirstOrDefault(levelButton => levelButton.Button.Pressed);
 
-        if (pressedLevelButton != null && pressedLevelButton.LevelNumber <= MaximumStartLevel)
-        {
-            return pressedLevelButton.LevelNumber;
-        }
-
-        return null;
+        return pressedLevelButton != null && pressedLevelButton.LevelNumber <= MaximumStartLevel ? pressedLevelButton.LevelNumber : null;
     }
 }
