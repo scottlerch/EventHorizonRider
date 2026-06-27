@@ -40,5 +40,10 @@
     <PackageReference Include="MonoGame.Framework.iOS" Version="3.8.4.1" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.4.1" />
   </ItemGroup>
-  <Import Project="$(MSBuildThisFileDirectory)..\EventHorizonRider.Shared\EventHorizonRider.Shared.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\EventHorizonRider.Shared\EventHorizonRider.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <MonoGameContentReference Include="..\EventHorizonRider.Shared\Content\Content.mgcb" />
+  </ItemGroup>
 </Project>

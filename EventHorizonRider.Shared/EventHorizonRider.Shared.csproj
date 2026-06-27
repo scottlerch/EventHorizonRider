@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Shared game code as a multi-targeted SDK class library (replaces the legacy .shproj/.projitems
+    shared project). The same source is compiled once per platform against that platform's MonoGame
+    framework assembly, which is why this multi-targets instead of producing a single portable DLL.
+
+    Source files are picked up by the SDK's default globbing - no manual <Compile Include> list.
+    The MonoGame content pipeline (Content/Content.mgcb) is still built by each platform head so that
+    content output continues to flow into the head's app package exactly as before.
+  -->
+  <PropertyGroup>
+    <TargetFrameworks>net10.0-windows;net10.0-android;net10.0-ios</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <RootNamespace>EventHorizonRider.Core</RootNamespace>
+    <!-- Content is referenced and built by the platform heads, not here. -->
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
+  </PropertyGroup>
+
+  <!-- The Windows head's DevelopmentToolsForm inspects internal game state (GameContext etc.),
+       which used to be same-assembly under the old shared-source project. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="EventHorizonRider.Windows" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.EndsWith('-windows'))">
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.4.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.EndsWith('-android'))">
+    <PackageReference Include="MonoGame.Framework.Android" Version="3.8.4.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.EndsWith('-ios'))">
+    <PackageReference Include="MonoGame.Framework.iOS" Version="3.8.4.1" />
+  </ItemGroup>
+</Project>

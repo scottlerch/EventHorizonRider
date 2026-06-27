@@ -40,5 +40,5 @@
     <File Path="Directory.Build.props" />
     <File Path="LICENSE" />
   </Folder>
-  <Project Path="EventHorizonRider.Shared/EventHorizonRider.Shared.shproj" />
+  <Project Path="EventHorizonRider.Shared/EventHorizonRider.Shared.csproj" />
 </Solution>

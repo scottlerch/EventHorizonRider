@@ -10,21 +10,23 @@ internal class Music : ComponentBase
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics) => _musicSong = content.Load<Song>(@"Music\techno_song");
 
+    // NOTE: MediaPlayer is fully qualified on purpose - on iOS 'MediaPlayer' is also an Apple
+    // framework namespace, so the unqualified name is ambiguous there.
     public void Start()
     {
-        MediaPlayer.IsRepeating = true;
-        MediaPlayer.Play(_musicSong);
+        Microsoft.Xna.Framework.Media.MediaPlayer.IsRepeating = true;
+        Microsoft.Xna.Framework.Media.MediaPlayer.Play(_musicSong);
     }
 
-    public void Stop() => MediaPlayer.Stop();
+    public void Stop() => Microsoft.Xna.Framework.Media.MediaPlayer.Stop();
 
     public void Pause()
     {
         Updating = false;
 
-        if (MediaPlayer.State != MediaState.Paused)
+        if (Microsoft.Xna.Framework.Media.MediaPlayer.State != MediaState.Paused)
         {
-            MediaPlayer.Pause();
+            Microsoft.Xna.Framework.Media.MediaPlayer.Pause();
         }
     }
 
@@ -32,9 +34,9 @@ internal class Music : ComponentBase
     {
         Updating = true;
 
-        if (MediaPlayer.State != MediaState.Playing)
+        if (Microsoft.Xna.Framework.Media.MediaPlayer.State != MediaState.Playing)
         {
-            MediaPlayer.Resume();
+            Microsoft.Xna.Framework.Media.MediaPlayer.Resume();
         }
     }
 }

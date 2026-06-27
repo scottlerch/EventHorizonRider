@@ -13,7 +13,7 @@ the web.
 
 | Project | TFM | Purpose |
 | --- | --- | --- |
-| `EventHorizonRider.Shared` | n/a | **Shared Project** (`.shproj`/`.projitems`) holding ~all game code. Not a standalone assembly. |
+| `EventHorizonRider.Shared` | `net10.0-windows;net10.0-android;net10.0-ios` | Multi-targeted SDK class library holding ~all game code; referenced by each head. |
 | `EventHorizonRider.Windows` | `net10.0-windows` | Windows head (`WinExe`, WindowsDX). Also hosts the WinForms `DevelopmentToolsForm`. |
 | `EventHorizonRider.Android` | `net10.0-android` | Android head. |
 | `EventHorizonRider.iOS` | `net10.0-ios` | iOS head (**requires a Mac to build**). |
@@ -23,16 +23,24 @@ The solution is `EventHorizonRider.slnx` (XML solution format). Common settings 
 `Directory.Build.props` (copyright, `Newtonsoft.Json`, `AllowUnsafeBlocks`, the `Debug;Release;Ad-Hoc;AppStore`
 configurations).
 
-### The shared-project model (important)
+### The shared class library (important)
 
-`EventHorizonRider.Shared` is an **old-style Shared Project**. Its `.cs` files are compiled *directly into
-each head* via `<Import .../EventHorizonRider.Shared.projitems />` — there is no shared DLL. Consequences:
+`EventHorizonRider.Shared` is a **multi-targeted SDK class library** (`net10.0-windows;net10.0-android;net10.0-ios`).
+The same source is compiled once per platform against that platform's MonoGame framework assembly
+(WindowsDX / Android / iOS), which is why it multi-targets rather than producing a single portable DLL.
+Each head `<ProjectReference>`s it. Consequences:
 
 - The root namespace of shared code is **`EventHorizonRider.Core`** (despite the folder being named `Shared`).
-- The CLI cannot load `.shproj` directly. To build/format/analyze the shared code, target a **head** project.
-  The Windows head is the most convenient because it compiles every shared file on this platform.
-- Adding a new shared `.cs` file requires adding a `<Compile Include="..." />` entry to
-  `EventHorizonRider.Shared.projitems`.
+- Source files are picked up by the SDK's default globbing — **no manual `<Compile>` list**; just add a `.cs` file.
+- Because it's a real library, `internal` members no longer leak into the heads. The Windows head's
+  `DevelopmentToolsForm` inspects internal game state, so the library grants it access via
+  `<InternalsVisibleTo Include="EventHorizonRider.Windows" />`.
+- The MonoGame content pipeline (`Content/Content.mgcb`) is still referenced and built **by each head**
+  (`<MonoGameContentReference>` + `MonoGame.Content.Builder.Task`), so content output flows into the app
+  package exactly as before; the library itself does not build content.
+- You can compile the shared code for a specific platform directly, e.g.
+  `dotnet build EventHorizonRider.Shared/EventHorizonRider.Shared.csproj -f net10.0-ios`. This compiles the
+  **iOS C# on Windows** (only the final app link needs a Mac), which catches iOS-only errors early.
 
 ## Build & run
 
@@ -43,14 +51,18 @@ fails:**
 dotnet tool restore
 ```
 
-Then build a head (this also compiles all shared code):
+Then build a head (this also builds the referenced shared library):
 
 ```bash
-dotnet build EventHorizonRider.Windows/EventHorizonRider.Windows.csproj   # Windows + all shared code
+dotnet build EventHorizonRider.Windows/EventHorizonRider.Windows.csproj   # Windows + shared library
 dotnet build EventHorizonRider.Web/EventHorizonRider.Web.csproj
 dotnet build EventHorizonRider.Android/EventHorizonRider.Android.csproj
-# iOS must be built on a Mac.
+# The full iOS app must be built on a Mac, but the shared C# compiles for iOS on Windows:
+dotnet build EventHorizonRider.Shared/EventHorizonRider.Shared.csproj -f net10.0-ios
 ```
+
+If a content build intermittently fails with a `.mgcontent ... being used by another process` race under
+parallel MSBuild, re-run that build with `-m:1`.
 
 Run on Windows:
 
@@ -93,9 +105,10 @@ Platform head (Android/iOS/Windows/Web)
 - Style is enforced by `.editorconfig`: 4-space indent, CRLF, file-scoped namespaces, `_camelCase` private
   fields, PascalCase constants, `I`-prefixed interfaces, `var` preferred. Modern idioms (primary constructors,
   collection expressions, target-typed `new`, expression-bodied members) are used throughout.
-- Run `dotnet format <head>.csproj` to format. The shared code is formatted via a head (the `.shproj` can't be
-  loaded directly). Note: `dotnet format --severity info` can crash inside the WinForms source generator on the
-  Windows head — use the default severity, or format the shared files through a non-WinForms head.
+- Run `dotnet format <project>.csproj` to format. The shared library can be formatted directly
+  (`dotnet format EventHorizonRider.Shared/EventHorizonRider.Shared.csproj`). Note: `dotnet format --severity info`
+  can crash inside the WinForms source generator on the Windows head — use the default severity, or format the
+  shared library (no WinForms) directly.
 
 ## Performance notes (the hot path)
 
@@ -111,7 +124,15 @@ paths is deliberately allocation-free, and should stay that way:
 
 ## Gotchas
 
-- iOS can only be built on a Mac; verify shared-code changes on Windows instead.
+- The full iOS **app** build needs a Mac, but the shared **C#** compiles on Windows via
+  `dotnet build EventHorizonRider.Shared/EventHorizonRider.Shared.csproj -f net10.0-ios` — use it to catch
+  iOS-only errors before handing off to a Mac.
+- On iOS, `MediaPlayer` is also an Apple framework namespace. Reference MonoGame's player with the fully
+  qualified `Microsoft.Xna.Framework.Media.MediaPlayer` (see `Components/Music.cs`) or the unqualified name is
+  ambiguous and the iOS build fails.
+- The MonoGame content build (`mgcb`) can intermittently fail under parallel MSBuild with
+  `.mgcontent ... being used by another process`. It's a content-pipeline race, not a code issue — rebuild the
+  head with `-m:1` (or clear `EventHorizonRider.Shared/Content/obj`) if it happens.
 - After cloning or when content fails to build, run `dotnet tool restore`.
 - `Motion.Acceleration` is currently always 0 (the acceleration branch in `Motion.Update` is dead code); don't
   rely on it without revisiting that branch.
