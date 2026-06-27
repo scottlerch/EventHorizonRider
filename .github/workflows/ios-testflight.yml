@@ -21,11 +21,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # .NET 10 iOS needs a recent Xcode; latest-stable picks the newest installed on the runner.
-      - name: Select Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
+      # .NET for iOS pins an Xcode version; select the newest Xcode installed on the runner
+      # (latest-stable can skip a just-released Xcode that's still flagged beta on the image).
+      - name: Select newest Xcode
+        run: |
+          set -euo pipefail
+          echo "Installed Xcodes:"; ls -d /Applications/Xcode*.app
+          newest=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          echo "Selecting $newest"
+          sudo xcode-select -s "$newest/Contents/Developer"
+          xcodebuild -version
 
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
