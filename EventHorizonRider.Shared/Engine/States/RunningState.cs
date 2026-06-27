@@ -122,7 +122,7 @@ internal class RunningState : GameStateBase
 
     public override void OnEnd(GameContext gameContext, GameTime gameTime)
     {
-        Components.Music.Stop();
+        gameContext.Root.Music.Stop();
 
         gameContext.Root.Space.SetBlur(blurAmount: 5f);
         gameContext.Root.Space.BlackholeHalo.Visible = false;

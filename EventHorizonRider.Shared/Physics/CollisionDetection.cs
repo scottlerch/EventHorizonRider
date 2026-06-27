@@ -43,6 +43,13 @@ internal class CollisionDetection
             }
         }
 
+        // The bounds are padded by a pixel on each side above; clamp back to the texture so a
+        // sprite with opaque pixels on its edge can't make the crop read out of bounds.
+        bounds.X = Math.Max(0, bounds.X);
+        bounds.Y = Math.Max(0, bounds.Y);
+        bounds.Width = Math.Min(bounds.Width, texture.Width - bounds.X);
+        bounds.Height = Math.Min(bounds.Height, texture.Height - bounds.Y);
+
         var newData = TextureProcessor.GetCroppedData(data, bounds);
 
         if (resolution < 1f)

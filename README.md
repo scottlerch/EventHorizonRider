@@ -9,12 +9,21 @@ http://www.eventhorizonrider.com
 
 Build Requirements
 ------------------
- * Visual Studio 2022 17.14+ with .NET 9 for iOS, Android, and Windows installed
+ * Visual Studio 2022 17.14+ (or the .NET 10 SDK) with the iOS, Android, and Windows workloads installed
 
 Build Instructions
 ------------------
-Open the EventHorizonRider solution, select desired platform project to *Set as StartUp Project*, select appropriate
-build configuration and platform, then hit F5.
+Restore the local content-pipeline tool once after cloning (otherwise the MonoGame content build fails):
+
+    dotnet tool restore
+
+Then open the EventHorizonRider solution, select the desired platform project as *Set as StartUp Project*, select
+the appropriate build configuration and platform, and hit F5.
+
+You can also build from the command line (iOS requires a Mac):
+
+    dotnet build EventHorizonRider.Windows/EventHorizonRider.Windows.csproj
+    dotnet run --project EventHorizonRider.Windows
 
 Development Notes
 -----------------

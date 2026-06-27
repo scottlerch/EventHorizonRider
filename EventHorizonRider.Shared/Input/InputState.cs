@@ -9,6 +9,8 @@ namespace EventHorizonRider.Core.Input;
 /// </summary>
 internal class InputState
 {
+    private static readonly TouchCollection EmptyTouchState = new([]);
+
     public KeyboardState KeyState;
     public TouchCollection TouchState;
     public MouseState MouseState;
@@ -18,20 +20,30 @@ internal class InputState
         KeyState = Keyboard.GetState();
 
         var currentTouchState = TouchPanel.GetState();
-        var scaledTouchLocations = new TouchLocation[currentTouchState.Count];
+        var touchCount = currentTouchState.Count;
 
-        for (var i = 0; i < currentTouchState.Count; i++)
+        if (touchCount == 0)
         {
-            var touch = currentTouchState[i];
-            scaledTouchLocations[i] = new TouchLocation(
-                touch.Id,
-                touch.State,
-                new Vector2(
-                    touch.Position.X * DeviceInfo.InputScale,
-                    touch.Position.Y * DeviceInfo.InputScale));
+            // Avoid allocating a fresh (often empty) array every frame; this is the common case on desktop.
+            TouchState = EmptyTouchState;
         }
+        else
+        {
+            var scaledTouchLocations = new TouchLocation[touchCount];
 
-        TouchState = new TouchCollection(scaledTouchLocations);
+            for (var i = 0; i < touchCount; i++)
+            {
+                var touch = currentTouchState[i];
+                scaledTouchLocations[i] = new TouchLocation(
+                    touch.Id,
+                    touch.State,
+                    new Vector2(
+                        touch.Position.X * DeviceInfo.InputScale,
+                        touch.Position.Y * DeviceInfo.InputScale));
+            }
+
+            TouchState = new TouchCollection(scaledTouchLocations);
+        }
 
         var currentMouseState = Mouse.GetState();
         var scaledMouseState = new MouseState(

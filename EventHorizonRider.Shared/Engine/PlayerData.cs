@@ -53,9 +53,12 @@ internal class PlayerData : ComponentBase
                 {
                     var data = JsonConvert.DeserializeObject<PlayerData>(text);
 
-                    BestTime = data.BestTime;
-                    HighestLevelNumber = data.HighestLevelNumber;
-                    DefaultLevelNumber = data.DefaultLevelNumber;
+                    if (data != null)
+                    {
+                        BestTime = data.BestTime;
+                        HighestLevelNumber = data.HighestLevelNumber;
+                        DefaultLevelNumber = data.DefaultLevelNumber;
+                    }
                 }
             }
         }

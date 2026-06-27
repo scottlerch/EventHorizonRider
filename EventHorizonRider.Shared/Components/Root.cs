@@ -24,16 +24,7 @@ internal class Root(Music music, Space space, Menu menu, Foreground foreground) 
     {
         PausePressed = false;
 
-        var keys = inputState.KeyState.GetPressedKeys();
-        var pausedPressed = false;
-
-        foreach (var key in keys)
-        {
-            if (key == Keys.P)
-            {
-                pausedPressed = true;
-            }
-        }
+        var pausedPressed = inputState.KeyState.IsKeyDown(Keys.P);
 
         if (_previousPausedPressed && !pausedPressed)
         {

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0-android</TargetFramework>
+    <TargetFramework>net10.0-android</TargetFramework>
     <Product>EventHorizonRider.Android</Product>
     <AndroidApplication>true</AndroidApplication>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
@@ -18,8 +18,8 @@
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.Android" Version="3.8.4" />
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.4" />
+    <PackageReference Include="MonoGame.Framework.Android" Version="3.8.4.1" />
+    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.4.1" />
   </ItemGroup>
   <Import Project="$(MSBuildThisFileDirectory)..\EventHorizonRider.Shared\EventHorizonRider.Shared.projitems" Label="Shared" />
 </Project>

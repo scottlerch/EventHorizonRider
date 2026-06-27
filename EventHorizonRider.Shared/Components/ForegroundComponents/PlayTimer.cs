@@ -27,6 +27,12 @@ internal class PlayTimer : ComponentBase
     private string _bestNumberText;
     private string _timeNumberText;
 
+    // Cache keys so the displayed strings are only re-formatted when their value changes,
+    // instead of allocating new strings every frame.
+    private long _bestTextTicks = -1;
+    private long _timeTextTicks = -1;
+    private int _levelTextNumber = -1;
+
     private float _levelTextSize;
 
     private readonly Color _scoreColor = Color.Yellow;
@@ -184,9 +190,23 @@ internal class PlayTimer : ComponentBase
             Elapsed += gameTime.ElapsedGameTime;
         }
 
-        _bestNumberText = FormatTime(Best);
-        _levelNumberText = _currentLevelNumber.ToString();
-        _timeNumberText = FormatTime(Elapsed);
+        if (_bestTextTicks != Best.Ticks)
+        {
+            _bestTextTicks = Best.Ticks;
+            _bestNumberText = FormatTime(Best);
+        }
+
+        if (_levelTextNumber != _currentLevelNumber)
+        {
+            _levelTextNumber = _currentLevelNumber;
+            _levelNumberText = _currentLevelNumber.ToString();
+        }
+
+        if (_timeTextTicks != Elapsed.Ticks)
+        {
+            _timeTextTicks = Elapsed.Ticks;
+            _timeNumberText = FormatTime(Elapsed);
+        }
     }
 
     protected override void DrawCore(SpriteBatch spriteBatch)

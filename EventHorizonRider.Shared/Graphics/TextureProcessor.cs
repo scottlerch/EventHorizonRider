@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Linq;
 
 namespace EventHorizonRider.Core.Graphics;
 
@@ -49,7 +48,14 @@ internal class TextureProcessor
     {
         var data = new Color[texture.Width * texture.Height];
         texture.GetData(data);
-        return new PixelData<byte>([.. data.Select(c => c.A)], texture.Width, texture.Height);
+
+        var alpha = new byte[data.Length];
+        for (var i = 0; i < data.Length; i++)
+        {
+            alpha[i] = data[i].A;
+        }
+
+        return new PixelData<byte>(alpha, texture.Width, texture.Height);
     }
 
     public static Color[] SoftenAlpha(Color[] data, int width, int height)

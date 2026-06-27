@@ -18,6 +18,9 @@ public partial class DevelopmentToolsForm : Form
 
     private void OnGameInitialized(object sender, System.EventArgs e)
     {
+        // Only needed once; unsubscribe so the form doesn't keep the handler alive.
+        _mainGame.Initialized -= OnGameInitialized;
+
         propertyGrid.SelectedObject = _mainGame.GameContext;
         UpdateTreeView();
 
@@ -70,7 +73,7 @@ public partial class DevelopmentToolsForm : Form
         foreach (var property in properties)
         {
             if (property.PropertyType.IsClass &&
-                property.PropertyType.FullName.StartsWith("EventHorizon") &&
+                property.PropertyType.FullName?.StartsWith("EventHorizon") == true &&
                 property.GetValue(obj) != null)
             {
                 node.Nodes.Add(CreateNode(property.Name, property.GetValue(obj)));

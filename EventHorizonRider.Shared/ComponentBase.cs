@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EventHorizonRider.Core;
 
@@ -103,7 +102,7 @@ internal abstract class ComponentBase
         }
     }
 
-    public IEnumerable<ComponentBase> Children => _children ?? Enumerable.Empty<ComponentBase>();
+    public IReadOnlyList<ComponentBase> Children => _children ?? (IReadOnlyList<ComponentBase>)Array.Empty<ComponentBase>();
 
     public void ForEach<T>(Action<T> action) where T : ComponentBase
     {
@@ -153,7 +152,16 @@ internal abstract class ComponentBase
             return;
         }
 
-        ForEach<ComponentBase>(child => child.Update(gameTime, inputState));
+        // Hand-rolled loop instead of ForEach to avoid allocating a closure/delegate
+        // every frame on this hot path (Update runs for the whole component tree at 60fps).
+        if (_children != null)
+        {
+            var count = _children.Count;
+            for (var i = 0; i < count; i++)
+            {
+                _children[i].Update(gameTime, inputState);
+            }
+        }
 
         UpdateCore(gameTime, inputState);
     }
@@ -175,7 +183,16 @@ internal abstract class ComponentBase
 
         OnBeforeDraw(spriteBatch, graphics);
 
-        ForEach<ComponentBase>(child => child.Draw(spriteBatch, graphics));
+        // Hand-rolled loop instead of ForEach to avoid allocating a closure/delegate
+        // every frame on this hot path (Draw runs for the whole component tree at 60fps).
+        if (_children != null)
+        {
+            var count = _children.Count;
+            for (var i = 0; i < count; i++)
+            {
+                _children[i].Draw(spriteBatch, graphics);
+            }
+        }
 
         DrawCore(spriteBatch);
 

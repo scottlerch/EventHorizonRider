@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EventHorizonRider.Core.Components.SpaceComponents;
 
@@ -51,8 +50,18 @@ internal class RingCollection(Blackhole blackhole, Shockwave shockwave, RingFact
             return false;
         }
 
-        // TODO: optimize collision detection, this is the biggest bottleneck right now
-        return Children.Cast<Ring>().Any(ring => ring.Intersects(ship));
+        // TODO: optimize collision detection, this is the biggest bottleneck right now.
+        // Indexed loop avoids the LINQ enumerator/closure allocations on this per-frame path.
+        var rings = Children;
+        for (var i = 0; i < rings.Count; i++)
+        {
+            if (((Ring)rings[i]).Intersects(ship))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void Start()
@@ -106,9 +115,10 @@ internal class RingCollection(Blackhole blackhole, Shockwave shockwave, RingFact
             }
         }
 
-        foreach (var ring in Children)
+        var rings = Children;
+        for (var i = 0; i < rings.Count; i++)
         {
-            (ring as Ring).Color = Color;
+            ((Ring)rings[i]).Color = Color;
         }
     }
 

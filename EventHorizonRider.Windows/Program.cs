@@ -38,7 +38,7 @@ internal static partial class Program
 
             var parentForm = game.Window.GetType()
                 .GetField("_form", BindingFlags.NonPublic | BindingFlags.Instance)
-                .GetValue(game.Window) as IWin32Window;
+                ?.GetValue(game.Window) as IWin32Window;
 
             developmentToolsForm.Show(parentForm);
         }

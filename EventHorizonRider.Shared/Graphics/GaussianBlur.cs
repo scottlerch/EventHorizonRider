@@ -9,6 +9,9 @@ internal class GaussianBlur
 {
     public Effect Effect { get; private set; }
 
+    private float[] _sampleWeights;
+    private Vector2[] _sampleOffsets;
+
     public void LoadContent(ContentManager content) => Effect = content.Load<Effect>(@"Effects\gaussianblur_effect");
 
     /// <summary>
@@ -24,9 +27,16 @@ internal class GaussianBlur
         // Look up how many samples our gaussian blur effect supports.
         var sampleCount = weightsParameter.Elements.Count;
 
-        // Create temporary arrays for computing our filter settings.
-        var sampleWeights = new float[sampleCount];
-        var sampleOffsets = new Vector2[sampleCount];
+        // Reuse the scratch arrays across calls; the sample count is constant for a given effect,
+        // so this avoids allocating two arrays on every blur pass.
+        if (_sampleWeights == null || _sampleWeights.Length != sampleCount)
+        {
+            _sampleWeights = new float[sampleCount];
+            _sampleOffsets = new Vector2[sampleCount];
+        }
+
+        var sampleWeights = _sampleWeights;
+        var sampleOffsets = _sampleOffsets;
 
         // The first sample always has a zero offset.
         sampleWeights[0] = ComputeGaussian(0);

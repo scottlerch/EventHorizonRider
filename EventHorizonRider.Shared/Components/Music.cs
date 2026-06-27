@@ -12,19 +12,19 @@ internal class Music : ComponentBase
 
     public void Start()
     {
-        Microsoft.Xna.Framework.Media.MediaPlayer.IsRepeating = true;
-        Microsoft.Xna.Framework.Media.MediaPlayer.Play(_musicSong);
+        MediaPlayer.IsRepeating = true;
+        MediaPlayer.Play(_musicSong);
     }
 
-    public static void Stop() => Microsoft.Xna.Framework.Media.MediaPlayer.Stop();
+    public void Stop() => MediaPlayer.Stop();
 
     public void Pause()
     {
         Updating = false;
 
-        if (Microsoft.Xna.Framework.Media.MediaPlayer.State != MediaState.Paused)
+        if (MediaPlayer.State != MediaState.Paused)
         {
-            Microsoft.Xna.Framework.Media.MediaPlayer.Pause();
+            MediaPlayer.Pause();
         }
     }
 
@@ -32,9 +32,9 @@ internal class Music : ComponentBase
     {
         Updating = true;
 
-        if (Microsoft.Xna.Framework.Media.MediaPlayer.State != MediaState.Playing)
+        if (MediaPlayer.State != MediaState.Playing)
         {
-            Microsoft.Xna.Framework.Media.MediaPlayer.Resume();
+            MediaPlayer.Resume();
         }
     }
 }
