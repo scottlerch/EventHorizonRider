@@ -236,3 +236,14 @@ pip-log.txt
 /.vs
 *.sqlite
 /EventHorizonRider.Web/Properties/launchSettings.json
+
+#############
+## iOS code-signing material — NEVER commit. Restore via scripts/restore-ios-secrets.sh
+#############
+/signing/*
+!/signing/README.md
+*.p12
+*.p8
+*.mobileprovision
+*.cer
+*.csr
