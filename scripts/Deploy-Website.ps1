@@ -9,10 +9,10 @@
         -> CloudFront E23FGJL5ZWVGNG         (CDN + HTTPS via an ACM certificate)
         -> eventhorizonrider.com / www.eventhorizonrider.com
 
-    Syncs the site files to S3 (skipping the .NET project scaffolding), then invalidates
-    CloudFront so the new content goes live. Does not use --delete: the bucket also holds a
-    large access-log prefix, so a delete-sync would be slow and risky. Remove stale objects
-    manually if ever needed (and exclude logs/).
+    Uploads the site files to S3 (skipping the .NET project scaffolding), then invalidates
+    CloudFront so the new content goes live. Uses `aws s3 cp --recursive` rather than `sync`,
+    because the bucket also holds a huge access-log prefix that `sync` would have to list every
+    run. `cp` doesn't remove orphans; delete stale objects manually if ever needed.
 
 .PARAMETER WhatIf
     Show what would change without uploading or invalidating (aws s3 sync --dryrun).
@@ -45,12 +45,14 @@ $excludes = @(
     '--exclude', 'obj/*'
 )
 
-$syncArgs = @('s3', 'sync', $site, "s3://$Bucket") + $excludes
-if ($WhatIf) { $syncArgs += '--dryrun' }
+# Use `cp --recursive`, not `sync`: the bucket also holds a huge access-log prefix, and `sync`
+# would list all of it to build its comparison (very slow). `cp` just uploads the small site.
+$cpArgs = @('s3', 'cp', $site, "s3://$Bucket", '--recursive') + $excludes
+if ($WhatIf) { $cpArgs += '--dryrun' }
 
-Write-Host "Syncing $site -> s3://$Bucket"
-aws $syncArgs
-if ($LASTEXITCODE -ne 0) { throw 's3 sync failed' }
+Write-Host "Uploading $site -> s3://$Bucket"
+aws $cpArgs
+if ($LASTEXITCODE -ne 0) { throw 's3 upload failed' }
 
 if ($WhatIf) {
     Write-Host '(--WhatIf) Skipped CloudFront invalidation.'

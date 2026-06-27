@@ -33,14 +33,15 @@ S3 bucket  www.eventhorizonrider.com        ← static website hosting (index & 
 With the `aws` CLI authenticated (PowerShell 7+):
 
 ```powershell
-pwsh ./scripts/Deploy-Website.ps1            # sync to S3 + invalidate CloudFront
+pwsh ./scripts/Deploy-Website.ps1            # upload to S3 + invalidate CloudFront
 pwsh ./scripts/Deploy-Website.ps1 -WhatIf    # dry run (no upload, no invalidation)
 ```
 
 The script uploads the site files (excluding the `.NET` project scaffolding) and then creates a
-CloudFront invalidation (`/*`) so the new content goes live within a few minutes. It does **not** use
-`aws s3 sync --delete` — the bucket also holds the large `logs/` prefix, so a delete-sync would be slow
-and risky.
+CloudFront invalidation (`/*`) so the new content goes live within a few minutes. It uses
+`aws s3 cp --recursive` rather than `sync`: the bucket also holds a huge `logs/` (access-log) prefix
+that `sync` would have to list on every run. `cp` doesn't remove orphaned objects, so delete any stale
+files manually if that ever comes up.
 
 ### One-time bucket policy (already applied)
 
