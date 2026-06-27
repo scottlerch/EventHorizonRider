@@ -21,16 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # .NET for iOS pins an Xcode version; select the newest Xcode installed on the runner
-      # (latest-stable can skip a just-released Xcode that's still flagged beta on the image).
-      - name: Select newest Xcode
-        run: |
-          set -euo pipefail
-          echo "Installed Xcodes:"; ls -d /Applications/Xcode*.app
-          newest=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
-          echo "Selecting $newest"
-          sudo xcode-select -s "$newest/Contents/Developer"
-          xcodebuild -version
+      # Match Xcode to the pinned iOS workload (26.2) so its required version check passes and
+      # the toolchain (clang++, etc.) resolves cleanly.
+      - name: Select Xcode 26.2 (matches the iOS workload)
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "26.2"
 
       # Use the runner's pre-installed .NET, whose iOS workload is kept in sync with the
       # runner's Xcode. (Installing the latest 10.0.x pulls an iOS workload that requires a
