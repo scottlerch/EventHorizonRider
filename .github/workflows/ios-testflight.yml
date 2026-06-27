@@ -32,10 +32,13 @@ jobs:
           sudo xcode-select -s "$newest/Contents/Developer"
           xcodebuild -version
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "10.0.x"
+      # Use the runner's pre-installed .NET, whose iOS workload is kept in sync with the
+      # runner's Xcode. (Installing the latest 10.0.x pulls an iOS workload that requires a
+      # newer Xcode than the image ships.)
+      - name: Show .NET SDKs
+        run: |
+          dotnet --version
+          dotnet --list-sdks
 
       - name: Restore tools and the iOS workload
         run: |
