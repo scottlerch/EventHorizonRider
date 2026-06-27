@@ -9,7 +9,10 @@
     content output continues to flow into the head's app package exactly as before.
   -->
   <PropertyGroup>
-    <TargetFrameworks>net10.0-windows;net10.0-android;net10.0-ios</TargetFrameworks>
+    <!-- A head can trim this (e.g. -p:SharedTargetFrameworks=net10.0-ios) so building one platform
+         doesn't require every platform's workload to be installed. Defaults to all platforms. -->
+    <SharedTargetFrameworks Condition="'$(SharedTargetFrameworks)' == ''">net10.0-windows;net10.0-android;net10.0-ios</SharedTargetFrameworks>
+    <TargetFrameworks>$(SharedTargetFrameworks)</TargetFrameworks>
     <OutputType>Library</OutputType>
     <RootNamespace>EventHorizonRider.Core</RootNamespace>
     <!-- Content is referenced and built by the platform heads, not here. -->
