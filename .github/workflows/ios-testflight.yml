@@ -37,6 +37,16 @@ jobs:
           dotnet tool restore                 # MonoGame content builder (mgcb)
           dotnet workload restore "$IOS_PROJECT"
 
+      # MonoGame compiles .fx shaders by running the HLSL compiler under Wine on macOS/Linux.
+      - name: Install Wine for MonoGame effect (.fx) compilation
+        run: |
+          set -euo pipefail
+          softwareupdate --install-rosetta --agree-to-license || true
+          brew install wget p7zip
+          brew install --cask --no-quarantine wine-stable
+          wget -qO- https://monogame.net/downloads/net9_mgfxc_wine_setup.sh | bash
+          echo "MGFXC_WINE_PATH=$HOME/.winemonogame" >> "$GITHUB_ENV"
+
       - name: Install Apple signing assets
         env:
           CERT_P12_BASE64: ${{ secrets.IOS_DIST_CERT_P12_BASE64 }}
