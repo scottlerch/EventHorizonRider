@@ -36,8 +36,31 @@ img {
     height: 100%;
 }
 
+.github-ribbon {
+  position: absolute;
+  top: 38px;
+  right: -58px;
+  width: 200px;
+  transform: rotate(45deg);
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 26px;
+  text-decoration: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  z-index: 100;
+}
+
+.github-ribbon:hover,
+.github-ribbon:focus {
+  background-color: #6a6a6a;
+  color: #fff;
+}
+
 @media (max-width: 767px) {
- .github-banner{
-   visibility: hidden;
- }
+  .github-ribbon {
+    display: none;
+  }
 }
