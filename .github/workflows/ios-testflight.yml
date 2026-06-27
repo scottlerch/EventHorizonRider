@@ -55,10 +55,17 @@ jobs:
           JSON
           dotnet --version
 
-      - name: Restore tools and the iOS workload
+      - name: Restore tools and install the pinned iOS workload
         run: |
           dotnet tool restore                 # MonoGame content builder (mgcb)
-          dotnet workload restore "$IOS_PROJECT"
+          # Pin the iOS workload to 26.2 (requires Xcode 26.2, satisfied by the runner's 26.3).
+          # There is no 26.3 manifest; the newer 26.4/26.5 workloads need an Xcode the runner lacks.
+          cat > ios-rollback.json <<'JSON'
+          {
+            "microsoft.net.sdk.ios": "26.2.10233/10.0.100"
+          }
+          JSON
+          dotnet workload install ios --from-rollback-file ios-rollback.json
 
       # MonoGame compiles .fx shaders by running the HLSL compiler under Wine on macOS/Linux.
       - name: Install Wine for MonoGame effect (.fx) compilation
