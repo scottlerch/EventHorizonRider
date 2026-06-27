@@ -1,0 +1,126 @@
+name: iOS TestFlight
+
+# Manual trigger only — run it from the Actions tab when you want a TestFlight build.
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "Optional note for this run"
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-upload:
+    runs-on: macos-15
+    env:
+      IOS_PROJECT: EventHorizonRider.iOS/EventHorizonRider.iOS.csproj
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # .NET 10 iOS needs a recent Xcode; latest-stable picks the newest installed on the runner.
+      - name: Select Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore tools and the iOS workload
+        run: |
+          dotnet tool restore                 # MonoGame content builder (mgcb)
+          dotnet workload restore "$IOS_PROJECT"
+
+      - name: Install Apple signing assets
+        env:
+          CERT_P12_BASE64: ${{ secrets.IOS_DIST_CERT_P12_BASE64 }}
+          CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
+          PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
+        run: |
+          set -euo pipefail
+          CERT_PATH="$RUNNER_TEMP/dist.p12"
+          PROFILE_PATH="$RUNNER_TEMP/profile.mobileprovision"
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+          KEYCHAIN_PASSWORD="$(openssl rand -base64 24)"
+
+          echo "$CERT_P12_BASE64" | base64 --decode > "$CERT_PATH"
+          echo "$PROFILE_BASE64"  | base64 --decode > "$PROFILE_PATH"
+
+          # Temporary keychain holding just the distribution certificate.
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERT_PATH" -P "$CERT_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" >/dev/null
+          security list-keychains -d user -s "$KEYCHAIN_PATH"
+
+          # Install the provisioning profile under its UUID.
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          security cms -D -i "$PROFILE_PATH" > "$RUNNER_TEMP/profile.plist"
+          PROFILE_UUID="$(/usr/libexec/PlistBuddy -c 'Print UUID' "$RUNNER_TEMP/profile.plist")"
+          PROFILE_NAME="$(/usr/libexec/PlistBuddy -c 'Print Name' "$RUNNER_TEMP/profile.plist")"
+          cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/$PROFILE_UUID.mobileprovision"
+
+          # Discover the signing identity that was just imported.
+          SIGNING_IDENTITY="$(security find-identity -v -p codesigning "$KEYCHAIN_PATH" | grep -o '"Apple Distribution:[^"]*"' | head -1 | tr -d '"')"
+
+          {
+            echo "KEYCHAIN_PATH=$KEYCHAIN_PATH"
+            echo "SIGNING_IDENTITY=$SIGNING_IDENTITY"
+            echo "PROVISION_NAME=$PROFILE_NAME"
+          } >> "$GITHUB_ENV"
+          echo "Signing identity: $SIGNING_IDENTITY"
+          echo "Provisioning profile: $PROFILE_NAME ($PROFILE_UUID)"
+
+      # TestFlight rejects duplicate build numbers, so stamp each run uniquely.
+      - name: Set unique build number
+        run: /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${{ github.run_number }}" EventHorizonRider.iOS/Info.plist
+
+      - name: Build signed .ipa
+        run: |
+          set -euo pipefail
+          dotnet publish "$IOS_PROJECT" \
+            -c Release -f net10.0-ios -r ios-arm64 \
+            -p:ArchiveOnBuild=true \
+            -p:CodesignKey="$SIGNING_IDENTITY" \
+            -p:CodesignProvision="$PROVISION_NAME" \
+            -m:1
+          IPA_PATH="$(find EventHorizonRider.iOS/bin -name '*.ipa' | head -1)"
+          test -n "$IPA_PATH" || { echo "::error::No .ipa produced"; exit 1; }
+          echo "IPA_PATH=$IPA_PATH" >> "$GITHUB_ENV"
+          echo "Built $IPA_PATH"
+
+      - name: Upload to TestFlight
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.appstoreconnect/private_keys"
+          printf '%s' "$ASC_API_KEY_P8" > "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+          xcrun altool --upload-app --type ios \
+            --file "$IPA_PATH" \
+            --apiKey "$ASC_KEY_ID" \
+            --apiIssuer "$ASC_ISSUER_ID"
+
+      - name: Save .ipa as a build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EventHorizonRider-ios
+          path: EventHorizonRider.iOS/bin/**/*.ipa
+          if-no-files-found: ignore
+
+      - name: Clean up keychain
+        if: always()
+        run: |
+          if [ -n "${KEYCHAIN_PATH:-}" ] && [ -f "${KEYCHAIN_PATH:-}" ]; then
+            security delete-keychain "$KEYCHAIN_PATH" || true
+          fi
