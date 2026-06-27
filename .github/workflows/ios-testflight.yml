@@ -143,10 +143,17 @@ jobs:
           set -euo pipefail
           mkdir -p "$HOME/.appstoreconnect/private_keys"
           printf '%s' "$ASC_API_KEY_P8" > "$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
-          xcrun altool --upload-app --type ios \
-            --file "$IPA_PATH" \
-            --apiKey "$ASC_KEY_ID" \
-            --apiIssuer "$ASC_ISSUER_ID"
+          set +e
+          out="$(xcrun altool --upload-app --type ios --file "$IPA_PATH" --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID" 2>&1)"
+          code=$?
+          set -e
+          echo "$out"
+          # altool can exit 0 even when App Store validation rejects the build, so check output too.
+          if [ "$code" -ne 0 ] || printf '%s' "$out" | grep -qiE 'Validation failed|ERROR:'; then
+            echo "::error::TestFlight upload failed"
+            exit 1
+          fi
+          echo "Uploaded to TestFlight."
 
       - name: Save .ipa as a build artifact
         if: always()

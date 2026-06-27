@@ -42,6 +42,12 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.4.1" />
   </ItemGroup>
   <ItemGroup>
+    <!-- App icons + launch images referenced by Info.plist (CFBundleIconFiles). Without these
+         the App Store rejects the build ("Missing required icon file"). IPhoneResourcePrefix
+         strips the "Resources" prefix so they land at the bundle root. -->
+    <BundleResource Include="Resources\**\*.png" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\EventHorizonRider.Shared\EventHorizonRider.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
