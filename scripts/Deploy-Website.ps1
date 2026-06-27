@@ -33,6 +33,7 @@ $site = Join-Path (Split-Path $PSScriptRoot -Parent) 'EventHorizonRider.Web'
 # Exclude S3 access logs and the .NET project scaffolding (not part of the published site).
 $excludes = @(
     '--exclude', 'logs/*'
+    '--exclude', '*.md'
     '--exclude', '*.csproj'
     '--exclude', '*.csproj.user'
     '--exclude', 'Program.cs'
