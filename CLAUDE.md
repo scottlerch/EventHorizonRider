@@ -17,7 +17,7 @@ the web.
 | `EventHorizonRider.Windows` | `net10.0-windows` | Windows head (`WinExe`, WindowsDX). Also hosts the WinForms `DevelopmentToolsForm`. |
 | `EventHorizonRider.Android` | `net10.0-android` | Android head. |
 | `EventHorizonRider.iOS` | `net10.0-ios` | iOS head (**requires a Mac to build**). |
-| `EventHorizonRider.Web` | `net10.0` | ASP.NET static-file host for the web build. |
+| `EventHorizonRider.Web` | `net10.0` | The marketing website (static HTML/CSS). Hosted on AWS S3 + CloudFront + ACM and deployed via `scripts/Deploy-Website.ps1` — see [its README](EventHorizonRider.Web/README.md). The `.csproj`/`Program.cs` is only a local `dotnet run` preview. |
 
 The solution is `EventHorizonRider.slnx` (XML solution format). Common settings live in
 `Directory.Build.props` (copyright, `Newtonsoft.Json`, `AllowUnsafeBlocks`, the `Debug;Release;Ad-Hoc;AppStore`
