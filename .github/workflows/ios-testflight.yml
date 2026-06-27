@@ -43,7 +43,8 @@ jobs:
           set -euo pipefail
           softwareupdate --install-rosetta --agree-to-license || true
           brew install wget p7zip
-          brew install --cask --no-quarantine wine-stable
+          brew install --cask wine-stable
+          sudo xattr -dr com.apple.quarantine "/Applications/Wine Stable.app" 2>/dev/null || true
           wget -qO- https://monogame.net/downloads/net9_mgfxc_wine_setup.sh | bash
           echo "MGFXC_WINE_PATH=$HOME/.winemonogame" >> "$GITHUB_ENV"
 
