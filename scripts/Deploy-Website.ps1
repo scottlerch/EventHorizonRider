@@ -28,6 +28,9 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# aws writes progress to stderr and can exit non-zero on benign conditions; don't let PowerShell
+# auto-throw on that - we check $LASTEXITCODE explicitly after each call.
+$PSNativeCommandUseErrorActionPreference = $false
 $site = Join-Path (Split-Path $PSScriptRoot -Parent) 'EventHorizonRider.Web'
 
 # Exclude S3 access logs and the .NET project scaffolding (not part of the published site).
@@ -55,8 +58,8 @@ if ($WhatIf) {
 }
 
 Write-Host "Invalidating CloudFront $DistributionId (/*)"
-aws cloudfront create-invalidation --distribution-id $DistributionId --paths '/*' `
-    --query 'Invalidation.{Id:Id,Status:Status}' --output table
+$status = aws cloudfront create-invalidation --distribution-id $DistributionId --paths '/*' --query 'Invalidation.Status' --output text
 if ($LASTEXITCODE -ne 0) { throw 'CloudFront invalidation failed' }
+Write-Host "Invalidation status: $status"
 
 Write-Host 'Deployed. CloudFront invalidation usually completes within a few minutes.'
