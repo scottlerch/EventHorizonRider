@@ -40,6 +40,21 @@ jobs:
           dotnet --version
           dotnet --list-sdks
 
+      # The latest .NET iOS workload requires a newer Xcode than the runner ships. Pin to an
+      # earlier .NET 10 band whose iOS workload matches the runner's Xcode. global.json is created
+      # here (not committed) so local Windows builds are unaffected.
+      - name: Pin .NET SDK (iOS workload compatible with the runner's Xcode)
+        run: |
+          cat > global.json <<'JSON'
+          {
+            "sdk": {
+              "version": "10.0.203",
+              "rollForward": "disable"
+            }
+          }
+          JSON
+          dotnet --version
+
       - name: Restore tools and the iOS workload
         run: |
           dotnet tool restore                 # MonoGame content builder (mgcb)
