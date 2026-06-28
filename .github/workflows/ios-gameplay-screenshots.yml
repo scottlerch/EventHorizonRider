@@ -51,9 +51,13 @@ jobs:
       - name: Install idb (touch injection)
         run: |
           set -euo pipefail
+          export NONINTERACTIVE=1
           brew tap facebook/fb
+          # Newer Homebrew refuses non-core taps until explicitly trusted.
+          brew trust --formula facebook/fb/idb-companion || brew trust facebook/fb
           brew install idb-companion
-          python3 -m pip install --user --upgrade fb-idb || pipx install fb-idb
+          pipx install fb-idb || python3 -m pip install --user --break-system-packages fb-idb
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           echo "$(python3 -m site --user-base)/bin" >> "$GITHUB_PATH"
 
       - name: Build the Simulator app
