@@ -69,10 +69,14 @@ jobs:
           echo "Simulator: $UDID"
           xcrun simctl bootstatus "$UDID" -b
           xcrun simctl install "$UDID" "$APP"
-          # Stream the app's console output so a startup crash/exception is captured.
-          ( timeout 20 xcrun simctl launch --console "$UDID" "$BUNDLE_ID" > app-console.log 2>&1 || true ) &
+          # Launch with the console attached (backgrounded) so a startup crash/exception is
+          # captured, screenshot while it runs, then detach. macOS has no `timeout`, so we
+          # background the launch and kill it by PID rather than time-boxing it.
+          xcrun simctl launch --console "$UDID" "$BUNDLE_ID" > app-console.log 2>&1 &
+          LAUNCH_PID=$!
           sleep 12
           xcrun simctl io "$UDID" screenshot smoke-screenshot.png
+          kill "$LAUNCH_PID" 2>/dev/null || true
           echo "=== app console (first 80 lines) ==="
           head -80 app-console.log || true
           mkdir -p crash-logs
