@@ -1,9 +1,9 @@
 name: iOS App Store Screenshots
 
-# Manual trigger: builds the Simulator app and captures full-resolution screenshots on a
-# 6.9" iPhone and a 13" iPad for App Store Connect. The game is landscape-only; the raw
-# Simulator capture comes out portrait-dimensioned with rotated content, so these raw PNGs
-# are rotated to true landscape afterwards (done outside CI for orientation control).
+# Manual trigger. Builds the Simulator app, then on a 6.9" iPhone and a 13" iPad captures
+# title + mid-game + game-over scenes (idb injects the touches: tap START, hold to steer into
+# a crash), and rotates/resizes the raw captures to upload-ready App Store sizes in-CI.
+# Download the 'appstore-screenshots' artifact: out/ holds the upload-ready PNGs, raw/ the originals.
 on:
   workflow_dispatch:
 
@@ -49,6 +49,23 @@ jobs:
           wget -qO- https://monogame.net/downloads/net9_mgfxc_wine_setup.sh | bash
           echo "MGFXC_WINE_PATH=$HOME/.winemonogame" >> "$GITHUB_ENV"
 
+      - name: Install idb (touch injection)
+        run: |
+          set -euo pipefail
+          export NONINTERACTIVE=1
+          brew tap facebook/fb
+          # Newer Homebrew refuses non-core taps until explicitly trusted.
+          brew trust --formula facebook/fb/idb-companion || brew trust facebook/fb
+          # fb-idb is unmaintained and uses asyncio.get_event_loop(), which RAISES on Python
+          # 3.14 (the runner default). Install it into a Python 3.11 venv where that still works.
+          brew install idb-companion python@3.11
+          PY311="$(brew --prefix python@3.11)/bin/python3.11"
+          "$PY311" -m venv "$HOME/idbvenv"
+          "$HOME/idbvenv/bin/pip" install --quiet --upgrade pip
+          "$HOME/idbvenv/bin/pip" install --quiet fb-idb
+          echo "$HOME/idbvenv/bin" >> "$GITHUB_PATH"
+          "$HOME/idbvenv/bin/idb" --help >/dev/null && echo "idb installed and runs"
+
       - name: Build the Simulator app
         run: |
           set -euo pipefail
@@ -57,38 +74,59 @@ jobs:
           APP=$(find EventHorizonRider.iOS/bin -type d -name '*.app' -path '*iossimulator*' | head -1)
           test -n "$APP" || { echo "::error::no simulator .app produced"; exit 1; }
           echo "APP=$APP" >> "$GITHUB_ENV"
-          echo "Built $APP"
 
-      - name: Capture screenshots on a 6.9" iPhone and 13" iPad
+      - name: Capture + process screenshots (iPhone 6.9" + iPad 13")
         run: |
-          set -euo pipefail
-          mkdir -p shots
+          set -uo pipefail
+          mkdir -p raw out
           UUID_RE='[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
-          pick() { xcrun simctl list devices available | grep -iE "$1" | grep -oE "$UUID_RE" | head -1; }
-          shoot() {
-            local label="$1" udid="$2"
-            echo "== $label ($udid) =="
-            xcrun simctl bootstatus "$udid" -b
-            xcrun simctl install "$udid" "$APP"
-            xcrun simctl launch "$udid" "$BUNDLE_ID" || true
-            sleep 12
-            xcrun simctl io "$udid" screenshot "shots/${label}-menu-1.png"
-            sleep 4
-            xcrun simctl io "$udid" screenshot "shots/${label}-menu-2.png"
-            echo "  dimensions:"; sips -g pixelWidth -g pixelHeight "shots/${label}-menu-1.png" | sed 's/^/    /'
-            xcrun simctl terminate "$udid" "$BUNDLE_ID" 2>/dev/null || true
-            xcrun simctl shutdown "$udid" 2>/dev/null || true
-          }
-          IP=$(pick 'iPhone 16 Pro Max'); [ -z "$IP" ] && IP=$(pick 'iPhone 17 Pro Max'); [ -z "$IP" ] && IP=$(pick 'iPhone 16 Pro')
-          IPAD=$(pick 'iPad Pro 13'); [ -z "$IPAD" ] && IPAD=$(pick 'iPad Pro .*12.9'); [ -z "$IPAD" ] && IPAD=$(pick 'iPad Pro')
-          test -n "$IP"   && shoot "iphone69" "$IP"   || echo "::warning::no 6.9-inch iPhone simulator found"
-          test -n "$IPAD" && shoot "ipad13"   "$IPAD" || echo "::warning::no 13-inch iPad simulator found"
-          echo "--- captured ---"; ls -la shots
+          pick(){ xcrun simctl list devices available | grep -iE "$1" | grep -oE "$UUID_RE" | head -1; }
 
-      - name: Upload raw screenshots
+          # $1 device-name regex  $2 label  $3 logical-points-width  $4 logical-points-height
+          shoot() {
+            local rx="$1" label="$2" PW="$3" PH="$4"
+            local UD; UD=$(pick "$rx")
+            if [ -z "$UD" ]; then echo "::warning::no simulator matched '$rx' for $label"; return; fi
+            echo "== $label : $UD =="
+            xcrun simctl bootstatus "$UD" -b
+            xcrun simctl install "$UD" "$APP"
+            local CX=$((PW/2)) CY=$((PH/2)) SX=$((PW/2)) SY=$((PH*82/100))
+            xcrun simctl launch "$UD" "$BUNDLE_ID" || true
+            sleep 10
+            xcrun simctl io "$UD" screenshot "raw/${label}-1-title.png"
+            # Tap START (center) -> gameplay
+            idb ui tap "$CX" "$CY" --udid "$UD" || echo "::warning::idb tap START failed ($label)"
+            sleep 2.5
+            xcrun simctl io "$UD" screenshot "raw/${label}-2-gameplay.png"
+            # Press-and-hold to steer (landscape 'right' maps to portrait bottom) -> crash; burst.
+            idb ui tap "$SX" "$SY" --udid "$UD" --duration 12 &
+            local HOLD=$! n=0
+            for _ in 1 2 3 4 5; do sleep 1.6; n=$((n+1)); xcrun simctl io "$UD" screenshot "raw/${label}-3-over-${n}.png" || true; done
+            wait $HOLD 2>/dev/null || true
+            xcrun simctl terminate "$UD" "$BUNDLE_ID" 2>/dev/null || true
+            xcrun simctl shutdown "$UD" 2>/dev/null || true
+          }
+
+          shoot 'iPhone 16 Pro Max|iPhone 17 Pro Max'  iphone 440  956
+          shoot 'iPad Pro 13|iPad Pro .*12.9-inch'     ipad   1032 1376
+
+          # Rotate 270deg CW (portrait capture -> upright landscape); downscale iPhone to 6.7" (2778x1284).
+          for f in raw/*.png; do
+            b=$(basename "$f")
+            sips -r 270 "$f" --out "out/$b" >/dev/null
+            case "$b" in
+              iphone-*) sips -z 1284 2778 "out/$b" --out "out/$b" >/dev/null ;;
+            esac
+          done
+          echo "--- upload-ready (out/) ---"
+          for f in out/*.png; do printf '  %-28s ' "$(basename "$f")"; sips -g pixelWidth -g pixelHeight "$f" | awk '/pixelWidth/{w=$2}/pixelHeight/{h=$2}END{print w" x "h}'; done
+
+      - name: Upload screenshots (upload-ready + raw)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: appstore-screenshots-raw
-          path: shots/
+          name: appstore-screenshots
+          path: |
+            out/
+            raw/
           if-no-files-found: warn
