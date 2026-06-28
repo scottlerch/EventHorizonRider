@@ -16,6 +16,11 @@
 	<string>15.0</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+	</dict>
 	<key>CFBundleDisplayName</key>
 	<string>Horizon</string>
 	<key>CFBundleIdentifier</key>
