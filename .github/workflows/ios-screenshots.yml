@@ -1,0 +1,94 @@
+name: iOS App Store Screenshots
+
+# Manual trigger: builds the Simulator app and captures full-resolution screenshots on a
+# 6.9" iPhone and a 13" iPad for App Store Connect. The game is landscape-only; the raw
+# Simulator capture comes out portrait-dimensioned with rotated content, so these raw PNGs
+# are rotated to true landscape afterwards (done outside CI for orientation control).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  screenshots:
+    runs-on: macos-15
+    env:
+      IOS_PROJECT: EventHorizonRider.iOS/EventHorizonRider.iOS.csproj
+      BUNDLE_ID: com.eventhorizonrider
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26.3 (required by the iOS workload)
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "26.3"
+
+      - name: Pin .NET SDK
+        run: |
+          cat > global.json <<'JSON'
+          { "sdk": { "version": "10.0.103", "rollForward": "disable" } }
+          JSON
+
+      - name: Restore tools and install the pinned iOS workload
+        run: |
+          dotnet tool restore
+          cat > ios-rollback.json <<'JSON'
+          { "microsoft.net.sdk.ios": "26.2.10233/10.0.100" }
+          JSON
+          dotnet workload install ios --from-rollback-file ios-rollback.json
+
+      - name: Install Wine for MonoGame effect (.fx) compilation
+        run: |
+          set -euo pipefail
+          softwareupdate --install-rosetta --agree-to-license || true
+          brew install wget p7zip
+          brew install --cask wine-stable
+          sudo xattr -dr com.apple.quarantine "/Applications/Wine Stable.app" 2>/dev/null || true
+          wget -qO- https://monogame.net/downloads/net9_mgfxc_wine_setup.sh | bash
+          echo "MGFXC_WINE_PATH=$HOME/.winemonogame" >> "$GITHUB_ENV"
+
+      - name: Build the Simulator app
+        run: |
+          set -euo pipefail
+          dotnet build "$IOS_PROJECT" -c Release -f net10.0-ios -r iossimulator-arm64 \
+            -p:SharedTargetFrameworks=net10.0-ios -m:1
+          APP=$(find EventHorizonRider.iOS/bin -type d -name '*.app' -path '*iossimulator*' | head -1)
+          test -n "$APP" || { echo "::error::no simulator .app produced"; exit 1; }
+          echo "APP=$APP" >> "$GITHUB_ENV"
+          echo "Built $APP"
+
+      - name: Capture screenshots on a 6.9" iPhone and 13" iPad
+        run: |
+          set -euo pipefail
+          mkdir -p shots
+          UUID_RE='[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+          pick() { xcrun simctl list devices available | grep -iE "$1" | grep -oE "$UUID_RE" | head -1; }
+          shoot() {
+            local label="$1" udid="$2"
+            echo "== $label ($udid) =="
+            xcrun simctl bootstatus "$udid" -b
+            xcrun simctl install "$udid" "$APP"
+            xcrun simctl launch "$udid" "$BUNDLE_ID" || true
+            sleep 12
+            xcrun simctl io "$udid" screenshot "shots/${label}-menu-1.png"
+            sleep 4
+            xcrun simctl io "$udid" screenshot "shots/${label}-menu-2.png"
+            echo "  dimensions:"; sips -g pixelWidth -g pixelHeight "shots/${label}-menu-1.png" | sed 's/^/    /'
+            xcrun simctl terminate "$udid" "$BUNDLE_ID" 2>/dev/null || true
+            xcrun simctl shutdown "$udid" 2>/dev/null || true
+          }
+          IP=$(pick 'iPhone 16 Pro Max'); [ -z "$IP" ] && IP=$(pick 'iPhone 17 Pro Max'); [ -z "$IP" ] && IP=$(pick 'iPhone 16 Pro')
+          IPAD=$(pick 'iPad Pro 13'); [ -z "$IPAD" ] && IPAD=$(pick 'iPad Pro .*12.9'); [ -z "$IPAD" ] && IPAD=$(pick 'iPad Pro')
+          test -n "$IP"   && shoot "iphone69" "$IP"   || echo "::warning::no 6.9-inch iPhone simulator found"
+          test -n "$IPAD" && shoot "ipad13"   "$IPAD" || echo "::warning::no 13-inch iPad simulator found"
+          echo "--- captured ---"; ls -la shots
+
+      - name: Upload raw screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appstore-screenshots-raw
+          path: shots/
+          if-no-files-found: warn
