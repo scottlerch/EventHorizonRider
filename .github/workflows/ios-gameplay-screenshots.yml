@@ -63,7 +63,7 @@ jobs:
           "$HOME/idbvenv/bin/pip" install --quiet --upgrade pip
           "$HOME/idbvenv/bin/pip" install --quiet fb-idb
           echo "$HOME/idbvenv/bin" >> "$GITHUB_PATH"
-          "$HOME/idbvenv/bin/idb" --version
+          "$HOME/idbvenv/bin/idb" --help >/dev/null && echo "idb installed and runs"
 
       - name: Build the Simulator app
         run: |
