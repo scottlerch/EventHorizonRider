@@ -5,6 +5,10 @@
     <AndroidApplication>true</AndroidApplication>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoGamePlatform>Android</MonoGamePlatform>
+    <!-- versionName (display) and a default versionCode. CI overrides the versionCode per build
+         with -p:ApplicationVersion=<n> (must exceed the last value published on Google Play). -->
+    <ApplicationDisplayVersion>1.3</ApplicationDisplayVersion>
+    <ApplicationVersion>2</ApplicationVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>

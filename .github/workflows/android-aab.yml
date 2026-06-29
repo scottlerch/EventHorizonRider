@@ -1,0 +1,87 @@
+name: Android AAB (Google Play)
+
+# Manual trigger: builds a Google Play Android App Bundle (.aab). Runs on Windows so MonoGame's
+# effect (.fx) compiler runs natively (no Wine). Signs the bundle if the keystore secrets are
+# present; otherwise produces an UNSIGNED .aab (fine for validating the build, not uploadable).
+on:
+  workflow_dispatch:
+    inputs:
+      versionCode:
+        description: "versionCode (integer) — MUST be greater than the last value published on Play"
+        required: true
+        default: "2"
+      versionName:
+        description: "versionName (marketing version shown to users)"
+        required: true
+        default: "1.3"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      ANDROID_PROJECT: EventHorizonRider.Android/EventHorizonRider.Android.csproj
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Install Android workload and restore the content tool
+        run: |
+          dotnet workload install android
+          dotnet tool restore
+
+      - name: Install upload keystore (if configured)
+        id: ks
+        shell: bash
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.keystore"
+            echo "signed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::ANDROID_KEYSTORE_BASE64 not set — building an UNSIGNED .aab (validates the build but cannot be uploaded to Play)."
+          fi
+
+      - name: Build AAB
+        shell: bash
+        env:
+          STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          ARGS=("$ANDROID_PROJECT" -c Release -f net10.0-android
+                -p:AndroidPackageFormat=aab
+                -p:ApplicationVersion=${{ inputs.versionCode }}
+                -p:ApplicationDisplayVersion=${{ inputs.versionName }})
+          if [ "${{ steps.ks.outputs.signed }}" = "true" ]; then
+            ARGS+=(-p:AndroidKeyStore=true
+                   -p:AndroidSigningKeyStore="$RUNNER_TEMP/upload.keystore"
+                   -p:AndroidSigningStorePass="$STORE_PASS"
+                   -p:AndroidSigningKeyAlias="$KEY_ALIAS"
+                   -p:AndroidSigningKeyPass="$KEY_PASS")
+          fi
+          dotnet publish "${ARGS[@]}"
+
+      - name: Collect the .aab
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          find EventHorizonRider.Android/bin -name '*-Signed.aab' -o -name '*.aab' | sort -u | while read -r f; do cp "$f" out/; done
+          ls -la out
+
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-aab
+          path: out/*.aab
+          if-no-files-found: error
