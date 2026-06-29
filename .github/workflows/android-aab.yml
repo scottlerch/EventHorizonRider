@@ -58,7 +58,9 @@ jobs:
           KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           set -euo pipefail
-          ARGS=("$ANDROID_PROJECT" -c Release -f net10.0-android
+          # -m:1 avoids the MonoGame content-pipeline ".mgstats being used by another process"
+          # race under parallel MSBuild (see CLAUDE.md).
+          ARGS=("$ANDROID_PROJECT" -c Release -f net10.0-android -m:1
                 -p:AndroidPackageFormat=aab
                 -p:ApplicationVersion=${{ inputs.versionCode }}
                 -p:ApplicationDisplayVersion=${{ inputs.versionName }})
