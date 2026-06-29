@@ -56,15 +56,18 @@ jobs:
           test -f "staging/EventHorizonRider.Windows.exe" || { echo "::error::exe missing from publish output"; ls staging; exit 1; }
 
       - name: Pack MSIX
-        shell: bash
+        shell: pwsh
         run: |
-          set -euo pipefail
-          MAKEAPPX=$(find "/c/Program Files (x86)/Windows Kits/10/bin" -name makeappx.exe -path '*x64*' 2>/dev/null | sort -V | tail -1)
-          test -n "$MAKEAPPX" || { echo "::error::makeappx.exe not found"; exit 1; }
-          echo "makeappx: $MAKEAPPX"
-          mkdir -p out
-          "$MAKEAPPX" pack /d staging /p "out/EventHorizonRider-${{ inputs.version }}.msix" /o
-          ls -la out
+          # Run makeappx from PowerShell so its /d /p /o flags aren't mangled by Git Bash/MSYS
+          # path conversion (which turns "/o" into a "D:/..." path -> "Unknown command line option").
+          $makeappx = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin" -Recurse -Filter makeappx.exe -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -like '*\x64\*' } | Sort-Object FullName | Select-Object -Last 1
+          if (-not $makeappx) { Write-Error 'makeappx.exe not found'; exit 1 }
+          Write-Host "makeappx: $($makeappx.FullName)"
+          New-Item -ItemType Directory -Force -Path out | Out-Null
+          & $makeappx.FullName pack /d staging /p "out/EventHorizonRider-${{ inputs.version }}.msix" /o
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Get-ChildItem out
 
       - name: Upload MSIX
         uses: actions/upload-artifact@v4
