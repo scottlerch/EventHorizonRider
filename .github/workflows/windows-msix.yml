@@ -35,7 +35,11 @@ jobs:
         run: |
           set -euo pipefail
           # -m:1 avoids the MonoGame content-pipeline ".mgstats" race (see CLAUDE.md).
+          # SharedTargetFrameworks trims the multi-targeted shared lib to just the Windows TFM —
+          # without it, publishing -r win-x64 tries to restore the Mono runtime pack for the
+          # android/ios TFMs and fails (NU1102 Microsoft.NETCore.App.Runtime.Mono.win-x64).
           dotnet publish "$WIN_PROJECT" -c Release -r win-x64 --self-contained true \
+            -p:SharedTargetFrameworks=net10.0-windows \
             -p:PublishSingleFile=false -p:PublishReadyToRun=true -m:1 -o publish
 
       - name: Stage MSIX layout
