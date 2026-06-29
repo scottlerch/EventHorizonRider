@@ -118,6 +118,9 @@ jobs:
               iphone-*) sips -z 1284 2778 "out/$b" --out "out/$b" >/dev/null ;;
             esac
           done
+          # simctl captures RGBA PNGs; App Store Connect rejects any alpha channel. Strip it -> RGB.
+          command -v magick >/dev/null 2>&1 || brew install imagemagick
+          magick mogrify -alpha off out/*.png
           echo "--- upload-ready (out/) ---"
           for f in out/*.png; do printf '  %-28s ' "$(basename "$f")"; sips -g pixelWidth -g pixelHeight "$f" | awk '/pixelWidth/{w=$2}/pixelHeight/{h=$2}END{print w" x "h}'; done
 
