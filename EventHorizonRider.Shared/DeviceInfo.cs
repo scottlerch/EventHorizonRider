@@ -36,6 +36,13 @@ public class DeviceInfo
     public static Platform Platform { get; private set; }
 
     /// <summary>
+    /// Display safe-area insets in <b>logical</b> units as (Left, Top, Right, Bottom) — the regions
+    /// covered by a notch / Dynamic Island / rounded corners / home indicator. Zero on platforms
+    /// that don't report them. Refresh with <see cref="RefreshSafeAreaInsets"/>.
+    /// </summary>
+    public static Vector4 SafeAreaInsets { get; private set; }
+
+    /// <summary>
     /// Initialize platform.  This must be called before the main game object is created.
     /// </summary>
     public static void InitializePlatform(Platform platform)
@@ -85,5 +92,16 @@ public class DeviceInfo
         LogicalCenter = new Vector2(LogicalWidth / 2f, LogicalHeight / 2f);
 
         _graphicsInitialized = true;
+    }
+
+    /// <summary>
+    /// Refresh <see cref="SafeAreaInsets"/> from the platform, converting the native-pixel values to
+    /// logical units. Call once per frame: insets can change at runtime (e.g. a 180° landscape flip
+    /// moves the Dynamic Island to the opposite side).
+    /// </summary>
+    public static void RefreshSafeAreaInsets()
+    {
+        var provider = Platform?.SafeAreaInsetsProvider;
+        SafeAreaInsets = provider is null ? Vector4.Zero : provider() * InputScale;
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework;
 
 namespace EventHorizonRider.Core;
 
@@ -47,6 +48,13 @@ public class Platform
     public ParticleEffectsDetails ParticleEffectsDetails { get; set; }
 
     public bool IsFullScreen { get; set; }
+
+    /// <summary>
+    /// Optional source of the display's safe-area insets (notch / Dynamic Island / rounded corners /
+    /// home indicator), in native pixels as (Left, Top, Right, Bottom). Set by the iOS head so the
+    /// HUD can keep clear of obscured regions; left null on platforms with no insets.
+    /// </summary>
+    public Func<Vector4> SafeAreaInsetsProvider { get; set; }
 
     public Platform()
     {

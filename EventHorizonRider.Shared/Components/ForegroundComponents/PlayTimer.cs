@@ -45,6 +45,11 @@ internal class PlayTimer : ComponentBase
 
     private Vector2 _viewSize;
 
+    // Safe-area insets (logical units, L/T/R/B) captured each frame, plus the progress bar's
+    // pre-inset position, so the HUD stays clear of the notch / rounded corners.
+    private Vector4 _safeAreaInsets;
+    private Vector2 _progressBarBasePosition;
+
     private List<float> _textOffset;
 
     private const string BestText = "Best: ";
@@ -151,13 +156,20 @@ internal class PlayTimer : ComponentBase
 
         var levelNumberTextSize = _labelFont.MeasureString("5").X;
 
+        _progressBarBasePosition = new Vector2(_viewSize.X - (levelNumberTextSize + _levelTextSize) - TextPadding, _bestTextSize.Y + 8);
         ProgressBar.Initialize(
-            new Vector2(_viewSize.X - (levelNumberTextSize + _levelTextSize) - TextPadding, _bestTextSize.Y + 8),
+            _progressBarBasePosition,
             new Vector2(levelNumberTextSize + _levelTextSize - 2, 6));
     }
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
+        _safeAreaInsets = DeviceInfo.SafeAreaInsets;
+        // Keep the progress bar (under the level number, top-right) aligned with the inset labels.
+        ProgressBar.SetPosition(new Vector2(
+            _progressBarBasePosition.X - _safeAreaInsets.Z,
+            _progressBarBasePosition.Y + _safeAreaInsets.Y));
+
         if (_newBest)
         {
             _newBestDuration = TimeSpan.Zero;
@@ -222,10 +234,13 @@ internal class PlayTimer : ComponentBase
 
     private void DrawBestTime(SpriteBatch spriteBatch)
     {
+        var left = _safeAreaInsets.X;
+        var top = _safeAreaInsets.Y;
+
         spriteBatch.DrawString(
             _labelFont,
             BestText,
-            new Vector2(TextPadding, TextPadding),
+            new Vector2(TextPadding + left, TextPadding + top),
             Color.LightGray.AdjustLight(0.9f),
             0,
             Vector2.Zero,
@@ -236,7 +251,7 @@ internal class PlayTimer : ComponentBase
         spriteBatch.DrawString(
             _labelFont,
             _bestNumberText,
-            new Vector2(TextPadding + _bestTextSize.X, TextPadding),
+            new Vector2(TextPadding + left + _bestTextSize.X, TextPadding + top),
             Color.White,
             0,
             Vector2.Zero,
@@ -249,7 +264,7 @@ internal class PlayTimer : ComponentBase
             spriteBatch.DrawString(
                 _labelFont,
                 "NEW!",
-                new Vector2(TextPadding, (TextPadding + 5) + _bestTextSize.Y),
+                new Vector2(TextPadding + left, (TextPadding + 5) + _bestTextSize.Y + top),
                 Color.Yellow * _newBestAlpha,
                 rotation: 0,
                 origin: Vector2.Zero,
@@ -265,8 +280,8 @@ internal class PlayTimer : ComponentBase
           _timeFont,
           _timeNumberText,
           new Vector2(
-              _viewSize.X - _textOffset[_timeNumberText.Length - 4] - TextPadding,
-              TextPadding + _bestTextSize.Y + TextVerticalSpacing),
+              (_viewSize.X - _safeAreaInsets.Z) - _textOffset[_timeNumberText.Length - 4] - TextPadding,
+              TextPadding + _safeAreaInsets.Y + _bestTextSize.Y + TextVerticalSpacing),
           _scoreColor,
           rotation: 0,
           origin: Vector2.Zero,
@@ -283,14 +298,17 @@ internal class PlayTimer : ComponentBase
         var text = isInifiniteLevel ? infiniteText : _levelNumberText;
         var levelNumberTextSize = _labelFont.MeasureString(text).X;
 
+        var right = _safeAreaInsets.Z;
+        var top = _safeAreaInsets.Y;
+
         if (!isInifiniteLevel)
         {
             spriteBatch.DrawString(
                 _labelFont,
                 LevelText,
                 new Vector2(
-                    _viewSize.X - (levelNumberTextSize + _levelTextSize) - TextPadding,
-                    TextPadding),
+                    (_viewSize.X - right) - (levelNumberTextSize + _levelTextSize) - TextPadding,
+                    TextPadding + top),
                 Color.LightGray.AdjustLight(0.9f),
                 rotation: 0,
                 origin: Vector2.Zero,
@@ -306,8 +324,8 @@ internal class PlayTimer : ComponentBase
             _labelFont,
             text,
             new Vector2(
-                (_viewSize.X - (levelNumberTextSize * textScale.X) - TextPadding),
-                TextPadding),
+                ((_viewSize.X - right) - (levelNumberTextSize * textScale.X) - TextPadding),
+                TextPadding + top),
             Color.White * (1f - _levelNumberScaling.Value),
             rotation: 0,
             origin: Vector2.Zero,

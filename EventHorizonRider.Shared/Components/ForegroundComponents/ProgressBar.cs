@@ -18,6 +18,8 @@ internal class ProgressBar : ComponentBase
         _scale = size;
     }
 
+    public void SetPosition(Vector2 position) => _position = position;
+
     public void SetProgress(float newProgress) => _progress = newProgress;
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
