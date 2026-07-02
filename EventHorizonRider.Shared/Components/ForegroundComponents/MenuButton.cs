@@ -25,6 +25,11 @@ internal class MenuButton : ComponentBase
     private Vector2 _backTextLocation;
     private Vector2 _backTextSize;
 
+    // Safe-area insets captured each frame, plus the pre-inset hit area, so the top-right
+    // "LEVEL SELECT"/"BACK" label and its touch target clear the notch / rounded corner.
+    private Vector4 _safeAreaInsets;
+    private Rectangle _baseButtonBounds;
+
     public Button Button { get; private set; }
 
     protected override void LoadContentCore(ContentManager content, GraphicsDevice graphics)
@@ -49,10 +54,20 @@ internal class MenuButton : ComponentBase
                 (int)(_menuTextSize.X + (buttonPadding * 2)),
                 (int)(_menuTextSize.Y + (buttonPadding * 2))),
             key: Keys.M);
+
+        _baseButtonBounds = Button.ButtonBounds;
     }
 
     protected override void UpdateCore(GameTime gameTime, InputState inputState)
     {
+        // Inset the label/hit area from the top-right: shift left by the right inset, down by the top.
+        _safeAreaInsets = DeviceInfo.SafeAreaInsets;
+        Button.SetBounds(new Rectangle(
+            _baseButtonBounds.X - (int)_safeAreaInsets.Z,
+            _baseButtonBounds.Y + (int)_safeAreaInsets.Y,
+            _baseButtonBounds.Width,
+            _baseButtonBounds.Height));
+
         Button.Update(gameTime, inputState, Visible);
 
         if (Button.Pressed)
@@ -73,12 +88,14 @@ internal class MenuButton : ComponentBase
     {
         if (_isVisible)
         {
+            var insetOffset = new Vector2(-_safeAreaInsets.Z, _safeAreaInsets.Y);
+
             if (_isBack)
             {
                 spriteBatch.DrawString(
                     _buttonFont,
                     BackText,
-                    _backTextLocation,
+                    _backTextLocation + insetOffset,
                     Button.Hover ? Color.Yellow : Color.LightGray.AdjustLight(0.9f),
                     rotation: 0,
                     origin: Vector2.Zero,
@@ -91,7 +108,7 @@ internal class MenuButton : ComponentBase
                 spriteBatch.DrawString(
                     _buttonFont,
                     MenuText,
-                    _menuTextLocation,
+                    _menuTextLocation + insetOffset,
                     Button.Hover ? Color.Yellow : Color.LightGray.AdjustLight(0.9f),
                     rotation: 0,
                     origin: Vector2.Zero,

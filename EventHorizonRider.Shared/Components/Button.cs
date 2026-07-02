@@ -10,6 +10,9 @@ internal class Button(Rectangle buttonBounds, Keys? key, TimeSpan holdDuration)
 {
     public Rectangle ButtonBounds { get; private set; } = buttonBounds;
 
+    /// <summary>Reposition the hit area (e.g. to follow a safe-area inset).</summary>
+    public void SetBounds(Rectangle bounds) => ButtonBounds = bounds;
+
     public Keys? Key { get; private set; } = key;
 
     private bool _keyPreviouslyPressed;
